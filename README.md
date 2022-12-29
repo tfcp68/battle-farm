@@ -1,11 +1,24 @@
-# battle-farm
-Implementation of a board game, designed with help of ChatGPT and Midjourney
+Battle Farm
+=================
 
-## Game Rules
+## Table of Contents
 
-Battle farm is a turn based card game for 2-6 players with a deck of crop cards of varying rarity. Every player has a number of garden beds which they can improve and plant different crops to. If a crop yield harvest, a player gains coins. When the game ends, the player with the highest amount of coins wins. The __battle__ part of it comes from different abilities, that players can invoke upon each other to gain advantage.
+   * [Trivia](#trivia)
+   * [Game Setup](#game-setup)
+   * [Turn Phases](#turn-phases)
+      * [Win Limit](#win-limit)
+   * [Garden Beds](#garden-beds)
+   * [Cards](#cards)
+      * [Rarity](#rarity)
+      * [Crop Cards](#crop-cards)
+      * [Action Cards](#action-cards)
+   * [Classes](#classes)
 
-### Game Setup
+## Trivia
+
+`Battle Farm` is a turn based card game for 2-6 players with a deck of crop cards of varying rarity. Every player has a number of garden beds which they can improve and plant different crops to. If a crop yield harvest, a player gains coins. When the game ends, the player with the highest amount of coins wins. The __battle__ part of it comes from different abilities, that players can invoke upon each other to gain advantage.
+
+## Game Setup
 
 1. Every Player is randomly assigned 1 of 6 _Classes_
 2. Every Player gains 2 common **Beds**, 3 random **Cards**, 6 **Fertilizers** and 4 **Coins**
@@ -16,15 +29,15 @@ Battle farm is a turn based card game for 2-6 players with a deck of crop cards 
 7. Other **Cards** are put in a deck and placed on the field at the _Deck_ area with their face down
 8. The game starts with every Player making their turns in the order, determined at step 4
 
-### Turn Phases
+## Turn Phases
 
 Every Player performs their turn in a certain sequence:
 
 1. The Player reduces `Reap Timer` on each of **Crops** in their **Beds**. **Crops**, having their `Reap Timer` equal to 0, are Harvested, being removed from its **Bed** and yielding **Coins** to the Player, equal to its `Crop Value`
 
-2. The Player has on option to acquire up to 1d4 **Cards** from the _Market_, if they have enough **Coins**. The **Coins** are then discarded.
+2. The Player has on option to acquire up to 1d4 **Cards** from the _Market_, if they have enough **Coins**. The **Coins** are then discarded. 
 
-    After taking the **Card** from the _Market_, a new one is drawn from the _Deck_ and placed to the same spot. If there are no more **Cards** left in the _Deck_, the current turn becomes the last one for all the following Players, and the Game ends afterwards
+   After taking the **Card** from the _Market_, a new one is drawn from the _Deck_ and placed to the same spot. If there are no more **Cards** left in the _Deck_, the current turn becomes the last one for all the following Players, and the Game ends afterwards
 
 3. The Player has an option to propose a trade, offering other Players to buy any subset of his **Cards**. Other Players then suggest the amount of **Coins** they wish to offer, and the current **Player** can accept one of the offers, if any, sealing the deal.
 
@@ -34,6 +47,7 @@ Every Player performs their turn in a certain sequence:
 5. The Player can use 1d4 **Fertilizers** to reduce the `Reap Timer` on any **Crop** in their **Beds** by 1 turn per **Crop** per **Fertilizer**. If the `Reap Timer` is reduced to zero on any given **Crop**, it is immediately harvested, yielding **Coins**, but the emptied **Bed** can't be planted the same turn.
 6. If by the end of their turn the Player has reached the `Win Limit` of **Coins**, the current turn becomes the last one for all the following Players, and the Game ends afterwards 
 
+### Win Limit 
 The `Win Limit` of **Coins** is set at the beginning of the Game depending on number of Players, and is calculated as
 > 44 + 6 * `Total number of players` + `Total sum of Crop Card values in Deck` / (1 + `Total number of Players`) rounded up
 
@@ -47,24 +61,24 @@ For instance, if a 1v1 Game is started with standard Deck, the `Win Limit` would
 | 5                 | 171       | 
 | 6                 | 164       |
 
-### Garden Beds
+## Garden Beds
 or just **Beds** are spots are where **Crops** are grown. They are positioned in front of each Player and are visible to all participants of the Game. When a Player plays a **Crop Card**, he plants that **Crop** in a **Garden Bed**, setting its `Reap Timer`. **Beds** come in a variety of types, providing different bonuses and mechanics. Player _Classes_ start with different sets of **Beds**, and they can be changed, acquired or destroyed during the Game with special **Cards**.
 
-| Garden Bed     | Special Bonus                                       |
-|----------------|-----------------------------------------------------|
-| Common Bed     | No bonuses                                          |
-| Raised Bed     | +2 **Coins** from Rare, Epic and Mythic **Crops**   |
-| Greenhouse     | Can't be targeted by negative Abilities             |
-| Hydroponic     | -1 `Reap Timer` for Rare, Epic and Mythic **Crops** |
-| Trellis        | +1 **Coin** from `Green` **Crops**                  |
-| Rotational Bed | +1 **Coin** from `Yellow` **Crops**                 |
-| Vertical Bed   | +1 **Coin** from `Red` **Crops**                    |
+| Garden Bed     | Special Bonus                                        |
+|----------------|------------------------------------------------------|
+| Common Bed     | No bonuses                                           |
+| Raised Bed     | +2 **Coins** from Rare, Epic and Mythic **Crops**    |
+| Greenhouse     | The **Crop** can't be targeted by negative Abilities |
+| Hydroponic     | -1 `Reap Timer` for Rare, Epic and Mythic **Crops**  |
+| Trellis        | +1 **Coin** from `Green` **Crops**                   |
+| Rotational Bed | +1 **Coin** from `Yellow` **Crops**                  |
+| Vertical Bed   | +1 **Coin** from `Red` **Crops**                     |
 
-### Cards
+## Cards
 
 **Cards** are the main expendable source of the Game. There is a set quantity of each **Card** in the _Deck_, and, once the _Deck_ is over, the Game is over too, if it was not finished earlier. Every Player gets a given number of **Cards** in the beginning of the Game, depending on their _Class_, and 6 more are placed at _Market_ their face up. All the rest reside in _Deck_ until required by certain actions. So at every moment of the Game every Player sees only their hand and the _Market_, as well as planted **Crops**, which were previously **Crop Cards**.
 
-#### Rarity
+### Rarity
 
 **Crops** come in 5 different Rarity grades, which define their `Seed Cost`, which is the amount of **Coins** a Player must discard to obtain a **Crop Card** of a given rarity from the  _Market_:
 - `Common` **Cards** - 1 **Coin**
@@ -73,7 +87,7 @@ or just **Beds** are spots are where **Crops** are grown. They are positioned in
 - `Epic` **Cards** - 5 **Coins**
 - `Mythic` **Cards** - 8 **Coins**
 
-#### Crop Cards
+### Crop Cards
 
 **Crop Cards** are the main source of Players income, with their value converted to **Coins** if a Player manages to plant and then harvest it
 
@@ -119,7 +133,7 @@ All **Crops** are divided into 3 groups: `Red`, `Green` and `Yellow`. Those grou
 That makes up for a total of **105 Crop Cards** with a total `Crop Value` of **582 Coins**
 
 
-#### Action Cards
+### Action Cards
 
 **Action Cards** require **Fertilizers** as expendables to be played. There is a set quantity of each **Action Card** in a _Deck_, and they come in the same 5 Rarities as **Crop Cards**.
 
@@ -149,7 +163,7 @@ That makes up for a total of **105 Crop Cards** with a total `Crop Value` of **5
 | Clone                  | 4    | Mythical | 1        | Choose any growing **Crop**. Add an identical **Crop Card** to your hand                                                                         |
 | Wither                 | 3    | Mythical | 1        | Choose any growing **Crop**. Its `Crop Value` is set to 1                                                                                        |
 
-### Classes
+## Classes
 Every Player is playing a certain _Class_, which defines his set of **Beds**, starting **Cards**, **Coins** and provides them with a unique **Action Card**
 
 | Class           | Starting Bonus                    | Starting Beds                    | Action Card                                                                                                                                                                                | Action Card Cost  |
