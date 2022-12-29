@@ -67,6 +67,7 @@ or just **Beds** are spots are where **Crops** are grown. They are positioned in
 | --- | --- | --- | ---| --- |
 | Garden Gourmet | 1 | Common | 8 | Choose a growing **Crop**, it's value is increased by this card's value |
 | Fertilizer Frenzy | 1 | Common | 8 | Choose a growing **Crop**. For each grade of that **Crop** Rarity, reduce it's value by 1 (1 for Common, 2 for Uncommon, etc.), down to 0 |
+| Recycle | 0 | Common | 8 | Discard a **Card** from your hand. For each grade of that **Card** Rarity, gain 1 **Fertilizer** (1 for Common, 2 for Uncommon, etc.), down to 0 |
 | Lucky Find | 0 | Common | 8 | Gain 1d4 **Coins** |
 | Weed Whacker | 1 | Uncommon | 6 | Gain as many **Coins**, as you have growing **Crops** | 
 | Pest Control | 3 | Uncommon | 6 | All your growing **Crops** increase their value by 1 |
@@ -79,7 +80,7 @@ or just **Beds** are spots are where **Crops** are grown. They are positioned in
 | Rotational Bed | 2 | Epic | 2 | Transform any **Bed** into `Rotational Bed` |
 | Green Grocer | 1 | Mythical | 1 | Roll d6 for each unit of this **Card** value. Gain as many **Fertilizers** |
 | Thorny Fence | 3 | Mythical | 1 | Chosen Oponnent discards as many **Cards** from his hand, as you have growing **Crops** |
-| Retractable Greenhouse | 5 | Mythical | 1 | Transform any **Bed** into `Greenhouse` | 
+| Retractable Greenhouse | 3 | Mythical | 1 | Transform any **Bed** into `Greenhouse` | 
 
 ### Classes
 Every Player is playing a certain _Class_, which defines his set of **Beds**, starting **Cards**, **Coins** and provies them with a unique **Action Card**.
