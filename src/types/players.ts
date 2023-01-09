@@ -20,3 +20,7 @@ export type TPlayer = {
 	beds: TBed[];
 	discardedCards?: TCard[];
 };
+
+export type TPlayerTarget = {
+	targetClass: TPlayerClass;
+};
