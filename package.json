@@ -1,0 +1,26 @@
+{
+  "name": "battle-farm",
+  "version": "0.1.0",
+  "description": "Implementation of a board game, designed with help of ChatGPT and Midjourney",
+  "main": "/public/index.html",
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/octaharon/battle-farm.git"
+  },
+  "keywords": [
+    "react"
+  ],
+  "author": "Alexander Uskov <neolord.tmb@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/octaharon/battle-farm/issues"
+  },
+  "homepage": "https://github.com/octaharon/battle-farm#readme",
+  "devDependencies": {
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.4"
+  }
+}
