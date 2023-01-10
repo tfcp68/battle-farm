@@ -24,13 +24,13 @@ import {
 } from '~/src/types/fsm/fertilize';
 
 export enum TTurnPhase {
-	WAITING,
 	HARVEST,
 	SHOPPING,
 	TRADE,
 	PLAYING,
 	FERTILIZE,
 	CALCULATION,
+	WAITING,
 }
 
 export type TTurnSubPhaseDict = {
