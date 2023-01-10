@@ -3,7 +3,6 @@ import { TTargetIndex } from '~/src/types/fsm/shared';
 
 export enum TPlayPhase {
 	IDLE,
-	PICK_CARD,
 	TARGET_MODE,
 	FINISHED,
 }
@@ -38,7 +37,7 @@ export enum TPlayAction {
 export type TPlayContext<T extends TPlayPhase> =
 	T extends TPlayPhase.TARGET_MODE
 		? { targetMode: TPlayTargetMode }
-		: T extends TPlayPhase.PICK_CARD
+		: T extends TPlayPhase.IDLE
 		? TTargetIndex
 		: never;
 
@@ -48,9 +47,9 @@ export type TPlayPayload<T extends TPlayAction> =
 		: T extends TPlayAction.CHOOSE_CARD
 		? TTargetIndex
 		: T extends TPlayAction.CHOOSE_PLAYER
-		? TTargetIndex
-		: T extends TPlayAction.CHOOSE_CARD
 		? TPlayerTarget
+		: T extends TPlayAction.CHOOSE_CARD
+		? TTargetIndex
 		: T extends TPlayAction.CHOOSE_MARKET_SLOT
 		? TTargetIndex
 		: T extends TPlayAction.CHOOSE_BED

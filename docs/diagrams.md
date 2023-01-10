@@ -3,7 +3,6 @@ State Diagrams for Finite State Machines
 
 ## Turn Phases
 
-
 ### Shopping
 
 ```mermaid
@@ -39,6 +38,49 @@ IDLE --> COLLECT: ADD_CARD_TO_TRADE (index)
 OFFERS_WAITING --> OFFERS_CHOOSING: GATHER_OFFERS (offers)
 COLLECT --> remove_last: REMOVE_CARD_FROM_TRADE (index)
 COLLECT --> OFFERS_WAITING: SEND_TRADE (TCard[])
+```
+
+### Playing Cards
+
+```mermaid
+stateDiagram-v2
+direction LR
+[*] --> IDLE: RESET
+IDLE --> IDLE: HOVER_CARD (index)
+IDLE --> TARGET_MODE: CHOOSE_CARD (index)
+IDLE --> FINISHED: SKIP
+TARGET_MODE --> FINISHED: SKIP
+TARGET_MODE --> IDLE: CANCEL_SELECTION
+TARGET_MODE --> IDLE: CHOOSE_PLAYER
+TARGET_MODE --> IDLE: CHOOSE_BED
+TARGET_MODE --> IDLE: CHOOSE_CROP
+TARGET_MODE --> IDLE: CHOOSE_CARD
+TARGET_MODE --> IDLE: CHOOSE_MARKET_SLOT
+state TARGET_MODE {
+    direction LR
+    [*]-->FOE
+    [*]-->PLAYER
+    [*]-->BED_FOE
+    [*]-->BED_OWN
+    [*]-->BED_ANY
+    [*]-->CROP_FOE
+    [*]-->CROP_OWN
+    [*]-->CROP_ANY
+    [*]-->CARD_OWN
+    [*]-->CARD_MARKET
+    [*]-->CARD_DISCARDED
+    FOE --> [*]: CHOOSE_PLAYER (index)
+    PLAYER --> [*]: CHOOSE_PLAYER (class)
+    BED_FOE --> [*]: CHOOSE_BED (class,index)
+    BED_OWN --> [*]: CHOOSE_BED (class,index)
+    BED_ANY --> [*]: CHOOSE_BED (class,index)
+    CROP_FOE --> [*]: CHOOSE_CROP (class,index)
+    CROP_OWN --> [*]: CHOOSE_CROP (class,index)
+    CROP_ANY --> [*]: CHOOSE_CROP (class,index)
+    CARD_OWN --> [*]: CHOOSE_CARD (index)
+    CARD_DISCARDED --> [*]: CHOOSE_CARD (index)
+    CARD_MARKET --> [*]: CHOOSE_MARKET_SLOT (index)
+    }
 ```
 
 ### Fertilizing
