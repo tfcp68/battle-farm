@@ -19,13 +19,13 @@ export enum TWaitAction {
 	SKIP,
 }
 
-export type TTradeContext<T extends TWaitPhase> = T extends TWaitPhase.HAS_TRADE
+export type TWaitContext<T extends TWaitPhase> = T extends TWaitPhase.HAS_TRADE
 	? TTrade & TTargetIndex
 	: T extends TWaitPhase.OFFER_SENT
 	? TTrade & TTargetIndex
 	: never;
 
-export type TTradePayload<T extends TWaitAction> =
+export type TWaitPayload<T extends TWaitAction> =
 	T extends TWaitAction.SEND_TRADE
 		? TTrade
 		: T extends TWaitAction.ADD_COINS_TO_OFFER

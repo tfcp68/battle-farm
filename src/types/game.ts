@@ -31,8 +31,8 @@ export type TGame<
 	TurnPhase extends TTurnPhase = TTurnPhase,
 	TurnSubPhase extends TTurnSubPhase<TurnPhase> = TTurnSubPhase<TurnPhase>
 > = {
-	Phase: TGamePhase;
-	players: LengthArray<TPlayer | null, typeof MAX_PLAYERS>[];
+	phase: TGamePhase;
+	players: Partial<Record<TPlayerClass, TPlayer>>;
 	turns: {
 		turnOrder: TTurnOrder;
 		currentTurn: TPlayerClass;

@@ -3,7 +3,7 @@ import { TTargetIndex } from '~/src/types/fsm/shared';
 export enum TFertilizePhase {
 	IDLE = 0,
 	PICK_CROP,
-	SKIP,
+	FINISHED,
 }
 
 export enum TFertilizeAction {
@@ -30,3 +30,7 @@ export type TFertilizePayload<T extends TFertilizeAction> =
 		: T extends TFertilizeAction.CONFIRM
 		? TTargetIndex
 		: never;
+
+export const CONTEXT_FERTILIZE: TFertilizeContext<any> = {
+	index: 0,
+};
