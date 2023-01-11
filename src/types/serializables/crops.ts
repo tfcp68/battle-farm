@@ -1,3 +1,5 @@
+import { TCardType, TGenericCard } from '~/src/types/serializables/cards';
+
 export enum TCropColor {
 	UNKNOWN,
 	RED,
@@ -52,3 +54,4 @@ export type TBed = {
 	type: TGardenBedType;
 	crop: TCrop | null;
 };
+export type TCropCard = TGenericCard<TCardType.CROP> & TCrop;

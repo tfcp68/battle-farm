@@ -67,7 +67,7 @@ or just **Beds** are spots are where [Crops](#crops) are grown. They are positio
 ### Game Area
 
 #### Deck
-There is a total of **204** [Cards](#cards) in a Deck, having 5 different [rarities](#rarity), that define their quantity, and divided into two types: [Crop Cards](#crop-cards) and [Action Cards](#action-cards). In the current implementation the Deck is not an actual sequence of Cards but a set rather, and every time a [Card](#cards) is to be drawn from the Deck, it's sampled all options using their remaining quantities as sampling weights. A set amount of [Cards](#cards) is distributed between Players at the beginning of the Game, and the rest are hidden from Players, only acquired by drawing. When the Deck is finished, the Game is over too.
+There is a total of **204** [Cards](#cards) in a Deck, having 5 different [rarities](#rarity), that define their quantity, and divided into two types: [Crop Cards](#crop-cards) and [Action Cards](#action-cards). A set amount of [Cards](#cards) is distributed between Players at the beginning of the Game, and the rest are hidden from Players, only acquired by drawing. When the Deck is finished, the Game is over too.
 
 #### Market
 Card Market is a special area, where [Cards](#cards) are stored with their face up, visible to Players. Players can acquire those [Cards](#cards) by exchanging them for a constant amount of [Coins](#coins), depending on their [Rarity](#rarity). Market has **6** card slots which are refilled from the [Deck](#deck) immediately as the [Cards](#cards) are taken from them.
@@ -183,7 +183,7 @@ can be modified with effects of other [Cards](#cards), which state explicitly th
 to win the game.
 
 When played, a [Crop Card](#crop-cards) must be planted (placed) in an empty **Garden Bed**, becoming the same [Crop](#crops), where it
-starts the countdown to harvest, called
+starts the countdown to Harvest, called
 `Reap Timer`:
 
 - `Common` [Crops](#crops) - 1 Turn
@@ -197,6 +197,8 @@ equal to its `Crop Value`. The `Value` of the [Crop](#crops) and its `Reap Timer
 > `Gold Per Turn` = ( `Crop Value` - `Market Price` ) / `Reap Timer`
 
 That means if a Player got a [Crop Card](#crop-cards) from effects of other [Cards](#cards), that number is mostly irrelevant, and the relative `Value` of the [Crops](#crops) is slightly altered. Notably, `Common` [Crop Cards](#crop-cards) gain +50-100% pure `Crop Value` if obtained without payment, while free `Uncommon` [Cards](#cards) become more profitable than even `Mythical` ones, if those were acquired from the [Market](#market).
+
+If the [Crop](#crops) has a special effect on Harvest, it is immediately triggered for the current Player. If a Player manages to Harvest an Opponent's Plant with an [Action Card](#action-card), they are to apply its Effect as the Crop was theirs.
 
 All [Crops](#crops) are divided into 3 groups: `Red`, `Green` and `Yellow`. Those groups don't have any properties themselves,
 but affect how particular [Crops](#crops) interact with [Beds](#garden-beds), [Action Cards](#action-cards) and each other.

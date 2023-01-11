@@ -3,32 +3,30 @@ import {
 	CONTEXT_FERTILIZE,
 	TFertilizeAction,
 	TFertilizePhase,
-} from '~/src/types/fsm/fertilize';
+} from '~/src/types/fsm/slices/fertilize';
+import { isFertilizeContext } from '~/src/types/typeGuards';
+import { TGameContainer } from '~/src/types/serializables/game';
 
 const reducer_Fertilize_IDLE: TTurnBasedReducer<
 	TTurnPhase.FERTILIZE,
 	TFertilizePhase.IDLE
 > = (params) => {
 	let {
-		subPhase,
 		game,
-		context = CONTEXT_FERTILIZE,
+		context = { subPhase: TFertilizePhase.IDLE, ...CONTEXT_FERTILIZE },
 		payload,
 		action,
 	} = params;
 	switch (action) {
 		case TFertilizeAction.HOVER:
 			return {
-				subPhase,
 				game,
 				context: {
 					...context,
 					index: payload.index,
 				},
 			};
-			break;
 		case TFertilizeAction.SKIP:
-			game.turns.currentTurnSubPhase = TFertilizePhase.FINISHED;
 			return {
 				subPhase: TFertilizePhase.FINISHED,
 				context: null,
@@ -36,13 +34,14 @@ const reducer_Fertilize_IDLE: TTurnBasedReducer<
 			};
 		case TFertilizeAction.CHOOSE_CROP:
 			return {
-				subPhase: TFertilizePhase.PICK_CROP,
-				context: { index: payload.index },
+				context: {
+					index: payload.index,
+					subPhase: TFertilizePhase.TARGET_CROP,
+				},
 				game,
 			};
 		default:
 			return {
-				subPhase,
 				game,
 				context,
 			};
@@ -52,37 +51,29 @@ const reducer_Fertilize_IDLE: TTurnBasedReducer<
 export const turnPhaseReducer_Fertilize: TTurnBasedReducer<
 	TTurnPhase.FERTILIZE
 > = (params) => {
-	let {
-		subPhase = null,
-		game = null,
-		context = CONTEXT_FERTILIZE,
-		payload = null,
-		action = null,
-	} = params;
+	let { game = null, context, payload = null, action = null } = params;
 	game = JSON.parse(JSON.stringify(game));
 	context = JSON.parse(JSON.stringify(context));
 	if (null === action)
 		throw new Error(`Missing action: ${JSON.stringify(params)}`);
-	if (null === subPhase)
-		throw new Error(`Missing action: ${JSON.stringify(params)}`);
+	if (null === context)
+		throw new Error(`Missing turn context: ${JSON.stringify(params)}`);
 	if (null === game)
-		throw new Error(`Missing action: ${JSON.stringify(params)}`);
+		throw new Error(`Missing game: ${JSON.stringify(params)}`);
 	if (null === payload)
-		throw new Error(`Missing action: ${JSON.stringify(params)}`);
-	switch (subPhase) {
-		case TFertilizePhase.IDLE:
-			return reducer_Fertilize_IDLE({
-				game,
-				context,
-				payload,
-				action,
-				subPhase,
-			});
-		default:
-			return {
-				subPhase,
-				game,
-				context,
-			};
-	}
+		throw new Error(`Missing payload: ${JSON.stringify(params)}`);
+	if (isFertilizeContext(TFertilizePhase.IDLE)(context))
+		return reducer_Fertilize_IDLE({
+			game: game as TGameContainer<
+				TTurnPhase.FERTILIZE,
+				TFertilizePhase.IDLE
+			>,
+			context,
+			payload,
+			action,
+		});
+	return {
+		game,
+		context,
+	};
 };

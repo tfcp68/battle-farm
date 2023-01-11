@@ -1,9 +1,11 @@
 import { TTargetIndex, TTrade } from '~/src/types/fsm/shared';
+import { TTargetContext } from '~/src/types/fsm/slices/target';
 
 export enum TWaitPhase {
 	INIT,
 	HAS_TRADE,
 	OFFER_SENT,
+	TARGET_MODE,
 	FINISHED,
 }
 
@@ -16,6 +18,8 @@ export enum TWaitAction {
 	CANCEL_OFFER,
 	OFFER_ACCEPTED,
 	END_TRADE,
+	ENTER_TARGET_MODE,
+	QUIT_TARGET_MODE,
 	SKIP,
 }
 
@@ -36,4 +40,6 @@ export type TWaitPayload<T extends TWaitAction> =
 		? TTargetIndex
 		: T extends TWaitAction.OFFER_ACCEPTED
 		? TTargetIndex
+		: T extends TWaitAction.ENTER_TARGET_MODE
+		? TTargetContext<any>
 		: never;

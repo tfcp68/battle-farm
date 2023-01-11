@@ -4,8 +4,8 @@ import {
 	TTargetIndexList,
 	TTrade,
 } from '~/src/types/fsm/shared';
-import { TPlayerClass, TPlayerTarget } from '~/src/types/players';
-import { TCard } from '~/src/types/cards';
+import { TPlayerClass, TPlayerTarget } from '~/src/types/serializables/players';
+import { TCard } from '~/src/types/serializables/cards';
 
 export enum TTradePhase {
 	INIT,

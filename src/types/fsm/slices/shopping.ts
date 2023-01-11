@@ -2,7 +2,7 @@ import { TTargetIndex } from '~/src/types/fsm/shared';
 
 export enum TShoppingPhase {
 	IDLE,
-	CONFIRM,
+	CONFIRM_TRADE,
 	FINISHED,
 }
 
@@ -18,7 +18,7 @@ export enum TShoppingAction {
 export type TShoppingContext<T extends TShoppingPhase> =
 	T extends TShoppingPhase.IDLE
 		? TTargetIndex
-		: T extends TShoppingPhase.CONFIRM
+		: T extends TShoppingPhase.CONFIRM_TRADE
 		? TTargetIndex
 		: never;
 
