@@ -1,6 +1,44 @@
 State Diagrams for Finite State Machines
 ================================
 
+<!-- TOC -->
+  * [Window Mode](#window-mode)
+  * [Target Mode](#target-mode)
+  * [Game Loop](#game-loop)
+  * [Turn Loop](#turn-loop)
+  * [Turn Phases](#turn-phases)
+    * [Harvest](#harvest)
+    * [Shopping](#shopping)
+    * [Trading](#trading)
+    * [Playing Cards](#playing-cards)
+    * [Fertilizing](#fertilizing)
+    * [Waiting](#waiting)
+<!-- TOC -->
+
+## Window Mode
+
+Every Window Mode represent different visual layout and different reactions to user input, including keystrokes
+
+```mermaid
+stateDiagram-v2
+[*]-->INIT: RESET
+INIT-->INTRO: RUN
+INTRO-->MAIN_MENU: TO_MENU
+MAIN_MENU-->[*]: EXIT
+MAIN_MENU-->MAIN_MENU: MENU_HOVER (index)
+MAIN_MENU-->GAME_LOBBY: CREATE_GAME (playerId)
+MAIN_MENU-->GAME_LOBBY: JOIN_GAME (gameId, playerId)
+GAME_LOBBY-->[*]: EXIT
+GAME_LOBBY-->MAIN_MENU: TO_MENU
+GAME_LOBBY-->GAME_STARTING: START_GAME (gameId, playerIds)
+GAME_STARTING-->IN_GAME: BEGIN_GAME (gameId, game)
+IN_GAME-->[*]: EXIT
+IN_GAME-->SCORE_SCREEN: END_GAME
+IN_GAME-->MAIN_MENU: TO_MENU
+SCORE_SCREEN-->MAIN_MENu: TO_MENU
+SCORE_SCREEN-->[*]: EXIT
+```
+
 ## Target Mode
 
 Target Mode is a parallel automata that blocks parent state transition until resolved. Target Mode can be turned on for a Player in almost any phase of Turn either by playing a Card or being a target of other Player's Card. In the latter case, `SKIP` forces a random choice of target, while in the former it returns the Card to Hand.
@@ -62,6 +100,51 @@ fork-->[*]: targetOptional===true
 fork-->INIT: targetOptional===false
 ```
 
+## Game Loop
+
+Game Loop is a state machine that represents the lifecycle of a single game, starting with players agreeing to start a game
+
+```mermaid
+stateDiagram-v2
+[*]-->PLANNED: RESET
+PLANNED-->FINISHED: END
+PLANNED-->ROLLING_CHARACTERS: ROLL_CHARACTERS
+ROLLING_CHARACTERS-->ROLLING_TURN_ORDER: ROLL_TURN_ORDER
+ROLLING_TURN_ORDER-->SETUP: PREPARE
+SETUP-->IN_PROGRESS: START
+IN_PROGRESS-->IN_PROGRESS: TURN_START
+IN_PROGRESS-->IN_PROGRESS: TURN_PHASE_START
+IN_PROGRESS-->IN_PROGRESS: TURN_PHASE_END
+state isLimitReached <<choice>>
+IN_PROGRESS-->isLimitReached: TURN_END
+IN_PROGRESS-->FINISHED: END
+isLimitReached-->IN_PROGRESS: Coin Limit Not Reached
+isLimitReached-->LAST_TURN: Coin Limit  Reached
+LAST_TURN-->LAST_TURN: TURN_START
+LAST_TURN-->LAST_TURN: TURN_PHASE_START
+LAST_TURN-->LAST_TURN: TURN_PHASE_END
+LAST_TURN-->FINISHED: TURN_END
+```
+
+## Turn Loop
+Turn Loop is triggered with `TURN_START` from Game Loop and is resolved by triggering `TURN_END`. Every transition within Turn Loop is triggered with `TURN_PHASE_START`, and the `FINISHED` state of the corresponding Turn Phase triggers `TURN_PHASE_END`
+
+```mermaid
+stateDiagram-v2
+[*]-->WAITING
+WAITING-->HARVEST
+HARVEST-->SHOPPING
+SHOPPING-->TRADE
+TRADE-->PLAYING
+PLAYING-->FERTILIZE
+FERTILIZE-->CALCULATION
+state isLastTurn <<choice>>
+CALCULATION-->isLastTurn
+isLastTurn-->[*]: is last turn
+isLastTurn-->WAITING: game continues
+```
+
+
 ## Turn Phases
 
 ### Harvest
@@ -89,15 +172,18 @@ One of the simplest Phases, Shopping enables Target Mode (`CARD_MARKET` mode) by
 
 ```mermaid
 stateDiagram-v2
-state "TARGET_MODE (Market Slots)" as IDLE
-[*]-->IDLE: RESET
+state hasMoney <<choice>>
+[*]-->hasMoney: RESET
 [*]-->FINISHED: SKIP
+state "TARGET_MODE (Market Slots)" as IDLE
+hasMoney-->IDLE: has enough Coins
+hasMoney-->FINISHED: no affordable Cards
 IDLE-->FINISHED: SKIP
-CONFIRM_TRADE-->FINISHED: SKIP
-CONFIRM_TRADE-->IDLE: CANCEL_SELECTION
-CONFIRM_TRADE-->IDLE: CONFIRM_DEAL (index)
 IDLE-->IDLE: HOVER (index)
 IDLE-->CONFIRM_TRADE: CHOOSE_MARKET_SLOT (index)
+CONFIRM_TRADE-->FINISHED: SKIP
+CONFIRM_TRADE-->IDLE: CANCEL_SELECTION
+CONFIRM_TRADE-->hasMoney: CONFIRM_DEAL (index)
 FINISHED-->[*]
 ```
 
@@ -172,15 +258,18 @@ Fertilizing Phase is pretty straightforward and allows the current Player to exp
 
 ```mermaid
 stateDiagram-v2
-state "TARGET_MODE (Fertilizing Crop)" as IDLE
+state canApply <<choice>>
+[*]-->canApply: RESET
 [*]-->FINISHED: SKIP
-[*]-->IDLE: RESET
-CROP_CONFIRM-->FINISHED: SKIP
-IDLE-->FINISHED: SKIP
+state "TARGET_MODE (Fertilizing Crop)" as IDLE
+canApply-->FINISHED: no Crops or Fertilizers
+canApply-->IDLE: have Fertilizers and Crops
 IDLE-->IDLE: HOVER (index)
+IDLE-->FINISHED: SKIP
 IDLE-->CROP_CONFIRM: CHOOSE_CROP (index)
+CROP_CONFIRM-->FINISHED: SKIP
 CROP_CONFIRM-->IDLE: CANCEL_SELECTION
-CROP_CONFIRM-->IDLE: FERTILIZE (index)
+CROP_CONFIRM-->canApply: FERTILIZE (index)
 FINISHED --> [*]
 ```
 

@@ -2,7 +2,7 @@ import { TTargetIndex } from '~/src/types/fsm/shared';
 
 export enum TFertilizePhase {
 	IDLE = 0,
-	TARGET_CROP,
+	CROP_CONFIRM,
 	FINISHED,
 }
 
@@ -18,7 +18,7 @@ export enum TFertilizeAction {
 export type TFertilizeContext<T extends TFertilizePhase> =
 	T extends TFertilizePhase.IDLE
 		? TTargetIndex
-		: T extends TFertilizePhase.TARGET_CROP
+		: T extends TFertilizePhase.CROP_CONFIRM
 		? TTargetIndex
 		: never;
 

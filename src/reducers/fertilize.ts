@@ -36,7 +36,7 @@ const reducer_Fertilize_IDLE: TTurnBasedReducer<
 			return {
 				context: {
 					index: payload.index,
-					subPhase: TFertilizePhase.TARGET_CROP,
+					subPhase: TFertilizePhase.CROP_CONFIRM,
 				},
 				game,
 			};

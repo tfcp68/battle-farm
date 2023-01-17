@@ -7,6 +7,7 @@ import { ICard, IDeck, TCard, TDeck } from '~/src/types/serializables/cards';
 import { LengthArray, TPlayerRecord } from '~/src/types/shared';
 import { TTurnPhase, TTurnSubContext, TTurnSubPhase } from '~/src/types/fsm';
 import { TTargetContext } from '~/src/types/fsm/slices/target';
+import { TGameStat } from '~/src/types/serializables/stat';
 
 export const MARKET_SIZE = 6;
 export const MAX_PLAYERS = 6;
@@ -25,17 +26,16 @@ export enum TGamePhase {
 }
 
 export enum TGameAction {
-	UNKNOWN,
-	PREPARE,
+	RESET,
 	ROLL_CHARACTERS,
 	ROLL_TURN_ORDER,
+	PREPARE,
 	START,
 	TURN_START,
 	TURN_PHASE_START,
 	TURN_PHASE_END,
 	NEXT_PLAYER,
 	TURN_END,
-	TURN_LAST,
 	END,
 }
 
@@ -61,6 +61,14 @@ export type TGame = {
 	deck: TDeck;
 	winLimit: number;
 	market: LengthArray<TCard, typeof MARKET_SIZE>;
+};
+
+export type TGameScore = {
+	uuid: number;
+	winLimit: number;
+	stat: TGameStat;
+	playerNames: TPlayerRecord<string>;
+	playerScore: TPlayerRecord<number>;
 };
 
 export type TGameContainer<
