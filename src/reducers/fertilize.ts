@@ -64,10 +64,7 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<
 		throw new Error(`Missing payload: ${JSON.stringify(params)}`);
 	if (isFertilizeContext(TFertilizePhase.IDLE)(context))
 		return reducer_Fertilize_IDLE({
-			game: game as TGameContainer<
-				TTurnPhase.FERTILIZE,
-				TFertilizePhase.IDLE
-			>,
+			game,
 			context,
 			payload,
 			action,

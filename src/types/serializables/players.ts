@@ -1,6 +1,6 @@
 import { TBed, TCrop, TGardenBedType } from '~/src/types/serializables/crops';
 import { ICard, TCard } from '~/src/types/serializables/cards';
-import { TTargetContext, TTargetMode } from '~/src/types/fsm/slices/target';
+import { TTargetModeContext, TTargetMode } from '~/src/types/fsm/slices/target';
 
 export enum TPlayerClass {
 	EMPTY,
@@ -39,7 +39,7 @@ export interface IPlayer {
 	discardCoins: (coins: number) => this;
 	discardRandomCards: (count: number) => this;
 	discardCards: (uuids: number[] | number) => this;
-	setTargetMode: <T extends TTargetMode>(mode: TTargetContext<T>) => this;
+	setTargetMode: <T extends TTargetMode>(mode: TTargetModeContext<T>) => this;
 	quitTargetMode: () => this;
 	getCrop: (bedIndex: number) => TCrop | null;
 	getBed: (bedIndex: number) => TBed | null;

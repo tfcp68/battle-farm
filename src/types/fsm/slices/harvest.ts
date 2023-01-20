@@ -1,5 +1,5 @@
 import { TTargetIndex, TTrade } from '~/src/types/fsm/shared';
-import { TTargetContext } from '~/src/types/fsm/slices/target';
+import { TTargetModeContext } from '~/src/types/fsm/slices/target';
 import { TPlayerTarget } from '~/src/types/serializables/players';
 import { TCrop } from '~/src/types/serializables/crops';
 
@@ -17,11 +17,11 @@ export enum THarvestAction {
 }
 
 export type THarvestContext<T extends THarvestPhase> =
-	T extends THarvestPhase.TARGET_MODE ? TTargetContext<any> : never;
+	T extends THarvestPhase.TARGET_MODE ? TTargetModeContext<any> : never;
 
 export type THarvestPayload<T extends THarvestAction> =
 	T extends THarvestAction.CROP_HARVESTED
-		? { crop: TCrop; targetContext?: TTargetContext<any> }
+		? { crop: TCrop; targetContext?: TTargetModeContext<any> }
 		: T extends THarvestAction.EFFECT_APPLIED
 		? { crop: TCrop }
 		: never;

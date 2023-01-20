@@ -6,8 +6,9 @@ import {
 import { ICard, IDeck, TCard, TDeck } from '~/src/types/serializables/cards';
 import { LengthArray, TPlayerRecord } from '~/src/types/shared';
 import { TTurnPhase, TTurnSubContext, TTurnSubPhase } from '~/src/types/fsm';
-import { TTargetContext } from '~/src/types/fsm/slices/target';
+import { TTargetModeContext } from '~/src/types/fsm/slices/target';
 import { TGameStat } from '~/src/types/serializables/stat';
+import { TGameEvent } from '~/src/types/fsm/events';
 
 export const MARKET_SIZE = 6;
 export const MAX_PLAYERS = 6;
@@ -71,10 +72,9 @@ export type TGameScore = {
 	playerScore: TPlayerRecord<number>;
 };
 
-export type TGameContainer<
-	TurnPhase extends TTurnPhase = TTurnPhase,
-	TurnSubPhase extends TTurnSubPhase<TurnPhase> = TTurnSubPhase<TurnPhase>
-> = TGame & { turns: TTurnContainer };
+export type TGameContainer = TGame & {
+	turns: TTurnContainer;
+};
 
 export interface IGame {
 	players: TPlayerRecord<IPlayer>;
@@ -83,7 +83,7 @@ export interface IGame {
 	turns: TTurnContainer;
 	phase: TGamePhase;
 	market: LengthArray<ICard, typeof MARKET_SIZE>;
-	targetingContext: TTargetContext<any>;
+	targetingContext: TTargetModeContext<any>;
 	exportGame: () => TGameContainer;
 	importGame: (savedGame: TGameContainer) => this;
 	putCardToDeck: (card: ICard) => this;

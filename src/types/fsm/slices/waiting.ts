@@ -1,5 +1,5 @@
-import { TTargetIndex, TTrade } from '~/src/types/fsm/shared';
-import { TTargetContext } from '~/src/types/fsm/slices/target';
+import { TPlayerIndex, TTargetIndex, TTrade } from '~/src/types/fsm/shared';
+import { TTargetModeContext } from '~/src/types/fsm/slices/target';
 
 export enum TWaitPhase {
 	INIT,
@@ -11,13 +11,10 @@ export enum TWaitPhase {
 
 export enum TWaitAction {
 	RESET,
-	SEND_TRADE,
 	ADD_COINS_TO_OFFER,
 	REMOVE_COINS_FROM_OFFER,
 	MAKE_OFFER,
-	CANCEL_OFFER,
 	OFFER_ACCEPTED,
-	END_TRADE,
 	ENTER_TARGET_MODE,
 	QUIT_TARGET_MODE,
 	SKIP,
@@ -30,16 +27,14 @@ export type TWaitContext<T extends TWaitPhase> = T extends TWaitPhase.HAS_TRADE
 	: never;
 
 export type TWaitPayload<T extends TWaitAction> =
-	T extends TWaitAction.SEND_TRADE
-		? TTrade
-		: T extends TWaitAction.ADD_COINS_TO_OFFER
-		? TTargetIndex
+	T extends TWaitAction.ADD_COINS_TO_OFFER
+		? TPlayerIndex
 		: T extends TWaitAction.REMOVE_COINS_FROM_OFFER
-		? TTargetIndex
+		? TPlayerIndex
 		: T extends TWaitAction.MAKE_OFFER
-		? TTargetIndex
+		? TPlayerIndex & TTrade
 		: T extends TWaitAction.OFFER_ACCEPTED
-		? TTargetIndex
+		? TPlayerIndex & TTrade
 		: T extends TWaitAction.ENTER_TARGET_MODE
-		? TTargetContext<any>
+		? TTargetModeContext<any>
 		: never;

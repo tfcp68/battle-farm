@@ -13,6 +13,7 @@ export type TPlayerStat = {
 	actionCardsPlayed: Record<TActionId, number>;
 	cropsPlanted: Record<TCropId, number>;
 	cropsHarvested: Record<TCropId, number>;
+	cropsDestroyed: number;
 	coinsAcquired: number;
 	coinsFromHarvest: number;
 	fertilizerUsed: number;
@@ -22,7 +23,6 @@ export type TPlayerStat = {
 
 export type TGameStat = {
 	players: TPlayerRecord<TPlayerStat>;
-	cropsDestroyed: number;
 	totalMarketCards: number;
 	totalCropValue: number;
 };

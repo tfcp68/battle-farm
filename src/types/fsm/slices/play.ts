@@ -1,6 +1,6 @@
 import { TPlayerTarget } from '~/src/types/serializables/players';
-import { TTargetIndex } from '~/src/types/fsm/shared';
-import { TTargetContext, TTargetMode } from '~/src/types/fsm/slices/target';
+import { TPlayerIndex, TTargetIndex } from '~/src/types/fsm/shared';
+import { TTargetModeContext, TTargetMode } from '~/src/types/fsm/slices/target';
 import { ICard, TCardType } from '~/src/types/serializables/cards';
 
 export enum TPlayPhase {
@@ -25,11 +25,11 @@ export enum TPlayAction {
 
 export type TPlayContext<T extends TPlayPhase> =
 	T extends TPlayPhase.TARGET_ACTION
-		? TTargetContext<any>
+		? TTargetModeContext<any>
 		: T extends TPlayPhase.TARGET_EFFECT
-		? TTargetContext<any>
+		? TTargetModeContext<any>
 		: T extends TPlayPhase.TARGET_CROP
-		? TTargetContext<TTargetMode.BED_OWN>
+		? TTargetModeContext<TTargetMode.BED_OWN>
 		: T extends TPlayPhase.IDLE
 		? TTargetIndex
 		: never;
@@ -40,15 +40,11 @@ export type TPlayPayload<T extends TPlayAction> =
 		: T extends TPlayAction.CHOOSE_CARD
 		? TTargetIndex
 		: T extends TPlayAction.TARGET_MODE
-		? TTargetContext<any>
+		? TTargetModeContext<any>
 		: T extends TPlayAction.PLANT_CROP
 		? { card: ICard<TCardType.CROP> } & TTargetIndex
 		: T extends TPlayAction.AFTER_PLANT
-		? { card: ICard<TCardType.CROP> } & Partial<
-				TTargetIndex & TPlayerTarget
-		  >
+		? { card: ICard<TCardType.CROP> } & Partial<TPlayerIndex>
 		: T extends TPlayAction.EXECUTE_ACTION
-		? { card: ICard<TCardType.ACTION> } & Partial<
-				TTargetIndex & TPlayerTarget
-		  >
+		? { card: ICard<TCardType.ACTION> } & Partial<TPlayerIndex>
 		: never;

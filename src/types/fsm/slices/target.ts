@@ -1,4 +1,4 @@
-import { TTargetIndex } from '~/src/types/fsm/shared';
+import { TPlayerIndex, TTargetIndex } from '~/src/types/fsm/shared';
 import { TPlayer, TPlayerTarget } from '~/src/types/serializables/players';
 import { TBed, TCrop } from '~/src/types/serializables/crops';
 import { TCard } from '~/src/types/serializables/cards';
@@ -34,12 +34,16 @@ export enum TTargetAction {
 
 export type TWithTargetMode<T extends TTargetMode = TTargetMode> = {
 	targetMode: T | null;
-	targetLimit?: number; // amount of targets to be set
-	skipDispatch?: TTurnBasedDispatch<any>; // if set, the target mode can be quit voluntarily
-	confirmDispatch?: TTurnBasedDispatch<any>; // action creator to call when the target is choosen
-	cancelDispatch?: TTurnBasedDispatch<any>; // if set, the target choice must be confirmed, and failing to do so triggers this action creator
-	effects?: Array<TTargetReducer<T>>; // a set of side effects that are applied on the chosen target
 };
+
+export type TWithTargetOptions<T extends TTargetMode = TTargetMode> =
+	TWithTargetMode<T> & {
+		targetLimit?: number; // amount of targets to be set
+		skipDispatch?: TTurnBasedDispatch<any>; // if set, the target mode can be quit voluntarily
+		confirmDispatch?: TTurnBasedDispatch<any>; // action creator to call when the target is choosen
+		cancelDispatch?: TTurnBasedDispatch<any>; // if set, the target choice must be confirmed, and failing to do so triggers this action creator
+		effects?: Array<TTargetReducer<T>>; // a set of side effects that are applied on the chosen target
+	};
 
 export type TTargetRelatedDict = {
 	[TTargetMode.INIT]: never;
@@ -65,17 +69,17 @@ export type TTargetTypedContext<T extends TTargetMode> =
 		: T extends TTargetMode.PLAYER
 		? TPlayerTarget
 		: T extends TTargetMode.BED_ANY
-		? TPlayerTarget & TTargetIndex
+		? TPlayerIndex
 		: T extends TTargetMode.BED_EMPTY
-		? TPlayerTarget & TTargetIndex
+		? TPlayerIndex
 		: T extends TTargetMode.BED_OWN
-		? TPlayerTarget & TTargetIndex
+		? TPlayerIndex
 		: T extends TTargetMode.BED_FOE
-		? TPlayerTarget & TTargetIndex
+		? TPlayerIndex
 		: T extends TTargetMode.CROP_ANY
-		? TPlayerTarget & TTargetIndex
+		? TPlayerIndex
 		: T extends TTargetMode.CROP_FOE
-		? TPlayerTarget & TTargetIndex
+		? TPlayerIndex
 		: T extends TTargetMode.CROP_OWN
 		? TPlayerTarget & TTargetIndex
 		: T extends TTargetMode.CARD_DISCARDED
@@ -85,6 +89,9 @@ export type TTargetTypedContext<T extends TTargetMode> =
 		: T extends TTargetMode.CARD_MARKET
 		? TTargetIndex
 		: never;
+
+export type TTargetModeContext<T extends TTargetMode> = TWithTargetOptions<T> &
+	TTargetTypedContext<T>;
 
 export type TTargetContext<T extends TTargetMode> = TWithTargetMode<T> &
 	TTargetTypedContext<T>;
@@ -129,7 +136,7 @@ export type TTargetReducer<
 	M extends TTargetMode,
 	A extends TTargetRelatedAction<M> = TTargetRelatedAction<M>,
 	P extends TTargetPayload<A, M> = TTargetPayload<A, M>,
-	C extends TTargetContext<M> = TTargetContext<M>,
+	C extends TTargetModeContext<M> = TTargetModeContext<M>,
 	T extends TRelatedTarget<M> = TRelatedTarget<M>
 > = (params: { game: TGame; context: C; payload: P; target: T }) => {
 	game: TGame;

@@ -48,6 +48,7 @@ export type TCrop = {
 	group: TCropColor;
 	value: number;
 	id: TCropId;
+	fertilized: number;
 };
 
 export type TBed = {

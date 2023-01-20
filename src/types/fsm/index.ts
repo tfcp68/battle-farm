@@ -143,7 +143,7 @@ export type TTurnSubReducerContext<
 	K extends TTurnSubPhaseDict[T] = TTurnSubPhase<T>
 > = {
 	context: TTurnSubContext<T, K>;
-	game: TGameContainer<T, K>;
+	game: TGameContainer;
 };
 
 // Synchronously updates the Turn Context Returns new SubPhase inside Turn Phase
