@@ -1,4 +1,8 @@
-import { TTurnBasedReducer, TTurnPhase } from '~/src/types/fsm';
+import {
+	TTurnBasedReducer,
+	TTurnPhase,
+	TTurnSubReducerContext,
+} from '~/src/types/fsm';
 import {
 	CONTEXT_FERTILIZE,
 	TFertilizeAction,
@@ -25,13 +29,20 @@ const reducer_Fertilize_IDLE: TTurnBasedReducer<
 					...context,
 					index: payload.index,
 				},
-			};
+			} as TTurnSubReducerContext<
+				TTurnPhase.FERTILIZE,
+				TFertilizePhase.IDLE
+			>;
 		case TFertilizeAction.SKIP:
 			return {
-				subPhase: TFertilizePhase.FINISHED,
-				context: null,
+				context: {
+					subPhase: TFertilizePhase.FINISHED,
+				},
 				game,
-			};
+			} as TTurnSubReducerContext<
+				TTurnPhase.FERTILIZE,
+				TFertilizePhase.FINISHED
+			>;
 		case TFertilizeAction.CHOOSE_CROP:
 			return {
 				context: {
@@ -39,12 +50,18 @@ const reducer_Fertilize_IDLE: TTurnBasedReducer<
 					subPhase: TFertilizePhase.CROP_CONFIRM,
 				},
 				game,
-			};
+			} as TTurnSubReducerContext<
+				TTurnPhase.FERTILIZE,
+				TFertilizePhase.CROP_CONFIRM
+			>;
 		default:
 			return {
 				game,
 				context,
-			};
+			} as TTurnSubReducerContext<
+				TTurnPhase.FERTILIZE,
+				TFertilizePhase.IDLE
+			>;
 	}
 };
 
