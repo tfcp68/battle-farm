@@ -30,3 +30,9 @@ export const isFertilizeContext =
 		ctx: TTurnSubContext<TTurnPhase.FERTILIZE>
 	): ctx is TTurnSubContext<TTurnPhase.FERTILIZE, T> =>
 		ctx.subPhase === targetSubphase;
+
+export const isCropCardId = (id: TCardId): id is TCardId<TCardType.CROP> =>
+	Object.keys(CropCardId).includes(id);
+
+export const isActionCardId = (id: TCardId): id is TCardId<TCardType.ACTION> =>
+	Object.keys(ActionCardId).includes(id);

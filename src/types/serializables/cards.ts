@@ -28,12 +28,17 @@ export type TCardId<T extends TCardType = TCardType> = T extends TCardType.CROP
 	? TActionId
 	: never;
 
-export type TCardDescriptor<T extends TCardType> = {
+export type TCardDiscriminator<T extends TCardType> = {
 	type: T;
 	id: TCardId<T>;
 };
 
-export type TGenericCard<T extends TCardType> = TCardDescriptor<T> & {
+export type TCardDescriptor<T extends TCardType> = {
+	type: T;
+	id: number;
+};
+
+export type TGenericCard<T extends TCardType> = TCardDiscriminator<T> & {
 	value: number;
 	uuid: number;
 };
