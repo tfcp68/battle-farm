@@ -1,6 +1,7 @@
 const common = require('./webpack.config');
 const { merge } = require('webpack-merge');
 const path = require('path');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = merge(common, {
 	mode: 'production',
@@ -15,4 +16,9 @@ module.exports = merge(common, {
 		react: 'React',
 		'react-dom': 'ReactDOM',
 	},
+	plugins: [
+		new CompressionPlugin({
+			algorithm: 'gzip',
+		}),
+	],
 });
