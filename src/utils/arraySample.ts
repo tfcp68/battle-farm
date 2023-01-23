@@ -1,4 +1,4 @@
-export default function arraySample(arr:any[],n:number = 1,acc:any[] = []):any[]{
+export default function arraySample<T>(arr:T[],n:number = 1,acc:T[] = []):T[]{
 	if (n <= 0) return acc
 	const i = Math.floor(Math.random()*arr.length)
 	acc.push(arr[i])

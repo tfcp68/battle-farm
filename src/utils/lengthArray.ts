@@ -1,6 +1,5 @@
-export function lengthArray(item: any, n: number = 1) {
-	if (typeof item === 'function')
-		return Array(n).fill(null).map(()=>item())
+export function lengthArray<T>(item:( (()=>T) |T), n:number):T[] {
+	if (item instanceof Function)
+		return Array(n).fill(null).map(() => item())
 	return Array(n).fill(item);
 }
-
