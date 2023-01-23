@@ -1,8 +1,9 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test,beforeEach } from '@jest/globals';
 import { TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
 import { gameContainerFixture } from '~/src/tests/fixtures/gameFixtures';
 import { reducer_Fertilize_IDLE, turnPhaseReducer_Fertilize } from '~/src/reducers/fertilize';
 import { TTurnPhase, TTurnSubContext, TTurnSubPayload } from '~/src/types/fsm';
+import { randomIntFromInterval } from '~/src/utils/randomIntFromInterval';
 
 
 type testBody = {
@@ -19,7 +20,7 @@ type testBody = {
     }
 }
 
-function defaultParams(){
+function defaultParamsDt(){
     return {
         action: TFertilizeAction.HOVER,
         game: gameContainerFixture(),
@@ -28,9 +29,9 @@ function defaultParams(){
     }
 }
 
-function defaultContextFixture(props:Partial<TTurnSubContext<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE >> = {}){
+function defaultContextFixture(props:Partial<TTurnSubContext<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE>> = {}){
     const defaults:TTurnSubContext<TTurnPhase.FERTILIZE,TFertilizePhase.IDLE> = {
-        index:3,
+        index:randomIntFromInterval(0,100),
         subPhase:TFertilizePhase.IDLE
     }
     return {...defaults, ...props}
@@ -38,7 +39,7 @@ function defaultContextFixture(props:Partial<TTurnSubContext<TTurnPhase.FERTILIZ
 
 function defaultPayloadFixture(props: Partial<TTurnSubPayload<any>> = {}){
     const defaults:TTurnSubPayload<any> = {
-    index:9
+    index:randomIntFromInterval(0,100)
     }
     return {...defaults, ...props}
 }
@@ -47,6 +48,15 @@ function defaultPayloadFixture(props: Partial<TTurnSubPayload<any>> = {}){
 
 
 describe("reducer_Fertilize_IDLE", () => {
+    let defaultDt:testBody['dt'] = defaultParamsDt()
+    let defaultGame = defaultDt.game
+    let defaultContext = defaultDt.context
+
+    beforeEach(() => {
+        defaultDt = defaultParamsDt()
+        defaultGame = defaultDt.game
+        defaultContext = defaultDt.context
+    })
 
     function makeTest(tests:testBody[]){
         for (let i = 0; i < tests.length; i++) {
@@ -60,81 +70,81 @@ describe("reducer_Fertilize_IDLE", () => {
         {
             msg: "with action HOVER should return index in context from payload",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
-                    index:9,
+                    ...defaultContext,
+                    index: defaultDt.payload.index,
                 },
-                game: gameContainerFixture()
+                game:defaultGame,
             }
         },
         {
             msg: "with action SKIP should return new context with another subPhase without index",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.SKIP
             },
             res:{
                 context: {
                     subPhase: TFertilizePhase.FINISHED
                 },
-                game: gameContainerFixture()
+                game:defaultGame,
             }
         },
         {
             msg: "with action CHOOSE_CROP should return new context with another subPhase",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.CHOOSE_CROP
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
-                    index:9,
+                    ...defaultContext,
+                    index: defaultDt.payload.index,
                     subPhase: TFertilizePhase.CROP_CONFIRM
                 },
-                game: gameContainerFixture()
+                game:defaultGame,
             }
         },
         {
             msg: "with action CROP_CONFIRM should return defaultContextFixture",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.FERTILIZE
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
+                    ...defaultContext,
                 },
-                game: gameContainerFixture()
+                game:defaultGame,
             }
         },
         {
             msg: "with action CANCEL_SELECTION should return defaultContextFixture",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.CANCEL_SELECTION
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
+                    ...defaultContext,
                 },
-                game: gameContainerFixture()
+                game:defaultGame,
             }
         },
         {
             msg: "with action RESET should return defaultContextFixture",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.RESET
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
+                    ...defaultContext,
                 },
-                game: gameContainerFixture()
+                game:defaultGame,
             }
         },
     ]
@@ -144,6 +154,15 @@ describe("reducer_Fertilize_IDLE", () => {
 })
 
 describe('turnPhaseReducer_Fertilize',()=>{
+    let defaultDt:testBody['dt'] = defaultParamsDt()
+    let defaultGame = defaultDt.game
+    let defaultContext = defaultDt.context
+
+    beforeEach(() => {
+        defaultDt = defaultParamsDt()
+        defaultGame = defaultDt.game
+        defaultContext = defaultDt.context
+    })
 
     function makeTest(tests:testBody[]){
         for (let i = 0; i < tests.length; i++) {
@@ -156,82 +175,82 @@ describe('turnPhaseReducer_Fertilize',()=>{
         {
             msg: "with action SKIP should return new context with another subPhase",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.SKIP,
             },
             res:{
                 context: {
                     subPhase: TFertilizePhase.FINISHED
                 },
-                game:gameContainerFixture()
+                game:defaultGame
             }
         },
         {
             msg: "with action RESET should return defaultContextFixture",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.RESET,
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
+                    ...defaultContext,
                 },
-                game:gameContainerFixture()
+                game:defaultGame
             }
         },
         {
             msg: "with action FERTILIZE should return defaultContextFixture",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.FERTILIZE,
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
+                    ...defaultContext,
                 },
-                game:gameContainerFixture()
+                game:defaultGame
             }
         },
         {
             msg: "with action CHOOSE_CROP should return new context with another subPhase & index",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.CHOOSE_CROP,
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
+                    ...defaultContext,
                     subPhase: TFertilizePhase.CROP_CONFIRM,
-                    index:9,
+                    index: defaultDt.payload.index,
                 },
-                game:gameContainerFixture()
+                game:defaultGame
             }
         },
         {
             msg: "with action HOVER should return new context with another index",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.HOVER,
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
-                    index:9,
+                    ...defaultContext,
+                    index: defaultDt.payload.index,
                 },
-                game:gameContainerFixture()
+                game:defaultGame
             }
         },
         {
             msg: "with action CANCEL_SELECTION should return defaultContextFixture",
             dt: {
-                ...defaultParams(),
+                ...defaultDt,
                 action: TFertilizeAction.CANCEL_SELECTION,
             },
             res:{
                 context: {
-                    ...defaultContextFixture(),
+                    ...defaultContext,
                 },
-                game:gameContainerFixture()
+                game:defaultGame
             }
         },
     ]

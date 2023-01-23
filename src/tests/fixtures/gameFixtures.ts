@@ -1,11 +1,13 @@
 import {TGame, TGameContainer, TGamePhase, TTurnContainer} from "~/src/types/serializables/game";
-import {cardActionFixture} from "~/src/tests/fixtures/cardsFixtures";
 import {TPlayerClass} from "~/src/types/serializables/players";
+import { marketFixture } from '~/src/tests/fixtures/marketFixtures';
+import {randomIntFromInterval } from '~/src/utils/randomIntFromInterval';
+import arraySample from '~/src/utils/arraySample';
 
 export function turnContainerFixture(props: Partial<TGameContainer> = {}) {
     const defaults: TTurnContainer = {
-        turnsPlayed: 12,
-        currentTurn: TPlayerClass.EMPTY,
+        turnsPlayed: randomIntFromInterval(),
+        currentTurn: arraySample(Object.values(TPlayerClass))[0],
         state: {},
         turnOrder: null,
     }
@@ -14,12 +16,12 @@ export function turnContainerFixture(props: Partial<TGameContainer> = {}) {
 
 export function gameFixture(props: Partial<TGame> = {}):TGame{
     const defaults: TGame = {
-        uuid: 22,
-        phase: TGamePhase.IN_PROGRESS,
-        winLimit: 10,
+        uuid: randomIntFromInterval(),
+        phase: arraySample(Object.values(TGamePhase))[0],
+        winLimit: randomIntFromInterval(),
         players:null,
         deck: [],
-        market: [cardActionFixture(),cardActionFixture(),cardActionFixture(),cardActionFixture(),cardActionFixture(),cardActionFixture()],
+        market: marketFixture(),
     }
     return {...defaults, ...props}
 }
