@@ -4,6 +4,7 @@ import { marketFixture } from '~/src/tests/fixtures/marketFixtures';
 import {randomIntFromInterval } from '~/src/utils/randomIntFromInterval';
 import arraySample from '~/src/utils/arraySample';
 import { deckFixture } from '~/src/tests/fixtures/cardsFixtures';
+import { playerRecordFixturePlayer, playerRecordFixtureTurnContext } from '~/src/tests/fixtures/playersFixture';
 
 export function turnContainerFixture(props: Partial<TTurnContainer> = {}):TTurnContainer {
     const currentTurn = arraySample(Object.values(TPlayerClass).filter((v) => typeof v === 'number'))[0]
@@ -12,7 +13,7 @@ export function turnContainerFixture(props: Partial<TTurnContainer> = {}):TTurnC
     const defaults: TTurnContainer = {
         turnsPlayed: randomIntFromInterval(),
         currentTurn,
-        state: {},
+        state: playerRecordFixtureTurnContext(),
         turnOrder: null,
     }
     return {...defaults, ...props}
@@ -28,7 +29,7 @@ export function gameFixture(props: Partial<TGame> = {}):TGame{
         uuid: randomIntFromInterval(),
         phase,
         winLimit: randomIntFromInterval(),
-        players:null,
+        players:playerRecordFixturePlayer(),
         deck: deckFixture(),
         market: marketFixture(),
     }
