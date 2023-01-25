@@ -60,9 +60,9 @@ export function playerRecordFixtureTurnContext(
 	props: TPlayerRecord<TTurnContext> = {}
 ) {
 	const getRandomCurrentTurnPhase = () => {
-		let phase = arraySample(
+		let [phase] = arraySample(
 			Object.values(TTurnPhase).filter((v) => typeof v === 'number')
-		)[0];
+		);
 		if (typeof phase !== 'number') throw new Error('invalid Turn Phase');
 		return phase;
 	};

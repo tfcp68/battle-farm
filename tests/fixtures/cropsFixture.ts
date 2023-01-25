@@ -11,7 +11,7 @@ import { getCardIDByType } from '~/src/helpers/cards';
 import { TCardType } from '~/src/types/serializables/cards';
 
 export function cropFixture(props: Partial<TCrop> = {}) {
-	const id = arraySample(Object.values(CropCardId))[0];
+	const [id] = arraySample(Object.values(CropCardId));
 	const namedID = getCardIDByType({ type: TCardType.CROP, id });
 	const [group] = arraySample(
 		Object.values(TCropColor).filter((v) => typeof v === 'number')
@@ -29,11 +29,11 @@ export function cropFixture(props: Partial<TCrop> = {}) {
 }
 
 export function bedFixture(props: Partial<TBed> = {}) {
-	const type = arraySample(
+	const [type] = arraySample(
 		Object.values(TGardenBedType).filter((v) => typeof v === 'number')
-	)[0];
+	);
 	const crop = cropFixture();
-	const cropOrNull = arraySample([crop, null])[0];
+	const [cropOrNull] = arraySample([crop, null]);
 
 	if (typeof type !== 'number') throw new Error('type is not a number');
 	const defaults: TBed = {

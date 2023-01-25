@@ -4,7 +4,6 @@ import {
 	TGamePhase,
 	TTurnContainer,
 } from '~/src/types/serializables/game';
-import { TPlayerClass } from '~/src/types/serializables/players';
 import { marketFixture } from './marketFixtures';
 import { sampleRange } from '~/src/utils/sampleRange';
 import arraySample from '../../src/utils/arraySample';
@@ -12,12 +11,11 @@ import { deckFixture } from './cardsFixtures';
 import {
 	playerRecordFixturePlayer,
 	playerRecordFixtureTurnContext,
+	randomPlayerClass,
 } from './playersFixture';
 
 export function turnContainerFixture(props: Partial<TTurnContainer> = {}) {
-	const currentTurn = arraySample(
-		Object.values(TPlayerClass).filter((v) => typeof v === 'number')
-	)[0];
+	const currentTurn = randomPlayerClass();
 	if (typeof currentTurn !== 'number')
 		throw new Error('currentTurn is not a number');
 	const defaults: TTurnContainer = {
@@ -30,9 +28,9 @@ export function turnContainerFixture(props: Partial<TTurnContainer> = {}) {
 }
 
 export function gameFixture(props: Partial<TGame> = {}) {
-	const phase = arraySample(
+	const [phase] = arraySample(
 		Object.values(TGamePhase).filter((v) => typeof v === 'number')
-	)[0];
+	);
 
 	if (typeof phase !== 'number') throw new Error('phase is not a number');
 
