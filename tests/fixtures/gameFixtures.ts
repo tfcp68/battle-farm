@@ -14,9 +14,7 @@ import {
 	playerRecordFixtureTurnContext,
 } from './playersFixture';
 
-export function turnContainerFixture(
-	props: Partial<TTurnContainer> = {}
-): TTurnContainer {
+export function turnContainerFixture(props: Partial<TTurnContainer> = {}) {
 	const currentTurn = arraySample(
 		Object.values(TPlayerClass).filter((v) => typeof v === 'number')
 	)[0];
@@ -28,10 +26,10 @@ export function turnContainerFixture(
 		state: playerRecordFixtureTurnContext(),
 		turnOrder: null,
 	};
-	return { ...defaults, ...props };
+	return Object.assign(defaults, props ?? {}) as TTurnContainer;
 }
 
-export function gameFixture(props: Partial<TGame> = {}): TGame {
+export function gameFixture(props: Partial<TGame> = {}) {
 	const phase = arraySample(
 		Object.values(TGamePhase).filter((v) => typeof v === 'number')
 	)[0];
@@ -46,15 +44,13 @@ export function gameFixture(props: Partial<TGame> = {}): TGame {
 		deck: deckFixture(),
 		market: marketFixture(),
 	};
-	return { ...defaults, ...props };
+	return Object.assign(defaults, props ?? {});
 }
 
-export function gameContainerFixture(
-	props: Partial<TGameContainer> = {}
-): TGameContainer {
+export function gameContainerFixture(props: Partial<TGameContainer> = {}) {
 	const defaults: TGameContainer = {
 		...gameFixture(),
 		turns: turnContainerFixture(),
 	};
-	return { ...defaults, ...props };
+	return Object.assign(defaults, props ?? {});
 }

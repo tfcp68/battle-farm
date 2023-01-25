@@ -10,12 +10,12 @@ import { sampleRange } from '~/src/utils/sampleRange';
 import { getCardIDByType } from '~/src/helpers/cards';
 import { TCardType } from '~/src/types/serializables/cards';
 
-export function cropFixture(props: Partial<TCrop> = {}): TCrop {
+export function cropFixture(props: Partial<TCrop> = {}) {
 	const id = arraySample(Object.values(CropCardId))[0];
 	const namedID = getCardIDByType({ type: TCardType.CROP, id });
-	const group = arraySample(
+	const [group] = arraySample(
 		Object.values(TCropColor).filter((v) => typeof v === 'number')
-	)[0];
+	);
 	if (typeof group !== 'number') throw new Error('group is not a number');
 	if (namedID === null) throw new Error('Card ID not found');
 	const defaults: TCrop = {
@@ -25,10 +25,10 @@ export function cropFixture(props: Partial<TCrop> = {}): TCrop {
 		fertilized: sampleRange(),
 		group,
 	};
-	return { ...defaults, ...props };
+	return Object.assign(defaults, props ?? {}) as TCrop;
 }
 
-export function bedFixture(props: Partial<TBed> = {}): TBed {
+export function bedFixture(props: Partial<TBed> = {}) {
 	const type = arraySample(
 		Object.values(TGardenBedType).filter((v) => typeof v === 'number')
 	)[0];
@@ -40,5 +40,5 @@ export function bedFixture(props: Partial<TBed> = {}): TBed {
 		type,
 		crop: cropOrNull,
 	};
-	return { ...defaults, ...props };
+	return Object.assign(defaults, props ?? {}) as TBed;
 }

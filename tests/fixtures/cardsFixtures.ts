@@ -10,9 +10,7 @@ import { sampleRange } from '~/src/utils/sampleRange';
 import arraySample from '../../src/utils/arraySample';
 import { lengthArray } from '~/src/utils/lengthArray';
 
-export function actionCardFixture(
-	props: Partial<TActionCard> = {}
-): TActionCard {
+export function actionCardFixture(props: Partial<TActionCard> = {}) {
 	const [CardIdName] = arraySample(Object.values(ActionCardId));
 	const id = getCardIDByType({ type: TCardType.ACTION, id: CardIdName });
 	if (id === null) throw new Error('Card ID not found');
@@ -22,14 +20,14 @@ export function actionCardFixture(
 		id,
 		value: sampleRange(0, 100),
 	};
-	return { ...defaults, ...props };
+	return Object.assign(defaults, props ?? {}) as TActionCard;
 }
 
-export function cropCardFixture(props: Partial<TCropCard> = {}): TCropCard {
+export function cropCardFixture(props: Partial<TCropCard> = {}) {
 	const [cardIdName] = arraySample(Object.values(CropCardId));
-	const group = arraySample(
+	const [group] = arraySample(
 		Object.values(TCropColor).filter((v) => typeof v === 'number')
-	)[0];
+	);
 	const id = getCardIDByType({ type: TCardType.CROP, id: cardIdName });
 	if (typeof group !== 'number') throw new Error('group is not a number');
 	if (id === null) throw new Error('Card ID not found');
@@ -42,7 +40,7 @@ export function cropCardFixture(props: Partial<TCropCard> = {}): TCropCard {
 		id,
 		value: sampleRange(0, 100),
 	};
-	return { ...defaults, ...props };
+	return Object.assign(defaults, props ?? {}) as TCropCard;
 }
 
 export function cardFixture(): TCard {
