@@ -11,6 +11,7 @@ import {
 import { TCard, TCardId, TCardType } from '~/src/types/serializables/cards';
 import { TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
 import { TTurnPhase, TTurnSubContext } from '~/src/types/fsm';
+import { TPlayerClass } from '~/src/types/serializables/players';
 
 export const isCropCard = (card: TCard): card is TCropCard =>
 	card?.type === TCardType.CROP;
@@ -36,3 +37,8 @@ export const isCropCardId = (id: TCardId): id is TCardId<TCardType.CROP> =>
 
 export const isActionCardId = (id: TCardId): id is TCardId<TCardType.ACTION> =>
 	Object.keys(ActionCardId).includes(id);
+
+export const isPlayerClass = (t: any): t is TPlayerClass =>
+	Object.values(TPlayerClass)
+		.filter((v) => Number.isFinite(v) && v > 0)
+		.includes(t);

@@ -1,0 +1,4 @@
+* text=auto
+*.ts eol=lf
+*.tsx eol=lf
+assets/**/* binary
