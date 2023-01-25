@@ -11,7 +11,7 @@ import {
 import { isFertilizeContext } from '~/src/types/typeGuards';
 import { TGameContainer } from '~/src/types/serializables/game';
 
-const reducer_Fertilize_IDLE: TTurnBasedReducer<
+export const reducer_Fertilize_IDLE: TTurnBasedReducer<
 	TTurnPhase.FERTILIZE,
 	TFertilizePhase.IDLE
 > = (params) => {
