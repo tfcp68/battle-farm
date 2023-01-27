@@ -9,14 +9,16 @@
 
 </head>
 <body>
-    <div id="game">
+    <main id="game">
         <div class="game-container">
-            <div class="game-card__cards">
+            <section class="game__cards">
                 <div class="game-card">
                     <div class="game-card__inner">
                         <div class="game-card__face game-card__front">
                             <img class="game-card__img" src="../../assets/crops/beans.png" alt="card">
                             <img class="game-card__frame" src="../../assets/elements/frame_card.png" alt="frame">
+                            // timer for reap (bad quality), will need a separate component
+                            <img class="game-card__timer" src="../../assets/elements/timer_card.png" alt="">
                         </div>
                         <div class="game-card__face game-card__back">
                         </div>
@@ -27,6 +29,7 @@
                         <div class="game-card__face game-card__front">
                             <img class="game-card__img" src="../../assets/crops/blueberry.png" alt="card">
                             <img class="game-card__frame" src="../../assets/elements/frame_card.png" alt="frame">
+                            <img class="game-card__timer" src="../../assets/elements/timer_card.png" alt="">
                         </div>
                         <div class="game-card__face game-card__back">
                         </div>
@@ -37,6 +40,7 @@
                         <div class="game-card__face game-card__front">
                             <img class="game-card__img" src="../../assets/crops/cherry.png" alt="card">
                             <img class="game-card__frame" src="../../assets/elements/frame_card.png" alt="frame">
+                            <img class="game-card__timer" src="../../assets/elements/timer_card.png" alt="">
                         </div>
                         <div class="game-card__face game-card__back">
                         </div>
@@ -47,30 +51,32 @@
                         <div class="game-card__face game-card__front">
                             <img class="game-card__img" src="../../assets/crops/wasabi.png" alt="card">
                             <img class="game-card__frame" src="../../assets/elements/frame_card.png" alt="frame">
+                            <img class="game-card__timer" src="../../assets/elements/timer_card.png" alt="">
                         </div>
                         <div class="game-card__face game-card__back">
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="game-card__beds">
-                <div class="game-card__bed">
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
+            </section>
+            <section class="game__beds">
+                <div class="game__beds__bed">
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
                 </div>
-                <div class="game-card__bed">
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
-                    <div class="game-card__bed__segment"></div>
+                <div class="game__beds__bed">
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
+                    <div class="game__beds__bed__segment"></div>
                 </div>
-            </div>
+            </section>
 
-            <div class="game-board">
+            //player's board info
+            <section class="game-board">
                 <div class="game-board__playerInfo">
                     <div class="game-board__playerInfo__block amountFertilize">
                         <img class="amountFertilize__icon" src="../../assets/elements/fertilize_icon.png" alt="icon">
@@ -87,9 +93,33 @@
                 <div class="game-board__avatar">
                     <img src="../../assets/classes/crop_scientist.png" alt="avatar">
                 </div>
-            </div>
+            </section>
+
+            <section class="enemy">
+                <div class="enemy__avatar">
+                    <img src="" alt="" class="enemy__avatar__img">
+                </div>
+                <div class="enemy__boardInfo">
+                    <div class="enemy__boardInfo__amountCoins amountCoins">
+                        <p class="amountCoins__value"></p>
+                    </div>
+
+                    <div class="enemy__boardInfo__amountCards amountCards">
+
+                    </div>
+                </div>
+            </section>
+
+            <section class="deck">
+                <div class="deck__wrapper">
+                    <div class="deck__deckCards"></div>
+                    <div class="deck__counterDeckCards">98 / 105</div>
+                </div>
+            </section>
+
+
         </div>
-    </div>
+    </main>
 
     <script src="js/script.js"></script>
 </body>

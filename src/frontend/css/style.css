@@ -19,7 +19,7 @@
 
 }
 
-.game-card__cards {
+.game__cards {
     position: absolute;
     bottom: 0;
     left: 50%;
@@ -35,17 +35,17 @@
     height: 300px;
     perspective: 1000px;
 
-    transform: scale(0.7);
+    transform: scale(0.8);
     align-self: flex-end;
 
 }
 
 .game-card:first-child {
-    transform: scale(0.7) rotate(-15deg);
+    transform: scale(0.8) rotate(-15deg);
 }
 
 .game-card:last-child {
-    transform: scale(0.7) rotate(15deg);
+    transform: scale(0.8) rotate(15deg);
 }
 
 .game-card__inner {
@@ -115,7 +115,7 @@
 }
 
 
-.game-card__beds {
+.game__beds {
 
     --topOffset: 70%;
     --leftOffset: 50%;
@@ -128,14 +128,14 @@
     top: var(--topOffset);
     left: var(--leftOffset);
     transform: translate(calc(var(--leftOffset) * -1),
-                        calc(var(--topOffset) * -1)) scale(0.7);
+                        calc(var(--topOffset) * -1)) scale(0.8);
 
     gap: 10px;
     background-color: #775824;
     padding: 10px;
 }
 
-.game-card__bed {
+.game__beds__bed {
     display: flex;
     align-items: baseline;
     width: 100%;
@@ -144,7 +144,7 @@
 
 }
 
-.game-card__bed__segment {
+.game__beds__bed__segment {
     max-width: 200px;
     max-height: 300px;
     width: 200px;
@@ -197,4 +197,13 @@
     display: flex;
     align-items: center;
     gap:  30px;
+}
+
+.game-card__timer {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
 }
