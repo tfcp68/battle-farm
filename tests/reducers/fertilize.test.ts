@@ -1,14 +1,11 @@
-import { beforeEach, describe, expect, test } from '@jest/globals';
+import { beforeEach, describe, expect, test,jest, } from '@jest/globals';
 import {
 	TFertilizeAction,
 	TFertilizePhase,
 } from '~/src/types/fsm/slices/fertilize';
 import { gameContainerFixture } from '../fixtures/gameFixtures';
-import {
-	reducer_Fertilize_IDLE,
-	turnPhaseReducer_Fertilize,
-} from '~/src/reducers/fertilize';
-import { TTurnPhase, TTurnSubContext, TTurnSubPayload } from '~/src/types/fsm';
+import * as functions from '~/src/reducers/fertilize';
+import {TTurnBasedReducer, TTurnPhase, TTurnSubContext, TTurnSubPayload} from '~/src/types/fsm';
 import { sampleRange } from '~/src/utils/sampleRange';
 
 type testBody = {
@@ -30,7 +27,10 @@ type testBody = {
 			>
 		>;
 	};
+	numberOfFunctionCalls?: number
+	spiedFunction?:  jest.SpiedFunction<TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE, TFertilizeAction>>
 };
+
 
 function defaultParamsDt() {
 	return {
@@ -41,14 +41,14 @@ function defaultParamsDt() {
 	};
 }
 
-function defaultContextFixture(
+function defaultContextFixture<T extends TFertilizePhase>(
 	props: Partial<
-		TTurnSubContext<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE>
+		TTurnSubContext<TTurnPhase.FERTILIZE, T>
 	> = {}
 ) {
 	const defaults: TTurnSubContext<
 		TTurnPhase.FERTILIZE,
-		TFertilizePhase.IDLE
+		any
 	> = {
 		index: sampleRange(0, 100),
 		subPhase: TFertilizePhase.IDLE,
@@ -63,116 +63,126 @@ function defaultPayloadFixture(props: Partial<TTurnSubPayload<any>> = {}) {
 	return { ...defaults, ...props };
 }
 
+let defaultDt: testBody['dt'] = defaultParamsDt();
+let defaultGame = defaultDt.game;
+let defaultContext = defaultDt.context;
+
+let tests: testBody[] = [
+	{
+		msg: 'IDLE-->IDLE: HOVER (index)',
+		dt: {
+			...defaultDt,
+		},
+		res: {
+			context: {
+				...defaultContext,
+				index: defaultDt.payload.index,
+			},
+			game: defaultGame,
+		},
+	},
+	{
+		msg: 'IDLE-->FINISHED: SKIP',
+		dt: {
+			...defaultDt,
+			action: TFertilizeAction.SKIP,
+		},
+		res: {
+			context: {
+				subPhase: TFertilizePhase.FINISHED,
+			},
+			game: defaultGame,
+		},
+	},
+	{
+		msg: 'IDLE-->CROP_CONFIRM: CHOOSE_CROP (index)',
+		dt: {
+			...defaultDt,
+			action: TFertilizeAction.CHOOSE_CROP,
+		},
+		res: {
+			context: {
+				...defaultContext,
+				index: defaultDt.payload.index,
+				subPhase: TFertilizePhase.CROP_CONFIRM,
+			},
+			game: defaultGame,
+		},
+	},
+	{
+		msg: 'ignores FERTILIZE',
+		dt: {
+			...defaultDt,
+			action: TFertilizeAction.FERTILIZE,
+
+		},
+		res: {
+
+			context: {
+				...defaultContext,
+			},
+			game: defaultGame,
+
+		},
+	},
+	{
+		msg: 'ignores CANCEL_SELECTION',
+		dt: {
+			...defaultDt,
+			action: TFertilizeAction.CANCEL_SELECTION,
+		},
+		res: {
+			context: {
+				...defaultContext,
+			},
+			game: defaultGame,
+		},
+	},
+	{
+		msg: 'ignores RESET',
+		dt: {
+			...defaultDt,
+			action: TFertilizeAction.RESET,
+		},
+		res: {
+			context: {
+				...defaultContext,
+			},
+			game: defaultGame,
+		},
+	},
+];
+
+
+
 /**
  * https://github.com/octaharon/battle-farm/blob/main/docs/diagrams.md#fertilizing
  */
 describe('FSM/Fertilizing: IDLE', () => {
-	let defaultDt: testBody['dt'] = defaultParamsDt();
-	let defaultGame = defaultDt.game;
-	let defaultContext = defaultDt.context;
 
 	beforeEach(() => {
 		defaultDt = defaultParamsDt();
 		defaultGame = defaultDt.game;
 		defaultContext = defaultDt.context;
+		jest.clearAllMocks()
 	});
+
 
 	function makeTest(tests: testBody[]) {
 		for (let i = 0; i < tests.length; i++) {
 			test(tests[i]?.msg, () => {
-				expect(reducer_Fertilize_IDLE(tests[i].dt)).toMatchObject(
+				expect(functions.reducer_Fertilize_IDLE(tests[i].dt)).toMatchObject(
 					tests[i].res
 				);
 			});
 		}
 	}
 
-	const tests: testBody[] = [
-		{
-			msg: 'IDLE-->IDLE: HOVER (index)',
-			dt: {
-				...defaultDt,
-			},
-			res: {
-				context: {
-					...defaultContext,
-					index: defaultDt.payload.index,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'IDLE-->FINISHED: SKIP',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.SKIP,
-			},
-			res: {
-				context: {
-					subPhase: TFertilizePhase.FINISHED,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'IDLE-->CROP_CONFIRM: CHOOSE_CROP (index)',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.CHOOSE_CROP,
-			},
-			res: {
-				context: {
-					...defaultContext,
-					index: defaultDt.payload.index,
-					subPhase: TFertilizePhase.CROP_CONFIRM,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'ignores CROP_CONFIRM',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.FERTILIZE,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'ignores CANCEL_SELECTION',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.CANCEL_SELECTION,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'ignores RESET',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.RESET,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-	];
+
 	makeTest(tests);
 });
-
 describe('FSM/Fertilizing: Root Reducer', () => {
+	const spiedFunction = jest.spyOn(functions, 'reducer_Fertilize_IDLE');
 	let defaultDt: testBody['dt'] = defaultParamsDt();
 	let defaultGame = defaultDt.game;
 	let defaultContext = defaultDt.context;
@@ -181,101 +191,61 @@ describe('FSM/Fertilizing: Root Reducer', () => {
 		defaultDt = defaultParamsDt();
 		defaultGame = defaultDt.game;
 		defaultContext = defaultDt.context;
+		jest.clearAllMocks()
 	});
 
 	function makeTest(tests: testBody[]) {
 		for (let i = 0; i < tests.length; i++) {
 			test(tests[i]?.msg, () => {
-				expect(turnPhaseReducer_Fertilize(tests[i].dt)).toMatchObject(
-					tests[i].res
-				);
+				functions.turnPhaseReducer_Fertilize(tests[i].dt);
+				const calls = tests[i].numberOfFunctionCalls;
+				const spiedFunction = tests[i].spiedFunction;
+				if (calls && spiedFunction){
+					expect(spiedFunction).toBeCalledTimes(calls);
+					expect(spiedFunction).toBeCalledWith(tests[i].dt);
+				}
 			});
 		}
 	}
 
-	const tests: testBody[] = [
-		{
-			msg: 'with action SKIP should return new context with another subPhase',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.SKIP,
-			},
-			res: {
-				context: {
-					subPhase: TFertilizePhase.FINISHED,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action RESET should return defaultContextFixture',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.RESET,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action FERTILIZE should return defaultContextFixture',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.FERTILIZE,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action CHOOSE_CROP should return new context with another subPhase & index',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.CHOOSE_CROP,
-			},
-			res: {
-				context: {
-					...defaultContext,
-					subPhase: TFertilizePhase.CROP_CONFIRM,
-					index: defaultDt.payload.index,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action HOVER should return new context with another index',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.HOVER,
-			},
-			res: {
-				context: {
-					...defaultContext,
-					index: defaultDt.payload.index,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action CANCEL_SELECTION should return defaultContextFixture',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.CANCEL_SELECTION,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-	];
+	tests.map((test)=>{
+		test.spiedFunction = spiedFunction
+		test.numberOfFunctionCalls = 1
+		return test
+	})
 
-	makeTest(tests);
+	tests.push(
+		{
+		msg: 'ignores TFertilizePhase.FINISHED',
+		dt: {
+			...defaultDt,
+		},
+		res:{
+			context: {
+				index: defaultDt.payload.index,
+				subPhase: TFertilizePhase.FINISHED,
+			},
+			game: defaultGame,
+		},
+		numberOfFunctionCalls:0,
+		spiedFunction:spiedFunction
+		},
+		{
+			msg: 'ignores TFertilizePhase.CROP_CONFIRM',
+			dt: {
+				...defaultDt,
+			},
+			res:{
+				context: {
+					index: defaultDt.payload.index,
+					subPhase: TFertilizePhase.CROP_CONFIRM,
+				},
+				game: defaultGame,
+			},
+			numberOfFunctionCalls:1,
+			spiedFunction:spiedFunction
+		}
+	)
+
+	makeTest(tests)
 });
