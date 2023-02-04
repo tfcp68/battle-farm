@@ -197,7 +197,9 @@ describe('FSM/Fertilizing: Root Reducer', () => {
 	function makeTest(tests: testBody[]) {
 		for (let i = 0; i < tests.length; i++) {
 			test(tests[i]?.msg, () => {
-				functions.turnPhaseReducer_Fertilize(tests[i].dt);
+                expect(functions.reducer_Fertilize_IDLE(tests[i].dt)).toMatchObject(
+                    tests[i].res
+                );
 				const calls = tests[i].numberOfFunctionCalls;
 				const spiedFunction = tests[i].spiedFunction;
 				if (calls && spiedFunction){
@@ -219,6 +221,10 @@ describe('FSM/Fertilizing: Root Reducer', () => {
 		msg: 'ignores TFertilizePhase.FINISHED',
 		dt: {
 			...defaultDt,
+            context: {
+                index: defaultDt.payload.index,
+                subPhase: TFertilizePhase.FINISHED,
+            },
 		},
 		res:{
 			context: {
@@ -234,6 +240,10 @@ describe('FSM/Fertilizing: Root Reducer', () => {
 			msg: 'ignores TFertilizePhase.CROP_CONFIRM',
 			dt: {
 				...defaultDt,
+                context:{
+                    subPhase: TFertilizePhase.CROP_CONFIRM,
+                    index: defaultDt.payload.index,
+                }
 			},
 			res:{
 				context: {
