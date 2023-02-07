@@ -1,9 +1,9 @@
-import { describe, expect, test } from '@jest/globals';
+import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 import {
 	TFertilizeAction,
 	TFertilizePhase,
 } from '~/src/types/fsm/slices/fertilize';
-import { reducer_Fertilize_IDLE } from '~/src/reducers/fertilize';
+import * as functions from '~/src/reducers/fertilize';
 import {
 	TTurnBasedReducer,
 	TTurnPhase,
@@ -26,6 +26,7 @@ type testBody<
 	readonly msg: string;
 	readonly input: Parameters<TTurnBasedReducer<T, S, A>>;
 	readonly output: ReturnType<TTurnBasedReducer<T, S, A>>;
+	numberOfFunctionCalls?: number;
 };
 
 function defaultTestInput<
@@ -113,122 +114,126 @@ function setupFixtures<
 }
 
 /**
+ * Unit tests for
  * https://github.com/octaharon/battle-farm/blob/main/docs/diagrams.md#fertilizing
  */
-describe('FSM/Fertilizing: IDLE', () => {
-	const tests: testBody<
-		TTurnPhase.FERTILIZE,
-		TFertilizePhase.IDLE,
-		TFertilizeAction
-	>[] = [
-		{
-			msg: 'IDLE-->IDLE: HOVER (index)',
-			...(() => {
-				const { defaultInput, originalInput, originalContext } =
-					setupFixtures(
-						TTurnPhase.FERTILIZE,
-						TFertilizeAction.HOVER,
-						TFertilizePhase.IDLE
-					);
-				return {
-					input: defaultInput,
-					output: Object.assign({}, originalContext, {
-						context: {
-							...originalContext.context,
-							index: originalInput[0].payload?.index,
-						},
-					}),
-				};
-			})(),
-		},
-		{
-			msg: 'IDLE-->FINISHED: SKIP',
-			...(() => {
-				const { defaultInput, originalInput, originalContext } =
-					setupFixtures(
-						TTurnPhase.FERTILIZE,
-						TFertilizeAction.SKIP,
-						TFertilizePhase.IDLE
-					);
-				return {
-					input: defaultInput,
-					output: Object.assign({}, originalContext, {
-						context: null,
-						subPhase: TFertilizePhase.FINISHED,
-					}),
-				};
-			})(),
-		},
-		{
-			msg: 'IDLE-->CROP_CONFIRM: CHOOSE_CROP (index)',
-			...(() => {
-				const { defaultInput, originalInput, originalContext } =
-					setupFixtures(
-						TTurnPhase.FERTILIZE,
-						TFertilizeAction.CHOOSE_CROP,
-						TFertilizePhase.IDLE
-					);
-				return {
-					input: defaultInput,
-					output: Object.assign({}, originalContext, {
-						context: {
-							index: defaultInput[0].payload?.index,
-						},
-						subPhase: TFertilizePhase.CROP_CONFIRM,
-					}),
-				};
-			})(),
-		},
-		{
-			msg: 'IDLE-->IDLE: FERTILIZE ignored',
-			...(() => {
-				const { defaultInput, originalInput, originalContext } =
-					setupFixtures(
-						TTurnPhase.FERTILIZE,
-						TFertilizeAction.FERTILIZE,
-						TFertilizePhase.IDLE
-					);
-				return {
-					input: defaultInput,
-					output: originalContext,
-				};
-			})(),
-		},
-		{
-			msg: 'IDLE-->IDLE: CANCEL_SELECTION ignored',
-			...(() => {
-				const { defaultInput, originalInput, originalContext } =
-					setupFixtures(
-						TTurnPhase.FERTILIZE,
-						TFertilizeAction.CANCEL_SELECTION,
-						TFertilizePhase.IDLE
-					);
-				return {
-					input: defaultInput,
-					output: originalContext,
-				};
-			})(),
-		},
-		{
-			msg: 'IDLE-->IDLE: RESET ignored',
-			...(() => {
-				const { defaultInput, originalInput, originalContext } =
-					setupFixtures(
-						TTurnPhase.FERTILIZE,
-						TFertilizeAction.RESET,
-						TFertilizePhase.IDLE
-					);
-				return {
-					input: defaultInput,
-					output: originalContext,
-				};
-			})(),
-		},
-	];
 
-	/**
-	 * Unit Tests
-	 */
+const testCasesIDLE: testBody<
+	TTurnPhase.FERTILIZE,
+	TFertilizePhase.IDLE,
+	TFertilizeAction
+>[] = [
+	{
+		msg: 'IDLE-->IDLE: HOVER (index)',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } =
+				setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.HOVER,
+					TFertilizePhase.IDLE
+				);
+			return {
+				input: defaultInput,
+				output: Object.assign({}, originalContext, {
+					context: {
+						...originalContext.context,
+						index: originalInput[0].payload?.index,
+					},
+				}),
+			};
+		})(),
+	},
+	{
+		msg: 'IDLE-->FINISHED: SKIP',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } =
+				setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.SKIP,
+					TFertilizePhase.IDLE
+				);
+			return {
+				input: defaultInput,
+				output: Object.assign({}, originalContext, {
+					context: null,
+					subPhase: TFertilizePhase.FINISHED,
+				}),
+			};
+		})(),
+	},
+	{
+		msg: 'IDLE-->CROP_CONFIRM: CHOOSE_CROP (index)',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } =
+				setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.CHOOSE_CROP,
+					TFertilizePhase.IDLE
+				);
+			return {
+				input: defaultInput,
+				output: Object.assign({}, originalContext, {
+					context: {
+						index: defaultInput[0].payload?.index,
+					},
+					subPhase: TFertilizePhase.CROP_CONFIRM,
+				}),
+			};
+		})(),
+	},
+	{
+		msg: 'IDLE-->IDLE: FERTILIZE ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } =
+				setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.FERTILIZE,
+					TFertilizePhase.IDLE
+				);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+	{
+		msg: 'IDLE-->IDLE: CANCEL_SELECTION ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } =
+				setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.CANCEL_SELECTION,
+					TFertilizePhase.IDLE
+				);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+	{
+		msg: 'IDLE-->IDLE: RESET ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } =
+				setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.RESET,
+					TFertilizePhase.IDLE
+				);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+];
+
+describe('FSM/Fertilizing/IDLE', () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+		jest.clearAllTimers();
+	});
+
 	((
 		tests: testBody<
 			TTurnPhase.FERTILIZE,
@@ -241,128 +246,95 @@ describe('FSM/Fertilizing: IDLE', () => {
 			const originalInput: typeof input = JSON.parse(
 				JSON.stringify(input)
 			);
-			const result = reducer_Fertilize_IDLE.apply(null, input);
+			const result = functions.reducer_Fertilize_IDLE.apply(null, input);
 
-			test(`${msg}: Works as intended`, () => {
+			test(`${msg} ::: Works as intended`, () => {
 				expect(result).toMatchObject(output);
 			});
-			test(`${msg}: Does not mutate input data`, () => {
+			test(`${msg} ::: Does not mutate input data`, () => {
 				expect(input).toMatchObject(originalInput);
 			});
 		}
-	})(tests);
+	})(testCasesIDLE);
 });
 
-/*describe('FSM/Fertilizing: Root Reducer', () => {
-	let defaultDt: testBody['input'] = defaultTestInput();
-	let defaultGame = defaultDt.game;
-	let defaultContext = defaultDt.context;
-
-	beforeEach(() => {
-		defaultDt = defaultTestInput();
-		defaultGame = defaultDt.game;
-		defaultContext = defaultDt.context;
-	});
-
-	function makeTest(tests: testBody[]) {
+describe('FSM/Fertilizing/Root Reducer', () => {
+	((
+		tests: testBody<
+			TTurnPhase.FERTILIZE,
+			TFertilizePhase,
+			TFertilizeAction
+		>[]
+	) => {
 		for (let i = 0; i < tests.length; i++) {
-			test(tests[i]?.msg, () => {
-				expect(
-					turnPhaseReducer_Fertilize(tests[i].input)
-				).toMatchObject(tests[i].output);
+			const { input, output, msg, numberOfFunctionCalls = 0 } = tests[i];
+			const originalInput: typeof input = JSON.parse(
+				JSON.stringify(input)
+			);
+
+			test(`${msg} ::: does ${numberOfFunctionCalls} calls of IDLE reducer`, () => {
+				const spiedFunction = jest.spyOn(
+					functions,
+					'reducer_Fertilize_IDLE'
+				);
+				const result = functions.turnPhaseReducer_Fertilize.apply(
+					null,
+					input
+				);
+				if (spiedFunction && Number.isFinite(numberOfFunctionCalls)) {
+					expect(spiedFunction).toBeCalledTimes(
+						numberOfFunctionCalls
+					);
+					if (numberOfFunctionCalls)
+						expect(spiedFunction).toBeCalledWith(...input);
+				}
+				jest.restoreAllMocks();
+			});
+
+			test(`${msg} ::: does not mutate input`, () => {
+				const result = functions.turnPhaseReducer_Fertilize.apply(
+					null,
+					input
+				);
+				expect(input).toMatchObject(originalInput);
 			});
 		}
-	}
-
-	const tests: testBody[] = [
+	})([
+		...testCasesIDLE.map((t) => ({
+			...t,
+			numberOfFunctionCalls: 1,
+		})),
 		{
-			msg: 'with action SKIP should return new context with another subPhase',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.SKIP,
-			},
-			res: {
-				context: {
-					subPhase: TFertilizePhase.FINISHED,
-				},
-				game: defaultGame,
-			},
+			msg: 'in FINISHED state',
+			numberOfFunctionCalls: 0,
+			...(() => {
+				const { defaultInput, originalInput, originalContext } =
+					setupFixtures(
+						TTurnPhase.FERTILIZE,
+						TFertilizeAction.SKIP,
+						TFertilizePhase.FINISHED
+					);
+				return {
+					input: defaultInput,
+					output: originalContext,
+				};
+			})(),
 		},
 		{
-			msg: 'with action RESET should return defaultContextFixture',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.RESET,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
+			msg: 'in CROP_CONFIRM state',
+			numberOfFunctionCalls: 0,
+			...(() => {
+				const { defaultInput, originalInput, originalContext } =
+					setupFixtures(
+						TTurnPhase.FERTILIZE,
+						TFertilizeAction.SKIP,
+						TFertilizePhase.CROP_CONFIRM
+					);
+				return {
+					input: defaultInput,
+					output: originalContext,
+				};
+			})(),
 		},
-		{
-			msg: 'with action FERTILIZE should return defaultContextFixture',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.FERTILIZE,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action CHOOSE_CROP should return new context with another subPhase & index',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.CHOOSE_CROP,
-			},
-			res: {
-				context: {
-					...defaultContext,
-					subPhase: TFertilizePhase.CROP_CONFIRM,
-					context: {
-						...defaultContext.context,
-						index: defaultDt.payload.index,
-					},
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action HOVER should return new context with another index',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.HOVER,
-			},
-			res: {
-				context: {
-					...defaultContext,
-					context: {
-						...defaultContext.context,
-						index: defaultDt.payload.index,
-					},
-				},
-				game: defaultGame,
-			},
-		},
-		{
-			msg: 'with action CANCEL_SELECTION should return defaultContextFixture',
-			dt: {
-				...defaultDt,
-				action: TFertilizeAction.CANCEL_SELECTION,
-			},
-			res: {
-				context: {
-					...defaultContext,
-				},
-				game: defaultGame,
-			},
-		},
-	];
-
-	makeTest(tests);
-});*/
+	]);
+});

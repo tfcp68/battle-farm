@@ -60,7 +60,7 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<
 		throw new Error(`Missing action: ${JSON.stringify(params)}`);
 	if (undefined === context)
 		throw new Error(`Missing turn context: ${JSON.stringify(params)}`);
-	if (null === payload)
+	if (undefined === payload)
 		throw new Error(`Missing payload: ${JSON.stringify(params)}`);
 	context = { ...context };
 
