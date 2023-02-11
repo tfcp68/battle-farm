@@ -2,7 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-	entry: path.resolve(__dirname, 'src/UI', 'index.tsx'),
+	entry: path.resolve(__dirname, 'src/UI/', 'index.tsx'),
 	resolve: {
 		extensions: ['.tsx', '.ts', '.js'],
 	},
