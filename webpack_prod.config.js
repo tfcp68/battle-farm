@@ -7,7 +7,7 @@ module.exports = merge(common, {
 	mode: 'production',
 	output: {
 		filename: 'js/bundle.[contenthash].min.js',
-		path: path.resolve(__dirname, '../../dist'),
+		path: path.resolve(__dirname, 'dist'),
 		publicPath: '/',
 		clean: true,
 	},
