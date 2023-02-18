@@ -1,3 +1,5 @@
+import { TValidator } from '~/src/types/typeGuards';
+
 export type TAutomataBaseStateType = number;
 export type TAutomataBaseActionType = number;
 export type TAutomataBaseEventType = number;
@@ -84,7 +86,13 @@ export type TAutomataDispatch<
 > = (
 	action: TAutomataActionPayload<ActionType, PayloadType>
 ) => ReturnType<
-	TAutomataReducer<StateType, ActionType, ContextType, PayloadType>
+	TAutomataReducer<
+		StateType,
+		ActionType,
+		ContextType,
+		PayloadType,
+		NewStateType
+	>
 >;
 
 type TSubscriptionCancelFunction = () => void;
@@ -106,12 +114,10 @@ export interface IAutomataEventAdapter<
 			PayloadType
 		>
 	) => null | TSubscriptionCancelFunction;
-
 	addEventEmitter: <T extends StateType>(
 		on: T,
 		emitter: TAutomataEventEmitter<EventType, T, EventMetaType, ContextType>
 	) => null | TSubscriptionCancelFunction;
-
 	handleEvent: <T extends EventType>(
 		event: TAutomataEventMetaType<T, EventMetaType>
 	) => Array<
@@ -119,7 +125,6 @@ export interface IAutomataEventAdapter<
 			TAutomataEventHandler<T, ActionType, EventMetaType, PayloadType>
 		>
 	>;
-
 	handleTransition: <T extends StateType>(
 		newState: TAutomataStateContext<T, ContextType>
 	) => Array<
@@ -127,6 +132,12 @@ export interface IAutomataEventAdapter<
 			TAutomataEventEmitter<EventType, T, EventMetaType, ContextType>
 		>
 	>;
+	removeAllListeners: <T extends EventType>(type: T | null) => this;
+	removeAllEmitters: <T extends StateType>(type: T | null) => this;
+	getObservedEvents: () => EventType[];
+	getObservedStates: () => StateType[];
+
+	setEventValidator(eventValidator?: TValidator<EventType>): this;
 }
 
 export type TAutomataParams<
@@ -145,9 +156,9 @@ export type TAutomataParams<
 		ContextType,
 		PayloadType
 	>;
-	stateValidator?: (t: any) => t is StateType;
-	actionValidator?: (t: any) => t is ActionType;
-	eventValidator?: (t: any) => t is EventType;
+	stateValidator?: TValidator<StateType>;
+	actionValidator?: TValidator<ActionType>;
+	eventValidator?: TValidator<EventType>;
 };
 
 export interface IAutomata<

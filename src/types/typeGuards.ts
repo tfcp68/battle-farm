@@ -1,6 +1,8 @@
 import { TPlayerClass } from '~/src/types/serializables/players';
 import { TGameEvent } from '~/src/types/fsm/events';
 
+export type TValidator<T extends any> = (x: any) => x is T;
+
 export const isPlayerClass = (t: any): t is TPlayerClass =>
 	Object.values(TPlayerClass)
 		.filter((v) => Number.isFinite(v) && v > 0)

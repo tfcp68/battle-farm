@@ -8,6 +8,7 @@ import {
 	TAutomataEventMetaType,
 	TAutomataStateContext,
 } from '~/src/types/fsm/automata';
+import { TValidator } from '~/src/types/typeGuards';
 
 export abstract class AutomataEventAdapter<
 	StateType extends TAutomataBaseStateType,
@@ -37,9 +38,20 @@ export abstract class AutomataEventAdapter<
 		>;
 	};
 
+	protected eventValidator?: TValidator<EventType>;
+
 	protected constructor() {
 		this.eventListeners = {};
 		this.eventEmitters = {};
+	}
+
+	setEventValidator(eventValidator?: TValidator<EventType>) {
+		if (eventValidator === null || eventValidator === undefined)
+			this.eventValidator = undefined;
+		if (!(eventValidator instanceof Function))
+			throw new Error(`passed Event Validator is not a function`);
+		this.eventValidator = eventValidator;
+		return this;
 	}
 
 	public addEventEmitter<T extends StateType>(
@@ -62,9 +74,15 @@ export abstract class AutomataEventAdapter<
 		type: T,
 		handler: TAutomataEventHandler<T, ActionType, EventObject, PayloadType>
 	) {
-		if (!type || !handler) return null;
+		if (
+			type === null ||
+			type === undefined ||
+			!(handler instanceof Function) ||
+			(this.eventValidator && !this.eventValidator(type))
+		)
+			return null;
 		this.eventListeners = Object.assign(this.eventListeners ?? {}, {
-			[type]: (this.eventListeners[type] ?? []).concat(handler),
+			[type]: [...(this.eventListeners?.[type] ?? []), handler],
 		});
 		return () => {
 			if (this?.eventListeners?.[type])
@@ -74,7 +92,7 @@ export abstract class AutomataEventAdapter<
 		};
 	}
 
-	handleEvent<T extends EventType>(
+	public handleEvent<T extends EventType>(
 		event: TAutomataEventMetaType<T, EventObject>
 	): Array<
 		ReturnType<
@@ -99,6 +117,44 @@ export abstract class AutomataEventAdapter<
 			emitter(newState)
 		);
 	}
+
+	public removeAllListeners<T extends EventType>(type: T | null = null) {
+		if (type === null) {
+			this.eventListeners = {};
+		} else if (this.eventListeners?.[type]) {
+			delete this.eventListeners[type];
+		}
+		return this;
+	}
+
+	public removeAllEmitters<T extends StateType>(type: T | null = null): this {
+		if (type === null) {
+			this.eventEmitters = {};
+		} else if (this.eventEmitters?.[type]) {
+			delete this.eventEmitters[type];
+		}
+		return this;
+	}
+
+	public getObservedEvents() {
+		return (
+			Object.keys(this.eventListeners).map((k) =>
+				parseInt(k)
+			) as EventType[]
+		)
+			.filter((k) => this.eventListeners[k]?.length)
+			.filter(this.eventValidator ?? this.defaultEventValidator);
+	}
+
+	public getObservedStates() {
+		return (
+			Object.keys(this.eventEmitters).map((k) =>
+				parseInt(k)
+			) as StateType[]
+		).filter((k) => this.eventEmitters[k]?.length);
+	}
+
+	protected defaultEventValidator = (x: any): x is EventType => x >= 0;
 }
 
 export default AutomataEventAdapter;
