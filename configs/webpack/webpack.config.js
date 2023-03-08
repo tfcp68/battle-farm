@@ -18,26 +18,17 @@ module.exports = {
 					},
 				],
 			},
-
 			{
-				test: /\.css$/,
-				use: ['style-loader', 'css-loader'],
+				test: /\.(scss)$/,
+				use: ['style-loader', 'css-loader', 'sass-loader'],
 			},
 		],
 	},
 
-	output: {
-		path: path.resolve(__dirname, '../..', './dist'),
-		filename: 'bundle.js',
-		clean: true,
-	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: path.resolve(
-				__dirname,
-				'../../src/UI/',
-				'index.html.ejs'
-			),
+			template: path.resolve(__dirname, '../../public/', 'index.html'),
+			title: 'Battle farm',
 		}),
 	],
 };
