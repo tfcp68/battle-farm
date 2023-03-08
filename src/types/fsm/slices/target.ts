@@ -40,7 +40,7 @@ export type TWithTargetOptions<T extends TTargetMode = TTargetMode> =
 	TWithTargetMode<T> & {
 		targetLimit?: number; // amount of targets to be set
 		skipDispatch?: TTurnBasedDispatch<any>; // if set, the target mode can be quit voluntarily
-		confirmDispatch?: TTurnBasedDispatch<any>; // action creator to call when the target is choosen
+		confirmDispatch?: TTurnBasedDispatch<any>; // action creator to call when the target is chosen
 		cancelDispatch?: TTurnBasedDispatch<any>; // if set, the target choice must be confirmed, and failing to do so triggers this action creator
 		effects?: Array<TTargetReducer<T>>; // a set of side effects that are applied on the chosen target
 	};

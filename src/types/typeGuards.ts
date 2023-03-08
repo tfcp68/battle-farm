@@ -1,38 +1,14 @@
-import {
-	CropCardId,
-	TCropCard,
-	TCropId,
-} from '~/src/types/serializables/crops';
-import {
-	ActionCardId,
-	TActionCard,
-	TActionId,
-} from '~/src/types/serializables/actions';
-import { TCard, TCardId, TCardType } from '~/src/types/serializables/cards';
-import { TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { TTurnPhase, TTurnSubContext } from '~/src/types/fsm';
+import { TPlayerClass } from '~/src/types/serializables/players';
+import { TGameEvent } from '~/src/types/fsm/events';
 
-export const isCropCard = (card: TCard): card is TCropCard =>
-	card?.type === TCardType.CROP;
-export const isActionCard = (card: TCard): card is TActionCard =>
-	card?.type === TCardType.ACTION;
-export const isCropId = (id: TCardId): id is TCropId =>
-	Object.keys(CropCardId).includes(id);
-export const isActionId = (id: TCardId): id is TActionId =>
-	Object.keys(ActionCardId).includes(id);
-export const isFertilizeSubphase =
-	<T extends TFertilizePhase>(targetSubphase: T) =>
-	(currentSubphase: any): currentSubphase is T =>
-		currentSubphase === targetSubphase;
-export const isFertilizeContext =
-	<T extends TFertilizePhase>(targetSubphase: T) =>
-	(
-		ctx: TTurnSubContext<TTurnPhase.FERTILIZE>
-	): ctx is TTurnSubContext<TTurnPhase.FERTILIZE, T> =>
-		ctx.subPhase === targetSubphase;
+export type TValidator<T extends any> = (x: any) => x is T;
 
-export const isCropCardId = (id: TCardId): id is TCardId<TCardType.CROP> =>
-	Object.keys(CropCardId).includes(id);
+export const isPlayerClass = (t: any): t is TPlayerClass =>
+	Object.values(TPlayerClass)
+		.filter((v) => Number.isFinite(v) && v > 0)
+		.includes(t);
 
-export const isActionCardId = (id: TCardId): id is TCardId<TCardType.ACTION> =>
-	Object.keys(ActionCardId).includes(id);
+export const isGameEvent = (t: any): t is TGameEvent =>
+	Object.values(TGameEvent)
+		.filter((v) => Number.isFinite(v) && v > 0)
+		.includes(t);

@@ -1,93 +1,78 @@
-import {
-	TTurnBasedReducer,
-	TTurnPhase,
-	TTurnSubReducerContext,
-} from '~/src/types/fsm';
+import { TTurnBasedReducer, TTurnPhase } from '~/src/types/fsm';
 import {
 	CONTEXT_FERTILIZE,
 	TFertilizeAction,
 	TFertilizePhase,
 } from '~/src/types/fsm/slices/fertilize';
-import { isFertilizeContext } from '~/src/types/typeGuards';
-import { TGameContainer } from '~/src/types/serializables/game';
+import {
+	isFertilizeAction,
+	isFertilizeSubphase,
+} from '~/src/types/guards/turnPhases';
 
-const reducer_Fertilize_IDLE: TTurnBasedReducer<
+export const reducer_Fertilize_IDLE: TTurnBasedReducer<
 	TTurnPhase.FERTILIZE,
 	TFertilizePhase.IDLE
 > = (params) => {
-	let {
-		game,
-		context = { subPhase: TFertilizePhase.IDLE, ...CONTEXT_FERTILIZE },
-		payload,
-		action,
-	} = params;
+	let { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
+	if (!isFertilizeAction(action))
+		throw new Error(`Invalid action: ${action}`);
+	if (subPhase !== TFertilizePhase.IDLE)
+		throw new Error(
+			`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`
+		);
 	switch (action) {
-		case TFertilizeAction.HOVER:
-			return {
-				game,
-				context: {
-					...context,
-					index: payload.index,
-				},
-			} as TTurnSubReducerContext<
-				TTurnPhase.FERTILIZE,
-				TFertilizePhase.IDLE
-			>;
 		case TFertilizeAction.SKIP:
 			return {
-				context: {
-					subPhase: TFertilizePhase.FINISHED,
-				},
-				game,
-			} as TTurnSubReducerContext<
-				TTurnPhase.FERTILIZE,
-				TFertilizePhase.FINISHED
-			>;
-		case TFertilizeAction.CHOOSE_CROP:
+				subPhase: TFertilizePhase.FINISHED,
+				context: null,
+			};
+		case TFertilizeAction.HOVER:
+			if (!payload) throw new Error(`Invalid HOVER payload: ${payload}`);
 			return {
+				subPhase: TFertilizePhase.IDLE,
 				context: {
-					index: payload.index,
-					subPhase: TFertilizePhase.CROP_CONFIRM,
+					...context,
+					index: payload?.index,
 				},
-				game,
-			} as TTurnSubReducerContext<
-				TTurnPhase.FERTILIZE,
-				TFertilizePhase.CROP_CONFIRM
-			>;
+			};
+		case TFertilizeAction.CHOOSE_CROP:
+			if (!payload)
+				throw new Error(`Invalid CHOOSE_CROP payload: ${payload}`);
+			return {
+				subPhase: TFertilizePhase.CROP_CONFIRM,
+				context: {
+					index: payload?.index,
+				},
+			};
 		default:
 			return {
-				game,
+				subPhase,
 				context,
-			} as TTurnSubReducerContext<
-				TTurnPhase.FERTILIZE,
-				TFertilizePhase.IDLE
-			>;
+			};
 	}
 };
 
 export const turnPhaseReducer_Fertilize: TTurnBasedReducer<
 	TTurnPhase.FERTILIZE
 > = (params) => {
-	let { game = null, context, payload = null, action = null } = params;
-	game = JSON.parse(JSON.stringify(game));
-	context = JSON.parse(JSON.stringify(context));
+	let { context, payload = null, action = null, subPhase } = params;
 	if (null === action)
 		throw new Error(`Missing action: ${JSON.stringify(params)}`);
-	if (null === context)
+	if (undefined === context)
 		throw new Error(`Missing turn context: ${JSON.stringify(params)}`);
-	if (null === game)
-		throw new Error(`Missing game: ${JSON.stringify(params)}`);
-	if (null === payload)
+	if (undefined === payload)
 		throw new Error(`Missing payload: ${JSON.stringify(params)}`);
-	if (isFertilizeContext(TFertilizePhase.IDLE)(context))
+	context = { ...context };
+
+	if (isFertilizeSubphase(TFertilizePhase.IDLE)(subPhase))
 		return reducer_Fertilize_IDLE({
-			game,
 			context,
 			payload,
 			action,
+			subPhase,
 		});
 	return {
-		game,
+		subPhase,
 		context,
 	};
 };

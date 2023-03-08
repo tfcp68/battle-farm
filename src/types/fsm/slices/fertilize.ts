@@ -34,3 +34,11 @@ export type TFertilizePayload<T extends TFertilizeAction> =
 export const CONTEXT_FERTILIZE: TFertilizeContext<TFertilizePhase.IDLE> = {
 	index: 0,
 };
+
+export type TFertilizeMappedContext = {
+	[K in TFertilizePhase]: TFertilizeContext<K>;
+};
+
+export type TFertilizeMappedPayload = {
+	[K in TFertilizeAction]: TFertilizePayload<K>;
+};

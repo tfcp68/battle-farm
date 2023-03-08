@@ -1,7 +1,7 @@
 import { TPlayerClass, TPlayerTarget } from '~/src/types/serializables/players';
 import { IGame } from '~/src/types/serializables/game';
 import { TTurnPhase } from '~/src/types/fsm';
-import { TPlayerIndex, TTargetIndex } from '~/src/types/fsm/shared';
+import { TPlayerIndex } from '~/src/types/fsm/shared';
 import { TCrop } from '~/src/types/serializables/crops';
 import { TCard } from '~/src/types/serializables/cards';
 import { TActionCard } from '~/src/types/serializables/actions';
@@ -84,6 +84,10 @@ export type TGameEventPayload<T extends TGameEvent> =
 		: T extends TGameEvent.PLAYER_TRADE_ACCEPTED
 		? TPlayerIndex & { cards: TCard[] }
 		: never;
+
+export type TMappedGameEventMeta = {
+	[K in TGameEvent]: TGameEventPayload<K>;
+};
 
 export type TGameEventObject<T extends TGameEvent> = {
 	event: T;

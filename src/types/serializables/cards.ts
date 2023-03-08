@@ -3,8 +3,8 @@ import { TCropCard, TCropId } from '~/src/types/serializables/crops';
 import {
 	TGameEffect,
 	TTurnPhase,
-	TTurnSubContext,
 	TTurnSubPhase,
+	TTurnSubphaseContext,
 } from '~/src/types/fsm';
 
 export enum TCardType {
@@ -64,7 +64,7 @@ export interface ICard<T extends TCardType = TCardType.CROP | TCardType.ACTION>
 	getEffect?: <
 		T extends TTurnPhase,
 		S extends TTurnSubPhase<T>,
-		С extends TTurnSubContext<T, S>
+		С extends TTurnSubphaseContext<T, S>
 	>(
 		context: С
 	) => TGameEffect<T>;
