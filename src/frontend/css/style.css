@@ -1,0 +1,209 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#game {
+    width: 100%;
+    height: 100vh;
+
+    background: url("../../../assets/elements/fon.jpg") no-repeat;
+    background-size: cover;
+}
+
+.game-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+}
+
+.game__cards {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+
+}
+
+.game-card {
+    max-width: 200px;
+    max-height: 300px;
+    width: 200px;
+    height: 300px;
+    perspective: 1000px;
+
+    transform: scale(0.8);
+    align-self: flex-end;
+
+}
+
+.game-card:first-child {
+    transform: scale(0.8) rotate(-15deg);
+}
+
+.game-card:last-child {
+    transform: scale(0.8) rotate(15deg);
+}
+
+.game-card__inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+
+    transform-style: preserve-3d;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.game-card__face {
+    backface-visibility: hidden;
+    overflow: hidden;
+    -webkit-backface-visibility: hidden;
+    position: absolute;
+}
+
+.game-card__inner.is-flipped {
+    transform: rotateY(-180deg);
+}
+
+.game-card__front {
+    width: calc(100%);
+    height: calc(100%);
+
+    top: calc(50%);
+    left: calc(50%);
+
+    transform: translate(-50%, -50%);
+}
+
+.game-card__back {
+    width: 100%;
+    height: 100%;
+    background: url('../../../assets/elements/card_back.png') no-repeat;
+    background-size: cover;
+    transform: rotateY(180deg);
+}
+
+.game-card__img {
+    width: calc(100% - 18px);
+    height: calc(100% - 24px);
+    object-fit: cover;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 40px;
+    z-index: 1;
+}
+
+.game-card__frame {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    z-index: 2;
+}
+
+
+.game__beds {
+
+    --topOffset: 70%;
+    --leftOffset: 50%;
+    max-width: 1000px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    top: var(--topOffset);
+    left: var(--leftOffset);
+    transform: translate(calc(var(--leftOffset) * -1),
+                        calc(var(--topOffset) * -1)) scale(0.8);
+
+    gap: 10px;
+    background-color: #775824;
+    padding: 10px;
+}
+
+.game__beds__bed {
+    display: flex;
+    align-items: baseline;
+    width: 100%;
+    height: auto;
+    gap: 0 10px;
+
+}
+
+.game__beds__bed__segment {
+    max-width: 200px;
+    max-height: 300px;
+    width: 200px;
+    height: 300px;
+
+    background-color: #543b1c;
+
+}
+
+.game-board {
+    width: 500px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    justify-content: space-between;
+    background-color: #bb9c77;
+    padding: 20px;
+    border: 6px solid #e0bc96;
+}
+.game-board__playerInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.amountFertilize__icon {
+    width: 60px;
+    height: 60px;
+}
+.amountCoins__icon {
+    width: 60px;
+    height: 60px;
+}
+
+.game-board__avatar {
+    border-radius: 50px/100px;
+    width: 200px;
+    height: 280px;
+    overflow: hidden;
+}
+.game-board__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.game-board__playerInfo__block {
+    display: flex;
+    align-items: center;
+    gap:  30px;
+}
+
+.game-card__timer {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+}
