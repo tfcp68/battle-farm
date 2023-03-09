@@ -1,5 +1,5 @@
 import React from "react";
-import frameCard from "../../../../assets/elements/frame_card.png";
+import frameCard from "~/assets/elements/frame_card.png";
 
 
 interface IGameCardProps {

@@ -24,14 +24,16 @@
             "es2016"
         ],
         "baseUrl": ".",
+
         "paths": {
             "~/src/*": [
-                "src/*"
+                "./src/*"
             ],
-            "~/assets/*": [
-                "assets/*"
+            "~assets/*": [
+                "./assets/*"
             ]
-        }
+        },
+
     },
     "include": [
         "./src/**/*",

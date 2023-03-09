@@ -16,6 +16,9 @@
   "keywords": [
     "react"
   ],
+  "browser": {
+    "[module-name]": false
+  },
   "author": "Alexander Uskov <neolord.tmb@gmail.com>",
   "license": "ISC",
   "bugs": {
@@ -54,6 +57,7 @@
     "wepack-cli": "^0.0.1-security"
   },
   "dependencies": {
+    "module-alias": "^2.2.2",
     "sass": "^1.58.0"
   }
 }
