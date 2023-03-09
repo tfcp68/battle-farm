@@ -28,6 +28,7 @@
             "~/src/*": [
                 "src/*"
             ],
+            "components/*": ["src/UI/components/*"],
             "~/assets/*": [
                 "assets/*"
             ]
