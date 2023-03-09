@@ -18,8 +18,8 @@ import {
 } from '~/src/types/fsm/slices/play';
 import {
 	TFertilizeAction,
-	TFertilizeContext,
-	TFertilizePayload,
+	TFertilizeMappedContext,
+	TFertilizeMappedPayload,
 	TFertilizePhase,
 } from '~/src/types/fsm/slices/fertilize';
 import {
@@ -28,7 +28,7 @@ import {
 	TWaitPayload,
 	TWaitPhase,
 } from '~/src/types/fsm/slices/waiting';
-import { IGame, TGame, TGameContainer } from '~/src/types/serializables/game';
+import { IGame } from '~/src/types/serializables/game';
 import { TPlayerClass } from '~/src/types/serializables/players';
 
 export enum TTurnPhase {
@@ -80,7 +80,7 @@ export type TTurnSubContextDict = {
 				: never
 			: T extends TTurnPhase.FERTILIZE
 			? K extends TTurnSubPhase<T>
-				? TFertilizeContext<K>
+				? TFertilizeMappedContext[K]
 				: never
 			: T extends TTurnPhase.PLAYING
 			? K extends TTurnSubPhase<T>
@@ -106,7 +106,7 @@ export type TTurnSubPayloadDict = {
 				: never
 			: T extends TTurnPhase.FERTILIZE
 			? K extends TTurnSubAction<T>
-				? TFertilizePayload<K>
+				? TFertilizeMappedPayload[K]
 				: never
 			: T extends TTurnPhase.PLAYING
 			? K extends TTurnSubAction<T>
@@ -123,35 +123,27 @@ export type TWithTurnSubPhase<
 	subPhase: M;
 };
 
-export type TTurnSubContext<
+export type TTurnSubphaseContext<
 	T extends TTurnPhase,
 	K extends TTurnSubPhaseDict[T] = TTurnSubPhase<T>
-> = TWithTurnSubPhase<T, K> & TTurnSubContextDict[T][K];
+> = TWithTurnSubPhase<T, K> & { context: TTurnSubContextDict[T][K] };
 
 export type TTurnSubPayload<
 	T extends TTurnPhase,
 	K extends TTurnSubActionDict[T] = TTurnSubAction<T>
 > = TTurnSubPayloadDict[T][K];
 
-export type TTurnSubDispatchParam<
+export type TTurnSubphaseAction<
 	T extends TTurnPhase,
 	K extends TTurnSubActionDict[T] = TTurnSubActionDict[T]
-> = { action: K; payload: TTurnSubPayload<T, K> };
-
-export type TTurnSubReducerContext<
-	T extends TTurnPhase,
-	K extends TTurnSubPhaseDict[T] = TTurnSubPhase<T>
-> = {
-	context: TTurnSubContext<T, K>;
-	game: TGameContainer;
-};
+> = { action: K; payload: TTurnSubPayload<T, K> | null };
 
 // Synchronously updates the Turn Context Returns new SubPhase inside Turn Phase
 export type TTurnBasedDispatch<
 	T extends TTurnPhase,
 	M extends TTurnSubPhase<T> = TTurnSubPhase<T>,
 	K extends TTurnSubAction<T> = TTurnSubAction<T>
-> = (params: TWithTurnSubPhase<T, M> & TTurnSubDispatchParam<T, K>) => M;
+> = (params: TWithTurnSubPhase<T, M> & TTurnSubphaseAction<T, K>) => M;
 
 // Synchronously calculates new Turn Context and Game State for a given action
 export type TTurnBasedReducer<
@@ -159,8 +151,8 @@ export type TTurnBasedReducer<
 	M extends TTurnSubPhase<T> = TTurnSubPhase<T>,
 	K extends TTurnSubAction<T> = TTurnSubAction<T>
 > = (
-	params: TTurnSubReducerContext<T, M> & TTurnSubDispatchParam<T, K>
-) => TTurnSubReducerContext<T, TTurnSubPhase<any>>;
+	params: TTurnSubphaseContext<T, M> & TTurnSubphaseAction<T, K>
+) => TTurnSubphaseContext<T, TTurnSubPhase<any>>;
 
 export type TGameEffect<
 	T extends TTurnPhase,

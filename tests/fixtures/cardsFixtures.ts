@@ -9,6 +9,7 @@ import {
 import { sampleRange } from '~/src/utils/sampleRange';
 import arraySample from '../../src/utils/arraySample';
 import { lengthArray } from '~/src/utils/lengthArray';
+import { isCropColor } from '~/src/types/guards/crops';
 
 export function actionCardFixture(props: Partial<TActionCard> = {}) {
 	const [CardIdName] = arraySample(Object.values(ActionCardId));
@@ -29,7 +30,7 @@ export function cropCardFixture(props: Partial<TCropCard> = {}) {
 		Object.values(TCropColor).filter((v) => typeof v === 'number')
 	);
 	const id = getCardIDByType({ type: TCardType.CROP, id: cardIdName });
-	if (typeof group !== 'number') throw new Error('group is not a number');
+	if (!isCropColor(group)) throw new Error('Group is invalid');
 	if (id === null) throw new Error('Card ID not found');
 	const defaults: TCropCard = {
 		fertilized: sampleRange(0, 100),

@@ -5,10 +5,13 @@ import {
 } from '~/src/types/serializables/players';
 import { ICard, IDeck, TCard, TDeck } from '~/src/types/serializables/cards';
 import { LengthArray, TPlayerRecord } from '~/src/types/shared';
-import { TTurnPhase, TTurnSubContext, TTurnSubPhase } from '~/src/types/fsm';
+import {
+	TTurnPhase,
+	TTurnSubPhase,
+	TTurnSubphaseContext,
+} from '~/src/types/fsm';
 import { TTargetModeContext } from '~/src/types/fsm/slices/target';
 import { TGameStat } from '~/src/types/serializables/stat';
-import { TGameEvent } from '~/src/types/fsm/events';
 
 export const MARKET_SIZE = 6;
 export const MAX_PLAYERS = 6;
@@ -45,7 +48,7 @@ export type TTurnContext<
 	TurnSubPhase extends TTurnSubPhase<TurnPhase> = TTurnSubPhase<TurnPhase>
 > = {
 	currentTurnPhase: TurnPhase;
-	context?: TTurnSubContext<TurnPhase, TurnSubPhase>;
+	context?: TTurnSubphaseContext<TurnPhase, TurnSubPhase>;
 };
 
 export type TTurnContainer = {

@@ -5,7 +5,7 @@ import {
 	TCardId,
 	TCardType,
 } from '~/src/types/serializables/cards';
-import { isActionCardId, isCropCardId } from '~/src/types/typeGuards';
+import { isActionCardId, isCropCardId } from '~/src/types/guards/cards';
 
 function _getCardIDByType(
 	card: TCardDescriptor<TCardType.ACTION>

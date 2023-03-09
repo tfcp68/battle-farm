@@ -1,7 +1,8 @@
 export default function arraySample<T>(arr: T[], n: number = 1): T[] {
 	const acc: T[] = [];
-	if (n <= 0) return acc;
+	if (!arr?.length || n <= 0) return acc;
+	const a = JSON.parse(JSON.stringify(arr));
 	while (acc.length < n)
-		acc.push(...arr.splice(Math.floor(Math.random() * arr.length), 1));
+		acc.push(...a.splice(Math.floor(Math.random() * a.length), 1));
 	return acc;
 }
