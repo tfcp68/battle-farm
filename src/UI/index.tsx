@@ -1,6 +1,6 @@
 import {createRoot} from 'react-dom/client';
 import React from "react";
-import App from "./components/app/App";
+import GameApp from "./components/GameApp/GameApp";
 
 const root = createRoot(document.getElementById('root')!);
-root.render(<App></App>);
+root.render(<GameApp></GameApp>);

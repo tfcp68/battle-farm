@@ -23,14 +23,14 @@
             "esnext",
             "es2016"
         ],
-        "baseUrl": ".",
+        "baseUrl": "./",
 
         "paths": {
             "~/src/*": [
-                "./src/*"
+                "src/*"
             ],
-            "~assets/*": [
-                "./assets/*"
+            "~/assets/*": [
+                "assets/*"
             ]
         },
 
