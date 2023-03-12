@@ -1,37 +1,45 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-console.log(path.resolve(__dirname, '../../src/UI/app/'));
-module.exports = {
-	entry: path.resolve(__dirname, '../../src/UI', 'index.tsx'),
-	resolve: {
-		alias: {
-			components: path.resolve(__dirname, '../../src/UI/components'),
+const paths = require('../paths');
+
+function getBaseConfig() {
+	return {
+		entry: {
+			index: [path.resolve(paths.SRC, './UI/index')],
 		},
-		extensions: ['.tsx', '.ts', '.js'],
-	},
+		resolve: {
+			alias: {
+				'~/components': path.resolve(paths.SRC, 'UI/components'),
+				'~/assets': paths.ASSETS,
+			},
+			extensions: ['.tsx', '.ts', '.js'],
+		},
 
-	module: {
-		rules: [
-			{
-				test: /\.(ts|js)x?$/,
-				exclude: /node_modules/,
-				use: [
-					{
-						loader: 'babel-loader',
-					},
-				],
-			},
-			{
-				test: /\.(scss)$/,
-				use: ['style-loader', 'css-loader', 'sass-loader'],
-			},
+		module: {
+			rules: [
+				{
+					test: /\.(ts|js)x?$/,
+					exclude: /node_modules/,
+					use: [
+						{
+							loader: 'babel-loader',
+						},
+					],
+				},
+				{
+					test: /\.(scss)$/,
+					use: ['style-loader', 'css-loader', 'sass-loader'],
+				},
+			],
+		},
+
+		plugins: [
+			new HtmlWebpackPlugin({
+				template: path.resolve(paths.ROOT_DIR, 'public', 'index.html'),
+				title: 'Battle farm',
+			}),
 		],
-	},
+	};
+}
 
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(__dirname, '../../public/', 'index.html'),
-			title: 'Battle farm',
-		}),
-	],
-};
+module.exports = { ...getBaseConfig };

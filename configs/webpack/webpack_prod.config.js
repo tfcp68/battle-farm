@@ -1,11 +1,10 @@
-const common = require('./webpack.config');
-const { merge } = require('webpack-merge');
 const path = require('path');
 const CompressionPlugin = require('compression-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const { getBaseConfig } = require('./webpack.config');
 
-module.exports = merge(common, {
+const prodConfig = {
 	mode: 'production',
 	output: {
 		filename: 'js/[name][hash].min.js',
@@ -17,20 +16,6 @@ module.exports = merge(common, {
 
 	module: {
 		rules: [
-			{
-				test: /\.(scss)$/,
-				use: [
-					MiniCssExtractPlugin.loader,
-					{
-						loader: 'css-loader',
-						options: {
-							sourceMap: false,
-							modules: false,
-						},
-					},
-					'sass-loader',
-				],
-			},
 			{
 				test: /\.(gif|png|jpe?g|svg)$/i,
 				type: 'asset/resource',
@@ -46,6 +31,7 @@ module.exports = merge(common, {
 					},
 				],
 			},
+			...getBaseConfig().module.rules,
 		],
 	},
 
@@ -69,5 +55,8 @@ module.exports = merge(common, {
 			algorithm: 'gzip',
 		}),
 		new MiniCssExtractPlugin(),
+		...getBaseConfig().plugins,
 	],
-});
+};
+
+module.exports = { ...getBaseConfig(), ...prodConfig };
