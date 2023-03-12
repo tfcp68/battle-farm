@@ -30,7 +30,7 @@ describe(`EventAdapter`, () => {
 	let sampleInstance: EventAdapterTest = new EventAdapterTest();
 	beforeEach(() => {
 		jest.restoreAllMocks();
-		jest.restoreAllMocks();
+		jest.clearAllTimers();
 		sampleInstance = new EventAdapterTest();
 	});
 	describe('constructor', () => {
@@ -122,10 +122,10 @@ describe(`EventAdapter`, () => {
 				] as Record<number, number>);
 			});
 
-			test('returns am unsubscribe function', () => {
+			test('returns an unsubscribe function', () => {
 				const testEvent = sampleRange(100, 200);
 				const unsubscribe = sampleInstance.addEventListener(
-					sampleEvent,
+					testEvent,
 					({ event, meta }) => ({
 						action: sampleAction,
 						payload: {
