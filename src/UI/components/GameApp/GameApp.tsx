@@ -3,6 +3,7 @@ import styles from './GameApp.module.scss';
 import Card from "../GameCard/GameCard";
 import beans from '~/assets/crops/beans.png';
 
+
 interface IGameAppProps {
 }
 

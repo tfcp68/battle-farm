@@ -1,12 +1,16 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+
 module.exports = {
-	entry: path.resolve(__dirname, '../../src/UI', 'index.tsx'),
+	entry: {
+		index: ['./src/UI/index.tsx'],
+	},
 	resolve: {
-		extensions: ['.tsx', '.ts', '.js'],
+		extensions: ['.tsx', '.ts', '.js', '.jsx'],
 		alias: {
-			'~/assets/': path.resolve(__dirname, '/assets'),
+			'~/assets': path.resolve(__dirname, '../../assets/'),
+			'~/src': path.resolve(__dirname, '../../src/'),
 		},
 	},
 
