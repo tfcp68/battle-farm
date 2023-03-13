@@ -3,15 +3,15 @@
   "jsxBracketSameLine": true,
   "tabWidth": 4,
   "useTabs": true,
-  "printWidth": 80,
+  "printWidth": 120,
   "endOfLine": "lf",
   "semi": true,
   "overrides": [
-    {
-      "files": ".ts?x",
-      "options": {
-        "parser": "typescript"
-      }
-    }
+	{
+	  "files": ".ts?x",
+	  "options": {
+		"parser": "typescript"
+	  }
+	}
   ]
 }

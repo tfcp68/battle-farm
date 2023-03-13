@@ -1,8 +1,4 @@
-import {
-	IAutomata,
-	IAutomataEventAdapter,
-	TAutomataReducer,
-} from '~/src/types/fsm/automata';
+import { IAutomata, IAutomataEventAdapter, TAutomataReducer } from '~/src/types/fsm/automata';
 
 export type TTestEvent = number;
 export type TTestAction = number;
@@ -34,12 +30,9 @@ export type TTestAutomata = IAutomata<
 	TTestEventMeta<TTestEvent>
 >;
 
-export const testStateValidator = (x: any): x is TTestState =>
-	Number.isFinite(x);
-export const testActionValidator = (x: any): x is TTestAction =>
-	Number.isFinite(x);
-export const testEventValidator = (x: any): x is TTestEvent =>
-	Number.isFinite(x);
+export const testStateValidator = (x: any): x is TTestState => Number.isFinite(x);
+export const testActionValidator = (x: any): x is TTestAction => Number.isFinite(x);
+export const testEventValidator = (x: any): x is TTestEvent => Number.isFinite(x);
 
 /**
  * Sample reducer that adds numbers

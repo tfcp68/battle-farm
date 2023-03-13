@@ -1,9 +1,9 @@
+import { TTurnBasedDispatch } from '~/src/types/fsm';
 import { TPlayerIndex, TTargetIndex } from '~/src/types/fsm/shared';
-import { TPlayer, TPlayerTarget } from '~/src/types/serializables/players';
-import { TBed, TCrop } from '~/src/types/serializables/crops';
 import { TCard } from '~/src/types/serializables/cards';
+import { TBed, TCrop } from '~/src/types/serializables/crops';
+import { TPlayer, TPlayerTarget } from '~/src/types/serializables/players';
 import { TGame } from '../../serializables/game';
-import { TTurnBasedDispatch, TTurnBasedReducer } from '~/src/types/fsm';
 
 export enum TTargetMode {
 	INIT,
@@ -36,14 +36,13 @@ export type TWithTargetMode<T extends TTargetMode = TTargetMode> = {
 	targetMode: T | null;
 };
 
-export type TWithTargetOptions<T extends TTargetMode = TTargetMode> =
-	TWithTargetMode<T> & {
-		targetLimit?: number; // amount of targets to be set
-		skipDispatch?: TTurnBasedDispatch<any>; // if set, the target mode can be quit voluntarily
-		confirmDispatch?: TTurnBasedDispatch<any>; // action creator to call when the target is chosen
-		cancelDispatch?: TTurnBasedDispatch<any>; // if set, the target choice must be confirmed, and failing to do so triggers this action creator
-		effects?: Array<TTargetReducer<T>>; // a set of side effects that are applied on the chosen target
-	};
+export type TWithTargetOptions<T extends TTargetMode = TTargetMode> = TWithTargetMode<T> & {
+	targetLimit?: number; // amount of targets to be set
+	skipDispatch?: TTurnBasedDispatch<any>; // if set, the target mode can be quit voluntarily
+	confirmDispatch?: TTurnBasedDispatch<any>; // action creator to call when the target is chosen
+	cancelDispatch?: TTurnBasedDispatch<any>; // if set, the target choice must be confirmed, and failing to do so triggers this action creator
+	effects?: Array<TTargetReducer<T>>; // a set of side effects that are applied on the chosen target
+};
 
 export type TTargetRelatedDict = {
 	[TTargetMode.INIT]: never;
@@ -63,43 +62,37 @@ export type TTargetRelatedDict = {
 
 export type TRelatedTarget<T extends TTargetMode> = TTargetRelatedDict[T];
 
-export type TTargetTypedContext<T extends TTargetMode> =
-	T extends TTargetMode.FOE
-		? TPlayerTarget
-		: T extends TTargetMode.PLAYER
-		? TPlayerTarget
-		: T extends TTargetMode.BED_ANY
-		? TPlayerIndex
-		: T extends TTargetMode.BED_EMPTY
-		? TPlayerIndex
-		: T extends TTargetMode.BED_OWN
-		? TPlayerIndex
-		: T extends TTargetMode.BED_FOE
-		? TPlayerIndex
-		: T extends TTargetMode.CROP_ANY
-		? TPlayerIndex
-		: T extends TTargetMode.CROP_FOE
-		? TPlayerIndex
-		: T extends TTargetMode.CROP_OWN
-		? TPlayerTarget & TTargetIndex
-		: T extends TTargetMode.CARD_DISCARDED
-		? TTargetIndex
-		: T extends TTargetMode.CARD_OWN
-		? TTargetIndex
-		: T extends TTargetMode.CARD_MARKET
-		? TTargetIndex
-		: never;
+export type TTargetTypedContext<T extends TTargetMode> = T extends TTargetMode.FOE
+	? TPlayerTarget
+	: T extends TTargetMode.PLAYER
+	? TPlayerTarget
+	: T extends TTargetMode.BED_ANY
+	? TPlayerIndex
+	: T extends TTargetMode.BED_EMPTY
+	? TPlayerIndex
+	: T extends TTargetMode.BED_OWN
+	? TPlayerIndex
+	: T extends TTargetMode.BED_FOE
+	? TPlayerIndex
+	: T extends TTargetMode.CROP_ANY
+	? TPlayerIndex
+	: T extends TTargetMode.CROP_FOE
+	? TPlayerIndex
+	: T extends TTargetMode.CROP_OWN
+	? TPlayerTarget & TTargetIndex
+	: T extends TTargetMode.CARD_DISCARDED
+	? TTargetIndex
+	: T extends TTargetMode.CARD_OWN
+	? TTargetIndex
+	: T extends TTargetMode.CARD_MARKET
+	? TTargetIndex
+	: never;
 
-export type TTargetModeContext<T extends TTargetMode> = TWithTargetOptions<T> &
-	TTargetTypedContext<T>;
+export type TTargetModeContext<T extends TTargetMode> = TWithTargetOptions<T> & TTargetTypedContext<T>;
 
-export type TTargetContext<T extends TTargetMode> = TWithTargetMode<T> &
-	TTargetTypedContext<T>;
+export type TTargetContext<T extends TTargetMode> = TWithTargetMode<T> & TTargetTypedContext<T>;
 
-export type TTargetPayload<
-	T extends TTargetAction,
-	M extends TTargetMode
-> = T extends TTargetAction.HOVER
+export type TTargetPayload<T extends TTargetAction, M extends TTargetMode> = T extends TTargetAction.HOVER
 	? TTargetPayload<TTargetRelatedAction<M>, M>
 	: T extends TTargetAction.CHOOSE_CARD
 	? TTargetIndex
@@ -129,8 +122,7 @@ export type TTargetRelatedActionDict = {
 	[TTargetMode.CARD_DISCARDED]: TTargetAction.CHOOSE_CARD;
 };
 
-export type TTargetRelatedAction<T extends TTargetMode> =
-	TTargetRelatedActionDict[T];
+export type TTargetRelatedAction<T extends TTargetMode> = TTargetRelatedActionDict[T];
 
 export type TTargetReducer<
 	M extends TTargetMode,

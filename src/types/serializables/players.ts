@@ -1,6 +1,6 @@
-import { TBed, TCrop, TGardenBedType } from '~/src/types/serializables/crops';
+import { TTargetMode, TTargetModeContext } from '~/src/types/fsm/slices/target';
 import { ICard, TCard } from '~/src/types/serializables/cards';
-import { TTargetModeContext, TTargetMode } from '~/src/types/fsm/slices/target';
+import { TBed, TCrop, TGardenBedType } from '~/src/types/serializables/crops';
 
 export enum TPlayerClass {
 	EMPTY,

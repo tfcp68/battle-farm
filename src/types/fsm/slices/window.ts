@@ -1,5 +1,5 @@
-import { TGame, TGameScore } from '~/src/types/serializables/game';
 import { TTargetIndex } from '~/src/types/fsm/shared';
+import { TGame, TGameScore } from '~/src/types/serializables/game';
 
 export enum TWindowState {
 	INIT,
@@ -24,40 +24,38 @@ export enum TWindowAction {
 	EXIT,
 }
 
-export type TWindowPayload<T extends TWindowAction> =
-	T extends TWindowAction.CREATE_GAME
-		? { playerId: string }
-		: T extends TWindowAction.JOIN_GAME
-		? { gameId: string; playerId: string }
-		: T extends TWindowAction.START_GAME
-		? { gameId: string; playerIds: string[] }
-		: T extends TWindowAction.BEGIN_GAME
-		? { gameId: string; game: TGame }
-		: T extends TWindowAction.END_GAME
-		? { gameId: string }
-		: never;
+export type TWindowPayload<T extends TWindowAction> = T extends TWindowAction.CREATE_GAME
+	? { playerId: string }
+	: T extends TWindowAction.JOIN_GAME
+	? { gameId: string; playerId: string }
+	: T extends TWindowAction.START_GAME
+	? { gameId: string; playerIds: string[] }
+	: T extends TWindowAction.BEGIN_GAME
+	? { gameId: string; game: TGame }
+	: T extends TWindowAction.END_GAME
+	? { gameId: string }
+	: never;
 
-export type TWindowContext<T extends TWindowState> =
-	T extends TWindowState.MAIN_MENU
-		? TTargetIndex
-		: T extends TWindowState.GAME_LOBBY
-		? {
-				gameId: string;
-				playerIds: string[];
-		  }
-		: T extends TWindowState.GAME_STARTING
-		? {
-				gameId: string;
-				playerIds: string[];
-		  }
-		: T extends TWindowState.IN_GAME
-		? {
-				gameId: string;
-				game: TGame;
-		  }
-		: T extends TWindowState.SCORE_SCREEN
-		? {
-				gameId: string;
-				score: TGameScore;
-		  }
-		: never;
+export type TWindowContext<T extends TWindowState> = T extends TWindowState.MAIN_MENU
+	? TTargetIndex
+	: T extends TWindowState.GAME_LOBBY
+	? {
+			gameId: string;
+			playerIds: string[];
+	  }
+	: T extends TWindowState.GAME_STARTING
+	? {
+			gameId: string;
+			playerIds: string[];
+	  }
+	: T extends TWindowState.IN_GAME
+	? {
+			gameId: string;
+			game: TGame;
+	  }
+	: T extends TWindowState.SCORE_SCREEN
+	? {
+			gameId: string;
+			score: TGameScore;
+	  }
+	: never;
