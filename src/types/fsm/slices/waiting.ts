@@ -26,15 +26,14 @@ export type TWaitContext<T extends TWaitPhase> = T extends TWaitPhase.HAS_TRADE
 	? TTrade & TTargetIndex
 	: never;
 
-export type TWaitPayload<T extends TWaitAction> =
-	T extends TWaitAction.ADD_COINS_TO_OFFER
-		? TPlayerIndex
-		: T extends TWaitAction.REMOVE_COINS_FROM_OFFER
-		? TPlayerIndex
-		: T extends TWaitAction.MAKE_OFFER
-		? TPlayerIndex & TTrade
-		: T extends TWaitAction.OFFER_ACCEPTED
-		? TPlayerIndex & TTrade
-		: T extends TWaitAction.ENTER_TARGET_MODE
-		? TTargetModeContext<any>
-		: never;
+export type TWaitPayload<T extends TWaitAction> = T extends TWaitAction.ADD_COINS_TO_OFFER
+	? TPlayerIndex
+	: T extends TWaitAction.REMOVE_COINS_FROM_OFFER
+	? TPlayerIndex
+	: T extends TWaitAction.MAKE_OFFER
+	? TPlayerIndex & TTrade
+	: T extends TWaitAction.OFFER_ACCEPTED
+	? TPlayerIndex & TTrade
+	: T extends TWaitAction.ENTER_TARGET_MODE
+	? TTargetModeContext<any>
+	: never;

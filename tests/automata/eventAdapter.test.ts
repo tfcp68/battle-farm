@@ -1,17 +1,10 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 
 import AutomataEventAdapter from '~/src/automata/EventAdapter';
-import {
-	TTestAction,
-	TTestContext,
-	TTestEvent,
-	TTestEventMeta,
-	TTestPayload,
-	TTestState,
-} from '../fixtures/fsm';
 import arraySample from '~/src/utils/arraySample';
-import { sampleRange } from '~/src/utils/sampleRange';
 import { lengthArray } from '~/src/utils/lengthArray';
+import { sampleRange } from '~/src/utils/sampleRange';
+import { TTestAction, TTestContext, TTestEvent, TTestEventMeta, TTestPayload, TTestState } from '../fixtures/fsm';
 
 class EventAdapterTest extends AutomataEventAdapter<
 	TTestState,
@@ -95,49 +88,38 @@ describe(`EventAdapter`, () => {
 			const sampleEvent = sampleRange(0, 100);
 			const sampleAction = sampleRange(0, 100);
 			beforeEach(() => {
-				sampleInstance.addEventListener(
-					sampleEvent,
-					({ event, meta }) => ({
-						action: sampleAction,
-						payload: {
-							payload: sampleRange(0, 100),
-						},
-					})
-				);
+				sampleInstance.addEventListener(sampleEvent, ({ event, meta }) => ({
+					action: sampleAction,
+					payload: {
+						payload: sampleRange(0, 100),
+					},
+				}));
 			});
 			test('actually adds an observer', () => {
 				const testEvent = sampleRange(100, 200);
-				sampleInstance.addEventListener(
-					testEvent,
-					({ event, meta }) => ({
-						action: sampleAction,
-						payload: {
-							payload: sampleEvent,
-						},
-					})
-				);
-				expect(sampleInstance.getObservedEvents()).toMatchObject([
-					sampleEvent,
-					testEvent,
-				] as Record<number, number>);
+				sampleInstance.addEventListener(testEvent, ({ event, meta }) => ({
+					action: sampleAction,
+					payload: {
+						payload: sampleEvent,
+					},
+				}));
+				expect(sampleInstance.getObservedEvents()).toMatchObject([sampleEvent, testEvent] as Record<
+					number,
+					number
+				>);
 			});
 
 			test('returns an unsubscribe function', () => {
 				const testEvent = sampleRange(100, 200);
-				const unsubscribe = sampleInstance.addEventListener(
-					testEvent,
-					({ event, meta }) => ({
-						action: sampleAction,
-						payload: {
-							payload: sampleRange(0, 100),
-						},
-					})
-				);
+				const unsubscribe = sampleInstance.addEventListener(testEvent, ({ event, meta }) => ({
+					action: sampleAction,
+					payload: {
+						payload: sampleRange(0, 100),
+					},
+				}));
 				expect(unsubscribe).toBeInstanceOf(Function);
 				if (unsubscribe) unsubscribe();
-				expect(sampleInstance.getObservedEvents()).toMatchObject([
-					sampleEvent,
-				] as Record<number, number>);
+				expect(sampleInstance.getObservedEvents()).toMatchObject([sampleEvent] as Record<number, number>);
 			});
 		});
 
@@ -145,18 +127,12 @@ describe(`EventAdapter`, () => {
 			const sampleEvent = sampleRange(0, 100);
 			const sampleAction = sampleRange(0, 100);
 			beforeEach(() => {
-				sampleInstance.addEventListener(
-					sampleEvent,
-					({ event, meta }) => ({
-						action: sampleAction,
-						payload: {
-							payload: parseInt(
-								meta?.meta ?? defaultMeta.toString(16),
-								16
-							),
-						},
-					})
-				);
+				sampleInstance.addEventListener(sampleEvent, ({ event, meta }) => ({
+					action: sampleAction,
+					payload: {
+						payload: parseInt(meta?.meta ?? defaultMeta.toString(16), 16),
+					},
+				}));
 			});
 			test('correctly handles single event', () => {
 				const sampleMeta = sampleRange(1000, 10000);
@@ -183,9 +159,7 @@ describe(`EventAdapter`, () => {
 					expect(result1).toMatchObject(result2); // idempotency
 					expect(event).toMatchObject(eventCopy); // argument immutability
 				}
-				expect(eventHandlers).toEqual(
-					sampleInstance.getObservedEvents()
-				);
+				expect(eventHandlers).toEqual(sampleInstance.getObservedEvents());
 			});
 			test('is correctly applied with null EventMeta', () => {
 				const result = sampleInstance.handleEvent({
@@ -200,22 +174,14 @@ describe(`EventAdapter`, () => {
 		});
 		describe('handleEvent (multiple listeners)', () => {
 			beforeEach(() => {
-				sampleEvents = new Array(sampleRange(12, 15))
-					.fill(null)
-					.map((v) => sampleRange(1, 10));
+				sampleEvents = new Array(sampleRange(12, 15)).fill(null).map((v) => sampleRange(1, 10));
 				sampleEvents.forEach((eventId, ix) => {
-					sampleInstance.addEventListener(
-						eventId,
-						({ event, meta }) => ({
-							action: ix,
-							payload: {
-								payload: parseInt(
-									meta?.meta ?? defaultMeta.toString(12),
-									12
-								),
-							},
-						})
-					);
+					sampleInstance.addEventListener(eventId, ({ event, meta }) => ({
+						action: ix,
+						payload: {
+							payload: parseInt(meta?.meta ?? defaultMeta.toString(12), 12),
+						},
+					}));
 				});
 			});
 			test('returns a related stack of actions on success', () => {
@@ -225,9 +191,7 @@ describe(`EventAdapter`, () => {
 					event: testEvent,
 					meta: { meta: testMeta },
 				});
-				expect(result).toHaveLength(
-					sampleEvents.filter((v) => v === testEvent).length
-				);
+				expect(result).toHaveLength(sampleEvents.filter((v) => v === testEvent).length);
 			});
 			test('applies multiple event handlers to each event in original order', () => {
 				const testEvent = arraySample(sampleEvents)[0];
@@ -236,7 +200,7 @@ describe(`EventAdapter`, () => {
 					event: testEvent,
 					meta: { meta: testMeta },
 				});
-				let minIndex = -1;
+				const minIndex = -1;
 				result.forEach((r) => {
 					expect(sampleEvents[r.action ?? -1]).toEqual(testEvent); // correct event handler is chosen
 					expect(r.payload).toMatchObject({
@@ -250,15 +214,12 @@ describe(`EventAdapter`, () => {
 			beforeEach(() => {
 				sampleEvents = lengthArray((ix) => ix ?? -1, sampleRange(4, 7));
 				sampleEvents.forEach((eventId, ix) => {
-					sampleInstance.addEventListener(
-						eventId,
-						({ event, meta }) => ({
-							action: 0,
-							payload: {
-								payload: ix,
-							},
-						})
-					);
+					sampleInstance.addEventListener(eventId, ({ event, meta }) => ({
+						action: 0,
+						payload: {
+							payload: ix,
+						},
+					}));
 				});
 			});
 			test('removes all listeners without an argument', () => {
@@ -269,14 +230,9 @@ describe(`EventAdapter`, () => {
 				const sampleEvent = arraySample(sampleEvents)[0];
 				sampleInstance.removeAllListeners(sampleEvent);
 				expect(sampleInstance.getObservedEvents()).toMatchObject(
-					sampleEvents.filter((v) => v !== sampleEvent) as Record<
-						number,
-						number
-					>
+					sampleEvents.filter((v) => v !== sampleEvent) as Record<number, number>
 				);
-				expect(sampleInstance.getObservedEvents()).toHaveLength(
-					sampleEvents.length - 1
-				);
+				expect(sampleInstance.getObservedEvents()).toHaveLength(sampleEvents.length - 1);
 			});
 		});
 	});

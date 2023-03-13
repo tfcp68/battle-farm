@@ -1,9 +1,5 @@
-import {
-	CropCardId,
-	TCropColor,
-	TCropId,
-} from '~/src/types/serializables/crops';
 import { TActionId } from '~/src/types/serializables/actions';
+import { TCropId } from '~/src/types/serializables/crops';
 import { TPlayerRecord } from '~/src/types/shared';
 
 export type TPlayerStat = {

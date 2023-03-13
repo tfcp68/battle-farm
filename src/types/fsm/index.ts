@@ -1,33 +1,13 @@
 import {
-	TTradeAction,
-	TTradeContext,
-	TTradePayload,
-	TTradePhase,
-} from '~/src/types/fsm/slices/trade';
-import {
-	TShoppingAction,
-	TShoppingContext,
-	TShoppingPayload,
-	TShoppingPhase,
-} from '~/src/types/fsm/slices/shopping';
-import {
-	TPlayAction,
-	TPlayContext,
-	TPlayPayload,
-	TPlayPhase,
-} from '~/src/types/fsm/slices/play';
-import {
 	TFertilizeAction,
 	TFertilizeMappedContext,
 	TFertilizeMappedPayload,
 	TFertilizePhase,
 } from '~/src/types/fsm/slices/fertilize';
-import {
-	TWaitAction,
-	TWaitContext,
-	TWaitPayload,
-	TWaitPhase,
-} from '~/src/types/fsm/slices/waiting';
+import { TPlayAction, TPlayContext, TPlayPayload, TPlayPhase } from '~/src/types/fsm/slices/play';
+import { TShoppingAction, TShoppingContext, TShoppingPayload, TShoppingPhase } from '~/src/types/fsm/slices/shopping';
+import { TTradeAction, TTradeContext, TTradePayload, TTradePhase } from '~/src/types/fsm/slices/trade';
+import { TWaitAction, TWaitContext, TWaitPayload, TWaitPhase } from '~/src/types/fsm/slices/waiting';
 import { IGame } from '~/src/types/serializables/game';
 import { TPlayerClass } from '~/src/types/serializables/players';
 
@@ -116,10 +96,7 @@ export type TTurnSubPayloadDict = {
 	};
 };
 
-export type TWithTurnSubPhase<
-	T extends TTurnPhase,
-	M extends TTurnSubPhase<T> = TTurnSubPhase<T>
-> = {
+export type TWithTurnSubPhase<T extends TTurnPhase, M extends TTurnSubPhase<T> = TTurnSubPhase<T>> = {
 	subPhase: M;
 };
 
@@ -133,10 +110,10 @@ export type TTurnSubPayload<
 	K extends TTurnSubActionDict[T] = TTurnSubAction<T>
 > = TTurnSubPayloadDict[T][K];
 
-export type TTurnSubphaseAction<
-	T extends TTurnPhase,
-	K extends TTurnSubActionDict[T] = TTurnSubActionDict[T]
-> = { action: K; payload: TTurnSubPayload<T, K> | null };
+export type TTurnSubphaseAction<T extends TTurnPhase, K extends TTurnSubActionDict[T] = TTurnSubActionDict[T]> = {
+	action: K;
+	payload: TTurnSubPayload<T, K> | null;
+};
 
 // Synchronously updates the Turn Context Returns new SubPhase inside Turn Phase
 export type TTurnBasedDispatch<
@@ -150,11 +127,9 @@ export type TTurnBasedReducer<
 	T extends TTurnPhase,
 	M extends TTurnSubPhase<T> = TTurnSubPhase<T>,
 	K extends TTurnSubAction<T> = TTurnSubAction<T>
-> = (
-	params: TTurnSubphaseContext<T, M> & TTurnSubphaseAction<T, K>
-) => TTurnSubphaseContext<T, TTurnSubPhase<any>>;
+> = (params: TTurnSubphaseContext<T, M> & TTurnSubphaseAction<T, K>) => TTurnSubphaseContext<T, TTurnSubPhase<any>>;
 
-export type TGameEffect<
-	T extends TTurnPhase,
-	M extends TTurnSubPhase<T> = TTurnSubPhase<T>
-> = (game: IGame, source: TPlayerClass) => IGame;
+export type TGameEffect<T extends TTurnPhase, M extends TTurnSubPhase<T> = TTurnSubPhase<T>> = (
+	game: IGame,
+	source: TPlayerClass
+) => IGame;

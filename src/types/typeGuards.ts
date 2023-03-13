@@ -1,7 +1,7 @@
-import { TPlayerClass } from '~/src/types/serializables/players';
 import { TGameEvent } from '~/src/types/fsm/events';
+import { TPlayerClass } from '~/src/types/serializables/players';
 
-export type TValidator<T extends any> = (x: any) => x is T;
+export type TValidator<T> = (x: any) => x is T;
 
 export const isPlayerClass = (t: any): t is TPlayerClass =>
 	Object.values(TPlayerClass)

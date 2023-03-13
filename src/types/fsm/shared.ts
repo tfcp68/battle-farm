@@ -1,5 +1,5 @@
-import { TPlayerClass, TPlayerTarget } from '~/src/types/serializables/players';
 import { TCard } from '~/src/types/serializables/cards';
+import { TPlayerClass, TPlayerTarget } from '~/src/types/serializables/players';
 
 export type TTargetIndex = {
 	index: number;
