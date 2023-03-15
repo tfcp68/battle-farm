@@ -45,7 +45,7 @@ export abstract class AutomataEventAdapter<
 		this.eventEmitters = {};
 	}
 
-	setEventValidator(eventValidator?: TValidator<EventType>) {
+	public setEventValidator(eventValidator?: TValidator<EventType>) {
 		if (eventValidator === null || eventValidator === undefined)
 			this.eventValidator = undefined;
 		if (!(eventValidator instanceof Function))
@@ -85,10 +85,13 @@ export abstract class AutomataEventAdapter<
 			[type]: [...(this.eventListeners?.[type] ?? []), handler],
 		});
 		return () => {
-			if (this?.eventListeners?.[type])
-				this.eventListeners[type] = this.eventListeners?.[type]?.filter(
-					(v) => v === handler
+			if (this.eventListeners?.[type]) {
+				const newHandlers = (this.eventListeners[type] || []).filter(
+					(v) => v !== handler
 				);
+				if (!newHandlers.length) delete this.eventListeners[type];
+				else this.eventListeners[type] = newHandlers;
+			}
 		};
 	}
 
