@@ -15,21 +15,19 @@ export enum TFertilizeAction {
 	SKIP,
 }
 
-export type TFertilizeContext<T extends TFertilizePhase> =
-	T extends TFertilizePhase.IDLE
-		? TTargetIndex
-		: T extends TFertilizePhase.CROP_CONFIRM
-		? TTargetIndex
-		: never;
+export type TFertilizeContext<T extends TFertilizePhase> = T extends TFertilizePhase.IDLE
+	? TTargetIndex
+	: T extends TFertilizePhase.CROP_CONFIRM
+	? TTargetIndex
+	: never;
 
-export type TFertilizePayload<T extends TFertilizeAction> =
-	T extends TFertilizeAction.HOVER
-		? TTargetIndex
-		: T extends TFertilizeAction.CHOOSE_CROP
-		? TTargetIndex
-		: T extends TFertilizeAction.FERTILIZE
-		? TTargetIndex
-		: never;
+export type TFertilizePayload<T extends TFertilizeAction> = T extends TFertilizeAction.HOVER
+	? TTargetIndex
+	: T extends TFertilizeAction.CHOOSE_CROP
+	? TTargetIndex
+	: T extends TFertilizeAction.FERTILIZE
+	? TTargetIndex
+	: never;
 
 export const CONTEXT_FERTILIZE: TFertilizeContext<TFertilizePhase.IDLE> = {
 	index: 0,

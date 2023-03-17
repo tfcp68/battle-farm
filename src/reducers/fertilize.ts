@@ -1,25 +1,12 @@
 import { TTurnBasedReducer, TTurnPhase } from '~/src/types/fsm';
-import {
-	CONTEXT_FERTILIZE,
-	TFertilizeAction,
-	TFertilizePhase,
-} from '~/src/types/fsm/slices/fertilize';
-import {
-	isFertilizeAction,
-	isFertilizeSubphase,
-} from '~/src/types/guards/turnPhases';
+import { CONTEXT_FERTILIZE, TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
+import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
 
-export const reducer_Fertilize_IDLE: TTurnBasedReducer<
-	TTurnPhase.FERTILIZE,
-	TFertilizePhase.IDLE
-> = (params) => {
-	let { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
-	if (!isFertilizeAction(action))
-		throw new Error(`Invalid action: ${action}`);
+export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE> = (params) => {
+	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
+	if (!isFertilizeAction(action)) throw new Error(`Invalid action: ${action}`);
 	if (subPhase !== TFertilizePhase.IDLE)
-		throw new Error(
-			`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`
-		);
+		throw new Error(`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`);
 	switch (action) {
 		case TFertilizeAction.SKIP:
 			return {
@@ -36,8 +23,7 @@ export const reducer_Fertilize_IDLE: TTurnBasedReducer<
 				},
 			};
 		case TFertilizeAction.CHOOSE_CROP:
-			if (!payload)
-				throw new Error(`Invalid CHOOSE_CROP payload: ${payload}`);
+			if (!payload) throw new Error(`Invalid CHOOSE_CROP payload: ${payload}`);
 			return {
 				subPhase: TFertilizePhase.CROP_CONFIRM,
 				context: {
@@ -52,17 +38,11 @@ export const reducer_Fertilize_IDLE: TTurnBasedReducer<
 	}
 };
 
-export const turnPhaseReducer_Fertilize: TTurnBasedReducer<
-	TTurnPhase.FERTILIZE
-> = (params) => {
-	let { context, payload = null, action = null, subPhase } = params;
-	if (null === action)
-		throw new Error(`Missing action: ${JSON.stringify(params)}`);
-	if (undefined === context)
-		throw new Error(`Missing turn context: ${JSON.stringify(params)}`);
-	if (undefined === payload)
-		throw new Error(`Missing payload: ${JSON.stringify(params)}`);
-	context = { ...context };
+export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE> = (params) => {
+	const { context, payload = null, action = null, subPhase } = params;
+	if (null === action) throw new Error(`Missing action: ${JSON.stringify(params)}`);
+	if (undefined === context) throw new Error(`Missing turn context: ${JSON.stringify(params)}`);
+	if (undefined === payload) throw new Error(`Missing payload: ${JSON.stringify(params)}`);
 
 	if (isFertilizeSubphase(TFertilizePhase.IDLE)(subPhase))
 		return reducer_Fertilize_IDLE({

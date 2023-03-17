@@ -1,5 +1,9 @@
-import {createRoot} from 'react-dom/client';
-import React from "react";
-import App from "./components/app/App";
-const root = createRoot(document.getElementById('root')!);
-root.render(<App></App>);
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import GameApp from './components/GameApp/GameApp';
+
+const root = document.getElementById('root');
+if (root) {
+	const App = createRoot(root);
+	App.render(<GameApp></GameApp>);
+} else throw new Error('App container #root not found');

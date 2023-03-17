@@ -1,15 +1,11 @@
-import { TCard, TCardType, TDeck } from '~/src/types/serializables/cards';
-import { ActionCardId, TActionCard } from '~/src/types/serializables/actions';
 import { getCardIDByType } from '~/src/helpers/cards';
-import {
-	CropCardId,
-	TCropCard,
-	TCropColor,
-} from '~/src/types/serializables/crops';
+import { isCropColor } from '~/src/types/guards/crops';
+import { ActionCardId, TActionCard } from '~/src/types/serializables/actions';
+import { TCard, TCardType, TDeck } from '~/src/types/serializables/cards';
+import { CropCardId, TCropCard, TCropColor } from '~/src/types/serializables/crops';
+import { lengthArray } from '~/src/utils/lengthArray';
 import { sampleRange } from '~/src/utils/sampleRange';
 import arraySample from '../../src/utils/arraySample';
-import { lengthArray } from '~/src/utils/lengthArray';
-import { isCropColor } from '~/src/types/guards/crops';
 
 export function actionCardFixture(props: Partial<TActionCard> = {}) {
 	const [CardIdName] = arraySample(Object.values(ActionCardId));
@@ -26,9 +22,7 @@ export function actionCardFixture(props: Partial<TActionCard> = {}) {
 
 export function cropCardFixture(props: Partial<TCropCard> = {}) {
 	const [cardIdName] = arraySample(Object.values(CropCardId));
-	const [group] = arraySample(
-		Object.values(TCropColor).filter((v) => typeof v === 'number')
-	);
+	const [group] = arraySample(Object.values(TCropColor).filter((v) => typeof v === 'number'));
 	const id = getCardIDByType({ type: TCardType.CROP, id: cardIdName });
 	if (!isCropColor(group)) throw new Error('Group is invalid');
 	if (id === null) throw new Error('Card ID not found');

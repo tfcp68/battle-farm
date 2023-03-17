@@ -1,17 +1,9 @@
-import {
-	IPlayer,
-	TPlayer,
-	TPlayerClass,
-} from '~/src/types/serializables/players';
-import { ICard, IDeck, TCard, TDeck } from '~/src/types/serializables/cards';
-import { LengthArray, TPlayerRecord } from '~/src/types/shared';
-import {
-	TTurnPhase,
-	TTurnSubPhase,
-	TTurnSubphaseContext,
-} from '~/src/types/fsm';
+import { TTurnPhase, TTurnSubPhase, TTurnSubphaseContext } from '~/src/types/fsm';
 import { TTargetModeContext } from '~/src/types/fsm/slices/target';
+import { ICard, IDeck, TCard, TDeck } from '~/src/types/serializables/cards';
+import { IPlayer, TPlayer, TPlayerClass } from '~/src/types/serializables/players';
 import { TGameStat } from '~/src/types/serializables/stat';
+import { LengthArray, TPlayerRecord } from '~/src/types/shared';
 
 export const MARKET_SIZE = 6;
 export const MAX_PLAYERS = 6;

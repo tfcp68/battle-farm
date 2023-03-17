@@ -5,8 +5,8 @@
   "main": "/public/index.html",
   "scripts": {
     "test": "jest",
-    "start": "webpack serve --config configs/webpack/webpack.config.js --mode=development",
-    "build": "webpack --config configs/webpack/webpack.config.js --mode=production &&  npx serve dist"
+    "start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.js ",
+    "build": "cross-env NODE_ENV=production webpack --config configs/webpack/webpack.config.js  &&  npx serve dist"
   },
   "repository": {
     "type": "git",
@@ -30,10 +30,18 @@
     "@types/node": "^18.14.6",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
     "babel-loader": "^9.1.2",
     "compression-webpack-plugin": "^10.0.0",
     "copy-webpack-plugin": "^11.0.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.7.3",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-webpack-plugin": "^4.0.0",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^8.0.3",
