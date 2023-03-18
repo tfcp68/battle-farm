@@ -12,15 +12,16 @@ const getPlugins = (isDev) => {
 			title: 'Battle farm',
 		}),
 	];
-	isDev
-		? (plugins = plugins.concat([new ReactRefreshWebpackPlugin()]))
-		: (plugins = plugins.concat([
+	plugins = isDev
+		? plugins.concat([new ReactRefreshWebpackPlugin()])
+		: plugins.concat([
 				new CompressionPlugin({
 					algorithm: 'gzip',
 				}),
-		  ]));
+		  ]);
 	return plugins;
 };
+
 const getRules = (isDev) => {
 	return isDev
 		? {
@@ -47,6 +48,7 @@ const getRules = (isDev) => {
 				],
 		  };
 };
+
 const getBaseLayoutSettings = (isDev) => {
 	return isDev
 		? {

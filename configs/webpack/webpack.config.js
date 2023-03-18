@@ -1,8 +1,8 @@
 const path = require('path');
 const paths = require('../paths');
-const { getPlugins, getRules, getBaseLayoutSettings } = require('./webpack_tool');
+const { getPlugins, getRules, getBaseLayoutSettings } = require('./utils');
 const { ROOT_DIR } = require('../paths');
-const isDev = process.env.NODE_ENV == 'development';
+const isDev = process.env.NODE_ENV === 'development';
 
 const config = {
 	entry: {
