@@ -57,10 +57,10 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE>
 	};
 };
 
-export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE> = (params) => {
+export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.CROP_CONFIRM> = (params) => {
 	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
 	if (!isFertilizeAction(action)) throw new Error(`Invalid action: ${action}`);
-	if (subPhase !== TFertilizePhase.IDLE)
+	if (subPhase !== TFertilizePhase.CROP_CONFIRM)
 		throw new Error(`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`);
 	switch (action) {
 		case TFertilizeAction.SKIP:
@@ -68,8 +68,8 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 				subPhase: TFertilizePhase.FINISHED,
 				context: null,
 			};
-		case TFertilizeAction.HOVER:
-			if (!payload) throw new Error(`Invalid HOVER payload: ${payload}`);
+		case TFertilizeAction.CANCEL_SELECTION:
+			if (!payload) throw new Error(`Invalid CANCEL_SELECTION payload: ${payload}`);
 			return {
 				subPhase: TFertilizePhase.IDLE,
 				context: {
@@ -77,10 +77,10 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 					index: payload?.index,
 				},
 			};
-		case TFertilizeAction.CHOOSE_CROP:
-			if (!payload) throw new Error(`Invalid CHOOSE_CROP payload: ${payload}`);
+		case TFertilizeAction.FERTILIZE:
+			if (!payload) throw new Error(`Invalid FERTILIZE_ACTION payload: ${payload}`);
 			return {
-				subPhase: TFertilizePhase.CROP_CONFIRM,
+				subPhase: TFertilizeAction.RESET,
 				context: {
 					index: payload?.index,
 				},
