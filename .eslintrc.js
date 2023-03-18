@@ -6,7 +6,7 @@ module.exports = {
 	},
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
-		ecmaVersion: 2021,
+		ecmaVersion: 2022,
 		sourceType: 'module',
 		ecmaFeatures: {
 			jsx: true,
@@ -17,12 +17,7 @@ module.exports = {
 			version: 'detect',
 		},
 	},
-	extends: [
-		'eslint:recommended',
-		'plugin:react/recommended',
-		'plugin:@typescript-eslint/recommended',
-		'prettier',
-	],
+	extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:@typescript-eslint/recommended', 'prettier'],
 	plugins: ['prettier', 'react', 'react-hooks', '@typescript-eslint'],
 	rules: {
 		'no-unused-vars': 'off',
@@ -50,28 +45,22 @@ module.exports = {
 			{
 				types: {
 					Object: {
-						message:
-							'Avoid using the `Object` type. Did you mean `object`?',
+						message: 'Avoid using the `Object` type. Did you mean `object`?',
 					},
 					Function: {
-						message:
-							'Avoid using the `Function` type. Prefer a specific function type, like `() => void`.',
+						message: 'Avoid using the `Function` type. Prefer a specific function type, like `() => void`.',
 					},
 					Boolean: {
-						message:
-							'Avoid using the `Boolean` type. Did you mean `boolean`?',
+						message: 'Avoid using the `Boolean` type. Did you mean `boolean`?',
 					},
 					Number: {
-						message:
-							'Avoid using the `Number` type. Did you mean `number`?',
+						message: 'Avoid using the `Number` type. Did you mean `number`?',
 					},
 					String: {
-						message:
-							'Avoid using the `String` type. Did you mean `string`?',
+						message: 'Avoid using the `String` type. Did you mean `string`?',
 					},
 					Symbol: {
-						message:
-							'Avoid using the `Symbol` type. Did you mean `symbol`?',
+						message: 'Avoid using the `Symbol` type. Did you mean `symbol`?',
 					},
 					['{}']: false,
 					['object']: false,
@@ -136,14 +125,7 @@ module.exports = {
 		'default-case': 'error',
 		eqeqeq: ['error', 'always'],
 		'guard-for-in': 'error',
-		'id-blacklist': [
-			'warn',
-			'any',
-			'Number',
-			'String',
-			'Boolean',
-			'Undefined',
-		],
+		'id-blacklist': ['warn', 'any', 'Number', 'String', 'Boolean', 'Undefined'],
 		'id-match': 'error',
 		'import/no-default-export': 'off',
 		'import/no-deprecated': 'off',
