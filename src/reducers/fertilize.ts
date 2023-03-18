@@ -56,3 +56,13 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE>
 		context,
 	};
 };
+
+export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE> = (params) => {
+	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
+	if (!isFertilizeAction(action)) throw new Error(`Invalid action: ${action}`);
+	if (subPhase !== TFertilizePhase.IDLE)
+		throw new Error(`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`);
+	switch (action) {
+
+	}
+}
