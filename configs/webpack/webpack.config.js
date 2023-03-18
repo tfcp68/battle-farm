@@ -1,20 +1,20 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const paths = require('../paths');
+const { getPlugins, getRules, getBaseLayoutSettings } = require('./webpack_tool');
+const { ROOT_DIR } = require('../paths');
+const isDev = process.env.NODE_ENV == 'development';
 
-
-module.exports = {
+const config = {
 	entry: {
-		index: ['./src/UI/index.tsx'],
+		index: [path.resolve(ROOT_DIR, 'src/UI', 'index.tsx')],
 	},
 	resolve: {
-		extensions: ['.tsx', '.ts', '.js', '.jsx'],
 		alias: {
-			'~/assets': path.resolve(__dirname, '../../assets/'),
-			'~/src': path.resolve(__dirname, '../../src/'),
-			'~/components': path.resolve(__dirname, '../../src/UI/components'),
+			'~/components': path.resolve(paths.ROOT_DIR, 'src/UI/components'),
+			'~/assets': path.resolve(paths.ROOT_DIR, 'assets'),
 		},
+		extensions: ['.tsx', '.ts', '.js'],
 	},
-
 	module: {
 		rules: [
 			{
@@ -30,13 +30,11 @@ module.exports = {
 				test: /\.(scss)$/,
 				use: ['style-loader', 'css-loader', 'sass-loader'],
 			},
+			getRules(isDev),
 		],
 	},
 
-	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.resolve(__dirname, '../../public/', 'index.html'),
-			title: 'Battle farm',
-		}),
-	],
+	plugins: getPlugins(isDev),
 };
+
+module.exports = Object.assign(config, getBaseLayoutSettings(isDev));
