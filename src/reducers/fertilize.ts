@@ -51,6 +51,13 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE>
 			action,
 			subPhase,
 		});
+	if (isFertilizeSubphase(TFertilizePhase.CROP_CONFIRM)(subPhase))
+		return reducer_Fertilize_CROP_CONFIRM({
+			context,
+			payload,
+			action,
+			subPhase,
+		});
 	return {
 		subPhase,
 		context,
@@ -82,7 +89,8 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 		case TFertilizeAction.FERTILIZE:
 			if (!payload) throw new Error(`Invalid FERTILIZE_ACTION payload: ${payload}`);
 			return {
-				subPhase: TFertilizeAction.RESET,
+				subPhase: TFertilizePhase.IDLE,
+				subAction: TFertilizeAction.RESET,
 				context: {
 					index: payload?.index,
 				},
