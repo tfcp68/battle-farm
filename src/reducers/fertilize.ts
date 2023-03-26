@@ -37,7 +37,21 @@ export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFe
 			};
 	}
 };
-
+export const reducer_Fertilize_FINISHED: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.FINISHED> = (
+	params
+) => {
+	const { action, context } = params;
+	if (!isFertilizeAction(action)) throw new Error(`Invalid action: ${action}`);
+	switch (action) {
+		case TFertilizeAction.RESET:
+			throw new Error(`invalid  ACTION  at this stage ${action}`);
+		default:
+			return {
+				context,
+				subPhase: TFertilizePhase.FINISHED,
+			};
+	}
+};
 export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE> = (params) => {
 	const { context, payload = null, action = null, subPhase } = params;
 	if (null === action) throw new Error(`Missing action: ${JSON.stringify(params)}`);
@@ -50,6 +64,13 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE>
 			payload,
 			action,
 			subPhase,
+		});
+	if (isFertilizeSubphase(TFertilizePhase.FINISHED)(subPhase))
+		return reducer_Fertilize_FINISHED({
+			context: undefined as never,
+			subPhase,
+			action,
+			payload,
 		});
 	return {
 		subPhase,
