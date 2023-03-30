@@ -48,6 +48,11 @@ export const reducer_Fertilize_FINISHED: TTurnBasedReducer<TTurnPhase.FERTILIZE,
 				subPhase: TFertilizePhase.IDLE,
 				context,
 			};
+		case TFertilizeAction.FERTILIZE:
+			return {
+				subPhase: TFertilizePhase.FINISHED,
+				context,
+			};
 		default:
 			return {
 				context,

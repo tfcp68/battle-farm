@@ -211,7 +211,7 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 			return {
 				input: defaultInput,
 				output: Object.assign({}, originalContext, {
-					subPhase: TFertilizePhase.FINISHED,
+					subPhase: TFertilizePhase.IDLE,
 				}),
 			};
 		})(),
@@ -221,7 +221,7 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 		...(() => {
 			const { defaultInput, originalInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.RESET,
+				TFertilizeAction.HOVER,
 				TFertilizePhase.FINISHED
 			);
 			return {
@@ -235,7 +235,7 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 		...(() => {
 			const { defaultInput, originalInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.RESET,
+				TFertilizeAction.CHOOSE_CROP,
 				TFertilizePhase.FINISHED
 			);
 			return {
@@ -249,7 +249,7 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 		...(() => {
 			const { defaultInput, originalInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.RESET,
+				TFertilizeAction.FERTILIZE,
 				TFertilizePhase.FINISHED
 			);
 			return {
@@ -263,7 +263,7 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 		...(() => {
 			const { defaultInput, originalInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.RESET,
+				TFertilizeAction.CANCEL_SELECTION,
 				TFertilizePhase.FINISHED
 			);
 			return {
@@ -277,7 +277,7 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 		...(() => {
 			const { defaultInput, originalInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.RESET,
+				TFertilizeAction.SKIP,
 				TFertilizePhase.FINISHED
 			);
 			return {
@@ -287,6 +287,27 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 		})(),
 	},
 ];
+describe('FSM/Fertilizing/FINISHED', () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+		jest.clearAllTimers();
+	});
+
+	((tests: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.FINISHED, TFertilizeAction>>) => {
+		for (let i = 0; i < tests.length; i++) {
+			const { input, output, msg } = tests[i];
+			const originalInput: typeof input = JSON.parse(JSON.stringify(input));
+			const result = functions.reducer_Fertilize_FINISHED.apply(null, input);
+
+			test(`${msg} ::: Works as intended`, () => {
+				expect(result).toMatchObject(output);
+			});
+			test(`${msg} ::: Does not mutate input data`, () => {
+				expect(input).toMatchObject(originalInput);
+			});
+		}
+	})(testCasesFINISHING);
+});
 describe('FSM/Fertilizing/IDLE', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
