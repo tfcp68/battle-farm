@@ -40,15 +40,18 @@ export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFe
 export const reducer_Fertilize_FINISHED: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.FINISHED> = (
 	params
 ) => {
-	const { action, context } = params;
+	const { action, context, subPhase } = params;
 	if (!isFertilizeAction(action)) throw new Error(`Invalid action: ${action}`);
 	switch (action) {
 		case TFertilizeAction.RESET:
-			throw new Error(`invalid  ACTION  at this stage ${action}`);
+			return {
+				subPhase: TFertilizePhase.IDLE,
+				context,
+			};
 		default:
 			return {
 				context,
-				subPhase: TFertilizePhase.FINISHED,
+				subPhase,
 			};
 	}
 };

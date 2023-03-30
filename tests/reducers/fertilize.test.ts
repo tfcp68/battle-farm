@@ -199,7 +199,94 @@ const testCasesIDLE: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE, 
 		})(),
 	},
 ];
-
+const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.FINISHED, TFertilizeAction>> = [
+	{
+		msg: 'FINISHED-->IDLE: RESET',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.RESET,
+				TFertilizePhase.FINISHED
+			);
+			return {
+				input: defaultInput,
+				output: Object.assign({}, originalContext, {
+					subPhase: TFertilizePhase.FINISHED,
+				}),
+			};
+		})(),
+	},
+	{
+		msg: 'FINISHED-->FINISHED: HOVER ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.RESET,
+				TFertilizePhase.FINISHED
+			);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+	{
+		msg: 'FINISHED-->FINISHED: CHOOSE_CROP ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.RESET,
+				TFertilizePhase.FINISHED
+			);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+	{
+		msg: 'FINISHED-->FINISHED: FERTILIZE ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.RESET,
+				TFertilizePhase.FINISHED
+			);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+	{
+		msg: 'FINISHED-->FINISHED: CANCEL_SELECTION ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.RESET,
+				TFertilizePhase.FINISHED
+			);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+	{
+		msg: 'FINISHED-->FINISHED: SKIP ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.RESET,
+				TFertilizePhase.FINISHED
+			);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
+];
 describe('FSM/Fertilizing/IDLE', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
