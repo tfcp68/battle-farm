@@ -78,13 +78,9 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 				context: null,
 			};
 		case TFertilizeAction.CANCEL_SELECTION:
-			if (!payload) throw new Error(`Invalid CANCEL_SELECTION payload: ${payload}`);
 			return {
 				subPhase: TFertilizePhase.IDLE,
-				context: {
-					...context,
-					index: payload?.index,
-				},
+				context,
 			};
 		case TFertilizeAction.FERTILIZE:
 			if (!payload) throw new Error(`Invalid FERTILIZE_ACTION payload: ${payload}`);

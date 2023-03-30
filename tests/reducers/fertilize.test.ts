@@ -219,7 +219,7 @@ const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhas
 		})(),
 	},
 	{
-		msg: 'CROP_CONFIRM-->CANCEL_SELECTION ignored',
+		msg: 'CROP_CONFIRM-->IDLE CANCEL_SELECTION',
 		...(() => {
 			const { defaultInput, originalInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
@@ -228,7 +228,9 @@ const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhas
 			);
 			return {
 				input: defaultInput,
-				output: originalContext,
+				output: Object.assign({}, originalContext, {
+					subPhase: TFertilizePhase.IDLE,
+				}),
 			};
 		})(),
 	},
