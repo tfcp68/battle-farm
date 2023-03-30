@@ -234,6 +234,20 @@ const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhas
 			};
 		})(),
 	},
+	{
+		msg: 'CROP_CONFIRM-->CROP_CONFIRM: RESET ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.RESET,
+				TFertilizePhase.CROP_CONFIRM
+			);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
 ];
 
 describe('FSM/Fertilizing/CROP_CONFIRM', () => {
