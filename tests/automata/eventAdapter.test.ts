@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 
 import AutomataEventAdapter from '~/src/automata/EventAdapter';
+import { TAutomataEventEmitter } from '~/src/types/fsm/automata';
 import arraySample from '~/src/utils/arraySample';
 import { lengthArray } from '~/src/utils/lengthArray';
 import { sampleRange } from '~/src/utils/sampleRange';
@@ -229,10 +230,171 @@ describe(`EventAdapter`, () => {
 			test('removes typed listeners with a typed argument', () => {
 				const sampleEvent = arraySample(sampleEvents)[0];
 				sampleInstance.removeAllListeners(sampleEvent);
-				expect(sampleInstance.getObservedEvents()).toMatchObject(
-					sampleEvents.filter((v) => v !== sampleEvent) as Record<number, number>
+				expect(sampleInstance.getObservedEvents().sort()).toMatchObject(
+					sampleEvents.filter((v) => v !== sampleEvent).sort() as Record<number, number>
 				);
 				expect(sampleInstance.getObservedEvents()).toHaveLength(sampleEvents.length - 1);
+			});
+		});
+	});
+	describe('Event Dispatching', () => {
+		let sampleStates: number[] = [];
+		const defaultContext = -1 * sampleRange(100, 200);
+		const fakeEmitter: TAutomataEventEmitter<
+			TTestEvent,
+			TTestState,
+			TTestEventMeta<TTestEvent>,
+			TTestContext<TTestEvent>
+		> = ({ state, context }) => ({
+			event: state,
+			meta: {
+				meta: (context?.context ?? -1).toString(16),
+			},
+		});
+
+		describe('addEventEmitter', () => {
+			const sampleState = sampleRange(0, 99);
+			const sampleEvent = sampleRange(0, 99);
+			beforeEach(() => {
+				sampleInstance.addEventEmitter(sampleState, ({ state, context }) => ({
+					event: sampleEvent,
+					meta: {
+						meta: String(context?.context),
+					},
+				}));
+			});
+			test('actually adds an emitter', () => {
+				const testState = sampleRange(100, 200);
+				sampleInstance.addEventEmitter(testState, fakeEmitter);
+				expect(sampleInstance.getObservedStates()).toMatchObject([sampleState, testState] as Record<
+					number,
+					number
+				>);
+			});
+			test('returns an unsubscribe function', () => {
+				const testState = sampleRange(100, 200);
+				const unsubscribe = sampleInstance.addEventEmitter(testState, fakeEmitter);
+				expect(unsubscribe).toBeInstanceOf(Function);
+				if (unsubscribe) unsubscribe();
+				expect(sampleInstance.getObservedStates()).toMatchObject([sampleState] as Record<number, number>);
+			});
+		});
+
+		describe('handleTransition (single emitter)', () => {
+			const sampleState = sampleRange(0, 100);
+			const sampleEvent = sampleRange(0, 100);
+			beforeEach(() => {
+				sampleInstance.addEventEmitter(sampleState, ({ state, context }) => ({
+					event: sampleEvent,
+					meta: { meta: (context?.context ?? defaultContext).toString(16) || '' },
+				}));
+			});
+			test('correctly handles a single transition', () => {
+				const samplePayload = sampleRange(1000, 10000);
+				const result = sampleInstance.handleTransition({
+					state: sampleState,
+					context: { context: samplePayload },
+				});
+				expect(result).toHaveLength(1);
+				expect(result).toMatchObject([
+					{
+						event: sampleEvent,
+						meta: { meta: samplePayload.toString(16) },
+					},
+				] as typeof result);
+			});
+			test('is pure function', () => {
+				const samplePayload = sampleRange(1000, 10000);
+				const state = {
+					state: sampleState,
+					context: { context: samplePayload },
+				};
+				const eventCopy = JSON.parse(JSON.stringify(state));
+				const transitions = sampleInstance.getObservedStates();
+				const result1 = sampleInstance.handleTransition(state);
+				for (let i = 0; i < 10; i++) {
+					const result2 = sampleInstance.handleTransition(state);
+					expect(result1).toMatchObject(result2); // idempotency
+					expect(state).toMatchObject(eventCopy); // argument immutability
+				}
+				expect(transitions).toEqual(sampleInstance.getObservedStates());
+			});
+			test('is correctly applied with null state context', () => {
+				const result = sampleInstance.handleTransition({
+					state: sampleState,
+					context: null,
+				});
+				expect(result).toHaveLength(1);
+				expect(result).toMatchObject([
+					{
+						event: sampleEvent,
+						meta: { meta: defaultContext.toString(16) },
+					},
+				] as typeof result);
+			});
+		});
+		describe('handleTransition (multiple emitters)', () => {
+			beforeEach(() => {
+				sampleStates = new Array(sampleRange(12, 15)).fill(null).map((v) => sampleRange(1, 10));
+				sampleStates.forEach((stateId, ix) => {
+					sampleInstance.addEventEmitter(stateId, ({ state, context }) => ({
+						event: ix,
+						meta: {
+							meta: [state, context?.context].join('|'),
+						},
+					}));
+				});
+			});
+			test('returns a related stack of actions on success', () => {
+				const testState = arraySample(sampleStates)[0];
+				const testContext = sampleRange(1000, 10000);
+				const result = sampleInstance.handleTransition({
+					state: testState,
+					context: { context: testContext },
+				});
+				expect(result).toHaveLength(sampleStates.filter((v) => v === testState).length);
+			});
+			test('applies multiple event handlers to each event in original order', () => {
+				const testState = arraySample(sampleStates)[0];
+				const testContext = sampleRange(1000, 10000);
+				const result = sampleInstance.handleTransition({
+					state: testState,
+					context: { context: testContext },
+				});
+				const minIndex = -1;
+				result.forEach((r) => {
+					expect(sampleStates[r.event ?? -1]).toEqual(testState); // correct event handler is chosen
+					expect(r.meta).toMatchObject({
+						meta: [testState, testContext].join('|'),
+					}); // it is actually called and the result is stored
+					expect((r.event ?? -1) > minIndex).toBe(true); // the order of handlers is preserved
+				});
+			});
+		});
+		describe('removeAllEmitters', () => {
+			beforeEach(() => {
+				sampleStates = lengthArray((ix) => sampleRange(1, 100), sampleRange(4, 7));
+				sampleStates.forEach((stateId, ix) => {
+					sampleInstance.addEventEmitter(stateId, ({ state, context }) => ({
+						event: stateId,
+						meta: {
+							meta: (context?.context ?? 0).toFixed(2),
+						},
+					}));
+				});
+			});
+			test('removes all listeners without an argument', () => {
+				sampleInstance.removeAllEmitters();
+				expect(sampleInstance.getObservedStates()).toMatchObject([]);
+			});
+			test('removes emitters for a specific state when called with a typed argument', () => {
+				const sampleState = arraySample(sampleStates)[0];
+				sampleInstance.removeAllEmitters(sampleState);
+
+				expect(sampleInstance.getObservedStates()).toHaveLength(sampleStates.length - 1);
+				expect(sampleInstance.getObservedStates().sort()).toMatchObject(
+					sampleStates.filter((v) => v !== sampleState).sort() as Record<number, number>
+				);
 			});
 		});
 	});

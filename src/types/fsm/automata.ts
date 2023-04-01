@@ -80,6 +80,18 @@ export type TAutomataDispatch<
 
 type TSubscriptionCancelFunction = () => void;
 
+export interface IAutomataValidatorContainer<
+	StateType extends TAutomataBaseStateType,
+	ActionType extends TAutomataBaseActionType,
+	EventType extends TAutomataBaseEventType
+> {
+	setEventValidator(eventValidator?: TValidator<EventType>): this;
+
+	setStateValidator(stateValidator?: TValidator<StateType>): this;
+
+	setActionValidator(actionValidator?: TValidator<ActionType>): this;
+}
+
 export interface IAutomataEventAdapter<
 	StateType extends TAutomataBaseStateType,
 	ActionType extends TAutomataBaseActionType,
@@ -87,7 +99,7 @@ export interface IAutomataEventAdapter<
 	ContextType extends { [K in StateType]: any } = Record<StateType, any>,
 	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
 	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
-> {
+> extends IAutomataValidatorContainer<StateType, ActionType, EventType> {
 	addEventListener: <T extends EventType>(
 		type: T,
 		handler: TAutomataEventHandler<T, ActionType, EventMetaType, PayloadType>
@@ -106,8 +118,6 @@ export interface IAutomataEventAdapter<
 	removeAllEmitters: <T extends StateType>(type: T | null) => this;
 	getObservedEvents: () => EventType[];
 	getObservedStates: () => StateType[];
-
-	setEventValidator(eventValidator?: TValidator<EventType>): this;
 }
 
 export type TAutomataParams<
