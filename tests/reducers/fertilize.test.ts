@@ -74,6 +74,18 @@ function defaultPayloadFixture<T extends TTurnPhase, A extends TTurnSubAction<T>
 			},
 			props ?? {}
 		);
+	if (isFertilizePayload(TFertilizeAction.FERTILIZE)(props))
+		return Object.assign(
+			{},
+			{
+				action: TFertilizeAction.FERTILIZE,
+				payload: {
+					index: sampleRange(100),
+				},
+			},
+			props ?? {}
+		);
+
 	return Object.assign(props ?? {}, { action: 0, payload: null });
 }
 

@@ -4,7 +4,7 @@ import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnP
 
 export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE> = (params) => {
 	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
-	if (!isFertilizeAction(action)) throw new Error(`Invalid action: ${action}`);
+	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${action}`);
 	if (subPhase !== TFertilizePhase.IDLE)
 		throw new Error(`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`);
 	switch (action) {
@@ -41,16 +41,11 @@ export const reducer_Fertilize_FINISHED: TTurnBasedReducer<TTurnPhase.FERTILIZE,
 	params
 ) => {
 	const { action, context, subPhase } = params;
-	if (!isFertilizeAction(action)) throw new Error(`Invalid action: ${action}`);
+	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${action}`);
 	switch (action) {
 		case TFertilizeAction.RESET:
 			return {
 				subPhase: TFertilizePhase.IDLE,
-				context,
-			};
-		case TFertilizeAction.FERTILIZE:
-			return {
-				subPhase: TFertilizePhase.FINISHED,
 				context,
 			};
 		default:
