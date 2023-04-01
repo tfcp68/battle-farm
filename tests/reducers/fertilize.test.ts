@@ -248,6 +248,20 @@ const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhas
 			};
 		})(),
 	},
+	{
+		msg: 'CROP_CONFIRM-->CROP_CONFIRM: CANCEL_SELECTION ignored',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.CANCEL_SELECTION,
+				TFertilizePhase.CROP_CONFIRM
+			);
+			return {
+				input: defaultInput,
+				output: originalContext,
+			};
+		})(),
+	},
 ];
 
 describe('FSM/Fertilizing/CROP_CONFIRM', () => {
