@@ -258,7 +258,9 @@ const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhas
 			);
 			return {
 				input: defaultInput,
-				output: originalContext,
+				output: Object.assign({}, originalContext, {
+					subPhase: TFertilizePhase.IDLE,
+				}),
 			};
 		})(),
 	},
