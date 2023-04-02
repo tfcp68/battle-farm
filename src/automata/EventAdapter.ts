@@ -48,7 +48,7 @@ export abstract class AutomataEventAdapter<
 		return this.stateValidator ?? this.defaultStateValidator;
 	}
 
-	public setEventValidator(eventValidator?: TValidator<EventType>) {
+	public setEventValidator(eventValidator: TValidator<EventType> | null = null) {
 		if (eventValidator === null || eventValidator === undefined) {
 			this.eventValidator = undefined;
 			return this;
@@ -58,7 +58,7 @@ export abstract class AutomataEventAdapter<
 		return this;
 	}
 
-	public setActionValidator(actionValidator?: TValidator<ActionType>) {
+	public setActionValidator(actionValidator: TValidator<ActionType> | null = null) {
 		if (actionValidator === null || actionValidator === undefined) {
 			this.actionValidator = undefined;
 			return this;
@@ -68,7 +68,7 @@ export abstract class AutomataEventAdapter<
 		return this;
 	}
 
-	public setStateValidator(stateValidator?: TValidator<StateType>) {
+	public setStateValidator(stateValidator: TValidator<StateType> | null = null) {
 		if (stateValidator === null || stateValidator === undefined) {
 			this.stateValidator = undefined;
 			return this;
@@ -116,7 +116,7 @@ export abstract class AutomataEventAdapter<
 	public handleEvent<T extends EventType>(
 		event: TAutomataEventMetaType<T, EventObject>
 	): Array<ReturnType<TAutomataEventHandler<T, ActionType, EventObject, PayloadType>>> {
-		if (!event?.event) return [];
+		if (!this.validateEvent(event?.event)) return [];
 		return (this.eventListeners?.[event.event] || [])
 			.map((handler) => handler(event))
 			.filter((action) => this.validateAction(action.action));
@@ -125,7 +125,7 @@ export abstract class AutomataEventAdapter<
 	public handleTransition<T extends StateType>(
 		newState: TAutomataStateContext<T, ContextType>
 	): Array<ReturnType<TAutomataEventEmitter<EventType, T, EventObject, ContextType>>> {
-		if (!newState?.state) return [];
+		if (!this.validateState(newState?.state)) return [];
 		return (this.eventEmitters?.[newState.state] || [])
 			.map((emitter) => emitter(newState))
 			.filter((event) => this.validateEvent(event.event));
@@ -167,9 +167,9 @@ export abstract class AutomataEventAdapter<
 			.filter(this.validateState);
 	}
 
-	protected defaultEventValidator = (x: any): x is EventType => x >= 0;
-	protected defaultStateValidator = (x: any): x is StateType => x >= 0;
-	protected defaultActionValidator = (x: any): x is EventType => x >= 0;
+	protected defaultEventValidator = (x: any): x is EventType => Number.isInteger(x) && x >= 0;
+	protected defaultStateValidator = (x: any): x is StateType => Number.isInteger(x) && x >= 0;
+	protected defaultActionValidator = (x: any): x is EventType => Number.isInteger(x) && x >= 0;
 }
 
 export default AutomataEventAdapter;
