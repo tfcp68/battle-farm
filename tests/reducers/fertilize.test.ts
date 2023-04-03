@@ -9,7 +9,12 @@ import {
 	TTurnSubphaseContext,
 } from '~/src/types/fsm';
 import { TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { isFertilizeContext, isFertilizePayload } from '~/src/types/guards/turnPhases';
+import {
+	isFertilizeAction,
+	isFertilizeContext,
+	isFertilizePayload,
+	isFertilizeSubphase,
+} from '~/src/types/guards/turnPhases';
 import { sampleRange } from '~/src/utils/sampleRange';
 
 type testBody<T extends TTurnPhase, S extends TTurnSubPhase<T>, A extends TTurnSubAction<T>> = {
@@ -33,58 +38,75 @@ function defaultTestInput<
 	return [fixture];
 }
 
+const defaultContextBySubPhase = (subPhase: TFertilizePhase) => {
+	switch (subPhase) {
+		case TFertilizePhase.CROP_CONFIRM:
+		case TFertilizePhase.IDLE:
+			return Object.assign(
+				{},
+				{
+					context: {
+						index: sampleRange(0, 100),
+					},
+					subPhase,
+				}
+			);
+		case TFertilizePhase.FINISHED:
+			return Object.assign(
+				{},
+				{
+					context: null,
+					subPhase: TFertilizePhase.FINISHED,
+				}
+			);
+	}
+};
+const defaultPayloadByAction = (action: TFertilizeAction) => {
+	switch (action) {
+		case TFertilizeAction.FERTILIZE:
+		case TFertilizeAction.CHOOSE_CROP:
+		case TFertilizeAction.HOVER:
+			return Object.assign(
+				{},
+				{
+					action,
+					payload: {
+						index: sampleRange(100),
+					},
+				}
+			);
+		case TFertilizeAction.RESET:
+		case TFertilizeAction.CANCEL_SELECTION:
+		case TFertilizeAction.SKIP:
+			return Object.assign(
+				{},
+				{
+					action,
+					payload: null,
+				}
+			);
+	}
+};
+
 function defaultContextFixture<T extends TTurnPhase, S extends TTurnSubPhase<T>>(
 	props: Partial<TTurnSubphaseContext<T, S>> = {}
 ): TTurnSubphaseContext<T, S> {
-	if (isFertilizeContext(null)(props))
-		return Object.assign(
-			{},
-			{
-				context: {
-					index: sampleRange(0, 100),
-				},
-				subPhase: TFertilizePhase.IDLE,
-			},
-			props ?? {}
-		);
+	for (const subPhase of Object.values(TFertilizePhase)) {
+		if (isFertilizeSubphase(null)(subPhase) && isFertilizeContext(subPhase)(props)) {
+			return Object.assign(defaultContextBySubPhase(subPhase), props ?? {});
+		}
+	}
 	return Object.assign(props ?? {}, { subPhase: 0, context: null });
 }
 
 function defaultPayloadFixture<T extends TTurnPhase, A extends TTurnSubAction<T>>(
 	props: Partial<TTurnSubphaseAction<T, A>> = {}
 ): TTurnSubphaseAction<T, A> {
-	for (const action of [TFertilizeAction.SKIP, TFertilizeAction.RESET, TFertilizeAction.CANCEL_SELECTION])
-		if (isFertilizePayload(action)(props))
-			return Object.assign(
-				{},
-				{
-					action,
-					payload: null,
-				},
-				props ?? {}
-			);
-	if (isFertilizePayload(null)(props))
-		return Object.assign(
-			{},
-			{
-				action: TFertilizeAction.HOVER,
-				payload: {
-					index: sampleRange(100),
-				},
-			},
-			props ?? {}
-		);
-	if (isFertilizePayload(TFertilizeAction.FERTILIZE)(props))
-		return Object.assign(
-			{},
-			{
-				action: TFertilizeAction.FERTILIZE,
-				payload: {
-					index: sampleRange(100),
-				},
-			},
-			props ?? {}
-		);
+	for (const action of Object.values(TFertilizeAction)) {
+		if (isFertilizeAction(null)(action) && isFertilizePayload(action)(props)) {
+			return Object.assign(props ?? {}, defaultPayloadByAction(action));
+		}
+	}
 
 	return Object.assign(props ?? {}, { action: 0, payload: null });
 }
