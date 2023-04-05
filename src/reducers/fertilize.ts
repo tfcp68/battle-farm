@@ -55,6 +55,41 @@ export const reducer_Fertilize_FINISHED: TTurnBasedReducer<TTurnPhase.FERTILIZE,
 			};
 	}
 };
+export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.CROP_CONFIRM> = (
+	params
+) => {
+	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
+	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${action}`); // isFertilizationAction должен ведь возвращать коллбэк-функцию (?)
+	if (subPhase !== TFertilizePhase.CROP_CONFIRM)
+		throw new Error(`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`);
+	switch (action) {
+		case TFertilizeAction.SKIP:
+			return {
+				subPhase: TFertilizePhase.FINISHED,
+				context: null,
+			};
+		case TFertilizeAction.CANCEL_SELECTION:
+			return {
+				subPhase: TFertilizePhase.IDLE,
+				context,
+			};
+		case TFertilizeAction.FERTILIZE:
+			if (!payload) throw new Error(`Invalid FERTILIZE_ACTION payload: ${payload}`);
+			return {
+				subPhase: TFertilizePhase.IDLE,
+				subAction: TFertilizeAction.RESET,
+				context: {
+					index: payload?.index,
+				},
+			};
+		default:
+			return {
+				subPhase,
+				context,
+			};
+	}
+};
+
 export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE> = (params) => {
 	const { context, payload = null, action = null, subPhase } = params;
 	if (null === action) throw new Error(`Missing action: ${JSON.stringify(params)}`);
@@ -63,6 +98,13 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE>
 
 	if (isFertilizeSubphase(TFertilizePhase.IDLE)(subPhase))
 		return reducer_Fertilize_IDLE({
+			context,
+			payload,
+			action,
+			subPhase,
+		});
+	if (isFertilizeSubphase(TFertilizePhase.CROP_CONFIRM)(subPhase))
+		return reducer_Fertilize_CROP_CONFIRM({
 			context,
 			payload,
 			action,
@@ -80,3 +122,4 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE>
 		context,
 	};
 };
+
