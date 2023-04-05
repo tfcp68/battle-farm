@@ -38,7 +38,7 @@ function defaultTestInput<
 	return [fixture];
 }
 
-const defaultContextBySubPhase = (subPhase: TFertilizePhase) => {
+function defaultContextBySubPhase(subPhase: TFertilizePhase) {
 	switch (subPhase) {
 		case TFertilizePhase.CROP_CONFIRM:
 		case TFertilizePhase.IDLE:
@@ -60,8 +60,9 @@ const defaultContextBySubPhase = (subPhase: TFertilizePhase) => {
 				}
 			);
 	}
-};
-const defaultPayloadByAction = (action: TFertilizeAction) => {
+}
+
+function defaultPayloadByAction(action: TFertilizeAction) {
 	switch (action) {
 		case TFertilizeAction.FERTILIZE:
 		case TFertilizeAction.CHOOSE_CROP:
@@ -86,7 +87,7 @@ const defaultPayloadByAction = (action: TFertilizeAction) => {
 				}
 			);
 	}
-};
+}
 
 function defaultContextFixture<T extends TTurnPhase, S extends TTurnSubPhase<T>>(
 	props: Partial<TTurnSubphaseContext<T, S>> = {}
@@ -321,27 +322,6 @@ const testCasesFINISHING: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.F
 		})(),
 	},
 ];
-describe('FSM/Fertilizing/FINISHED', () => {
-	beforeEach(() => {
-		jest.clearAllMocks();
-		jest.clearAllTimers();
-	});
-
-	((tests: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.FINISHED, TFertilizeAction>>) => {
-		for (let i = 0; i < tests.length; i++) {
-			const { input, output, msg } = tests[i];
-			const originalInput: typeof input = JSON.parse(JSON.stringify(input));
-			const result = functions.reducer_Fertilize_FINISHED.apply(null, input);
-
-			test(`${msg} ::: Works as intended`, () => {
-				expect(result).toMatchObject(output);
-			});
-			test(`${msg} ::: Does not mutate input data`, () => {
-				expect(input).toMatchObject(originalInput);
-			});
-		}
-	})(testCasesFINISHING);
-});
 const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.CROP_CONFIRM, TFertilizeAction>> = [
 	{
 		msg: 'CROP_CONFIRM-->FINISHED: SKIP',
@@ -407,7 +387,27 @@ const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhas
 		})(),
 	},
 ];
+describe('FSM/Fertilizing/FINISHED', () => {
+	beforeEach(() => {
+		jest.clearAllMocks();
+		jest.clearAllTimers();
+	});
 
+	((tests: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase.FINISHED, TFertilizeAction>>) => {
+		for (let i = 0; i < tests.length; i++) {
+			const { input, output, msg } = tests[i];
+			const originalInput: typeof input = JSON.parse(JSON.stringify(input));
+			const result = functions.reducer_Fertilize_FINISHED.apply(null, input);
+
+			test(`${msg} ::: Works as intended`, () => {
+				expect(result).toMatchObject(output);
+			});
+			test(`${msg} ::: Does not mutate input data`, () => {
+				expect(input).toMatchObject(originalInput);
+			});
+		}
+	})(testCasesFINISHING);
+});
 describe('FSM/Fertilizing/CROP_CONFIRM', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
@@ -508,5 +508,33 @@ describe('FSM/Fertilizing/Root Reducer', () => {
 				};
 			})(),
 		},
+	]);
+});
+describe('FSM/Fertilizing/Root Reducer', () => {
+	((tests: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase, TFertilizeAction>>) => {
+		for (let i = 0; i < tests.length; i++) {
+			const { input, output, msg, numberOfFunctionCalls = 0 } = tests[i];
+			const originalInput: typeof input = JSON.parse(JSON.stringify(input));
+
+			test(`${msg} ::: does ${numberOfFunctionCalls} calls of IDLE reducer`, () => {
+				const spiedFunction = jest.spyOn(functions, 'reducer_Fertilize_FINISHED');
+				const result = functions.turnPhaseReducer_Fertilize.apply(null, input);
+				if (spiedFunction && Number.isFinite(numberOfFunctionCalls)) {
+					expect(spiedFunction).toBeCalledTimes(numberOfFunctionCalls);
+					if (numberOfFunctionCalls) expect(spiedFunction).toBeCalledWith(...input);
+				}
+				jest.restoreAllMocks();
+			});
+
+			test(`${msg} ::: does not mutate input`, () => {
+				const result = functions.turnPhaseReducer_Fertilize.apply(null, input);
+				expect(input).toMatchObject(originalInput);
+			});
+		}
+	})([
+		...testCasesFINISHING.map((t) => ({
+			...t,
+			numberOfFunctionCalls: 1,
+		})),
 	]);
 });

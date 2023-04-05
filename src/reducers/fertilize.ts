@@ -1,6 +1,6 @@
 import { TTurnBasedReducer, TTurnPhase } from '~/src/types/fsm';
 import { CONTEXT_FERTILIZE, TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
+import { isFertilizeAction, isFertilizeContext, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
 
 export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE> = (params) => {
 	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
@@ -110,16 +110,10 @@ export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE>
 			action,
 			subPhase,
 		});
-	if (isFertilizeSubphase(TFertilizePhase.FINISHED)(subPhase))
-		return reducer_Fertilize_FINISHED({
-			context: undefined as never,
-			subPhase,
-			action,
-			payload,
-		});
+
+	if (isFertilizeContext(TFertilizePhase.FINISHED)(params)) return reducer_Fertilize_FINISHED(params);
 	return {
 		subPhase,
 		context,
 	};
 };
-
