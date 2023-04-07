@@ -12,6 +12,7 @@ const config = {
 		alias: {
 			'~/components': path.resolve(paths.ROOT_DIR, 'src/UI/components'),
 			'~/assets': path.resolve(paths.ROOT_DIR, 'assets'),
+			'~/src': path.resolve(paths.ROOT_DIR, 'src'),
 		},
 		extensions: ['.tsx', '.ts', '.js'],
 	},
