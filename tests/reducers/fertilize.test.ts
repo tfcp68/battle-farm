@@ -603,3 +603,62 @@ describe('FSM/Fertilizing/Root Reducer', () => {
 		},
 	]);
 });
+
+describe('FSM/Fertilizing/Root Reducer', () => {
+	((tests: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhase, TFertilizeAction>>) => {
+		for (let i = 0; i < tests.length; i++) {
+			const { input, output, msg, numberOfFunctionCalls = 0 } = tests[i];
+			const originalInput: typeof input = JSON.parse(JSON.stringify(input));
+
+			test(`${msg} ::: does ${numberOfFunctionCalls} calls of CROP_CONFIRM reducer`, () => {
+				const spiedFunction = jest.spyOn(functions, 'reducer_Fertilize_CROP_CONFIRM');
+				const result = functions.turnPhaseReducer_Fertilize.apply(null, input);
+				if (spiedFunction && Number.isFinite(numberOfFunctionCalls)) {
+					expect(spiedFunction).toBeCalledTimes(numberOfFunctionCalls);
+					if (numberOfFunctionCalls) expect(spiedFunction).toBeCalledWith(...input);
+				}
+				jest.restoreAllMocks();
+			});
+
+			test(`${msg} ::: does not mutate input`, () => {
+				const result = functions.turnPhaseReducer_Fertilize.apply(null, input);
+				expect(input).toMatchObject(originalInput);
+			});
+		}
+	})([
+		...testCasesCROP_CONFIRM.map((t) => ({
+			...t,
+			numberOfFunctionCalls: 1,
+		})),
+		{
+			msg: 'in FINISHED state',
+			numberOfFunctionCalls: 0,
+			...(() => {
+				const { defaultInput, originalInput, originalContext } = setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.SKIP,
+					TFertilizePhase.FINISHED
+				);
+				return {
+					input: defaultInput,
+					output: originalContext,
+				};
+			})(),
+		},
+		{
+			msg: 'in IDLE state',
+			numberOfFunctionCalls: 0,
+			...(() => {
+				const { defaultInput, originalInput, originalContext } = setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.SKIP,
+					TFertilizePhase.IDLE
+				);
+				return {
+					input: defaultInput,
+					output: originalContext,
+				};
+			})(),
+		},
+	]);
+});
