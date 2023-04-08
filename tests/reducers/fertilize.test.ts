@@ -386,6 +386,41 @@ const testCasesCROP_CONFIRM: Array<testBody<TTurnPhase.FERTILIZE, TFertilizePhas
 			};
 		})(),
 	},
+	{
+		msg: 'CROP_CONFIRM-->CROP_CONFIRM: CHOOSE_CROP (index)',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.CHOOSE_CROP,
+				TFertilizePhase.CROP_CONFIRM
+			);
+			return {
+				input: defaultInput,
+				output: Object.assign({}, originalContext, {
+					subPhase: TFertilizePhase.CROP_CONFIRM,
+				}),
+			};
+		})(),
+	},
+	{
+		msg: 'CROP_CONFIRM-->IDLE: FERTILIZE (index)',
+		...(() => {
+			const { defaultInput, originalInput, originalContext } = setupFixtures(
+				TTurnPhase.FERTILIZE,
+				TFertilizeAction.FERTILIZE,
+				TFertilizePhase.CROP_CONFIRM
+			);
+			return {
+				input: defaultInput,
+				output: Object.assign({}, originalContext, {
+					context: {
+						index: defaultInput[0].payload?.index,
+					},
+					subPhase: TFertilizePhase.IDLE,
+				}),
+			};
+		})(),
+	},
 ];
 describe('FSM/Fertilizing/FINISHED', () => {
 	beforeEach(() => {
