@@ -61,7 +61,7 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
 	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${action}`); // isFertilizationAction должен ведь возвращать коллбэк-функцию (?)
 	if (subPhase !== TFertilizePhase.CROP_CONFIRM)
-		throw new Error(`Fertilize/IDLE reducer is called in invalid state: ${subPhase}`);
+		throw new Error(`Fertilize/CROP_CONFIRM reducer is called in invalid state: ${subPhase}`);
 	switch (action) {
 		case TFertilizeAction.SKIP:
 			return {
