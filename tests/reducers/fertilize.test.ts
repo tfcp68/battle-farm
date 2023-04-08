@@ -516,7 +516,7 @@ describe('FSM/Fertilizing/Root Reducer', () => {
 			const { input, output, msg, numberOfFunctionCalls = 0 } = tests[i];
 			const originalInput: typeof input = JSON.parse(JSON.stringify(input));
 
-			test(`${msg} ::: does ${numberOfFunctionCalls} calls of IDLE reducer`, () => {
+			test(`${msg} ::: does ${numberOfFunctionCalls} calls of FINISHED reducer`, () => {
 				const spiedFunction = jest.spyOn(functions, 'reducer_Fertilize_FINISHED');
 				const result = functions.turnPhaseReducer_Fertilize.apply(null, input);
 				if (spiedFunction && Number.isFinite(numberOfFunctionCalls)) {
@@ -536,5 +536,35 @@ describe('FSM/Fertilizing/Root Reducer', () => {
 			...t,
 			numberOfFunctionCalls: 1,
 		})),
+		{
+			msg: 'in CROP CONFIRM state',
+			numberOfFunctionCalls: 0,
+			...(() => {
+				const { defaultInput, originalInput, originalContext } = setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.SKIP,
+					TFertilizePhase.CROP_CONFIRM
+				);
+				return {
+					input: defaultInput,
+					output: originalContext,
+				};
+			})(),
+		},
+		{
+			msg: 'in IDLE state',
+			numberOfFunctionCalls: 0,
+			...(() => {
+				const { defaultInput, originalInput, originalContext } = setupFixtures(
+					TTurnPhase.FERTILIZE,
+					TFertilizeAction.SKIP,
+					TFertilizePhase.IDLE
+				);
+				return {
+					input: defaultInput,
+					output: originalContext,
+				};
+			})(),
+		},
 	]);
 });
