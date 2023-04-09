@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from './GameBlockInfo.module.scss';
 import { TPlayer } from '~/src/types/serializables/players';
 import GameHand from '~/components/GameHand/GameHand';
@@ -9,7 +9,7 @@ interface IGameBlockInfoProps {
 	playerInfo: TPlayer;
 }
 
-const GameBlockInfo = ({ playerInfo }: IGameBlockInfoProps) => {
+const GameBlockInfo: FC<IGameBlockInfoProps> = ({ playerInfo }) => {
 	const { coins, class: playerClassIndex, discardedCards, hand, id, beds, fertilizers } = playerInfo;
 
 	return (

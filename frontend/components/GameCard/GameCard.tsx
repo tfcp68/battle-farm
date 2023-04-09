@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './GameCard.module.scss';
-import useImage from '~/src/frontend/hooks/useImage';
+import useImage from '~/hooks/useImage';
 
 interface IGameCardProps {
 	cropImage: string;

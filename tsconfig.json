@@ -32,11 +32,15 @@
         "assets/*"
       ],
       "~/components/*": [
-        "src/frontend/components/*"
+        "frontend/components/*"
+      ],
+      "~/hooks/*": [
+        "frontend/hooks/*"
       ]
     }
   },
   "include": [
+    "./frontend/**/*",
     "./src/**/*",
     "./tests/**/*"
   ],

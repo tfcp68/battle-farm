@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import styles from './GameDeck.module.scss';
 import { TCard } from '~/src/types/serializables/cards';
-import GameCard from '~/src/frontend/components/GameCard/GameCard';
+import GameCard from '~/components/GameCard/GameCard';
 
 interface IGameDeckProps {
 	listCards: TCard[];

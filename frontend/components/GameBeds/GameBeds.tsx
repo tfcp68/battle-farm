@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import styles from '~/components/GameBlockInfo/GameBlockInfo.module.scss';
 import { TBed } from '~/src/types/serializables/crops';
 import Bed from '~/components/GameBeds/Bed/Bed';
@@ -7,7 +7,7 @@ interface IGameHandProps {
 	listBeds: TBed[];
 }
 
-function GameBeds({ listBeds }: IGameHandProps) {
+const GameBeds: FC<IGameHandProps> = ({ listBeds }) => {
 	return (
 		<ul className={styles.gameBlockInfo__list}>
 			{'Beds: '}
@@ -16,6 +16,6 @@ function GameBeds({ listBeds }: IGameHandProps) {
 			})}
 		</ul>
 	);
-}
+};
 
 export default GameBeds;

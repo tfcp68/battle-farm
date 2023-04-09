@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { TCard } from '~/src/types/serializables/cards';
 import styles from '~/components/GameBlockInfo/GameBlockInfo.module.scss';
 
@@ -6,7 +6,7 @@ interface IGameHandProps {
 	listCards: TCard[];
 }
 
-function GameHand({ listCards }: IGameHandProps) {
+const GameHand: FC<IGameHandProps> = ({ listCards }) => {
 	return (
 		<ul className={styles.gameBlockInfo__list}>
 			{'Hand: '}
@@ -15,6 +15,6 @@ function GameHand({ listCards }: IGameHandProps) {
 			})}
 		</ul>
 	);
-}
+};
 
 export default GameHand;
