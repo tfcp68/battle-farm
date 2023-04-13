@@ -12,6 +12,7 @@ export enum TPlayerClass {
 	WEATHER_WATCHER,
 }
 
+export type TTPlayerClass = keyof typeof TPlayerClass;
 export type TPlayer = {
 	id: string;
 	class: TPlayerClass;

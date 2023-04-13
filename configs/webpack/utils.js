@@ -5,6 +5,21 @@ const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('../paths');
 
+/*const getRules = (isDev) => {
+	return isDev
+		? {
+				test: /\.(png|jpe?g|gif)$/i,
+				use: [
+					{
+						loader: 'file-loader',
+					},
+				],
+		  }
+		: {
+				test: /\.(png|jpe?g|gif)$/i,
+				type: 'asset/resource',
+		  };
+};*/
 const getPlugins = (isDev) => {
 	let plugins = [
 		new HtmlWebpackPlugin({
@@ -22,33 +37,6 @@ const getPlugins = (isDev) => {
 	return plugins;
 };
 
-const getRules = (isDev) => {
-	return isDev
-		? {
-				test: /\.(png|jpe?g|gif)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-					},
-				],
-		  }
-		: {
-				test: /\.(png|jpe?g|gif)$/i,
-				type: 'asset/resource',
-				use: [
-					{
-						loader: 'image-webpack-loader',
-						options: {
-							pngquant: {
-								quality: [0.35, 0.9],
-								speed: 11,
-							},
-						},
-					},
-				],
-		  };
-};
-
 const getBaseLayoutSettings = (isDev) => {
 	return isDev
 		? {
@@ -64,7 +52,7 @@ const getBaseLayoutSettings = (isDev) => {
 					path: path.resolve(__dirname, '../../dist'),
 					publicPath: '/',
 					clean: true,
-					assetModuleFilename: 'assets/[hash][ext][query]',
+					assetModuleFilename: '[path][hash][ext]',
 				},
 				mode: 'production',
 				optimization: {
@@ -83,4 +71,4 @@ const getBaseLayoutSettings = (isDev) => {
 				},
 		  };
 };
-module.exports = { getBaseLayoutSettings, getRules, getPlugins };
+module.exports = { getBaseLayoutSettings /*getRules*/, getPlugins };
