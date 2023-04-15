@@ -1,6 +1,6 @@
 import { TTurnBasedReducer, TTurnPhase } from '~/src/types/fsm';
 import { CONTEXT_FERTILIZE, TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { isFertilizeAction, isFertilizeContext, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
+import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
 
 export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE> = (params) => {
 	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
@@ -77,7 +77,6 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 			if (!payload) throw new Error(`Invalid FERTILIZE_ACTION payload: ${payload}`);
 			return {
 				subPhase: TFertilizePhase.IDLE,
-				subAction: TFertilizeAction.RESET,
 				context: {
 					index: payload?.index,
 				},
@@ -90,30 +89,28 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 	}
 };
 
+export const reducersMap: {
+	[T in TFertilizePhase]: TTurnBasedReducer<TTurnPhase.FERTILIZE, T>;
+} = {
+	[TFertilizePhase.IDLE]: reducer_Fertilize_IDLE,
+	[TFertilizePhase.CROP_CONFIRM]: reducer_Fertilize_CROP_CONFIRM,
+	[TFertilizePhase.FINISHED]: reducer_Fertilize_FINISHED,
+};
+export const getFertilizeReducer = <T extends TFertilizePhase>(p: T): TTurnBasedReducer<TTurnPhase.FERTILIZE, T> =>
+	reducersMap[p];
+
 export const turnPhaseReducer_Fertilize: TTurnBasedReducer<TTurnPhase.FERTILIZE> = (params) => {
 	const { context, payload = null, action = null, subPhase } = params;
-	if (null === action) throw new Error(`Missing action: ${JSON.stringify(params)}`);
+	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${JSON.stringify(params)}`);
+	if (!isFertilizeSubphase()(subPhase)) throw new Error(`Invalid phase: ${JSON.stringify(params)}`);
 	if (undefined === context) throw new Error(`Missing turn context: ${JSON.stringify(params)}`);
 	if (undefined === payload) throw new Error(`Missing payload: ${JSON.stringify(params)}`);
 
-	if (isFertilizeSubphase(TFertilizePhase.IDLE)(subPhase))
-		return reducer_Fertilize_IDLE({
-			context,
-			payload,
-			action,
+	const reducer = getFertilizeReducer(subPhase);
+	if (!reducer)
+		return {
 			subPhase,
-		});
-	if (isFertilizeSubphase(TFertilizePhase.CROP_CONFIRM)(subPhase))
-		return reducer_Fertilize_CROP_CONFIRM({
 			context,
-			payload,
-			action,
-			subPhase,
-		});
-
-	if (isFertilizeContext(TFertilizePhase.FINISHED)(params)) return reducer_Fertilize_FINISHED(params);
-	return {
-		subPhase,
-		context,
-	};
+		};
+	return reducer(params);
 };
