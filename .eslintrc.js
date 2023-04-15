@@ -210,4 +210,12 @@ module.exports = {
 		'use-isnan': 'error',
 		'valid-typeof': 'off',
 	},
+	overrides: [
+		{
+			files: ['*.test.js', '*.test.ts'],
+			rules: {
+				'@typescript-eslint/ban-ts-comment': 'off',
+			},
+		},
+	],
 };
