@@ -1,0 +1,10 @@
+.gameApp {
+	width: 100%;
+
+	&__wrapper {
+		display: flex;
+		gap: 30px 0;
+		flex-direction: column;
+	}
+
+}

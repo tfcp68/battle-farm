@@ -1,0 +1,11 @@
+.market {
+	display: flex;
+	gap: 0 20px;
+
+	&__lot {
+		width: 150px;
+		height: 220px;
+		border: 1px solid #000;
+		border-radius: 10px;
+	}
+}
