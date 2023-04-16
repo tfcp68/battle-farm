@@ -6,11 +6,13 @@ export enum TTradePhase {
 	COLLECT,
 	OFFERS_WAITING,
 	OFFERS_CHOOSING,
+	OFFER_ACCEPTED,
 	FINISHED,
 }
 
 export enum TTradeAction {
 	RESET,
+	START_COLLECT,
 	HOVER,
 	ADD_CARD_TO_TRADE,
 	REMOVE_CARD_FROM_TRADE,
@@ -26,6 +28,8 @@ export type TTradeContext<T extends TTradePhase> = T extends TTradePhase.INIT
 	? TTargetIndex & TTargetIndexList
 	: T extends TTradePhase.OFFERS_CHOOSING
 	? TOffers
+	: T extends TTradePhase.OFFER_ACCEPTED
+	? TTrade & TTargetIndex
 	: never;
 
 export type TTradePayload<T extends TTradeAction> = T extends TTradeAction.HOVER
