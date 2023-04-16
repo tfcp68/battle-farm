@@ -44,7 +44,7 @@
 		"eslint-plugin-react-hooks": "^4.6.0",
 		"eslint-webpack-plugin": "^4.0.1",
 		"file-loader": "^6.2.0",
-		"html-webpack-plugin": "^5.5.0",
+		"html-webpack-plugin": "^5.5.1",
 		"husky": "^8.0.3",
 		"image-webpack-loader": "^8.1.0",
 		"imagemin-pngquant": "^9.0.2",
@@ -65,6 +65,6 @@
 		"typescript": "^5.0.4",
 		"webpack": "^5.79.0",
 		"webpack-cli": "^5.0.1",
-		"webpack-dev-server": "^4.13.2"
+		"webpack-dev-server": "^4.13.3"
 	}
 }
