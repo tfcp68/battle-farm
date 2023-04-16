@@ -40,7 +40,7 @@ function defaultContextBySubPhase(subPhase: TFertilizePhase) {
 function defaultPayloadByAction(action: TFertilizeAction) {
 	switch (action) {
 		case TFertilizeAction.FERTILIZE:
-		case TFertilizeAction.CHOOSE_CROP:
+		case TFertilizeAction.SELECT_CROP:
 		case TFertilizeAction.HOVER:
 			return Object.assign(
 				{},
@@ -111,14 +111,12 @@ export function setupFixtures<
 	A extends TTurnSubAction<T> = TTurnSubAction<T>
 >(phase: T, action: A, subPhase: S) {
 	const defaultInput = defaultTestInput(phase, action, subPhase);
-	const originalInput: typeof defaultInput = JSON.parse(JSON.stringify(defaultInput));
 	const originalContext: TReducerTestCase<T, S, A>['output'] = {
-		context: originalInput[0]?.context,
-		subPhase: originalInput[0]?.subPhase,
+		context: defaultInput[0]?.context,
+		subPhase: defaultInput[0]?.subPhase,
 	};
 	return {
 		defaultInput,
-		originalInput,
 		originalContext,
 	};
 }

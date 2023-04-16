@@ -9,7 +9,7 @@ export const testCasesFINISHED: Array<
 	{
 		msg: 'FINISHED-->IDLE: RESET',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.RESET,
 				TFertilizePhase.FINISHED
@@ -25,7 +25,7 @@ export const testCasesFINISHED: Array<
 	{
 		msg: 'FINISHED-->FINISHED: HOVER ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.HOVER,
 				TFertilizePhase.FINISHED
@@ -39,9 +39,9 @@ export const testCasesFINISHED: Array<
 	{
 		msg: 'FINISHED-->FINISHED: CHOOSE_CROP ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.CHOOSE_CROP,
+				TFertilizeAction.SELECT_CROP,
 				TFertilizePhase.FINISHED
 			);
 			return {
@@ -53,7 +53,7 @@ export const testCasesFINISHED: Array<
 	{
 		msg: 'FINISHED-->FINISHED: FERTILIZE ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.FERTILIZE,
 				TFertilizePhase.FINISHED
@@ -67,7 +67,7 @@ export const testCasesFINISHED: Array<
 	{
 		msg: 'FINISHED-->FINISHED: CANCEL_SELECTION ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.CANCEL_SELECTION,
 				TFertilizePhase.FINISHED
@@ -81,7 +81,7 @@ export const testCasesFINISHED: Array<
 	{
 		msg: 'FINISHED-->FINISHED: SKIP ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.SKIP,
 				TFertilizePhase.FINISHED

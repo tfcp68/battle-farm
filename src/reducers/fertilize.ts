@@ -22,7 +22,7 @@ export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFe
 					index: payload?.index,
 				},
 			};
-		case TFertilizeAction.CHOOSE_CROP:
+		case TFertilizeAction.SELECT_CROP:
 			if (!payload) throw new Error(`Invalid CHOOSE_CROP payload: ${payload}`);
 			return {
 				subPhase: TFertilizePhase.CROP_CONFIRM,
@@ -59,7 +59,7 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 	params
 ) => {
 	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
-	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${action}`); // isFertilizationAction должен ведь возвращать коллбэк-функцию (?)
+	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${action}`);
 	if (subPhase !== TFertilizePhase.CROP_CONFIRM)
 		throw new Error(`Fertilize/CROP_CONFIRM reducer is called in invalid state: ${subPhase}`);
 	switch (action) {
@@ -89,12 +89,29 @@ export const reducer_Fertilize_CROP_CONFIRM: TTurnBasedReducer<TTurnPhase.FERTIL
 	}
 };
 
+/**
+ * Reducer that does not mutate incoming state+context
+ * @param params { subPhase, context, action, payload}
+ */
+const defaultReducer: TTurnBasedReducer<TTurnPhase.FERTILIZE> = (params) => {
+	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;
+	if (!isFertilizeAction()(action)) throw new Error(`Invalid action: ${action}`);
+	return {
+		subPhase,
+		context,
+	};
+};
+
 export const reducersMap: {
 	[T in TFertilizePhase]: TTurnBasedReducer<TTurnPhase.FERTILIZE, T>;
 } = {
 	[TFertilizePhase.IDLE]: reducer_Fertilize_IDLE,
 	[TFertilizePhase.CROP_CONFIRM]: reducer_Fertilize_CROP_CONFIRM,
 	[TFertilizePhase.FINISHED]: reducer_Fertilize_FINISHED,
+	[TFertilizePhase.CROP_SELECTION]: defaultReducer,
+	[TFertilizePhase.EFFECT_APPLIANCE]: defaultReducer,
+	[TFertilizePhase.EFFECT_TARGETING]: defaultReducer,
+	[TFertilizePhase.CROP_FERTILIZED]: defaultReducer,
 };
 export const getFertilizeReducer = <T extends TFertilizePhase>(p: T): TTurnBasedReducer<TTurnPhase.FERTILIZE, T> =>
 	reducersMap[p];
