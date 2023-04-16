@@ -129,7 +129,4 @@ export type TTurnBasedReducer<
 	K extends TTurnSubAction<T> = TTurnSubAction<T>
 > = (params: TTurnSubphaseContext<T, M> & TTurnSubphaseAction<T, K>) => TTurnSubphaseContext<T, TTurnSubPhase<any>>;
 
-export type TGameEffect<T extends TTurnPhase, M extends TTurnSubPhase<T> = TTurnSubPhase<T>> = (
-	game: IGame,
-	source: TPlayerClass
-) => IGame;
+export type TGameEffect = (game: IGame, source: TPlayerClass) => IGame;

@@ -1,0 +1,25 @@
+.gameBlockInfo {
+	width: fit-content;
+	min-width: 400px;
+	border: 2px solid #2c2c2c;
+	border-radius: 5px;
+	padding: 10px;
+	display: flex;
+	gap: 0 10px;
+
+	& div {
+		border-right: 1px solid #000;
+		padding-right: 5px;
+	}
+
+	&__list {
+		font-weight: 900;
+		font-size: 20px;
+		list-style: none;
+
+		li {
+			font-size: 16px;
+			font-weight: 400;
+		}
+	}
+}

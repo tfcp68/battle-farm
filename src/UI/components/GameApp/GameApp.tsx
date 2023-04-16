@@ -1,16 +1,16 @@
 import React from 'react';
+import beans from '~/assets/crops/beans.png';
+import GameCard from '~/components/GameCard/GameCard';
 import styles from './GameApp.module.scss';
-import assetsDictionary from '../../assetBuilder/assetBuilder';
 
 interface IGameAppProps {}
 
 const GameApp = () => {
 	return (
 		<div className={styles.gameApp}>
-			{Object.values(assetsDictionary.actions).map((el) => {
-				return <img src={el} alt="" />;
-			})}
+			<GameCard cropImage={beans} />
 		</div>
 	);
 };
+
 export default GameApp;

@@ -202,6 +202,7 @@ module.exports = {
 		'object-shorthand': 'error',
 		'one-var': ['error', 'never'],
 		'prefer-const': 'error',
+		'prefer-spread': 'off',
 		'prefer-object-spread': 'off',
 		'quote-props': 'off',
 		radix: 'off',

@@ -1,13 +1,13 @@
 import { TTargetIndex } from '~/src/types/fsm/shared';
 
 export enum TFertilizePhase {
-	IDLE = 0,
+	IDLE = 1,
 	CROP_CONFIRM,
 	FINISHED,
 }
 
 export enum TFertilizeAction {
-	RESET = 0,
+	RESET = 1,
 	HOVER,
 	CHOOSE_CROP,
 	FERTILIZE,

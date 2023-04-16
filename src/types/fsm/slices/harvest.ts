@@ -3,18 +3,21 @@ import { TCrop } from '~/src/types/serializables/crops';
 
 export enum THarvestPhase {
 	IDLE,
-	TARGET_MODE,
+	HARVESTING,
+	EFFECT_TARGETING,
+	EFFECT_APPLIANCE,
 	FINISHED,
 }
 
 export enum THarvestAction {
 	RESET,
+	HARVEST,
 	CROP_HARVESTED,
 	EFFECT_APPLIED,
-	SKIP_TARGET_MODE,
+	SKIP,
 }
 
-export type THarvestContext<T extends THarvestPhase> = T extends THarvestPhase.TARGET_MODE
+export type THarvestContext<T extends THarvestPhase> = T extends THarvestPhase.EFFECT_TARGETING
 	? TTargetModeContext<any>
 	: never;
 

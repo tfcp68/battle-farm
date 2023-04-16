@@ -7,12 +7,14 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const config = {
 	entry: {
-		index: [path.resolve(ROOT_DIR, 'src/UI', 'index.tsx')],
+		index: [path.resolve(ROOT_DIR, 'frontend', 'index.tsx')],
 	},
 	resolve: {
 		alias: {
-			'~/components': path.resolve(paths.ROOT_DIR, 'src/UI/components'),
+			'~/components': path.resolve(paths.ROOT_DIR, 'frontend/components'),
 			'~/assets': path.resolve(paths.ROOT_DIR, 'assets'),
+			'~/src': path.resolve(paths.ROOT_DIR, 'src'),
+			'~/hooks': path.resolve(paths.ROOT_DIR, 'frontend/hooks'),
 		},
 		extensions: ['.tsx', '.ts', '.js'],
 	},
