@@ -24,7 +24,6 @@ function importAll<K extends baseAssetNamesTypes>(
 	dict: Partial<Record<baseAssetType<K>, string>>
 ) {
 	f.keys().forEach((key) => {
-		console.log(f.keys());
 		const fullPathToAsset = f(key);
 		const assetName = key.replace('./', '').replace('.png', '').toUpperCase() as baseAssetType<K>;
 		dict[assetName] = fullPathToAsset;
