@@ -4,6 +4,8 @@ const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('../paths');
+const webpack = require('webpack');
+const sizes = require('../../frontend/assetBuilder/assetSharedSIzes');
 
 /*const getRules = (isDev) => {
 	return isDev
@@ -16,12 +18,15 @@ const paths = require('../paths');
 				],
 		  }
 		: {
-				test: /\.(png|jpe?g|gif)$/i,
+				test: /\.(png|jpe?g|gif|webp)$/i,
 				type: 'asset/resource',
 		  };
 };*/
 const getPlugins = (isDev) => {
 	let plugins = [
+		new webpack.DefinePlugin({
+			...sizes,
+		}),
 		new HtmlWebpackPlugin({
 			template: path.resolve(paths.ROOT_DIR, 'public', 'index.html'),
 			title: 'Battle farm',

@@ -35,10 +35,10 @@ const config = {
 			},
 
 			{
-				test: /\.(png|jpe?g|gif)$/i,
+				test: /\.(jpe?g|png|gif|svg)$/i,
 				type: 'asset/resource',
 				generator: {
-					filename: isDev ? '[path][name][ext]' : '[path][hash][ext]',
+					filename: isDev ? '[path][name]_[hash][ext]' : '[path][hash][ext]',
 				},
 			},
 
@@ -54,7 +54,7 @@ const config = {
 									encodeOptions: {
 										jpeg: {
 											// https://sharp.pixelplumbing.com/api-output#jpeg
-											quality: 100,
+											quality: 70,
 										},
 										webp: {
 											// https://sharp.pixelplumbing.com/api-output#webp
