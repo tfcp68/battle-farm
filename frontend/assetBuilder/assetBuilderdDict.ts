@@ -1,13 +1,13 @@
 import { baseAssetNamesTypes } from './assetBuilderTypes';
 import assetsDictionary from './assetBuilder';
-import sizes from './assetSharedSIzes';
+import { UICardSize, UIClassSize } from './assetSharedSIzes';
 
-export const getClassesAssets = (size: keyof typeof sizes.UIClassSize) => {
+export const getClassesAssets = (size: keyof typeof UIClassSize) => {
 	return assetsDictionary[baseAssetNamesTypes.CLASSES][size];
 };
-export const getActionsAssets = (size: keyof typeof sizes.UICardSize) => {
+export const getActionsAssets = (size: keyof typeof UICardSize) => {
 	return assetsDictionary[baseAssetNamesTypes.ACTIONS][size];
 };
-export const getCropsAssets = (size: keyof typeof sizes.UICardSize) => {
+export const getCropsAssets = (size: keyof typeof UICardSize) => {
 	return assetsDictionary[baseAssetNamesTypes.CROPS][size];
 };

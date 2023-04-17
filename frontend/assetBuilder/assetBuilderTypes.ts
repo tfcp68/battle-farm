@@ -1,7 +1,7 @@
 import { TActionId } from '~/src/types/serializables/actions';
 import { TCropId } from '~/src/types/serializables/crops';
 import { TTPlayerClass } from '~/src/types/serializables/players';
-import sizes from './assetSharedSIzes';
+import { UICardSize, UIClassSize } from './assetSharedSIzes';
 
 export enum baseAssetNamesTypes {
 	ACTIONS = 'actions',
@@ -18,9 +18,9 @@ export type baseAssetType<K extends baseAssetNamesTypes> = K extends baseAssetNa
 	: never;
 
 export type baseAssetSizeType<K extends baseAssetNamesTypes> = K extends baseAssetNamesTypes.ACTIONS
-	? keyof typeof sizes.UICardSize
+	? keyof typeof UICardSize
 	: K extends baseAssetNamesTypes.CROPS
-	? keyof typeof sizes.UICardSize
+	? keyof typeof UICardSize
 	: K extends baseAssetNamesTypes.CLASSES
-	? keyof typeof sizes.UIClassSize
+	? keyof typeof UIClassSize
 	: never;

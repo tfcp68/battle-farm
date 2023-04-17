@@ -5,8 +5,8 @@
 	"main": "/public/index.html",
 	"scripts": {
 		"test": "jest",
-		"start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.js ",
-		"build": "cross-env NODE_ENV=production webpack --config configs/webpack/webpack.config.js  &&  npx serve dist"
+		"start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts ",
+		"build": "cross-env NODE_ENV=production webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist"
 	},
 	"repository": {
 		"type": "git",
