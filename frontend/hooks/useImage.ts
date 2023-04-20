@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
+import { TCardType } from '~/src/types/serializables/cards';
 
-const useImage = (fileName: string) => {
+const useImage = (fileName: string, typeCard: TCardType) => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	const [image, setImage] = useState('');
@@ -8,7 +9,11 @@ const useImage = (fileName: string) => {
 	useEffect(() => {
 		const fetchImage = async () => {
 			try {
-				const response = await import(`~/assets/crops/${fileName.toLowerCase()}.png`);
+				const response = await import(
+					`~/assets/${
+						typeCard === TCardType.ACTION ? 'actions' : typeCard === TCardType.CROP ? 'crops' : 'classes'
+					}/${fileName.toLowerCase()}.png`
+				);
 				setImage(response.default);
 			} catch (err) {
 				setError(err);

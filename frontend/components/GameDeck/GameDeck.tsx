@@ -14,7 +14,7 @@ const GameDeck: FC<IGameDeckProps> = ({ listCards }) => {
 			<h1 className={styles.deck__title}>Deck</h1>
 			{deck.map((card) => {
 				const { id } = card;
-				return <GameCard key={id} cropImage={id} />;
+				return <GameCard key={id} cropImage={id} typeCard={card.type} />;
 			})}
 		</div>
 	);
