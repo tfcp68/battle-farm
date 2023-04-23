@@ -4,9 +4,9 @@ import styles from './GameApp.module.scss';
 import { TCropColor, TGardenBedType } from '~/src/types/serializables/crops';
 import { TCard, TCardType } from '~/src/types/serializables/cards';
 import { TPlayer, TPlayerClass } from '~/src/types/serializables/players';
-import GameBlockInfo from '~/components/GameBlockInfo/GameBlockInfo';
 import GameDeck from '~/components/GameDeck/GameDeck';
 import GameMarket from '~/components/GameMarket/GameMarket';
+import GameBlockInfo from '~/components/GameBlockInfo/GameBlockInfo';
 
 const GameApp = () => {
 	const listCards: TCard[] = [

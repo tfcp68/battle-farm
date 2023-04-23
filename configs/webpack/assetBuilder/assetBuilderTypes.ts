@@ -1,8 +1,8 @@
 import { TActionId } from '~/src/types/serializables/actions';
 import { TCropId } from '~/src/types/serializables/crops';
 import { TTPlayerClass } from '~/src/types/serializables/players';
-import { UICardSize, UIClassSize } from './assetSharedSIzes';
-
+import { UICardSize, UIClassSize } from './assetSIzes';
+export const targetFormat = ['avif', 'webp', 'jpeg'];
 export enum baseAssetNamesTypes {
 	ACTIONS = 'actions',
 	CLASSES = 'classes',

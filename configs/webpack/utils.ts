@@ -1,3 +1,6 @@
+import {UICardSize, UIClassSize} from './assetBuilder/assetSIzes';
+import { getPresets } from './assetBuilder/presetBuilder/generatorBuilder';
+import {GetPresetsDefinePlugin} from "./assetBuilder/presetBuilder/definePluginPresets";
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const path = require('path');
@@ -5,30 +8,16 @@ const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('../paths');
 const webpack = require('webpack');
-const sizes = require('../../frontend/assetBuilder/assetSharedSIzes');
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const { ROOT_DIR } = require('../paths');
 
-/*const getRules = (isDev) => {
-	return isDev
-		? {
-				test: /\.(png|jpe?g|gif)$/i,
-				use: [
-					{
-						loader: 'file-loader',
-					},
-				],
-		  }
-		: {
-				test: /\.(png|jpe?g|gif|webp)$/i,
-				type: 'asset/resource',
-		  };
-};*/
+const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
+
+
+
 export const getPlugins = (isDev: boolean) => {
 	let plugins = [
 		new webpack.DefinePlugin({
-			...sizes,
+			...GetPresetsDefinePlugin(UIClassSize,"Classes"),
+			...GetPresetsDefinePlugin(UICardSize,"Cards"),
 		}),
 		new HtmlWebpackPlugin({
 			template: path.resolve(paths.ROOT_DIR, 'public', 'index.html'),
@@ -40,14 +29,6 @@ export const getPlugins = (isDev: boolean) => {
 		: plugins.concat([
 				new CompressionPlugin({
 					algorithm: 'gzip',
-				}),
-				new CopyPlugin({
-					patterns: [
-						{
-							from: path.resolve(ROOT_DIR, 'assets'),
-							to: 'asset/[path][hash][ext]',
-						},
-					],
 				}),
 		  ]);
 	return plugins;
@@ -68,7 +49,6 @@ export const getBaseLayoutSettings = (isDev: boolean) => {
 					path: path.resolve(__dirname, '../../dist'),
 					publicPath: '/',
 					clean: true,
-					assetModuleFilename: '[path][hash][ext]',
 				},
 				mode: 'production',
 				optimization: {
@@ -76,71 +56,10 @@ export const getBaseLayoutSettings = (isDev: boolean) => {
 					minimizer: [
 						new TerserPlugin(),
 						new ImageMinimizerPlugin({
-							// Disable loader
-							loader: false,
-							// Allows to keep original asset and minimized assets with different filenames
-							deleteOriginalAssets: true,
-							generator: [
-								{
-									type: 'asset',
-									preset: 'webp-100',
-									implementation: async (original: any, options: any) => {
-										const inputExt = path.extname(original.filename).toLowerCase();
-										console.log(original, options);
-										if (inputExt !== '.xxx') {
-											// Store error and return `null` if the implementation does not support this file type
-											original.errors.push('error');
-											return null;
-										}
-
-										let result;
-
-										try {
-											result = '';
-										} catch (error) {
-											// Store error and return `null` if there was an error
-											original.errors.push(error);
-											return null;
-										}
-
-										return {
-											filename: original.filename,
-											data: result,
-											warnings: [...original.warnings],
-											errors: [...original.errors],
-											info: {
-												...original.info,
-												// Please always set it to prevent double minification
-												generated: true,
-												// Optional
-												generatedBy: ['custom-name-of-minification'],
-											},
-										};
-									},
-									options: {
-										resize: {
-											enabled: true,
-											width: 100,
-											height: 10,
-										},
-										encodeOptions: {
-											webp: {
-												quality: 90,
-											},
-										},
-									},
-								},
-							],
-
+							loader:false,
+							generator: [...getPresets(UIClassSize,"Classes"), ...getPresets(UICardSize,'Cards')],
 							minimizer: {
 								implementation: ImageMinimizerPlugin.sharpMinify,
-								options: {
-									encodeOptions: {
-										jpeg: {
-											quality: 90,
-										},
-									},
-								},
 							},
 						}),
 					],
