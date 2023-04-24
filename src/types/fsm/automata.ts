@@ -134,7 +134,14 @@ export type TAutomataParams<
 	stateValidator?: TValidator<StateType>;
 	actionValidator?: TValidator<ActionType>;
 	eventValidator?: TValidator<EventType>;
+	enabled?: boolean;
+	paused?: boolean;
 };
+
+export type TAutomataQueue<
+	ActionType extends TAutomataBaseActionType,
+	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>
+> = Array<TAutomataActionPayload<ActionType, PayloadType>>;
 
 export interface IAutomata<
 	StateType extends TAutomataBaseStateType,
@@ -145,7 +152,8 @@ export interface IAutomata<
 	} = Record<StateType, any>,
 	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
 	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
-> extends TAutomataStateContext<StateType, ContextType> {
+> extends TAutomataStateContext<StateType, ContextType>,
+		IAutomataValidatorContainer<StateType, ActionType, EventType> {
 	eventAdapter: IAutomataEventAdapter<
 		StateType,
 		ActionType,
@@ -155,18 +163,71 @@ export interface IAutomata<
 		EventMetaType
 	> | null;
 
+	/**
+	 * Reset the Instance and provide a Reducer, new State and optionally Validators
+	 */
 	init: (params: TAutomataParams<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>) => this;
 
-	dispatch: TAutomataDispatch<StateType, ActionType, ContextType, PayloadType>;
-
-	getState: <K extends StateType = StateType>() => TAutomataStateContext<K, ContextType>;
-
-	getActionQueue: () => Array<TAutomataActionPayload<ActionType, PayloadType>>;
-
+	/**
+	 * Return current Reducer function
+	 */
 	getReducer: () => TAutomataReducer<StateType, ActionType, ContextType, PayloadType> | null;
 
-	consumeAction: () => {
+	/**
+	 * When the Instance is Disabled, Consuming Actions doesn't change the internal state
+	 */
+	enable: () => this;
+	disable: (clearQueue?: boolean) => this;
+	isEnabled: () => boolean;
+
+	/**
+	 * When the Instance is Paused, dispatched Actions aren't Consumed, but put into the Queue instead
+	 */
+	isPaused: () => boolean;
+
+	pause: () => this;
+	/**
+	 * Resuming will Collapse the Queue, unless the Instance is Disabled
+	 */
+	resume: () => this;
+
+	/**
+	 * Returns internal State and Context of the Instance
+	 */
+	getContext: <K extends StateType = StateType>() => TAutomataStateContext<K, ContextType>;
+
+	/**
+	 * Consume all Actions in the Queue and return the resulting State
+	 * Works even when Paused
+	 * When Disabled, consumed Actions don't change the internal State
+	 * Returns the final result of all consumed Actions
+	 */
+	collapseActionQueue: () => {
+		actions: TAutomataQueue<ActionType, PayloadType> | null;
+		newState: TAutomataStateContext<StateType, ContextType>;
+	};
+
+	getActionQueue: () => TAutomataQueue<ActionType, PayloadType>;
+	clearActionQueue: () => this;
+
+	/**
+	 * Pop at most [count] Actions from the Queue and Consume them
+	 * Works even when Paused
+	 * When Disabled, consumed Actions don't change the internal State
+	 * Returns the final result of all consumed Actions
+	 * @param count Number of Actions to consume, defaults to 1
+	 */
+	consumeAction: (count?: number) => {
 		action: TAutomataActionPayload<ActionType, PayloadType> | null;
 		newState: TAutomataStateContext<StateType, ContextType>;
 	};
+
+	/**
+	 * Consume Action and return the new State and its context
+	 * The Queue is Collapsed beforehand, if not Disabled
+	 * When Paused, puts an Action into the Queue instead
+	 * When Disabled, doesn't change the internal State
+	 * Returns the final result of all Actions, including the Queue
+	 */
+	dispatch: TAutomataDispatch<StateType, ActionType, ContextType, PayloadType>;
 }

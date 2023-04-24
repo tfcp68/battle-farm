@@ -1,3 +1,4 @@
+import { AutomataValidatorContainer } from '~/src/automata/ValidatorContainer';
 import {
 	IAutomata,
 	IAutomataEventAdapter,
@@ -6,20 +7,23 @@ import {
 	TAutomataBaseEventType,
 	TAutomataBaseStateType,
 	TAutomataParams,
+	TAutomataQueue,
 	TAutomataReducer,
 	TAutomataStateContext,
 } from '~/src/types/fsm/automata';
 
 export abstract class GenericAutomata<
-	StateType extends TAutomataBaseStateType,
-	ActionType extends TAutomataBaseActionType,
-	EventType extends TAutomataBaseEventType,
-	ContextType extends {
-		[K in StateType]: any;
-	} = Record<StateType, any>,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
-	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
-> implements IAutomata<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>
+		StateType extends TAutomataBaseStateType,
+		ActionType extends TAutomataBaseActionType,
+		EventType extends TAutomataBaseEventType,
+		ContextType extends {
+			[K in StateType]: any;
+		} = Record<StateType, any>,
+		PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
+		EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
+	>
+	extends AutomataValidatorContainer<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>
+	implements IAutomata<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>
 {
 	public eventAdapter: IAutomataEventAdapter<
 		StateType,
@@ -28,58 +32,118 @@ export abstract class GenericAutomata<
 		ContextType,
 		PayloadType,
 		EventMetaType
-	> | null;
-	public state: StateType | null;
-	public context: ContextType[StateType] | null;
-	protected actionQueue: Array<TAutomataActionPayload<ActionType, PayloadType>> | null;
-	protected stateValidator?: (t: any) => t is StateType;
-	protected actionValidator?: (t: any) => t is ActionType;
-	protected eventValidator?: (t: any) => t is EventType;
-	private rootReducer: TAutomataReducer<StateType, ActionType, ContextType, PayloadType> | null;
+	> | null = null;
 
-	protected constructor() {
-		this.state = null;
-		this.context = null;
-		this.rootReducer = null;
-		this.actionQueue = [];
-		this.eventAdapter = null;
+	#state: StateType | null = null;
+	#context: ContextType[StateType] | null = null;
+	#actionQueue: TAutomataQueue<ActionType, PayloadType> = [];
+	#enabled = true;
+	#paused = false;
+	private rootReducer: TAutomataReducer<StateType, ActionType, ContextType, PayloadType> | null = null;
+
+	public get state() {
+		return this.#state;
+	}
+
+	public get context() {
+		return this.#context;
+	}
+
+	clearActionQueue() {
+		this.#actionQueue = [];
+		return this;
+	}
+
+	collapseActionQueue(): {
+		actions: TAutomataQueue<ActionType, PayloadType> | null;
+		newState: TAutomataStateContext<StateType, ContextType>;
+	} {
+		const actions = (this.#actionQueue ?? []).slice();
+		const newState = this.reduceQueue();
+		if (this.isEnabled()) {
+			this.clearActionQueue();
+		}
+		return {
+			actions,
+			newState,
+		};
+	}
+
+	enable() {
+		this.#enabled = true;
+		return this;
+	}
+
+	disable(clearQueue = false) {
+		this.#enabled = false;
+		if (clearQueue) this.clearActionQueue();
+		return this;
+	}
+
+	isEnabled() {
+		return this.#enabled ?? true;
+	}
+
+	isPaused() {
+		return this.#paused ?? false;
+	}
+
+	pause() {
+		this.#paused = true;
+		return this;
+	}
+
+	resume() {
+		this.#paused = false;
+		if (this.isEnabled()) this.collapseActionQueue();
+		return this;
 	}
 
 	init(params: TAutomataParams<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>) {
-		const { state = null, context, rootReducer = null, stateValidator, eventValidator, actionValidator } = params;
-		if (stateValidator instanceof Function && !stateValidator(state))
-			throw new Error(`Invalid initial State: ${this.state}`);
-		this.state = state;
-		if (state) this.context = context;
-		else this.context = null;
+		const {
+			state = null,
+			context,
+			paused = false,
+			enabled = false,
+			rootReducer = null,
+			stateValidator,
+			eventValidator,
+			actionValidator,
+		} = params;
 		if (rootReducer instanceof Function) this.rootReducer = rootReducer;
+		else if (rootReducer) throw new Error(`Invalid Root Reducer supplied: ${rootReducer}`);
 		else this.rootReducer = null;
-		if (stateValidator instanceof Function) this.stateValidator = stateValidator;
-		else if (stateValidator) throw new Error(`Invalid State Validator provided: ${stateValidator}`);
-		else this.stateValidator = undefined;
-		if (eventValidator instanceof Function) this.eventValidator = eventValidator;
-		else if (eventValidator) throw new Error(`Invalid Event Validator provided: ${eventValidator}`);
-		else this.eventValidator = undefined;
-		if (actionValidator instanceof Function) this.actionValidator = actionValidator;
-		else if (actionValidator) throw new Error(`Invalid Action Validator provided: ${actionValidator}`);
-		else this.actionValidator = undefined;
-
+		if (!this.validateState(state)) throw new Error(`Invalid initial State: ${state}`);
+		this.#actionQueue = [];
+		this.#enabled = enabled;
+		this.#paused = paused;
+		this.setContext({ state, context });
+		if (stateValidator) this.setStateValidator(stateValidator);
+		if (actionValidator) this.setActionValidator(actionValidator);
+		if (eventValidator) this.setEventValidator(eventValidator);
 		return this;
 	}
 
 	dispatch(action: TAutomataActionPayload<ActionType, PayloadType>): TAutomataStateContext<StateType, ContextType> {
-		if (!action?.action || (this.actionValidator && !this.actionValidator(action.action)))
-			throw new Error(`Invalid Action: ${action?.action}`);
-		if (this.actionQueue) this.actionQueue.push(action);
-		return this.rootReducer
-			? this.rootReducer({
-					...action,
-					...this.getState(),
-			  })
-			: this.getState();
+		if (!this.validateAction(action?.action)) throw new Error(`Invalid Action: ${action}`);
+		if (!this.rootReducer)
+			throw new Error(
+				`Root Reducer is not defined. Please init the Instance with a rootReducer. Dispatched Action: ${action}`
+			);
+		const reducedValue = this.rootReducer({
+			...action,
+			...this.reduceQueue(),
+		});
+		if (!reducedValue || !this.validateState(reducedValue.state))
+			throw new Error(`Invalid Reduced State: ${reducedValue}`);
+		if (this.isPaused()) this.#actionQueue = [...(this.#actionQueue ?? []).concat(action)];
+		if (this.isEnabled()) {
+			this.setContext(reducedValue);
+		}
+		return reducedValue;
 	}
 
-	getState<K extends StateType = StateType>(): TAutomataStateContext<K, ContextType> {
+	getContext<K extends StateType = StateType>(): TAutomataStateContext<K, ContextType> {
 		return {
 			state: this.state as K,
 			context: this.context,
@@ -87,7 +151,7 @@ export abstract class GenericAutomata<
 	}
 
 	getActionQueue() {
-		return this.actionQueue ?? [];
+		return this.#actionQueue ?? [];
 	}
 
 	getReducer() {
@@ -97,23 +161,48 @@ export abstract class GenericAutomata<
 	consumeAction() {
 		const currentResponse = {
 			action: null,
-			newState: {
-				state: this.state,
-				context: this.context,
-			},
+			newState: this.getContext(),
 		};
-		if (!this.actionQueue?.length) return currentResponse;
-		const action = this.actionQueue.shift() || null;
-		if (!action) return currentResponse;
-		const newState = this.rootReducer
-			? this.rootReducer({
-					state: this.state,
-					context: this.context,
-					...action,
-			  })
-			: currentResponse.newState;
+		if (!this.getActionQueue()?.length) return currentResponse;
+		const action = this.getActionQueue().shift() || null;
+		if (null == action) return currentResponse;
+		if (!this.rootReducer)
+			throw new Error(
+				`Root Reducer is not defined. Please init the Instance with a rootReducer. Dispatched Action: ${action}`
+			);
+		const newState = this.rootReducer({
+			...this.getContext(),
+			...action,
+		});
+		if (this.isEnabled()) this.setContext(newState);
 		return { action, newState };
 	}
+
+	protected reduceQueue: () => TAutomataStateContext<StateType, ContextType> = () => {
+		let reducedValue = this.getContext();
+		if (!this.rootReducer)
+			throw new Error(`Root Reducer is not defined. Please init the Instance with a rootReducer`);
+		while (this.getActionQueue().length) {
+			const action = this.getActionQueue().shift();
+			if (action == null) return reducedValue;
+			if (!this.validateAction(action?.action)) throw new Error(`Invalid Action: ${action}`);
+			reducedValue = this.rootReducer({
+				...action,
+				...reducedValue,
+			});
+		}
+		return reducedValue;
+	};
+
+	protected setContext: (context?: TAutomataStateContext<StateType, ContextType> | null) => this = (
+		context = null
+	) => {
+		if (!context || !this.validateState(context?.state)) throw new Error(`Invalid Context: ${context}`);
+		this.#state = context.state;
+		this.#context = context.context ?? null;
+		this.clearActionQueue();
+		return this;
+	};
 }
 
 export default GenericAutomata;
