@@ -1,30 +1,27 @@
-import { UICardSize, UIClassSize } from '../assetSIzes';
+import { UICardSize, UIClassSize } from '../../../frontend/assetBuilder/assetSIzes';
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
-import { targetFormat } from '../assetBuilderTypes';
+import { assetNamesDictTypesKeys, extTypes } from '../../../frontend/assetBuilder/assetBuilderTypes';
 
-const a = ['webpSmallClasses', 'webpLargeClasses', 'avifSmallClasses'];
+export const getPresetName = (ext: string, size: string, assetName: string) => {
+	return [ext, size, assetName].join('');
+};
 const formatSettings: {
 	[T in string]: any;
 } = {
 	// https://sharp.pixelplumbing.com/api-output#avif
-	avif: () => {
-		return {
-			effort: 9,
-			quality: 75,
-		};
+	avif: {
+		effort: 1,
+		quality: 75,
 	},
+
 	// https://sharp.pixelplumbing.com/api-output#webp
-	webp: () => {
-		return {
-			effort: 6,
-			quality: 75,
-		};
+	webp: {
+		effort: 1,
+		quality: 75,
 	},
 	// https://sharp.pixelplumbing.com/api-output#jpeg
-	jpeg: () => {
-		return {
-			quality: 75,
-		};
+	jpeg: {
+		quality: 75,
 	},
 };
 type baseDefaultLayout = {
@@ -35,16 +32,15 @@ type baseDefaultLayout = {
 	preset: string;
 };
 
-export function getPresets(sizes: typeof UIClassSize | typeof UICardSize, assetType: 'Classes' | 'Cards') {
+export function getPresets(sizes: typeof UIClassSize | typeof UICardSize, assetType: assetNamesDictTypesKeys) {
 	const result: baseDefaultLayout[] = [];
-	const values = Object.values(sizes).filter((v) => !isNaN(Number(v)));
-	const keys = Object.values(sizes).filter((v) => isNaN(Number(v)));
-
-	for (const ext of targetFormat) {
+	const values = Object.values(sizes);
+	const keys = Object.keys(sizes);
+	Object.values(extTypes).forEach((ext) => {
 		keys.forEach((size, index) => {
 			result.push({
 				implementation: ImageMinimizerPlugin.sharpGenerate,
-				preset: ext + size + assetType,
+				preset: getPresetName(ext, size, assetType),
 				options: {
 					encodeOptions: {
 						[ext]: {
@@ -58,6 +54,7 @@ export function getPresets(sizes: typeof UIClassSize | typeof UICardSize, assetT
 				},
 			});
 		});
-	}
+	});
+
 	return result;
 }

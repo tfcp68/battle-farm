@@ -1,6 +1,6 @@
-import {UICardSize, UIClassSize} from './assetBuilder/assetSIzes';
-import { getPresets } from './assetBuilder/presetBuilder/generatorBuilder';
-import {GetPresetsDefinePlugin} from "./assetBuilder/presetBuilder/definePluginPresets";
+import { UICardSize, UIClassSize } from '../../frontend/assetBuilder/assetSIzes';
+import { GetPresetsDefinePlugin } from './presetBuilder/definePluginPresets';
+
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const path = require('path');
@@ -9,15 +9,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('../paths');
 const webpack = require('webpack');
 
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-
-
-
 export const getPlugins = (isDev: boolean) => {
 	let plugins = [
 		new webpack.DefinePlugin({
-			...GetPresetsDefinePlugin(UIClassSize,"Classes"),
-			...GetPresetsDefinePlugin(UICardSize,"Cards"),
+			...GetPresetsDefinePlugin(UIClassSize, 'Classes'),
+			...GetPresetsDefinePlugin(UICardSize, 'Cards'),
 		}),
 		new HtmlWebpackPlugin({
 			template: path.resolve(paths.ROOT_DIR, 'public', 'index.html'),
@@ -53,16 +49,7 @@ export const getBaseLayoutSettings = (isDev: boolean) => {
 				mode: 'production',
 				optimization: {
 					minimize: true,
-					minimizer: [
-						new TerserPlugin(),
-						new ImageMinimizerPlugin({
-							loader:false,
-							generator: [...getPresets(UIClassSize,"Classes"), ...getPresets(UICardSize,'Cards')],
-							minimizer: {
-								implementation: ImageMinimizerPlugin.sharpMinify,
-							},
-						}),
-					],
+					minimizer: [new TerserPlugin()],
 					splitChunks: {
 						chunks: 'all',
 						cacheGroups: {

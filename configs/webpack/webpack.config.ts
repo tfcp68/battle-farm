@@ -1,8 +1,8 @@
 import { Configuration } from 'webpack';
 import { getBaseLayoutSettings, getPlugins } from './utils';
 import { ROOT_DIR } from '../paths';
-import { getPresets } from './assetBuilder/presetBuilder/generatorBuilder';
-import { UICardSize, UIClassSize } from './assetBuilder/assetSIzes';
+import { getPresets } from './presetBuilder/generatorBuilder';
+import { UICardSize, UIClassSize } from '../../frontend/assetBuilder/assetSIzes';
 import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const path = require('path');
@@ -11,10 +11,6 @@ const isDev = process.env.NODE_ENV === 'development';
 const config: Configuration = {
 	entry: {
 		index: [path.resolve(ROOT_DIR, 'frontend', 'index.tsx')],
-	},
-	cache: {
-		type: 'filesystem',
-		allowCollectingMemory: true,
 	},
 	resolve: {
 		alias: {
@@ -42,60 +38,19 @@ const config: Configuration = {
 			},
 
 			{
-				test: /\.(jpe?g|gif|png|svg|webp|avif)$/i,
-				type: 'asset/resource',
+				test: /\.(jpe?g|gif|png|svg)$/i,
+				type: 'asset',
 				generator: {
 					filename: '[path][hash][ext]',
 				},
-			},
-			{
-				test: /\.(jpe?g|png|gif|svg|webp)$/i,
 				use: [
 					{
 						loader: ImageMinimizerPlugin.loader,
 						options: {
-							minimizer: {
-								implementation: ImageMinimizerPlugin.sharpMinify,
-								options: {
-									options: {
-										encodeOptions: {
-											jpeg: {
-												// https://sharp.pixelplumbing.com/api-output#jpeg
-												quality: 100,
-											},
-											webp: {
-												quality: 10,
-												// https://sharp.pixelplumbing.com/api-output#webp
-												lossless: true,
-											},
-											avif: {
-												// https://sharp.pixelplumbing.com/api-output#avif
-												lossless: true,
-											},
-
-											// png by default sets the quality to 100%, which is same as lossless
-											// https://sharp.pixelplumbing.com/api-output#png
-											png: {},
-
-											// gif does not support lossless compression at all
-											// https://sharp.pixelplumbing.com/api-output#gif
-											gif: {},
-										},
-									},
-								},
-							},
+							generator: [...getPresets(UIClassSize, 'Classes'), ...getPresets(UICardSize, 'Cards')],
 						},
 					},
 				],
-			},
-
-			{
-				test: /\.(jpe?g|png|gif|svg|webp)$/i,
-				loader: ImageMinimizerPlugin.loader,
-				enforce: 'pre',
-				options: {
-					generator: [...getPresets(UIClassSize, 'Classes'), ...getPresets(UICardSize, 'Cards')],
-				},
 			},
 		],
 	},
