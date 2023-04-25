@@ -23,6 +23,7 @@ for (const currentPhase of Object.keys(stateReducerCases)
 	const cases = stateReducerCases[currentPhase];
 
 	describe(`FSM/Fertilizing/${getStateLabel(currentPhase)}`, () => {
+		if (!cases?.length) return;
 		for (let i = 0; i < cases.length; i++) {
 			const { input, output, msg } = cases[i];
 			const originalInput: typeof input = JSON.parse(JSON.stringify(input));

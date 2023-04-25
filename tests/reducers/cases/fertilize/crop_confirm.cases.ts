@@ -9,7 +9,7 @@ export const testCasesCROP_CONFIRM: Array<
 	{
 		msg: 'CROP_CONFIRM-->FINISHED: SKIP',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.SKIP,
 				TFertilizePhase.CROP_CONFIRM
@@ -26,7 +26,7 @@ export const testCasesCROP_CONFIRM: Array<
 	{
 		msg: 'CROP_CONFIRM-->IDLE CANCEL_SELECTION',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.CANCEL_SELECTION,
 				TFertilizePhase.CROP_CONFIRM
@@ -42,7 +42,7 @@ export const testCasesCROP_CONFIRM: Array<
 	{
 		msg: 'CROP_CONFIRM-->CROP_CONFIRM: RESET ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.RESET,
 				TFertilizePhase.CROP_CONFIRM
@@ -56,7 +56,7 @@ export const testCasesCROP_CONFIRM: Array<
 	{
 		msg: 'CROP_CONFIRM-->CROP_CONFIRM: CANCEL_SELECTION ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.CANCEL_SELECTION,
 				TFertilizePhase.CROP_CONFIRM
@@ -72,9 +72,9 @@ export const testCasesCROP_CONFIRM: Array<
 	{
 		msg: 'CROP_CONFIRM-->CROP_CONFIRM: CHOOSE_CROP (index)',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.CHOOSE_CROP,
+				TFertilizeAction.SELECT_CROP,
 				TFertilizePhase.CROP_CONFIRM
 			);
 			return {
@@ -88,7 +88,7 @@ export const testCasesCROP_CONFIRM: Array<
 	{
 		msg: 'CROP_CONFIRM-->IDLE: FERTILIZE (index)',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.FERTILIZE,
 				TFertilizePhase.CROP_CONFIRM

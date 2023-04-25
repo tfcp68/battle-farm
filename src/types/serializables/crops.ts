@@ -43,9 +43,12 @@ export const CropCardId = {
 
 export type TCropId = keyof typeof CropCardId;
 
-export type TCrop = {
-	ripeTimer: number;
+export type TWithCropColor = {
 	group: TCropColor;
+};
+
+export type TCrop = TWithCropColor & {
+	ripeTimer: number;
 	value: number;
 	id: TCropId;
 	fertilized: number;
