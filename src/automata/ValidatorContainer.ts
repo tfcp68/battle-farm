@@ -37,7 +37,7 @@ export abstract class AutomataValidatorContainer<
 	}
 
 	setEventValidator(eventValidator: TValidator<EventType> | null = null) {
-		if (eventValidator === null || eventValidator === undefined) {
+		if (eventValidator == null) {
 			this.#eventValidator = undefined;
 			return this;
 		}
@@ -47,7 +47,7 @@ export abstract class AutomataValidatorContainer<
 	}
 
 	setActionValidator(actionValidator: TValidator<ActionType> | null = null) {
-		if (actionValidator === null || actionValidator === undefined) {
+		if (actionValidator == null) {
 			this.#actionValidator = undefined;
 			return this;
 		}
@@ -57,7 +57,7 @@ export abstract class AutomataValidatorContainer<
 	}
 
 	setStateValidator(stateValidator: TValidator<StateType> | null = null) {
-		if (stateValidator === null || stateValidator === undefined) {
+		if (stateValidator == null) {
 			this.#stateValidator = undefined;
 			return this;
 		}

@@ -6,7 +6,14 @@ import { TValidator } from '~/src/types/typeGuards';
 import arraySample from '~/src/utils/arraySample';
 import { lengthArray } from '~/src/utils/lengthArray';
 import { sampleRange } from '~/src/utils/sampleRange';
-import { TTestAction, TTestContext, TTestEvent, TTestEventMeta, TTestPayload, TTestState } from '../fixtures/fsm';
+import {
+	TTestAction,
+	TTestContext,
+	TTestEvent,
+	TTestEventMeta,
+	TTestPayload,
+	TTestState,
+} from '../../../tests/fixtures/fsm';
 
 class EventAdapterTest extends AutomataEventAdapter<
 	TTestState,

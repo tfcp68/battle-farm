@@ -41,6 +41,20 @@ export abstract class GenericAutomata<
 	#paused = false;
 	private rootReducer: TAutomataReducer<StateType, ActionType, ContextType, PayloadType> | null = null;
 
+	protected constructor(
+		eventAdapter: IAutomataEventAdapter<
+			StateType,
+			ActionType,
+			EventType,
+			ContextType,
+			PayloadType,
+			EventMetaType
+		> | null = null
+	) {
+		super();
+		if (eventAdapter) this.eventAdapter = eventAdapter;
+	}
+
 	public get state() {
 		return this.#state;
 	}
@@ -159,6 +173,8 @@ export abstract class GenericAutomata<
 	}
 
 	consumeAction() {
+		if (!this.rootReducer)
+			throw new Error(`Root Reducer is not defined. Please init the Instance with a rootReducer.`);
 		const currentResponse = {
 			action: null,
 			newState: this.getContext(),
@@ -166,10 +182,7 @@ export abstract class GenericAutomata<
 		if (!this.getActionQueue()?.length) return currentResponse;
 		const action = this.getActionQueue().shift() || null;
 		if (null == action) return currentResponse;
-		if (!this.rootReducer)
-			throw new Error(
-				`Root Reducer is not defined. Please init the Instance with a rootReducer. Dispatched Action: ${action}`
-			);
+
 		const newState = this.rootReducer({
 			...this.getContext(),
 			...action,
