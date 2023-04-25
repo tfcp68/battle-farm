@@ -1,5 +1,5 @@
 import { UICardSize, UIClassSize } from '../../../frontend/assetBuilder/assetSIzes';
-import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
+import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import { assetNamesDictTypesKeys, extTypes } from '../../../frontend/assetBuilder/assetBuilderTypes';
 
 export const getPresetName = (ext: string, size: string, assetName: string) => {

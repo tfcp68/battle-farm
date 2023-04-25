@@ -3,7 +3,7 @@ import { getBaseLayoutSettings, getPlugins } from './utils';
 import { ROOT_DIR } from '../paths';
 import { getPresets } from './presetBuilder/generatorBuilder';
 import { UICardSize, UIClassSize } from '../../frontend/assetBuilder/assetSIzes';
-import ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
+import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
