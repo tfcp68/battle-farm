@@ -7,7 +7,7 @@ export const testCasesIDLE: Array<TReducerTestCase<TTurnPhase.FERTILIZE, TFertil
 	{
 		msg: 'IDLE-->IDLE: HOVER (index)',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.HOVER,
 				TFertilizePhase.IDLE
@@ -17,7 +17,7 @@ export const testCasesIDLE: Array<TReducerTestCase<TTurnPhase.FERTILIZE, TFertil
 				output: Object.assign({}, originalContext, {
 					context: {
 						...originalContext.context,
-						index: originalInput[0].payload?.index,
+						index: defaultInput[0].payload?.index,
 					},
 				}),
 			};
@@ -26,7 +26,7 @@ export const testCasesIDLE: Array<TReducerTestCase<TTurnPhase.FERTILIZE, TFertil
 	{
 		msg: 'IDLE-->FINISHED: SKIP',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.SKIP,
 				TFertilizePhase.IDLE
@@ -43,9 +43,9 @@ export const testCasesIDLE: Array<TReducerTestCase<TTurnPhase.FERTILIZE, TFertil
 	{
 		msg: 'IDLE-->CROP_CONFIRM: CHOOSE_CROP (index)',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
-				TFertilizeAction.CHOOSE_CROP,
+				TFertilizeAction.SELECT_CROP,
 				TFertilizePhase.IDLE
 			);
 			return {
@@ -62,7 +62,7 @@ export const testCasesIDLE: Array<TReducerTestCase<TTurnPhase.FERTILIZE, TFertil
 	{
 		msg: 'IDLE-->IDLE: FERTILIZE ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.FERTILIZE,
 				TFertilizePhase.IDLE
@@ -76,7 +76,7 @@ export const testCasesIDLE: Array<TReducerTestCase<TTurnPhase.FERTILIZE, TFertil
 	{
 		msg: 'IDLE-->IDLE: CANCEL_SELECTION ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.CANCEL_SELECTION,
 				TFertilizePhase.IDLE
@@ -90,7 +90,7 @@ export const testCasesIDLE: Array<TReducerTestCase<TTurnPhase.FERTILIZE, TFertil
 	{
 		msg: 'IDLE-->IDLE: RESET ignored',
 		...(() => {
-			const { defaultInput, originalInput, originalContext } = setupFixtures(
+			const { defaultInput, originalContext } = setupFixtures(
 				TTurnPhase.FERTILIZE,
 				TFertilizeAction.RESET,
 				TFertilizePhase.IDLE

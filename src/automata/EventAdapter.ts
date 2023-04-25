@@ -1,3 +1,4 @@
+import { AutomataValidatorContainer } from '~/src/automata/ValidatorContainer';
 import {
 	IAutomataEventAdapter,
 	TAutomataBaseActionType,
@@ -12,19 +13,21 @@ import { TValidator } from '~/src/types/typeGuards';
 import unifyObjectKey from '~/src/utils/unifyObjectKey';
 
 export abstract class AutomataEventAdapter<
-	StateType extends TAutomataBaseStateType,
-	ActionType extends TAutomataBaseActionType,
-	EventType extends TAutomataBaseEventType,
-	ContextType extends { [K in StateType]: any } = Record<StateType, any>,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
-	EventObject extends { [K in EventType]: any } = Record<EventType, any>
-> implements IAutomataEventAdapter<StateType, ActionType, EventType, ContextType, PayloadType, EventObject>
+		StateType extends TAutomataBaseStateType,
+		ActionType extends TAutomataBaseActionType,
+		EventType extends TAutomataBaseEventType,
+		ContextType extends { [K in StateType]: any } = Record<StateType, any>,
+		PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
+		EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
+	>
+	extends AutomataValidatorContainer<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>
+	implements IAutomataEventAdapter<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>
 {
 	protected eventListeners: {
-		[T in EventType]?: Array<TAutomataEventHandler<T, ActionType, EventObject, PayloadType>>;
+		[T in EventType]?: Array<TAutomataEventHandler<T, ActionType, EventMetaType, PayloadType>>;
 	};
 	protected eventEmitters: {
-		[T in StateType]?: Array<TAutomataEventEmitter<EventType, T, EventObject, ContextType>>;
+		[T in StateType]?: Array<TAutomataEventEmitter<EventType, T, EventMetaType, ContextType>>;
 	};
 
 	protected eventValidator?: TValidator<EventType>;
@@ -32,55 +35,14 @@ export abstract class AutomataEventAdapter<
 	protected actionValidator?: TValidator<ActionType>;
 
 	protected constructor() {
+		super();
 		this.eventListeners = {};
 		this.eventEmitters = {};
 	}
 
-	protected get validateEvent() {
-		return this.eventValidator ?? this.defaultEventValidator;
-	}
-
-	protected get validateAction() {
-		return this.actionValidator ?? this.defaultActionValidator;
-	}
-
-	protected get validateState() {
-		return this.stateValidator ?? this.defaultStateValidator;
-	}
-
-	public setEventValidator(eventValidator: TValidator<EventType> | null = null) {
-		if (eventValidator === null || eventValidator === undefined) {
-			this.eventValidator = undefined;
-			return this;
-		}
-		if (typeof eventValidator !== 'function') throw new Error(`passed Event Validator is not a function`);
-		this.eventValidator = eventValidator;
-		return this;
-	}
-
-	public setActionValidator(actionValidator: TValidator<ActionType> | null = null) {
-		if (actionValidator === null || actionValidator === undefined) {
-			this.actionValidator = undefined;
-			return this;
-		}
-		if (typeof actionValidator !== 'function') throw new Error(`passed Action Validator is not a function`);
-		this.actionValidator = actionValidator;
-		return this;
-	}
-
-	public setStateValidator(stateValidator: TValidator<StateType> | null = null) {
-		if (stateValidator === null || stateValidator === undefined) {
-			this.stateValidator = undefined;
-			return this;
-		}
-		if (typeof stateValidator !== 'function') throw new Error(`passed State Validator is not a function`);
-		this.stateValidator = stateValidator;
-		return this;
-	}
-
 	public addEventEmitter<T extends StateType>(
 		on: T,
-		emitter: TAutomataEventEmitter<EventType, T, EventObject, ContextType>
+		emitter: TAutomataEventEmitter<EventType, T, EventMetaType, ContextType>
 	) {
 		if (on === null || on === undefined || !(emitter instanceof Function) || !this.validateState(on)) return null;
 		this.eventEmitters = Object.assign(this.eventEmitters ?? {}, {
@@ -97,7 +59,7 @@ export abstract class AutomataEventAdapter<
 
 	public addEventListener<T extends EventType>(
 		type: T,
-		handler: TAutomataEventHandler<T, ActionType, EventObject, PayloadType>
+		handler: TAutomataEventHandler<T, ActionType, EventMetaType, PayloadType>
 	) {
 		if (type === null || type === undefined || !(handler instanceof Function) || !this.validateEvent(type))
 			return null;
@@ -114,8 +76,8 @@ export abstract class AutomataEventAdapter<
 	}
 
 	public handleEvent<T extends EventType>(
-		event: TAutomataEventMetaType<T, EventObject>
-	): Array<ReturnType<TAutomataEventHandler<T, ActionType, EventObject, PayloadType>>> {
+		event: TAutomataEventMetaType<T, EventMetaType>
+	): Array<ReturnType<TAutomataEventHandler<T, ActionType, EventMetaType, PayloadType>>> {
 		if (!this.validateEvent(event?.event)) return [];
 		return (this.eventListeners?.[event.event] || [])
 			.map((handler) => handler(event))
@@ -124,7 +86,7 @@ export abstract class AutomataEventAdapter<
 
 	public handleTransition<T extends StateType>(
 		newState: TAutomataStateContext<T, ContextType>
-	): Array<ReturnType<TAutomataEventEmitter<EventType, T, EventObject, ContextType>>> {
+	): Array<ReturnType<TAutomataEventEmitter<EventType, T, EventMetaType, ContextType>>> {
 		if (!this.validateState(newState?.state)) return [];
 		return (this.eventEmitters?.[newState.state] || [])
 			.map((emitter) => emitter(newState))
@@ -166,10 +128,6 @@ export abstract class AutomataEventAdapter<
 			.filter((k) => this.eventEmitters[k]?.length)
 			.filter(this.validateState);
 	}
-
-	protected defaultEventValidator = (x: any): x is EventType => Number.isInteger(x) && x >= 0;
-	protected defaultStateValidator = (x: any): x is StateType => Number.isInteger(x) && x >= 0;
-	protected defaultActionValidator = (x: any): x is EventType => Number.isInteger(x) && x >= 0;
 }
 
 export default AutomataEventAdapter;

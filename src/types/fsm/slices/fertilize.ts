@@ -2,15 +2,21 @@ import { TTargetIndex } from '~/src/types/fsm/shared';
 
 export enum TFertilizePhase {
 	IDLE = 1,
+	CROP_SELECTION,
 	CROP_CONFIRM,
+	CROP_FERTILIZED,
+	EFFECT_APPLIANCE,
+	EFFECT_TARGETING,
 	FINISHED,
 }
 
 export enum TFertilizeAction {
 	RESET = 1,
+	START_FERTILIZE,
 	HOVER,
-	CHOOSE_CROP,
+	SELECT_CROP,
 	FERTILIZE,
+	APPLY_EFFECT,
 	CANCEL_SELECTION,
 	SKIP,
 }
@@ -23,7 +29,7 @@ export type TFertilizeContext<T extends TFertilizePhase> = T extends TFertilizeP
 
 export type TFertilizePayload<T extends TFertilizeAction> = T extends TFertilizeAction.HOVER
 	? TTargetIndex
-	: T extends TFertilizeAction.CHOOSE_CROP
+	: T extends TFertilizeAction.SELECT_CROP
 	? TTargetIndex
 	: T extends TFertilizeAction.FERTILIZE
 	? TTargetIndex

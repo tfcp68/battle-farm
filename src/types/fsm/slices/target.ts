@@ -1,7 +1,7 @@
 import { TTurnBasedDispatch } from '~/src/types/fsm';
 import { TPlayerIndex, TTargetIndex } from '~/src/types/fsm/shared';
 import { TCard } from '~/src/types/serializables/cards';
-import { TBed, TCrop } from '~/src/types/serializables/crops';
+import { TBed, TCrop, TCropColor, TWithCropColor } from '~/src/types/serializables/crops';
 import { TPlayer, TPlayerTarget } from '~/src/types/serializables/players';
 import { TGame } from '../../serializables/game';
 
@@ -19,6 +19,7 @@ export enum TTargetMode {
 	CARD_OWN,
 	CARD_MARKET,
 	CARD_DISCARDED,
+	CROP_COLOR,
 }
 
 export enum TTargetAction {
@@ -29,6 +30,7 @@ export enum TTargetAction {
 	CHOOSE_BED,
 	CHOOSE_CROP,
 	CHOOSE_MARKET_SLOT,
+	CHOOSE_COLOR,
 	QUIT,
 }
 
@@ -58,6 +60,7 @@ export type TTargetRelatedDict = {
 	[TTargetMode.CROP_ANY]: TCrop;
 	[TTargetMode.CROP_FOE]: TCrop;
 	[TTargetMode.CROP_OWN]: TCrop;
+	[TTargetMode.CROP_COLOR]: TCropColor;
 };
 
 export type TRelatedTarget<T extends TTargetMode> = TTargetRelatedDict[T];
@@ -86,6 +89,8 @@ export type TTargetTypedContext<T extends TTargetMode> = T extends TTargetMode.F
 	? TTargetIndex
 	: T extends TTargetMode.CARD_MARKET
 	? TTargetIndex
+	: T extends TTargetMode.CROP_COLOR
+	? TWithCropColor
 	: never;
 
 export type TTargetModeContext<T extends TTargetMode> = TWithTargetOptions<T> & TTargetTypedContext<T>;
@@ -96,6 +101,8 @@ export type TTargetPayload<T extends TTargetAction, M extends TTargetMode> = T e
 	? TTargetPayload<TTargetRelatedAction<M>, M>
 	: T extends TTargetAction.CHOOSE_CARD
 	? TTargetIndex
+	: T extends TTargetAction.CHOOSE_COLOR
+	? TWithCropColor
 	: T extends TTargetAction.CHOOSE_BED
 	? TPlayerTarget & TTargetIndex
 	: T extends TTargetAction.CHOOSE_CROP
@@ -120,6 +127,7 @@ export type TTargetRelatedActionDict = {
 	[TTargetMode.CARD_MARKET]: TTargetAction.CHOOSE_MARKET_SLOT;
 	[TTargetMode.CARD_OWN]: TTargetAction.CHOOSE_CARD;
 	[TTargetMode.CARD_DISCARDED]: TTargetAction.CHOOSE_CARD;
+	[TTargetMode.CROP_COLOR]: TTargetAction.CHOOSE_COLOR;
 };
 
 export type TTargetRelatedAction<T extends TTargetMode> = TTargetRelatedActionDict[T];
