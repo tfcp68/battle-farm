@@ -8,7 +8,7 @@ export type TTestEventMeta<T extends TTestEvent> = {
 	[key in T]: { meta: string };
 };
 export type TTestPayload<T extends TTestAction> = {
-	[key in T]: { payload: number };
+	[key in T]: Record<string, number>;
 };
 export type TTestContext<T extends TTestState> = {
 	[key in T]: { context: number };
