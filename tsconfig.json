@@ -26,6 +26,6 @@
 			"~/hooks/*": ["frontend/hooks/*"]
 		}
 	},
-	"include": ["./frontend/**/*", "./src/**/*", "./tests/**/*", "./configs/webpack/**/*"],
+	"include": ["./frontend/**/*", "./src/**/*", "./tests/**/*"],
 	"exclude": ["node_modules", "dist", "src/**/*.js"]
 }

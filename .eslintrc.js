@@ -123,7 +123,7 @@ module.exports = {
 		'constructor-super': 'error',
 		curly: 'off',
 		'default-case': 'error',
-		eqeqeq: ['error', 'always'],
+		eqeqeq: ['warn', 'smart'],
 		'guard-for-in': 'error',
 		'id-blacklist': ['warn', 'any', 'Number', 'String', 'Boolean', 'Undefined'],
 		'id-match': 'error',

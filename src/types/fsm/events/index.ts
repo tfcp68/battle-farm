@@ -62,9 +62,13 @@ export type TGameEventPayload<T extends TGameEvent> = T extends TGameEvent.TURN_
 	: T extends TGameEvent.CARD_BOUGHT
 	? TPlayerIndex & { card: TCard }
 	: T extends TGameEvent.CARD_DISCARDED
-	? TPlayerIndex & { card: TCard }
+	? TPlayerIndex & {
+			card: TCard;
+	  }
 	: T extends TGameEvent.CARD_PLAYED
-	? TPlayerIndex & { card: TCard }
+	? TPlayerIndex & {
+			card: TCard;
+	  }
 	: T extends TGameEvent.ACTION_PLAYED
 	? TPlayerIndex & {
 			card: TActionCard;
@@ -79,9 +83,13 @@ export type TGameEventPayload<T extends TGameEvent> = T extends TGameEvent.TURN_
 	: T extends TGameEvent.PLAYER_DISCARDS_FERTILIZER
 	? TPlayerIndex
 	: T extends TGameEvent.PLAYER_TRADE_PERFORMED
-	? TPlayerIndex & { cards: TCard[] }
+	? TPlayerIndex & {
+			cards: TCard[];
+	  }
 	: T extends TGameEvent.PLAYER_TRADE_ACCEPTED
-	? TPlayerIndex & { cards: TCard[] }
+	? TPlayerIndex & {
+			cards: TCard[];
+	  }
 	: never;
 
 export type TMappedGameEventMeta = {
@@ -91,6 +99,6 @@ export type TMappedGameEventMeta = {
 export type TGameEventObject<T extends TGameEvent> = {
 	event: T;
 	payload: TGameEventPayload<T>;
-	game: IGame;
+	game: IGame | null;
 	source: TPlayerClass | null;
 };

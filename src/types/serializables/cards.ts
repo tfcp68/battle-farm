@@ -57,7 +57,7 @@ export interface ICard<T extends TCardType = TCardType.CROP | TCardType.ACTION> 
 	setValue: (value: number) => this;
 	getEffect?: <T extends TTurnPhase, S extends TTurnSubPhase<T>, С extends TTurnSubphaseContext<T, S>>(
 		context: С
-	) => TGameEffect<T>;
+	) => TGameEffect;
 }
 
 export type IDeck = Array<ICard<any>>;
