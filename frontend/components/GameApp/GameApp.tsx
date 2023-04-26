@@ -7,6 +7,8 @@ import { TPlayer, TPlayerClass } from '~/src/types/serializables/players';
 import GameBlockInfo from '~/components/GameBlockInfo/GameBlockInfo';
 import GameDeck from '~/components/GameDeck/GameDeck';
 import GameMarket from '~/components/GameMarket/GameMarket';
+import GameHand from "~/components/GameHand/GameHand";
+import GameBeds from "~/components/GameBeds/GameBeds";
 
 const GameApp = () => {
 	const listCards: TCard[] = [
@@ -113,6 +115,8 @@ const GameApp = () => {
 			<div className={'container'}>
 				<div className={styles.gameApp__wrapper}>
 					<GameBlockInfo playerInfo={playerInfo} />
+					<GameHand listCards={listCards}/>
+					<GameBeds listBeds={playerInfo.beds}/>
 					<GameDeck listCards={listCards} />
 					<GameMarket listCards={listCards} />
 				</div>

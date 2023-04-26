@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { TCard } from '~/src/types/serializables/cards';
-import styles from '~/components/GameBlockInfo/GameBlockInfo.module.scss';
+import styles from '~/components/GameHand/GameHand.module.scss';
+import GameCard from "~/components/GameCard/GameCard";
 
 interface IGameHandProps {
 	listCards: TCard[];
@@ -8,10 +9,10 @@ interface IGameHandProps {
 
 const GameHand: FC<IGameHandProps> = ({ listCards }) => {
 	return (
-		<ul className={styles.gameBlockInfo__list}>
+		<ul className={styles.gameHand__list}>
 			{'Hand: '}
 			{listCards.map((card) => {
-				return <li key={card.uuid}>{card.id}</li>;
+				return <GameCard key={card.uuid} typeCard={card.type} cropImage={card.id}/>
 			})}
 		</ul>
 	);

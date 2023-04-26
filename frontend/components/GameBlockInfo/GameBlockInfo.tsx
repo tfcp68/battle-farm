@@ -1,8 +1,6 @@
 import React, { FC } from 'react';
 import styles from './GameBlockInfo.module.scss';
 import { TPlayer } from '~/src/types/serializables/players';
-import GameHand from '~/components/GameHand/GameHand';
-import GameBeds from '~/components/GameBeds/GameBeds';
 import { getPlayerClassName } from '~/src/helpers/playerClass';
 
 interface IGameBlockInfoProps {
@@ -17,8 +15,6 @@ const GameBlockInfo: FC<IGameBlockInfoProps> = ({ playerInfo }) => {
 			<div>{coins + ' coins'}</div>
 			<div>{fertilizers + ' fertilizers'}</div>
 			<div>{getPlayerClassName(playerClassIndex)}</div>
-			<GameHand listCards={hand} />
-			<GameBeds listBeds={beds} />
 		</div>
 	);
 };
