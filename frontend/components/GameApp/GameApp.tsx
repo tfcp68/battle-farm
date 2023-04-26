@@ -1,14 +1,15 @@
 import React from 'react';
 import styles from './GameApp.module.scss';
 
-import { TCropColor, TGardenBedType } from '~/src/types/serializables/crops';
-import { TCard, TCardType } from '~/src/types/serializables/cards';
-import { TPlayer, TPlayerClass } from '~/src/types/serializables/players';
+import {TCropColor, TGardenBedType} from '~/src/types/serializables/crops';
+import {TCard, TCardType} from '~/src/types/serializables/cards';
+import {TPlayer, TPlayerClass} from '~/src/types/serializables/players';
 import GameBlockInfo from '~/components/GameBlockInfo/GameBlockInfo';
 import GameDeck from '~/components/GameDeck/GameDeck';
 import GameMarket from '~/components/GameMarket/GameMarket';
 import GameHand from "~/components/GameHand/GameHand";
 import GameBeds from "~/components/GameBeds/GameBeds";
+import GameAvatar from "~/components/GameAvatar/GameAvatar";
 
 const GameApp = () => {
 	const listCards: TCard[] = [
@@ -114,6 +115,7 @@ const GameApp = () => {
 			{/*<GameCard cropImage={beans} />*/}
 			<div className={'container'}>
 				<div className={styles.gameApp__wrapper}>
+					<GameAvatar avatarImage={TPlayerClass.LAND_BARON}/>
 					<GameBlockInfo playerInfo={playerInfo} />
 					<GameHand listCards={listCards}/>
 					<GameBeds listBeds={playerInfo.beds}/>
