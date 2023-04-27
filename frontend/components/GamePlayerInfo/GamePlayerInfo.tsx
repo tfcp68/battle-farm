@@ -17,7 +17,7 @@ const GamePlayerInfo: FC<IGameBlockInfoProps> = ({ playerInfo }) => {
 
 	return (
 		<div className={styles.playerInfo}>
-			<GameAvatar avatarImageIx={playerClassIndex} />
+			<GameAvatar avatarImageIx={playerClassIndex} typeAvatar={'player'} />
 			<div className={styles.playerInfo__sourceInfo}>
 				<GameAmountCoins amountCoins={coins} />
 				<GameAmountFertilize amountFertilize={fertilizers} />
