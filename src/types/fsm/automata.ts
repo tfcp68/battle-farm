@@ -217,7 +217,7 @@ export interface IAutomata<
 	 * Returns the final result of all consumed Actions
 	 * @param count Number of Actions to consume, defaults to 1
 	 */
-	consumeAction: (count?: number) => {
+	consumeAction: (count: number) => {
 		action: TAutomataActionPayload<ActionType, PayloadType> | null;
 		newState: TAutomataStateContext<StateType, ContextType>;
 	};
