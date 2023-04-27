@@ -4,7 +4,7 @@ import GameBlockInfo from '~/components/GameBlockInfo/GameBlockInfo';
 import GameDeck from '~/components/GameDeck/GameDeck';
 import GameMarket from '~/components/GameMarket/GameMarket';
 import GamePlayerInfo from '~/components/GamePlayerInfo/GamePlayerInfo';
-import { listCards, playerInfo } from '../../constants/gameConstants';
+import { enemyInfo, listCards, playerInfo } from '../../constants/gameConstants';
 import GameEnemyInfo from '~/components/GameEnemyInfo/GameEnemyInfo';
 import GameDices from '~/components/GameDices/GameDices';
 
@@ -16,7 +16,7 @@ const GameApp = () => {
 					<GameBlockInfo playerInfo={playerInfo} />
 					<GameDices />
 					<GamePlayerInfo playerInfo={playerInfo} />
-					<GameEnemyInfo enemyInfo={playerInfo} />
+					<GameEnemyInfo enemyInfo={enemyInfo} />
 					<GameDeck listCards={listCards} />
 					<GameMarket listCards={listCards} />
 				</div>

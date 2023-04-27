@@ -104,6 +104,52 @@ export const playerInfo: TPlayer = {
 	],
 };
 
+export const enemyInfo: TPlayer = {
+	id: '1',
+	coins: 17,
+	class: TPlayerClass.GRIM_REAPER,
+	fertilizers: 3,
+	hand: [
+		{
+			uuid: 1,
+			type: TCardType.CROP,
+			id: 'CHERRY',
+			value: 5,
+			fertilized: 10,
+			ripeTimer: 30,
+			group: TCropColor.GREEN,
+		},
+		{
+			uuid: 2,
+			type: TCardType.ACTION,
+			id: 'CHEMICAL_BLISS',
+			value: 52,
+		},
+	],
+	beds: [
+		{
+			type: TGardenBedType.COMMON,
+			crop: {
+				id: 'WHEAT',
+				value: 5,
+				fertilized: 10,
+				ripeTimer: 30,
+				group: TCropColor.GREEN,
+			},
+		},
+		{
+			type: TGardenBedType.RAISED,
+			crop: {
+				id: 'CABBAGE',
+				value: 3,
+				fertilized: 2,
+				ripeTimer: 15,
+				group: TCropColor.RED,
+			},
+		},
+	],
+};
+
 export const GAME_WIN_LIMIT = Math.ceil(
 	44 + 6 * GAME_AMOUNT_PLAYERS + TOTAL_SUM_VALUES_IN_DECK / (1 + GAME_AMOUNT_PLAYERS)
 );

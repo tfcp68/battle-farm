@@ -12,15 +12,14 @@ interface IGameAvatarProps {
 
 const GameAvatar: FC<IGameAvatarProps> = ({ avatarImageIx, typeAvatar }) => {
 	const avatarName = getPlayerClassName(avatarImageIx);
+
 	const { image } = useImage(avatarName, TCardType.UNKNOWN);
 	return (
 		<div className={styles.gameAvatar}>
-			<div className={styles.gameAvatar__img}>
-				<img
-					style={typeAvatar === 'player' ? { border: '8px solid #92d393' } : { border: '8px solid #e84242' }}
-					src={image}
-					alt="icon"
-				/>
+			<div
+				style={typeAvatar === 'player' ? { border: '8px solid #92d393' } : { border: '8px solid #e84242' }}
+				className={styles.gameAvatar__img}>
+				<img src={image} alt="icon" />
 			</div>
 			<h3>{avatarName}</h3>
 		</div>
