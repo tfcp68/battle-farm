@@ -130,7 +130,7 @@ export type TAutomataParams<
 	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
 	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
 > = TAutomataStateContext<StateType, ContextType> & {
-	rootReducer: TAutomataReducer<StateType, ActionType, ContextType, PayloadType>;
+	rootReducer: TAutomataReducer<StateType, ActionType, ContextType, PayloadType> | null;
 	stateValidator?: TValidator<StateType>;
 	actionValidator?: TValidator<ActionType>;
 	eventValidator?: TValidator<EventType>;
