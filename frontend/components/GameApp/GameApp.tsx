@@ -115,12 +115,12 @@ const GameApp = () => {
 			{/*<GameCard cropImage={beans} />*/}
 			<div className={'container'}>
 				<div className={styles.gameApp__wrapper}>
-					<GameAvatar avatarImage={TPlayerClass.LAND_BARON}/>
 					<GameBlockInfo playerInfo={playerInfo} />
 					<GameHand listCards={listCards}/>
 					<GameBeds listBeds={playerInfo.beds}/>
 					<GameDeck listCards={listCards} />
 					<GameMarket listCards={listCards} />
+					<GameAvatar avatarImageIx={TPlayerClass.LAND_BARON}/>
 				</div>
 			</div>
 		</div>

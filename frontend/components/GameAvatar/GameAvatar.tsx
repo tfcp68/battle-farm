@@ -6,14 +6,16 @@ import {TCardType} from "~/src/types/serializables/cards";
 import {getPlayerClassName} from "~/src/helpers/playerClass";
 
 interface IGameAvatarProps {
-    avatarImage: TPlayerClass
+    avatarImageIx: TPlayerClass
 }
 
-const GameAvatar: FC<IGameAvatarProps> = ({avatarImage}) => {
-    const {image, loading, error} = useImage(getPlayerClassName(avatarImage), TCardType.UNKNOWN)
+const GameAvatar: FC<IGameAvatarProps> = ({avatarImageIx}) => {
+    const avatarName = getPlayerClassName(avatarImageIx)
+    const {image, loading, error} = useImage(avatarName, TCardType.UNKNOWN)
     return (
         <div className={styles.gameAvatar}>
             <img src={image} alt="icon"/>
+            <h1>{avatarName}</h1>
         </div>
     );
 };

@@ -1,13 +1,14 @@
 .bed {
 
   background-color: #762a07;
-  width: 100px;
-  height: 120px;
+  width: 140px;
+  height: 180px;
   border-radius: 10px;
 
   color: #fff;
 
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
