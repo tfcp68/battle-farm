@@ -120,15 +120,15 @@ export abstract class GenericAutomata<
 			state = null,
 			context,
 			paused = false,
-			enabled = false,
+			enabled = true,
 			rootReducer = null,
 			stateValidator,
 			eventValidator,
 			actionValidator,
 		} = params;
-		if (rootReducer instanceof Function) this.rootReducer = rootReducer;
-		else if (rootReducer) throw new Error(`Invalid Root Reducer supplied: ${rootReducer}`);
-		else this.rootReducer = null;
+		if (rootReducer == null) this.rootReducer = null;
+		else if (rootReducer instanceof Function) this.rootReducer = rootReducer;
+		else throw new Error(`Invalid Root Reducer supplied: ${rootReducer}`);
 		if (!this.validateState(state)) throw new Error(`Invalid initial State: ${state}`);
 		this.#actionQueue = [];
 		this.#enabled = enabled;
@@ -141,10 +141,12 @@ export abstract class GenericAutomata<
 	}
 
 	dispatch(action: TAutomataActionPayload<ActionType, PayloadType>): TAutomataStateContext<StateType, ContextType> {
-		if (!this.validateAction(action?.action)) throw new Error(`Invalid Action: ${action}`);
+		if (!this.validateAction(action?.action)) throw new Error(`Invalid Action: ${JSON.stringify(action)}`);
 		if (!this.rootReducer)
 			throw new Error(
-				`Root Reducer is not defined. Please init the Instance with a rootReducer. Dispatched Action: ${action}`
+				`Root Reducer is not defined. Please init the Instance with a rootReducer. Dispatched Action: ${JSON.stringify(
+					action
+				)}`
 			);
 		const reducedValue = this.rootReducer({
 			...action,
