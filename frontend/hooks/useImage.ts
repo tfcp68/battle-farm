@@ -11,7 +11,13 @@ const useImage = (fileName: string, typeCard: TCardType) => {
 			try {
 				const response = await import(
 					`~/assets/${
-						typeCard === TCardType.ACTION ? 'actions' : typeCard === TCardType.CROP ? 'crops' : 'classes'
+						typeCard === TCardType.ACTION
+							? 'actions'
+							: typeCard === TCardType.CROP
+							? 'crops'
+							: typeCard === TCardType.CLASS_HERO
+							? 'classes'
+							: ''
 					}/${fileName.toLowerCase()}.png`
 				);
 				setImage(response.default);

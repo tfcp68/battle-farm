@@ -13,7 +13,7 @@ interface IGameAvatarProps {
 const GameAvatar: FC<IGameAvatarProps> = ({ avatarImageIx, typeAvatar }) => {
 	const avatarName = getPlayerClassName(avatarImageIx);
 
-	const { image } = useImage(avatarName, TCardType.UNKNOWN);
+	const { image } = useImage(avatarName, TCardType.CLASS_HERO);
 	return (
 		<div className={styles.gameAvatar}>
 			<div
