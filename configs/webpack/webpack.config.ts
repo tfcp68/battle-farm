@@ -1,13 +1,10 @@
 import { Configuration } from 'webpack';
 import { getBaseLayoutSettings, getPlugins } from './utils';
 import { ROOT_DIR } from '../paths';
-import { getPresets } from './presetBuilder/generatorBuilder';
-import { UICardSize, UIClassSize } from '../../frontend/assetBuilder/assetSIzes';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 
 const path = require('path');
 const isDev = process.env.NODE_ENV === 'development';
-
 const config: Configuration = {
 	entry: {
 		index: [path.resolve(ROOT_DIR, 'frontend', 'index.tsx')],
@@ -38,19 +35,54 @@ const config: Configuration = {
 			},
 
 			{
-				test: /\.(jpe?g|gif|png|svg)$/i,
+				test: /\.(jpe?g|gif|png|svg|webp|avif)$/i,
 				type: 'asset',
 				generator: {
-					filename: '[path][hash][ext]',
+					filename: '[path][hash:4][name][ext]',
 				},
-				use: [
-					{
-						loader: ImageMinimizerPlugin.loader,
-						options: {
-							generator: [...getPresets(UIClassSize, 'Classes'), ...getPresets(UICardSize, 'Cards')],
+			},
+			{
+				test: /\.(jpe?g|png|gif|svg)$/i,
+				loader: ImageMinimizerPlugin.loader,
+				options: {
+					generator: [
+						{
+							preset: 'webp',
+							implementation: ImageMinimizerPlugin.sharpGenerate,
+							options: {
+								encodeOptions: {
+									webp: {
+										quality: 75,
+										effort: 6,
+									},
+								},
+							},
 						},
-					},
-				],
+						{
+							preset: 'jpeg',
+							implementation: ImageMinimizerPlugin.sharpGenerate,
+							options: {
+								encodeOptions: {
+									jpeg: {
+										quality: 75,
+									},
+								},
+							},
+						},
+						{
+							preset: 'avif',
+							implementation: ImageMinimizerPlugin.sharpGenerate,
+							options: {
+								encodeOptions: {
+									avif: {
+										quality: 75,
+										effort: 9,
+									},
+								},
+							},
+						},
+					],
+				},
 			},
 		],
 	},

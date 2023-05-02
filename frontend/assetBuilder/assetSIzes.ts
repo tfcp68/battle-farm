@@ -7,3 +7,5 @@ export const UICardSize = {
 	MEDIUM: 450,
 	LARGE: 600,
 };
+
+export type TUIAllSizes = typeof UIClassSize | typeof UICardSize;

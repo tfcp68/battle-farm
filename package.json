@@ -5,8 +5,9 @@
 	"main": "/public/index.html",
 	"scripts": {
 		"test": "jest",
-		"start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts ",
-		"build": "cross-env NODE_ENV=production webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist"
+		"start": "cross-env NODE_ENV=development npm run generate-images && cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts",
+		"generate-images": "webpack  --config configs/assetsWebpack/webpack_assets.config.ts && node preBuild/dictGenerate.js",
+		"build": "cross-env NODE_ENV=production npm run generate-images && cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist "
 	},
 	"repository": {
 		"type": "git",
@@ -30,9 +31,9 @@
 		"@types/node": "^18.15.11",
 		"@types/react": "^18.0.38",
 		"@types/react-dom": "^18.0.10",
+		"@types/webpack-env": "^1.18.0",
 		"@typescript-eslint/eslint-plugin": "^5.59.0",
 		"@typescript-eslint/parser": "^5.59.0",
-		"@types/webpack-env": "^1.18.0",
 		"babel-loader": "^9.1.2",
 		"compression-webpack-plugin": "^10.0.0",
 		"copy-webpack-plugin": "^11.0.0",

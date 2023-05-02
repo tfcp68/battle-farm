@@ -1,12 +1,14 @@
-import { assetNamesDictTypes } from './assetBuilderTypes';
-import assetsDictionary from './assetBuilder';
+import assetsDictionaryJson from '../../preBuild/assetDictionary.json';
+import { TAssetNamesDict, TAssetsDictionary } from '../../configs/assetsWebpack/assetBuilder/assetBuilderTypes';
 
+const assetDictionary = assetsDictionaryJson as TAssetsDictionary;
 export const getClassesAssets = () => {
-	return assetsDictionary[assetNamesDictTypes.CLASSES];
+	return assetDictionary[TAssetNamesDict.CLASSES];
 };
+
 export const getActionsAssets = () => {
-	return assetsDictionary[assetNamesDictTypes.ACTIONS];
+	return assetDictionary[TAssetNamesDict.ACTIONS];
 };
 export const getCropsAssets = () => {
-	return assetsDictionary[assetNamesDictTypes.CROPS];
+	return assetDictionary[TAssetNamesDict.CROPS];
 };
