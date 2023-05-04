@@ -4,6 +4,9 @@ import styles from './GameApp.module.scss';
 import { TCropColor, TGardenBedType } from '~/src/types/serializables/crops';
 import { TCard, TCardType } from '~/src/types/serializables/cards';
 import { TPlayer, TPlayerClass } from '~/src/types/serializables/players';
+import GameBlockInfo from '~/components/GameBlockInfo/GameBlockInfo';
+import GameDeck from '~/components/GameDeck/GameDeck';
+import GameMarket from '~/components/GameMarket/GameMarket';
 
 const GameApp = () => {
 	const listCards: TCard[] = [
@@ -73,12 +76,11 @@ const GameApp = () => {
 	};
 	return (
 		<div className={styles.gameApp}>
-			{/*<GameCard cropImage={beans} />*/}
 			<div className={'container'}>
 				<div className={styles.gameApp__wrapper}>
-					{/*					<GameBlockInfo playerInfo={playerInfo} />
+					<GameBlockInfo playerInfo={playerInfo} />
 					<GameDeck listCards={listCards} />
-					<GameMarket listCards={listCards} />*/}
+					<GameMarket listCards={listCards} />
 				</div>
 			</div>
 		</div>

@@ -36,53 +36,54 @@ const config: Configuration = {
 
 			{
 				test: /\.(jpe?g|gif|png|svg|webp|avif)$/i,
-				type: 'asset',
+				type: 'asset/resource',
 				generator: {
 					filename: '[path][hash:4][name][ext]',
 				},
-			},
-			{
-				test: /\.(jpe?g|png|gif|svg)$/i,
-				loader: ImageMinimizerPlugin.loader,
-				options: {
-					generator: [
-						{
-							preset: 'webp',
-							implementation: ImageMinimizerPlugin.sharpGenerate,
-							options: {
-								encodeOptions: {
-									webp: {
-										quality: 75,
-										effort: 6,
+				use: [
+					{
+						loader: ImageMinimizerPlugin.loader,
+						options: {
+							generator: [
+								{
+									preset: 'webp',
+									implementation: ImageMinimizerPlugin.sharpGenerate,
+									options: {
+										encodeOptions: {
+											webp: {
+												quality: 75,
+												effort: 6,
+											},
+										},
 									},
 								},
-							},
-						},
-						{
-							preset: 'jpeg',
-							implementation: ImageMinimizerPlugin.sharpGenerate,
-							options: {
-								encodeOptions: {
-									jpeg: {
-										quality: 75,
+								{
+									preset: 'jpeg',
+									implementation: ImageMinimizerPlugin.sharpGenerate,
+									options: {
+										encodeOptions: {
+											jpeg: {
+												quality: 75,
+											},
+										},
 									},
 								},
-							},
-						},
-						{
-							preset: 'avif',
-							implementation: ImageMinimizerPlugin.sharpGenerate,
-							options: {
-								encodeOptions: {
-									avif: {
-										quality: 75,
-										effort: 9,
+								{
+									preset: 'avif',
+									implementation: ImageMinimizerPlugin.sharpGenerate,
+									options: {
+										encodeOptions: {
+											avif: {
+												quality: 75,
+												effort: 9,
+											},
+										},
 									},
 								},
-							},
+							],
 						},
-					],
-				},
+					},
+				],
 			},
 		],
 	},

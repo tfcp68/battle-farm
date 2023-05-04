@@ -1,23 +1,21 @@
 import { TUIAllSizes } from '../../../frontend/assetBuilder/assetSIzes';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import { extTypes, TAssetNamesKeys } from '../assetBuilder/assetBuilderTypes';
+import { getPresetName } from '../uitls';
 
 const isDev = process.env.NODE_ENV === 'development';
-export const getPresetName = (ext: string, size: string, assetName: string) => {
-	return [ext, size, assetName].join('');
-};
 const formatSettings: {
 	[T in string]: any;
 } = {
 	// https://sharps.pixelplumbing.com/api-output#avif
 	avif: {
-		effort: isDev ? 1 : 9,
+		effort: isDev ? 1 : 1,
 		qualitys: 75,
 	},
 
 	// https://sharp.pixelplumbing.com/api-output#webp
 	webp: {
-		effort: isDev ? 1 : 6,
+		effort: isDev ? 1 : 1,
 		quality: 75,
 	},
 	// https://sharp.pixelplumbing.com/api-output#jpeg

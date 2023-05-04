@@ -3,7 +3,6 @@ import { GetPresetsDefinePlugin } from '../assetsWebpack/pluginsPresets/definePl
 import { ROOT_DIR } from '../paths';
 
 const CopyPlugin = require('copy-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -22,7 +21,7 @@ export const getPlugins = (isDev: boolean) => {
 		}),
 	];
 	plugins = isDev
-		? plugins.concat([new ReactRefreshWebpackPlugin()])
+		? plugins.concat()
 		: plugins.concat([
 				new CompressionPlugin({
 					algorithm: 'gzip',

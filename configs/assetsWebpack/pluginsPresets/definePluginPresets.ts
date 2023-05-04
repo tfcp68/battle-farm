@@ -1,6 +1,6 @@
 import { extTypes, TAssetNamesKeys } from '../assetBuilder/assetBuilderTypes';
 import { TUIAllSizes } from '../../../frontend/assetBuilder/assetSIzes';
-import { getPresetName } from './ImageMinimizerPresets';
+import { getPresetName } from '../uitls';
 
 export const GetPresetsDefinePlugin = (sizes: TUIAllSizes, assetType: TAssetNamesKeys) => {
 	const preset: any = {};
