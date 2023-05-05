@@ -1,12 +1,4 @@
-import React from 'react';
-
-const styleProgressBar = {
-	width: '200px',
-	height: '14px',
-	backgroundColor: '#ffe2cf',
-	borderRadius: '10px',
-	border: 'none',
-};
+import React, { FC } from 'react';
 
 const ProgressBarThumb = {
 	backgroundColor: 'orange',
@@ -15,11 +7,24 @@ const ProgressBarThumb = {
 	border: 'none',
 };
 
-const GameProgressBar = () => {
-	const CURRENT_MAX_COINS = 40;
+interface IProgressBarProps {
+	winLimit: number;
+	currentMaxCoins: number;
+}
+
+const GameProgressBar: FC<IProgressBarProps> = ({ winLimit, currentMaxCoins }) => {
+	const styleProgressBar = (width: number) => {
+		return {
+			width: `${width}px`,
+			height: '14px',
+			backgroundColor: '#ffe2cf',
+			borderRadius: '10px',
+			border: 'none',
+		};
+	};
 	return (
-		<div style={{ ...styleProgressBar }}>
-			<div style={{ ...ProgressBarThumb, width: `${CURRENT_MAX_COINS}%` }}></div>
+		<div style={{ ...styleProgressBar(winLimit) }}>
+			<div style={{ ...ProgressBarThumb, width: `${currentMaxCoins}%` }}></div>
 		</div>
 	);
 };

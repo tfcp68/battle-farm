@@ -10,13 +10,14 @@ interface IEnemyInfo {
 }
 
 const GameEnemyInfo: FC<IEnemyInfo> = ({ enemyInfo }) => {
-	const { coins, class: enemyClassIx, fertilizers } = enemyInfo;
+	const { coins, class: enemyClassIx, fertilizers, hand } = enemyInfo;
 	return (
 		<div className={styles.enemyInfo}>
 			<GameAvatar avatarImageIx={enemyClassIx} typeAvatar={'enemy'} />
 			<div className={styles.enemyInfo__sourceInfo}>
 				<GameAmountCoins amountCoins={coins} />
 				<GameAmountFertilize amountFertilize={fertilizers} />
+				<p>Amount cards in hand: {hand.length}</p>
 			</div>
 		</div>
 	);

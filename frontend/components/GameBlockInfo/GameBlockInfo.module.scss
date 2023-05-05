@@ -5,7 +5,9 @@
 	border-radius: 5px;
 	padding: 10px;
 	display: flex;
-	gap: 0 10px;
+	gap: 10px 10px;
+
+	flex-direction: column;
 
 	& div {
 		border-right: 1px solid #000;

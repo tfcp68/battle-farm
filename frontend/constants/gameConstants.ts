@@ -4,6 +4,8 @@ import { TPlayer, TPlayerClass } from '~/src/types/serializables/players';
 
 export const GAME_AMOUNT_PLAYERS = 4;
 export const TOTAL_SUM_VALUES_IN_DECK = 582;
+
+export const AMOUNT_CROP_CARDS = 105;
 export const listCards: TCard[] = [
 	{
 		uuid: 1,
@@ -150,6 +152,5 @@ export const enemyInfo: TPlayer = {
 	],
 };
 
-export const GAME_WIN_LIMIT = Math.ceil(
-	44 + 6 * GAME_AMOUNT_PLAYERS + TOTAL_SUM_VALUES_IN_DECK / (1 + GAME_AMOUNT_PLAYERS)
-);
+export const GAME_WIN_LIMIT = (amountPlayer: number, sumValuesInDeck: number): number =>
+	Math.ceil(44 + 6 * amountPlayer + sumValuesInDeck / (1 + amountPlayer));
