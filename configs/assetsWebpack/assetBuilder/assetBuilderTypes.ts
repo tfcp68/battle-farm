@@ -1,11 +1,11 @@
 import { TActionId } from 'src/types/serializables/actions';
 import { TCropId } from 'src/types/serializables/crops';
 import { TPlayerClassKeys } from 'src/types/serializables/players';
-import { UICardSize, UIClassSize } from '../../../frontend/assetBuilder/assetSIzes';
+import { UICardSize, UIClassSize } from '../../../frontend/notion/assetSIzes';
 
 export type TAssetsDictionary = {
 	[T in TAssetNamesDict]: Partial<
-		Record<TBaseAssetSize<T>, Partial<Record<ExtKeysT, Partial<Record<TBaseAsset<T>, string>>>>>
+		Record<TBaseAsset<T>, Partial<Record<TBaseAssetSize<T>, Partial<Record<ExtKeysT, string>>>>>
 	>;
 };
 
@@ -15,14 +15,13 @@ export enum TAssetNamesDict {
 	CROPS = 'CROPS',
 }
 
+export type TAssetNamesKeys = 'Classes' | 'Cards';
 export const extTypes = {
 	AVIF: 'avif',
 	WEBP: 'webp',
 	JPEG: 'jpeg',
 };
 export type ExtKeysT = keyof typeof extTypes;
-
-export type TAssetNamesKeys = 'Classes' | 'Cards';
 
 export type TBaseAsset<K extends TAssetNamesDict> = K extends TAssetNamesDict.ACTIONS
 	? TActionId

@@ -1,4 +1,4 @@
-import { UICardSize, UIClassSize } from '../../frontend/assetBuilder/assetSIzes';
+import { UICardSize, UIClassSize } from '../../frontend/notion/assetSIzes';
 import { GetPresetsDefinePlugin } from '../assetsWebpack/pluginsPresets/definePluginPresets';
 import { ROOT_DIR } from '../paths';
 
@@ -29,7 +29,7 @@ export const getPlugins = (isDev: boolean) => {
 				new CopyPlugin({
 					patterns: [
 						{
-							from: path.resolve(ROOT_DIR, 'preBuild/assets'),
+							from: path.resolve(ROOT_DIR, 'assets/thumbs/assets'),
 							to: path.resolve(ROOT_DIR, 'dist/assets'),
 						},
 					],
@@ -46,7 +46,7 @@ export const getBaseLayoutSettings = (isDev: boolean) => {
 				devServer: {
 					hot: true,
 					static: {
-						directory: path.join(ROOT_DIR, 'preBuild'),
+						directory: path.join(ROOT_DIR, 'assets/thumbs/'),
 						publicPath: '/',
 					},
 				},

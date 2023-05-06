@@ -1,7 +1,7 @@
 import * as webpack from 'webpack';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import { getPresets } from './pluginsPresets/ImageMinimizerPresets';
-import { UICardSize, UIClassSize } from '../../frontend/assetBuilder/assetSIzes';
+import { UICardSize, UIClassSize } from '../../frontend/notion/assetSIzes';
 import * as path from 'path';
 import { ROOT_DIR } from '../paths';
 import { GetPresetsDefinePlugin } from './pluginsPresets/definePluginPresets';
@@ -11,6 +11,7 @@ const config: webpack.Configuration = {
 	entry: [path.resolve(ROOT_DIR, 'configs/assetsWebpack/assetBuilder', 'assetBuilder.ts')],
 	resolve: {
 		alias: {
+			'~/src': path.resolve(ROOT_DIR, 'src'),
 			'~/assets': path.resolve(ROOT_DIR, 'assets'),
 		},
 		extensions: ['.js', '.ts'],
@@ -19,7 +20,7 @@ const config: webpack.Configuration = {
 	output: {
 		clean: true,
 		filename: 'dictGenerate.js',
-		path: path.resolve(ROOT_DIR, 'preBuild'),
+		path: path.resolve(ROOT_DIR, 'assets/thumbs'),
 	},
 	plugins: [
 		new webpack.DefinePlugin({
@@ -42,7 +43,7 @@ const config: webpack.Configuration = {
 				test: /\.(jpe?g|gif|png|svg)$/i,
 				type: 'asset',
 				generator: {
-					filename: '[path][hash:4]_[name][ext]',
+					filename: '[path][name]_[hash:4][ext]',
 				},
 				use: [
 					{
