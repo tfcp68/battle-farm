@@ -5,9 +5,9 @@
 	"main": "/public/index.html",
 	"scripts": {
 		"test": "jest",
-		"start": "cross-env NODE_ENV=development npm run generate-images && cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts",
-		"generate-images": "webpack  --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js",
-		"build": "cross-env NODE_ENV=production npm run generate-images && cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist "
+		"start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts",
+		"generate-images": "webpack --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js",
+		"build": "npm run generate-images && cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist "
 	},
 	"repository": {
 		"type": "git",

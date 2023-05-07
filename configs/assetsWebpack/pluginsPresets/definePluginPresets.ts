@@ -1,5 +1,5 @@
-import { extTypes, TAssetNamesKeys } from '../assetBuilder/assetBuilderTypes';
-import { TUIAllSizesKeys } from '../../../frontend/notion/assetSIzes';
+import { extTypes, TAssetNamesKeys } from '../../../src/types/build/assetBuilderTypes';
+import { TUIAllSizesKeys } from '../../../frontend/constants/assetSIzes';
 import { getPresetName } from '../uitls';
 
 export const GetPresetsDefinePlugin = (sizes: TUIAllSizesKeys, assetType: TAssetNamesKeys) => {

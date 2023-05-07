@@ -1,4 +1,4 @@
-import { UICardSize, UIClassSize } from '../../frontend/notion/assetSIzes';
+import { UICardSize, UIClassSize } from '../../frontend/constants/assetSIzes';
 import { GetPresetsDefinePlugin } from '../assetsWebpack/pluginsPresets/definePluginPresets';
 import { ROOT_DIR } from '../paths';
 

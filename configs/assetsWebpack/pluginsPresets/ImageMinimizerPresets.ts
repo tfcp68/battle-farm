@@ -1,21 +1,20 @@
-import { TUIAllSizesKeys } from '../../../frontend/notion/assetSIzes';
+import { TUIAllSizesKeys } from '../../../frontend/constants/assetSIzes';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
-import { extTypes, TAssetNamesKeys } from '../assetBuilder/assetBuilderTypes';
+import { extTypes, TAssetNamesKeys } from '../../../src/types/build/assetBuilderTypes';
 import { getPresetName } from '../uitls';
 
-const isDev = process.env.NODE_ENV === 'development';
 const formatSettings: {
 	[T in string]: any;
 } = {
 	// https://sharp.pixelplumbing.com/api-output#avif
 	avif: {
-		effort: isDev ? 1 : 9,
+		effort: 9,
 		qualitys: 75,
 	},
 
 	// https://sharp.pixelplumbing.com/api-output#webp
 	webp: {
-		effort: isDev ? 1 : 6,
+		effort: 6,
 		quality: 75,
 	},
 	// https://sharp.pixelplumbing.com/api-output#jpeg
@@ -42,7 +41,7 @@ export function getPresets(sizes: TUIAllSizesKeys, assetType: TAssetNamesKeys) {
 			result.push({
 				implementation: ImageMinimizerPlugin.sharpGenerate,
 				preset: getPresetName(ext, size, assetType),
-				filename: () => `[path]/${size}/${ext}/[width]x[height]_[name][ext]`,
+				filename: () => `[path]/${size}/${ext}/[name][ext]`,
 				options: {
 					encodeOptions: {
 						[ext]: {

@@ -1,21 +1,63 @@
 import assetsDictionaryJson from '~/hooks/assetsDictionary.json';
-import {
-	ExtKeysT,
-	TAssetNamesDict,
-	TAssetsDictionary,
-} from '../../configs/assetsWebpack/assetBuilder/assetBuilderTypes';
+import { TAssetNamesDict, TAssetsDictionary } from '~/src/types/build/assetBuilderTypes';
 import { TPlayerClassKeys } from '~/src/types/serializables/players';
-import { TUICardSizeKeys, TUIUIClassSizeKeys } from '../notion/assetSIzes';
+import { TUICardSizeKeys, TUIUIClassSizeKeys } from '../constants/assetSIzes';
 import { TActionId } from '~/src/types/serializables/actions';
 import { TCropId } from '~/src/types/serializables/crops';
 
 const assetDictionary = assetsDictionaryJson as TAssetsDictionary;
-export const getClassesAssets = (className: TPlayerClassKeys, size: TUIUIClassSizeKeys, format: ExtKeysT) => {
-	return assetDictionary[TAssetNamesDict.CLASSES]![className]![size]![format];
+export const getClassesAssets = (className: TPlayerClassKeys, size: TUIUIClassSizeKeys) => {
+	const assetTypes = assetDictionary[TAssetNamesDict.CLASSES];
+	if (!assetTypes) {
+		throw new Error('Assets directory is empty');
+	} else {
+		const assetClass = assetTypes[className];
+		if (!assetClass) {
+			throw new Error(`Asset is missing with this className: ${className}`);
+		} else {
+			const assetSize = assetClass[size];
+			if (!assetSize) {
+				throw new Error(`Asset ${className} doesn't have this size: ${size}`);
+			} else {
+				return assetSize;
+			}
+		}
+	}
 };
-export const getActionsAssets = (actionName: TActionId, size: TUICardSizeKeys, format: ExtKeysT) => {
-	return assetDictionary[TAssetNamesDict.ACTIONS]![actionName]![size]![format];
+
+export const getActionsAssets = (actionName: TActionId, size: TUICardSizeKeys) => {
+	const assetTypes = assetDictionary[TAssetNamesDict.ACTIONS];
+	if (!assetTypes) {
+		throw new Error('Assets directory is empty');
+	} else {
+		const assetClass = assetTypes[actionName];
+		if (!assetClass) {
+			throw new Error(`Asset is missing with this className: ${actionName}`);
+		} else {
+			const assetSize = assetClass[size];
+			if (!assetSize) {
+				throw new Error(`Asset ${actionName} doesn't have this size: ${size}`);
+			} else {
+				return assetSize;
+			}
+		}
+	}
 };
-export const getCropsAssets = (actionName: TCropId, size: TUICardSizeKeys, format: ExtKeysT) => {
-	return assetDictionary[TAssetNamesDict.CROPS]![actionName]![size]![format];
+export const getCropsAssets = (cropName: TCropId, size: TUICardSizeKeys) => {
+	const assetTypes = assetDictionary[TAssetNamesDict.CROPS];
+	if (!assetTypes) {
+		throw new Error('Assets directory is empty');
+	} else {
+		const assetClass = assetTypes[cropName];
+		if (!assetClass) {
+			throw new Error(`Asset is missing with this className: ${cropName}`);
+		} else {
+			const assetSize = assetClass[size];
+			if (!assetSize) {
+				throw new Error(`Asset ${cropName} doesn't have this size: ${size}`);
+			} else {
+				return assetSize;
+			}
+		}
+	}
 };
