@@ -32,7 +32,7 @@ export const getActionsAssets = (actionName: TActionId, size: TUICardSizeKeys) =
 	} else {
 		const assetClass = assetTypes[actionName];
 		if (!assetClass) {
-			throw new Error(`Asset is missing with this className: ${actionName}`);
+			throw new Error(`Asset is missing with this actionName: ${actionName}`);
 		} else {
 			const assetSize = assetClass[size];
 			if (!assetSize) {
@@ -50,7 +50,7 @@ export const getCropsAssets = (cropName: TCropId, size: TUICardSizeKeys) => {
 	} else {
 		const assetClass = assetTypes[cropName];
 		if (!assetClass) {
-			throw new Error(`Asset is missing with this className: ${cropName}`);
+			throw new Error(`Asset is missing with this cropName: ${cropName}`);
 		} else {
 			const assetSize = assetClass[size];
 			if (!assetSize) {
