@@ -1,0 +1,20 @@
+.playerInfo {
+	width: fit-content;
+	min-width: 400px;
+	border: 2px solid #2c2c2c;
+	border-radius: 5px;
+	padding: 10px;
+	display: flex;
+	gap: 0 20px;
+
+
+	&__cropInfoBlock, &__sourceInfo {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__sourceInfo {
+		gap: 10px 0;
+	}
+
+}
