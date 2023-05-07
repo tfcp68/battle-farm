@@ -1,92 +1,33 @@
-import { TValidator } from '~/src/types/typeGuards';
+import {
+	TAutomataActionPayload,
+	TAutomataBaseActionType,
+	TAutomataBaseEventType,
+	TAutomataBaseStateType,
+	TAutomataDispatch,
+	TAutomataEffect,
+	TAutomataEventEmitter,
+	TAutomataEventHandler,
+	TAutomataEventMetaType,
+	TAutomataEventStack,
+	TAutomataParams,
+	TAutomataQueue,
+	TAutomataReducer,
+	TAutomataStateContext,
+	TSubscriptionCancelFunction,
+	TValidator,
+} from './index';
 
-export type TAutomataBaseStateType = number;
-export type TAutomataBaseActionType = number;
-export type TAutomataBaseEventType = number;
+export interface TAutomataEventContainer<EventType extends TAutomataBaseEventType> {
+	validateEvent?: TValidator<EventType>;
 
-export type TAutomataStateContainer<StateType extends TAutomataBaseStateType> = {
-	state: StateType | null;
-};
-
-export type TAutomataActionContainer<ActionType extends TAutomataBaseActionType> = {
-	action: ActionType | null;
-};
-
-export type TAutomataEventContainer<EventType extends TAutomataBaseEventType> = {
-	event: EventType | null;
-};
-
-export type TAutomataStateContext<
-	StateType extends TAutomataBaseStateType,
-	ContextType extends { [K in StateType]: any }
-> = TAutomataStateContainer<StateType> & {
-	context: ContextType[StateType] | null;
-};
-
-export type TAutomataActionPayload<
-	ActionType extends TAutomataBaseActionType,
-	PayloadType extends { [K in ActionType]: any }
-> = TAutomataActionContainer<ActionType> & {
-	payload: PayloadType[ActionType] | null;
-};
-
-export type TAutomataEventMetaType<
-	EventType extends TAutomataBaseEventType,
-	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
-> = TAutomataEventContainer<EventType> & {
-	meta: EventMetaType[EventType] | null;
-};
-
-export type TAutomataEventHandler<
-	EventType extends TAutomataBaseEventType,
-	ActionType extends TAutomataBaseActionType,
-	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>
-> = (event: TAutomataEventMetaType<EventType, EventMetaType>) => TAutomataActionPayload<ActionType, PayloadType>;
-
-export type TAutomataEventEmitter<
-	EventType extends TAutomataBaseEventType,
-	StateType extends TAutomataBaseStateType,
-	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>,
-	ContextType extends { [K in StateType]: any } = Record<StateType, any>
-> = (state: TAutomataStateContext<StateType, ContextType>) => TAutomataEventMetaType<EventType, EventMetaType>;
-
-export type TAutomataEvent<
-	StateType extends TAutomataBaseStateType,
-	ActionType extends TAutomataBaseActionType,
-	ContextType extends { [K in StateType]: any } = Record<StateType, any>,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>
-> = TAutomataStateContext<StateType, ContextType> & TAutomataActionPayload<ActionType, PayloadType>;
-
-export type TAutomataReducer<
-	StateType extends TAutomataBaseStateType,
-	ActionType extends TAutomataBaseActionType,
-	ContextType extends { [K in StateType]: any } = Record<StateType, any>,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
-	NewStateType extends StateType = StateType
-> = (
-	params: TAutomataEvent<StateType, ActionType, ContextType, PayloadType>
-) => TAutomataStateContext<NewStateType, ContextType>;
-
-export type TAutomataDispatch<
-	StateType extends TAutomataBaseStateType,
-	ActionType extends TAutomataBaseActionType,
-	ContextType extends { [K in StateType]: any } = Record<StateType, any>,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
-	NewStateType extends StateType = StateType
-> = (
-	action: TAutomataActionPayload<ActionType, PayloadType>
-) => ReturnType<TAutomataReducer<StateType, ActionType, ContextType, PayloadType, NewStateType>>;
-
-type TSubscriptionCancelFunction = () => void;
+	setEventValidator(eventValidator?: TValidator<EventType>): this;
+}
 
 export interface IAutomataValidatorContainer<
 	StateType extends TAutomataBaseStateType,
 	ActionType extends TAutomataBaseActionType,
 	EventType extends TAutomataBaseEventType
-> {
-	setEventValidator(eventValidator?: TValidator<EventType>): this;
-
+> extends TAutomataEventContainer<EventType> {
 	setStateValidator(stateValidator?: TValidator<StateType>): this;
 
 	setActionValidator(actionValidator?: TValidator<ActionType>): this;
@@ -119,29 +60,6 @@ export interface IAutomataEventAdapter<
 	getObservedEvents: () => EventType[];
 	getObservedStates: () => StateType[];
 }
-
-export type TAutomataParams<
-	StateType extends TAutomataBaseStateType,
-	ActionType extends TAutomataBaseActionType,
-	EventType extends TAutomataBaseEventType,
-	ContextType extends {
-		[K in StateType]: any;
-	} = Record<StateType, any>,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>,
-	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>
-> = TAutomataStateContext<StateType, ContextType> & {
-	rootReducer: TAutomataReducer<StateType, ActionType, ContextType, PayloadType> | null;
-	stateValidator?: TValidator<StateType>;
-	actionValidator?: TValidator<ActionType>;
-	eventValidator?: TValidator<EventType>;
-	enabled?: boolean;
-	paused?: boolean;
-};
-
-export type TAutomataQueue<
-	ActionType extends TAutomataBaseActionType,
-	PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>
-> = Array<TAutomataActionPayload<ActionType, PayloadType>>;
 
 export interface IAutomata<
 	StateType extends TAutomataBaseStateType,
@@ -230,4 +148,37 @@ export interface IAutomata<
 	 * Returns the final result of all Actions, including the Queue
 	 */
 	dispatch: TAutomataDispatch<StateType, ActionType, ContextType, PayloadType>;
+}
+
+export interface IAutomataSlice<
+	EventType extends TAutomataBaseEventType,
+	EventMetaType extends { [K in EventType]: any } = Record<EventType, any>,
+	ModelType extends object = Record<string, any>
+> extends TAutomataEventContainer<EventType> {
+	getMachines: Record<string, IAutomata<any, any, EventType>>;
+	addMachine: <
+		StateType extends TAutomataBaseStateType,
+		ActionType extends TAutomataBaseActionType,
+		ContextType extends { [K in StateType]: any } = Record<StateType, any>,
+		PayloadType extends { [K in ActionType]: any } = Record<ActionType, any>
+	>(
+		machineId: string,
+		automata: IAutomata<StateType, ActionType, EventType, ContextType, PayloadType, EventMetaType>
+	) => this;
+	removeMachine: (machineId: string) => this;
+	getCompositeState: Record<string, TAutomataStateContext<any, any>>;
+	restoreState: (machineId: string, state: TAutomataStateContext<any, any>) => this;
+	restoreCompositeState: (compositeState: Record<string, TAutomataStateContext<any, any>>) => this;
+	getEventMatrix: () => Record<EventType, Array<TAutomataEffect<ModelType, EventType>>>;
+	dispatchEvent: (event: TAutomataEventMetaType<EventType, EventMetaType>) => this;
+	start: () => this;
+	stop: (clearStack: boolean) => this;
+	isRunning: () => boolean;
+	getEventStack: () => TAutomataEventStack<EventType, EventMetaType>;
+	clearEventStack: () => this;
+	consumeEvent: () => {
+		events: TAutomataEventStack<EventType, EventMetaType>;
+		effects: Array<TAutomataEffect<ModelType, EventType>>;
+	};
+	getEventEffects: (event: EventType) => Array<TAutomataEffect<ModelType, EventType>>;
 }

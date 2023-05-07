@@ -1,7 +1,5 @@
-import { AutomataValidatorContainer } from '~/src/automata/ValidatorContainer';
+import { AutomataValidatorContainer } from './ValidatorContainer';
 import {
-	IAutomata,
-	IAutomataEventAdapter,
 	TAutomataActionPayload,
 	TAutomataBaseActionType,
 	TAutomataBaseEventType,
@@ -10,8 +8,12 @@ import {
 	TAutomataQueue,
 	TAutomataReducer,
 	TAutomataStateContext,
-} from '~/src/types/fsm/automata';
-import { isPositiveInteger } from '~/src/types/typeGuards';
+} from '../types';
+
+import { IAutomata, IAutomataEventAdapter } from '../types/interfaces';
+import Utils from '../utils';
+
+const { isPositiveInteger } = Utils;
 
 export abstract class GenericAutomata<
 		StateType extends TAutomataBaseStateType,

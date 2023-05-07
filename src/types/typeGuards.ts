@@ -1,12 +1,8 @@
 import { TGameEvent } from '~/src/types/fsm/events';
 import { TPlayerClass } from '~/src/types/serializables/players';
+import { Utils } from '~/src/automata';
 
-export type TValidator<T> = (x: any) => x is T;
-
-export const isNumber = (t: any): t is number => Number.isFinite(t);
-export const isPositiveNumber = (t: any): t is number => isNumber(t) && t >= 0;
-export const isPositiveInteger = (t: any): t is number => isPositiveNumber(t) && Number.isSafeInteger(t);
-export const isInteger = (t: any): t is number => Number.isSafeInteger(t);
+const { isPositiveInteger } = Utils;
 
 export const isPlayerClass = (t: any): t is TPlayerClass =>
 	Object.values(TPlayerClass).filter(isPositiveInteger).includes(t);

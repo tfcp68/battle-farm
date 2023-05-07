@@ -1,5 +1,9 @@
-import { IAutomata, IAutomataEventAdapter, TAutomataReducer } from '~/src/types/fsm/automata';
-import { isPositiveInteger } from '~/src/types/typeGuards';
+import { TAutomataReducer } from '../../types';
+
+import { IAutomata, IAutomataEventAdapter } from '../../types/interfaces';
+import Utils from '../../utils';
+
+const { isPositiveInteger } = Utils;
 
 export type TTestEvent = number;
 export type TTestAction = number;

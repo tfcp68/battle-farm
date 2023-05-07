@@ -1,7 +1,7 @@
 import { MARKET_SIZE } from '~/src/types/serializables/game';
-import { lengthArray } from '~/src/utils/lengthArray';
 import { cardFixture } from './cardsFixtures';
+import { sampleArray } from '~/src/automata/utils/fixtures';
 
 export function marketFixture() {
-	return lengthArray(cardFixture, MARKET_SIZE);
+	return sampleArray(cardFixture, MARKET_SIZE);
 }

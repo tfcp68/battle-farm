@@ -1,6 +1,8 @@
 import { TTurnPhase, TTurnSubphaseAction, TTurnSubphaseContext } from '~/src/types/fsm';
 import { TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { isPositiveInteger } from '~/src/types/typeGuards';
+import { Utils } from '~/src/automata';
+
+const { isPositiveInteger } = Utils;
 
 export const isFertilizeSubphase =
 	<T extends TFertilizePhase>(targetSubphase: T | null = null) =>

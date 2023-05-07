@@ -1,9 +1,10 @@
 import { TGame, TGameContainer, TGamePhase, TTurnContainer } from '~/src/types/serializables/game';
-import { sampleRange } from '~/src/utils/sampleRange';
-import arraySample from '../../src/utils/arraySample';
 import { deckFixture } from './cardsFixtures';
 import { marketFixture } from './marketFixtures';
 import { playerRecordFixturePlayer, playerRecordFixtureTurnContext, randomPlayerClass } from './playersFixture';
+import { Utils } from '~/src/automata';
+
+const { sampleRange, pickFromArray } = Utils;
 
 export function turnContainerFixture(props: Partial<TTurnContainer> = {}) {
 	const currentTurn = randomPlayerClass();
@@ -18,7 +19,7 @@ export function turnContainerFixture(props: Partial<TTurnContainer> = {}) {
 }
 
 export function gameFixture(props: Partial<TGame> = {}) {
-	const [phase] = arraySample(Object.values(TGamePhase).filter((v) => typeof v === 'number'));
+	const [phase] = pickFromArray(Object.values(TGamePhase).filter((v) => typeof v === 'number'));
 
 	if (typeof phase !== 'number') throw new Error('phase is not a number');
 

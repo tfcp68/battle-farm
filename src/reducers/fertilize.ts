@@ -108,6 +108,7 @@ export const reducersMap: {
 	[TFertilizePhase.IDLE]: reducer_Fertilize_IDLE,
 	[TFertilizePhase.CROP_CONFIRM]: reducer_Fertilize_CROP_CONFIRM,
 	[TFertilizePhase.FINISHED]: reducer_Fertilize_FINISHED,
+	// @TODO
 	[TFertilizePhase.CROP_SELECTION]: defaultReducer,
 	[TFertilizePhase.EFFECT_APPLIANCE]: defaultReducer,
 	[TFertilizePhase.EFFECT_TARGETING]: defaultReducer,

@@ -1,5 +1,4 @@
 import { TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { sampleRange } from '~/src/utils/sampleRange';
 import { TTurnPhase, TTurnSubAction, TTurnSubPhase, TTurnSubphaseAction, TTurnSubphaseContext } from '~/src/types/fsm';
 import {
 	isFertilizeAction,
@@ -8,6 +7,8 @@ import {
 	isFertilizeSubphase,
 } from '~/src/types/guards/turnPhases';
 import { TReducerTestCase } from '../../types';
+
+import { sampleRange } from '~/src/automata/utils/fixtures';
 
 function defaultContextBySubPhase(subPhase: TFertilizePhase) {
 	switch (subPhase) {
