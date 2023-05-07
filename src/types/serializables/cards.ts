@@ -6,6 +6,7 @@ export enum TCardType {
 	UNKNOWN,
 	CROP,
 	ACTION,
+	CLASS_HERO,
 }
 
 export enum TCardRarity {
