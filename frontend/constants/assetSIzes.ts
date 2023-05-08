@@ -9,5 +9,5 @@ export const UICardSize = {
 	LARGE: 600,
 };
 export type TUICardSizeKeys = keyof typeof UICardSize;
-export type TUIUIClassSizeKeys = keyof typeof UIClassSize;
+export type TUIClassSizeKeys = keyof typeof UIClassSize;
 export type TUIAllSizesKeys = typeof UIClassSize | typeof UICardSize;

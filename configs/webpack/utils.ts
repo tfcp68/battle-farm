@@ -1,5 +1,3 @@
-import { UICardSize, UIClassSize } from '../../frontend/constants/assetSIzes';
-import { GetPresetsDefinePlugin } from '../assetsWebpack/pluginsPresets/definePluginPresets';
 import { ROOT_DIR } from '../paths';
 
 const CopyPlugin = require('copy-webpack-plugin');
@@ -7,14 +5,9 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
 
 export const getPlugins = (isDev: boolean) => {
 	let plugins = [
-		new webpack.DefinePlugin({
-			...GetPresetsDefinePlugin(UIClassSize, 'Classes'),
-			...GetPresetsDefinePlugin(UICardSize, 'Cards'),
-		}),
 		new HtmlWebpackPlugin({
 			template: path.resolve(ROOT_DIR, 'public', 'index.html'),
 			title: 'Battle farm',

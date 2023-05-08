@@ -1,12 +1,12 @@
 import assetsDictionaryJson from '~/hooks/assetsDictionary.json';
 import { TAssetNamesDict, TAssetsDictionary } from '~/src/types/build/assetBuilderTypes';
 import { TPlayerClassKeys } from '~/src/types/serializables/players';
-import { TUICardSizeKeys, TUIUIClassSizeKeys } from '../constants/assetSIzes';
+import { TUICardSizeKeys, TUIClassSizeKeys } from '../constants/assetSIzes';
 import { TActionId } from '~/src/types/serializables/actions';
 import { TCropId } from '~/src/types/serializables/crops';
 
 const assetDictionary = assetsDictionaryJson as TAssetsDictionary;
-export const getClassesAssets = (className: TPlayerClassKeys, size: TUIUIClassSizeKeys) => {
+export const getClassesAssets = (className: TPlayerClassKeys, size: TUIClassSizeKeys) => {
 	const assetTypes = assetDictionary[TAssetNamesDict.CLASSES];
 	if (!assetTypes) {
 		throw new Error('Assets directory is empty');

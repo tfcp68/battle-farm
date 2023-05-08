@@ -6,7 +6,7 @@
 	"scripts": {
 		"test": "jest",
 		"start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts",
-		"generate-images": "webpack --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js",
+		"generate-images": "webpack --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js && npx rimraf assets/thumbs/dictGenerate.js",
 		"build": "npm run generate-images && cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist "
 	},
 	"repository": {
@@ -55,6 +55,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-refresh": "^0.14.0",
+		"rimraf": "^5.0.0",
 		"sass": "^1.62.1",
 		"sass-loader": "^13.2.2",
 		"serve": "^14.1.2",

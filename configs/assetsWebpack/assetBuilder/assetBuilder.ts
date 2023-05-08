@@ -9,7 +9,7 @@ import {
 import * as path from 'path';
 import { TPlayerClass, TPlayerClassKeys } from '../../../src/types/serializables/players';
 import { ActionCardId, TActionId } from '../../../src/types/serializables/actions';
-import { CropCardId, TCropId } from '../../..//src/types/serializables/crops';
+import { CropCardId, TCropId } from '../../../src/types/serializables/crops';
 import { UICardSize, UIClassSize } from '../../../frontend/constants/assetSIzes';
 import * as fs from 'fs';
 import { ROOT_DIR } from '../../paths';

@@ -22,7 +22,7 @@ export const CropCardId = {
 	CHERRY: 2,
 	CABBAGE: 3,
 	CORN: 4,
-	CARROT: 5,
+	CARROTS: 5,
 	ONION: 6,
 	MANGO: 7,
 	TOMATO: 8,

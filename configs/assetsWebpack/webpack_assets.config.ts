@@ -11,7 +11,6 @@ const config: webpack.Configuration = {
 	entry: [path.resolve(ROOT_DIR, 'configs/assetsWebpack/assetBuilder', 'assetBuilder.ts')],
 	resolve: {
 		alias: {
-			'~/src': path.resolve(ROOT_DIR, 'src'),
 			'~/assets': path.resolve(ROOT_DIR, 'assets'),
 		},
 		extensions: ['.ts'],
