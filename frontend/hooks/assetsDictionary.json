@@ -1,0 +1,1044 @@
+{
+    "CLASSES": {
+        "EMPTY": {
+            "SMALL": {
+                "AVIF": "",
+                "WEBP": "",
+                "JPEG": ""
+            },
+            "LARGE": {
+                "AVIF": "",
+                "WEBP": "",
+                "JPEG": ""
+            }
+        },
+        "LAND_BARON": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/land_baron_5d9a.avif",
+                "WEBP": "assets/classes/SMALL/webp/land_baron_ac77.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/land_baron_2df6.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/land_baron_e66a.avif",
+                "WEBP": "assets/classes/LARGE/webp/land_baron_6c2f.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/land_baron_c577.jpeg"
+            }
+        },
+        "GRIM_REAPER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/grim_reaper_e47c.avif",
+                "WEBP": "assets/classes/SMALL/webp/grim_reaper_7692.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/grim_reaper_b6d7.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/grim_reaper_3e88.avif",
+                "WEBP": "assets/classes/LARGE/webp/grim_reaper_6dd8.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/grim_reaper_cebb.jpeg"
+            }
+        },
+        "MASTER_GARDENER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/master_gardener_da94.avif",
+                "WEBP": "assets/classes/SMALL/webp/master_gardener_23da.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/master_gardener_7ad3.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/master_gardener_1781.avif",
+                "WEBP": "assets/classes/LARGE/webp/master_gardener_85ed.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/master_gardener_58d3.jpeg"
+            }
+        },
+        "CROP_SCIENTIST": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/crop_scientist_d1c6.avif",
+                "WEBP": "assets/classes/SMALL/webp/crop_scientist_7508.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/crop_scientist_7a9d.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/crop_scientist_3ff0.avif",
+                "WEBP": "assets/classes/LARGE/webp/crop_scientist_f693.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/crop_scientist_3465.jpeg"
+            }
+        },
+        "SEED_TRADER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/seed_trader_d4e5.avif",
+                "WEBP": "assets/classes/SMALL/webp/seed_trader_2e30.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/seed_trader_d7c2.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/seed_trader_ccc2.avif",
+                "WEBP": "assets/classes/LARGE/webp/seed_trader_b753.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/seed_trader_a0b6.jpeg"
+            }
+        },
+        "WEATHER_WATCHER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/weather_watcher_d919.avif",
+                "WEBP": "assets/classes/SMALL/webp/weather_watcher_daba.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/weather_watcher_4f8d.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/weather_watcher_f3dd.avif",
+                "WEBP": "assets/classes/LARGE/webp/weather_watcher_c2bb.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/weather_watcher_a22c.jpeg"
+            }
+        }
+    },
+    "CROPS": {
+        "WHEAT": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/wheat_62f6.avif",
+                "WEBP": "assets/crops/SMALL/webp/wheat_9b6d.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/wheat_5727.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/wheat_1904.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/wheat_46f9.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/wheat_0ca9.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/wheat_f5cb.avif",
+                "WEBP": "assets/crops/LARGE/webp/wheat_b700.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/wheat_9df7.jpeg"
+            }
+        },
+        "CHERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/cherry_8fd2.avif",
+                "WEBP": "assets/crops/SMALL/webp/cherry_fa26.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/cherry_af86.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/cherry_f6e9.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/cherry_fcb1.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/cherry_48dc.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/cherry_ba96.avif",
+                "WEBP": "assets/crops/LARGE/webp/cherry_87e7.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/cherry_96e1.jpeg"
+            }
+        },
+        "CABBAGE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/cabbage_159b.avif",
+                "WEBP": "assets/crops/SMALL/webp/cabbage_d0cc.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/cabbage_3bef.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/cabbage_13c2.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/cabbage_7eed.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/cabbage_0566.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/cabbage_1358.avif",
+                "WEBP": "assets/crops/LARGE/webp/cabbage_d927.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/cabbage_8107.jpeg"
+            }
+        },
+        "CORN": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/corn_ccbf.avif",
+                "WEBP": "assets/crops/SMALL/webp/corn_b65e.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/corn_aa47.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/corn_2a70.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/corn_d331.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/corn_9bc9.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/corn_b704.avif",
+                "WEBP": "assets/crops/LARGE/webp/corn_bac0.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/corn_4f2b.jpeg"
+            }
+        },
+        "CARROT": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/carrot_fe1f.avif",
+                "WEBP": "assets/crops/SMALL/webp/carrot_b83d.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/carrot_3031.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/carrot_7afd.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/carrot_c703.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/carrot_bdf1.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/carrot_debd.avif",
+                "WEBP": "assets/crops/LARGE/webp/carrot_b501.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/carrot_4b25.jpeg"
+            }
+        },
+        "ONION": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/onion_ba38.avif",
+                "WEBP": "assets/crops/SMALL/webp/onion_1746.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/onion_782b.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/onion_7ffc.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/onion_24a8.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/onion_c193.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/onion_73ee.avif",
+                "WEBP": "assets/crops/LARGE/webp/onion_9b8a.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/onion_386f.jpeg"
+            }
+        },
+        "MANGO": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/mango_32c9.avif",
+                "WEBP": "assets/crops/SMALL/webp/mango_9c3a.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/mango_6349.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/mango_17bc.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/mango_de5e.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/mango_48ba.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/mango_0776.avif",
+                "WEBP": "assets/crops/LARGE/webp/mango_c92d.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/mango_d32d.jpeg"
+            }
+        },
+        "TOMATO": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/tomato_ef99.avif",
+                "WEBP": "assets/crops/SMALL/webp/tomato_a67e.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/tomato_5bf9.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/tomato_8e6d.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/tomato_a87d.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/tomato_8282.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/tomato_5fdd.avif",
+                "WEBP": "assets/crops/LARGE/webp/tomato_7feb.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/tomato_8eee.jpeg"
+            }
+        },
+        "POTATO": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/potato_4a1f.avif",
+                "WEBP": "assets/crops/SMALL/webp/potato_e09a.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/potato_dcc6.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/potato_d551.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/potato_999e.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/potato_b6b7.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/potato_018d.avif",
+                "WEBP": "assets/crops/LARGE/webp/potato_1210.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/potato_fc66.jpeg"
+            }
+        },
+        "MELON": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/melon_944d.avif",
+                "WEBP": "assets/crops/SMALL/webp/melon_efff.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/melon_1bb6.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/melon_b7fb.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/melon_c611.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/melon_b091.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/melon_8a84.avif",
+                "WEBP": "assets/crops/LARGE/webp/melon_cb71.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/melon_9456.jpeg"
+            }
+        },
+        "BEANS": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/beans_6779.avif",
+                "WEBP": "assets/crops/SMALL/webp/beans_5202.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/beans_16e6.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/beans_03dc.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/beans_6de3.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/beans_6b02.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/beans_ef02.avif",
+                "WEBP": "assets/crops/LARGE/webp/beans_ceb0.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/beans_6a2d.jpeg"
+            }
+        },
+        "WASABI": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/wasabi_f163.avif",
+                "WEBP": "assets/crops/SMALL/webp/wasabi_b5ad.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/wasabi_3fd2.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/wasabi_bc54.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/wasabi_6d3c.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/wasabi_5a8f.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/wasabi_012a.avif",
+                "WEBP": "assets/crops/LARGE/webp/wasabi_cfd2.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/wasabi_beeb.jpeg"
+            }
+        },
+        "PINEAPPLE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/pineapple_c131.avif",
+                "WEBP": "assets/crops/SMALL/webp/pineapple_0a29.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/pineapple_0b8e.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/pineapple_2705.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/pineapple_df29.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/pineapple_7a7d.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/pineapple_46fb.avif",
+                "WEBP": "assets/crops/LARGE/webp/pineapple_7020.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/pineapple_adef.jpeg"
+            }
+        },
+        "EGGPLANT": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/eggplant_ee53.avif",
+                "WEBP": "assets/crops/SMALL/webp/eggplant_f921.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/eggplant_2338.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/eggplant_016a.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/eggplant_ca48.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/eggplant_0427.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/eggplant_35f2.avif",
+                "WEBP": "assets/crops/LARGE/webp/eggplant_a07c.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/eggplant_5ab7.jpeg"
+            }
+        },
+        "PEPPER": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/pepper_de79.avif",
+                "WEBP": "assets/crops/SMALL/webp/pepper_7392.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/pepper_eb45.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/pepper_ab68.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/pepper_d895.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/pepper_dcec.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/pepper_a25e.avif",
+                "WEBP": "assets/crops/LARGE/webp/pepper_08df.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/pepper_37e4.jpeg"
+            }
+        },
+        "TANGERINE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/tangerine_da9d.avif",
+                "WEBP": "assets/crops/SMALL/webp/tangerine_8838.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/tangerine_a7a2.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/tangerine_da9b.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/tangerine_7fa0.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/tangerine_694d.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/tangerine_dd4b.avif",
+                "WEBP": "assets/crops/LARGE/webp/tangerine_a218.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/tangerine_980d.jpeg"
+            }
+        },
+        "PUMPKIN": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/pumpkin_45cd.avif",
+                "WEBP": "assets/crops/SMALL/webp/pumpkin_ff21.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/pumpkin_f36b.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/pumpkin_ed5d.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/pumpkin_d3d4.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/pumpkin_274b.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/pumpkin_1d66.avif",
+                "WEBP": "assets/crops/LARGE/webp/pumpkin_df11.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/pumpkin_0118.jpeg"
+            }
+        },
+        "GRAPE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/grape_9d52.avif",
+                "WEBP": "assets/crops/SMALL/webp/grape_059c.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/grape_a626.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/grape_88b6.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/grape_4c04.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/grape_df2b.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/grape_e8aa.avif",
+                "WEBP": "assets/crops/LARGE/webp/grape_b514.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/grape_5174.jpeg"
+            }
+        },
+        "CLOUDBERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/cloudberry_d18e.avif",
+                "WEBP": "assets/crops/SMALL/webp/cloudberry_c1dd.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/cloudberry_d0eb.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/cloudberry_bd14.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/cloudberry_452a.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/cloudberry_e3d9.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/cloudberry_e169.avif",
+                "WEBP": "assets/crops/LARGE/webp/cloudberry_58e3.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/cloudberry_3fbe.jpeg"
+            }
+        },
+        "STRAWBERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/strawberry_6564.avif",
+                "WEBP": "assets/crops/SMALL/webp/strawberry_7867.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/strawberry_5b04.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/strawberry_d614.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/strawberry_a9ea.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/strawberry_6b5f.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/strawberry_ad10.avif",
+                "WEBP": "assets/crops/LARGE/webp/strawberry_4045.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/strawberry_b3a7.jpeg"
+            }
+        },
+        "BLUEBERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/blueberry_a741.avif",
+                "WEBP": "assets/crops/SMALL/webp/blueberry_915c.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/blueberry_4ffa.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/blueberry_fd13.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/blueberry_3c49.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/blueberry_db2c.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/blueberry_099c.avif",
+                "WEBP": "assets/crops/LARGE/webp/blueberry_d74e.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/blueberry_ed4f.jpeg"
+            }
+        }
+    },
+    "ACTIONS": {
+        "GARDEN_GOURMET": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/garden_gourmet_5e05.avif",
+                "WEBP": "assets/actions/SMALL/webp/garden_gourmet_e1cc.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/garden_gourmet_d5d8.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/garden_gourmet_25db.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/garden_gourmet_5f3c.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/garden_gourmet_b4a4.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/garden_gourmet_9541.avif",
+                "WEBP": "assets/actions/LARGE/webp/garden_gourmet_59c8.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/garden_gourmet_669b.jpeg"
+            }
+        },
+        "FERTILIZER_FRENZY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/fertilizer_frenzy_57e8.avif",
+                "WEBP": "assets/actions/SMALL/webp/fertilizer_frenzy_38b2.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/fertilizer_frenzy_d689.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/fertilizer_frenzy_96e1.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/fertilizer_frenzy_598c.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/fertilizer_frenzy_0add.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/fertilizer_frenzy_a607.avif",
+                "WEBP": "assets/actions/LARGE/webp/fertilizer_frenzy_dc63.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/fertilizer_frenzy_4421.jpeg"
+            }
+        },
+        "RECYCLE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/recycle_209d.avif",
+                "WEBP": "assets/actions/SMALL/webp/recycle_e514.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/recycle_7478.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/recycle_b1f9.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/recycle_dd5a.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/recycle_ad0b.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/recycle_d604.avif",
+                "WEBP": "assets/actions/LARGE/webp/recycle_f8ca.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/recycle_6e6a.jpeg"
+            }
+        },
+        "LUCKY_FIND": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/lucky_find_2d5b.avif",
+                "WEBP": "assets/actions/SMALL/webp/lucky_find_83dc.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/lucky_find_5c5c.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/lucky_find_3ff9.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/lucky_find_fc63.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/lucky_find_93e5.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/lucky_find_d7b4.avif",
+                "WEBP": "assets/actions/LARGE/webp/lucky_find_c605.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/lucky_find_201d.jpeg"
+            }
+        },
+        "GREEN_DAY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/green_day_769a.avif",
+                "WEBP": "assets/actions/SMALL/webp/green_day_3d52.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/green_day_177e.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/green_day_38bd.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/green_day_7afd.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/green_day_878d.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/green_day_bcf4.avif",
+                "WEBP": "assets/actions/LARGE/webp/green_day_175e.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/green_day_b3ac.jpeg"
+            }
+        },
+        "RED_HEAT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/red_heat_52dc.avif",
+                "WEBP": "assets/actions/SMALL/webp/red_heat_c4c5.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/red_heat_026b.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/red_heat_5f62.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/red_heat_6c29.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/red_heat_a57e.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/red_heat_6180.avif",
+                "WEBP": "assets/actions/LARGE/webp/red_heat_aff6.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/red_heat_84c2.jpeg"
+            }
+        },
+        "YELLOW_GOLD": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/yellow_gold_4777.avif",
+                "WEBP": "assets/actions/SMALL/webp/yellow_gold_7937.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/yellow_gold_4f3b.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/yellow_gold_988d.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/yellow_gold_52e1.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/yellow_gold_96e6.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/yellow_gold_426e.avif",
+                "WEBP": "assets/actions/LARGE/webp/yellow_gold_aec0.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/yellow_gold_1266.jpeg"
+            }
+        },
+        "WEED_WHACKER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/weed_whacker_86bd.avif",
+                "WEBP": "assets/actions/SMALL/webp/weed_whacker_6c87.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/weed_whacker_2486.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/weed_whacker_7359.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/weed_whacker_f870.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/weed_whacker_3159.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/weed_whacker_11a3.avif",
+                "WEBP": "assets/actions/LARGE/webp/weed_whacker_45c5.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/weed_whacker_66c7.jpeg"
+            }
+        },
+        "PEST_CONTROL": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/pest_control_b77c.avif",
+                "WEBP": "assets/actions/SMALL/webp/pest_control_42e5.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/pest_control_bce4.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/pest_control_eaae.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/pest_control_c517.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/pest_control_752c.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/pest_control_2b74.avif",
+                "WEBP": "assets/actions/LARGE/webp/pest_control_8f1f.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/pest_control_ed73.jpeg"
+            }
+        },
+        "SUPERNATURAL_SELECTION": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/supernatural_selection_9820.avif",
+                "WEBP": "assets/actions/SMALL/webp/supernatural_selection_afe6.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/supernatural_selection_278f.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/supernatural_selection_8fa4.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/supernatural_selection_1685.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/supernatural_selection_bde6.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/supernatural_selection_f58a.avif",
+                "WEBP": "assets/actions/LARGE/webp/supernatural_selection_4ba7.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/supernatural_selection_0b25.jpeg"
+            }
+        },
+        "FLOWER_POWER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/flower_power_eaa7.avif",
+                "WEBP": "assets/actions/SMALL/webp/flower_power_f2d5.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/flower_power_ce45.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/flower_power_b21b.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/flower_power_0c4f.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/flower_power_6463.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/flower_power_90d7.avif",
+                "WEBP": "assets/actions/LARGE/webp/flower_power_fe91.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/flower_power_caa0.jpeg"
+            }
+        },
+        "FUNGUS_FLAY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/fungus_flay_9630.avif",
+                "WEBP": "assets/actions/SMALL/webp/fungus_flay_b585.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/fungus_flay_777f.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/fungus_flay_90e6.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/fungus_flay_acb3.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/fungus_flay_398e.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/fungus_flay_93e7.avif",
+                "WEBP": "assets/actions/LARGE/webp/fungus_flay_703b.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/fungus_flay_6b41.jpeg"
+            }
+        },
+        "SURGING_SEEDLINGS": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/surging_seedlings_610e.avif",
+                "WEBP": "assets/actions/SMALL/webp/surging_seedlings_7882.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/surging_seedlings_6293.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/surging_seedlings_3e3b.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/surging_seedlings_54ca.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/surging_seedlings_5648.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/surging_seedlings_63e6.avif",
+                "WEBP": "assets/actions/LARGE/webp/surging_seedlings_974f.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/surging_seedlings_b19a.jpeg"
+            }
+        },
+        "THORNY_FENCE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/thorny_fence_f213.avif",
+                "WEBP": "assets/actions/SMALL/webp/thorny_fence_7ebe.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/thorny_fence_6921.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/thorny_fence_be6b.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/thorny_fence_4633.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/thorny_fence_ddbd.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/thorny_fence_c74a.avif",
+                "WEBP": "assets/actions/LARGE/webp/thorny_fence_918e.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/thorny_fence_b389.jpeg"
+            }
+        },
+        "SOIL_ENRICHMENT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/soil_enrichment_345b.avif",
+                "WEBP": "assets/actions/SMALL/webp/soil_enrichment_5241.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/soil_enrichment_e91a.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/soil_enrichment_89be.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/soil_enrichment_ddc5.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/soil_enrichment_1308.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/soil_enrichment_cede.avif",
+                "WEBP": "assets/actions/LARGE/webp/soil_enrichment_0c29.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/soil_enrichment_3c67.jpeg"
+            }
+        },
+        "SEED_SPROUT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/seed_sprout_12cb.avif",
+                "WEBP": "assets/actions/SMALL/webp/seed_sprout_11b5.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/seed_sprout_dd51.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/seed_sprout_dd09.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/seed_sprout_2d25.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/seed_sprout_0ee0.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/seed_sprout_b0b4.avif",
+                "WEBP": "assets/actions/LARGE/webp/seed_sprout_456e.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/seed_sprout_84d8.jpeg"
+            }
+        },
+        "POLLEN_PARADISE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/pollen_paradise_d8e5.avif",
+                "WEBP": "assets/actions/SMALL/webp/pollen_paradise_de30.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/pollen_paradise_95fe.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/pollen_paradise_c286.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/pollen_paradise_9c6e.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/pollen_paradise_75b6.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/pollen_paradise_a261.avif",
+                "WEBP": "assets/actions/LARGE/webp/pollen_paradise_7986.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/pollen_paradise_701e.jpeg"
+            }
+        },
+        "RETRACTABLE_GREENHOUSE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/retractable_greenhouse_b7da.avif",
+                "WEBP": "assets/actions/SMALL/webp/retractable_greenhouse_1911.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/retractable_greenhouse_f128.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/retractable_greenhouse_851f.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/retractable_greenhouse_b4a9.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/retractable_greenhouse_22c7.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/retractable_greenhouse_740a.avif",
+                "WEBP": "assets/actions/LARGE/webp/retractable_greenhouse_7b84.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/retractable_greenhouse_42c3.jpeg"
+            }
+        },
+        "GARDEN_GNOME": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/garden_gnome_22a1.avif",
+                "WEBP": "assets/actions/SMALL/webp/garden_gnome_dae8.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/garden_gnome_1b6e.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/garden_gnome_8454.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/garden_gnome_7e32.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/garden_gnome_249e.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/garden_gnome_268e.avif",
+                "WEBP": "assets/actions/LARGE/webp/garden_gnome_9f1d.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/garden_gnome_a18a.jpeg"
+            }
+        },
+        "TRELLIS_BED": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/trellis_bed_fa8f.avif",
+                "WEBP": "assets/actions/SMALL/webp/trellis_bed_b465.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/trellis_bed_4510.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/trellis_bed_5a5e.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/trellis_bed_e361.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/trellis_bed_b071.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/trellis_bed_5a1a.avif",
+                "WEBP": "assets/actions/LARGE/webp/trellis_bed_7cc0.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/trellis_bed_87ff.jpeg"
+            }
+        },
+        "VERTICAL_BED": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/vertical_bed_ad1f.avif",
+                "WEBP": "assets/actions/SMALL/webp/vertical_bed_4258.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/vertical_bed_c883.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/vertical_bed_eeea.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/vertical_bed_25c5.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/vertical_bed_4c15.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/vertical_bed_2ad5.avif",
+                "WEBP": "assets/actions/LARGE/webp/vertical_bed_c971.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/vertical_bed_c5cb.jpeg"
+            }
+        },
+        "ROTATIONAL_BED": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/rotational_bed_254b.avif",
+                "WEBP": "assets/actions/SMALL/webp/rotational_bed_f024.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/rotational_bed_477b.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/rotational_bed_8985.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/rotational_bed_b83a.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/rotational_bed_596a.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/rotational_bed_17f1.avif",
+                "WEBP": "assets/actions/LARGE/webp/rotational_bed_acae.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/rotational_bed_c6fb.jpeg"
+            }
+        },
+        "WASTE_DISPOSAL": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/waste_disposal_7840.avif",
+                "WEBP": "assets/actions/SMALL/webp/waste_disposal_b2e9.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/waste_disposal_672a.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/waste_disposal_13b1.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/waste_disposal_89de.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/waste_disposal_a9a6.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/waste_disposal_d29d.avif",
+                "WEBP": "assets/actions/LARGE/webp/waste_disposal_26b6.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/waste_disposal_1032.jpeg"
+            }
+        },
+        "CARTEL_AGREEMENT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/cartel_agreement_ac77.avif",
+                "WEBP": "assets/actions/SMALL/webp/cartel_agreement_a097.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/cartel_agreement_cc6f.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/cartel_agreement_a2bb.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/cartel_agreement_470e.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/cartel_agreement_582f.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/cartel_agreement_629a.avif",
+                "WEBP": "assets/actions/LARGE/webp/cartel_agreement_15d1.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/cartel_agreement_dbc4.jpeg"
+            }
+        },
+        "CHEMICAL_BLISS": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/chemical_bliss_7745.avif",
+                "WEBP": "assets/actions/SMALL/webp/chemical_bliss_7618.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/chemical_bliss_2f60.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/chemical_bliss_512f.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/chemical_bliss_c3f5.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/chemical_bliss_926d.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/chemical_bliss_fd5c.avif",
+                "WEBP": "assets/actions/LARGE/webp/chemical_bliss_2557.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/chemical_bliss_19b3.jpeg"
+            }
+        },
+        "DROUGHT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/drought_f1c7.avif",
+                "WEBP": "assets/actions/SMALL/webp/drought_c1df.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/drought_163f.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/drought_91e9.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/drought_2a52.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/drought_38b7.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/drought_f310.avif",
+                "WEBP": "assets/actions/LARGE/webp/drought_ba31.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/drought_0d09.jpeg"
+            }
+        },
+        "CLONE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/clone_879d.avif",
+                "WEBP": "assets/actions/SMALL/webp/clone_e208.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/clone_8454.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/clone_cf84.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/clone_465d.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/clone_af46.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/clone_eb0b.avif",
+                "WEBP": "assets/actions/LARGE/webp/clone_99d2.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/clone_ff13.jpeg"
+            }
+        },
+        "WITHER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/wither_49aa.avif",
+                "WEBP": "assets/actions/SMALL/webp/wither_c557.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/wither_4ecd.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/wither_1226.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/wither_a988.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/wither_c4ff.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/wither_43ae.avif",
+                "WEBP": "assets/actions/LARGE/webp/wither_9508.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/wither_6e8e.jpeg"
+            }
+        },
+        "BLACK_FRIDAY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/black_friday_1531.avif",
+                "WEBP": "assets/actions/SMALL/webp/black_friday_27fc.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/black_friday_48af.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/black_friday_ef23.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/black_friday_2a01.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/black_friday_fa09.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/black_friday_7b85.avif",
+                "WEBP": "assets/actions/LARGE/webp/black_friday_4640.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/black_friday_d537.jpeg"
+            }
+        },
+        "CLOUD_COVER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/cloud_cover_4340.avif",
+                "WEBP": "assets/actions/SMALL/webp/cloud_cover_063f.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/cloud_cover_19ad.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/cloud_cover_b7f2.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/cloud_cover_a75c.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/cloud_cover_c987.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/cloud_cover_19c3.avif",
+                "WEBP": "assets/actions/LARGE/webp/cloud_cover_a36a.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/cloud_cover_4f69.jpeg"
+            }
+        },
+        "DEMON": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/demon_5bb6.avif",
+                "WEBP": "assets/actions/SMALL/webp/demon_a1a2.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/demon_5c79.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/demon_09fe.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/demon_39a4.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/demon_02be.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/demon_76f7.avif",
+                "WEBP": "assets/actions/LARGE/webp/demon_0136.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/demon_5581.jpeg"
+            }
+        },
+        "EARLY_BIRD": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/early_bird_c438.avif",
+                "WEBP": "assets/actions/SMALL/webp/early_bird_fc81.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/early_bird_d3b8.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/early_bird_3877.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/early_bird_8704.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/early_bird_1d72.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/early_bird_4b01.avif",
+                "WEBP": "assets/actions/LARGE/webp/early_bird_dc8b.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/early_bird_588f.jpeg"
+            }
+        },
+        "REAP_AND_SOW": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/reap_and_sow_7186.avif",
+                "WEBP": "assets/actions/SMALL/webp/reap_and_sow_1940.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/reap_and_sow_2a80.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/reap_and_sow_5473.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/reap_and_sow_e374.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/reap_and_sow_47da.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/reap_and_sow_d497.avif",
+                "WEBP": "assets/actions/LARGE/webp/reap_and_sow_0ba9.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/reap_and_sow_9f91.jpeg"
+            }
+        },
+        "LAND_RECLAMATION": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/land_reclamation_bd35.avif",
+                "WEBP": "assets/actions/SMALL/webp/land_reclamation_3d98.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/land_reclamation_2f25.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/land_reclamation_6e17.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/land_reclamation_0355.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/land_reclamation_7ff7.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/land_reclamation_0a1b.avif",
+                "WEBP": "assets/actions/LARGE/webp/land_reclamation_43b0.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/land_reclamation_c311.jpeg"
+            }
+        },
+        "GENETIC_MODIFICATION": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/genetic_modification_47c5.avif",
+                "WEBP": "assets/actions/SMALL/webp/genetic_modification_d15d.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/genetic_modification_9f96.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/genetic_modification_494d.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/genetic_modification_3974.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/genetic_modification_7b3a.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/genetic_modification_aaf4.avif",
+                "WEBP": "assets/actions/LARGE/webp/genetic_modification_f2e6.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/genetic_modification_1ce0.jpeg"
+            }
+        }
+    }
+}

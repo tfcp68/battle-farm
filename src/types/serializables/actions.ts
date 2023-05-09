@@ -30,7 +30,13 @@ export const ActionCardId = {
 	DROUGHT: 26,
 	CLONE: 27,
 	WITHER: 28,
-	DEMON_OF_HARVEST: 29,
+	BLACK_FRIDAY: 30,
+	CLOUD_COVER: 31,
+	DEMON: 32,
+	EARLY_BIRD: 33,
+	REAP_AND_SOW: 34,
+	LAND_RECLAMATION: 35,
+	GENETIC_MODIFICATION: 36,
 };
 
 export type TActionId = keyof typeof ActionCardId;
