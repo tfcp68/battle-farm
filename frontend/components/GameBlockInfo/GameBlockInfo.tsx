@@ -1,24 +1,27 @@
 import React, { FC } from 'react';
 import styles from './GameBlockInfo.module.scss';
 import { TPlayer } from '~/src/types/serializables/players';
-import GameHand from '~/components/GameHand/GameHand';
-import GameBeds from '~/components/GameBeds/GameBeds';
+import GameProgressBar from '~/components/GameProgressBar/GameProgressBar';
+import { GAME_AMOUNT_PLAYERS, GAME_WIN_LIMIT, TOTAL_SUM_VALUES_IN_DECK } from '../../constants/gameConstants';
 import { getPlayerClassName } from '~/src/helpers/playerClass';
 
 interface IGameBlockInfoProps {
-	playerInfo: TPlayer;
+	currPlayer: TPlayer;
+	currPhaseName: string;
+	currSubphaseName: string;
 }
 
-const GameBlockInfo: FC<IGameBlockInfoProps> = ({ playerInfo }) => {
-	const { coins, class: playerClassIndex, discardedCards, hand, id, beds, fertilizers } = playerInfo;
-
+const GameBlockInfo: FC<IGameBlockInfoProps> = ({ currPlayer, currSubphaseName, currPhaseName }) => {
+	const { class: currPlayerClass } = currPlayer;
 	return (
 		<div className={styles.gameBlockInfo}>
-			<div>{coins + ' coins'}</div>
-			<div>{fertilizers + ' fertilizers'}</div>
-			<div>{getPlayerClassName(playerClassIndex)}</div>
-			<GameHand listCards={hand} />
-			<GameBeds listBeds={beds} />
+			<p>Current phase: {currPhaseName}</p>
+			<p>Current subphase: {currSubphaseName}</p>
+			<p>Current player: {getPlayerClassName(currPlayerClass)}</p>
+			<GameProgressBar
+				currentMaxCoins={40}
+				winLimit={GAME_WIN_LIMIT(GAME_AMOUNT_PLAYERS, TOTAL_SUM_VALUES_IN_DECK)}
+			/>
 		</div>
 	);
 };

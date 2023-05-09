@@ -1,19 +1,27 @@
-import React, { FC } from 'react';
-import { TBed } from '~/src/types/serializables/crops';
+import React, {FC} from 'react';
+import {TBed} from '~/src/types/serializables/crops';
 import styles from './Bed.module.scss';
 
 interface IBedProps {
-	bedInfo: TBed;
+    bedInfo: TBed;
 }
 
-const Bed: FC<IBedProps> = ({ bedInfo }) => {
-	const { crop } = bedInfo;
-	return (
-		<li className={styles.bed}>
-			{'Timer: ' + crop?.ripeTimer + ' '}
-			{'Fertilize: ' + crop?.fertilized}
-		</li>
-	);
+const Bed: FC<IBedProps> = ({bedInfo}) => {
+    const {crop} = bedInfo;
+
+    return (
+        <li className={styles.bed}>
+            <div>
+                {'Timer: ' + crop?.ripeTimer + ' '}
+            </div>
+            <div>
+                {'Fertilized: ' + crop?.fertilized}
+            </div>
+            <div>
+                {'Cost: ' + crop?.value}
+            </div>
+        </li>
+    );
 };
 
 export default Bed;

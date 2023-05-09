@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { TCard } from '~/src/types/serializables/cards';
 import styles from './GameMarket.module.scss';
+import GameCard from '~/components/GameCard/GameCard';
 
 interface IGameMarketProps {
 	listCards: TCard[];
@@ -9,12 +10,12 @@ interface IGameMarketProps {
 const GameMarket: FC<IGameMarketProps> = ({ listCards }) => {
 	return (
 		<div className={styles.market}>
-			<div className={styles.market__lot}></div>
-			<div className={styles.market__lot}></div>
-			<div className={styles.market__lot}></div>
-			<div className={styles.market__lot}></div>
-			<div className={styles.market__lot}></div>
-			<div className={styles.market__lot}></div>
+			<h1 className={styles.market__title}>Market</h1>
+			<div className={styles.market__wrapper}>
+				{listCards.map((card) => {
+					return <GameCard key={card.id} cropImage={card.id} typeCard={card.type} />;
+				})}
+			</div>
 		</div>
 	);
 };
