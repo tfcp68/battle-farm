@@ -1,19 +1,11 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 
-import AutomataEventAdapter from '~/src/automata/EventAdapter';
-import { TAutomataEventEmitter, TAutomataEventHandler } from '~/src/types/fsm/automata';
-import { TValidator } from '~/src/types/typeGuards';
-import arraySample from '~/src/utils/arraySample';
-import { lengthArray } from '~/src/utils/lengthArray';
-import { sampleRange } from '~/src/utils/sampleRange';
-import {
-	TTestAction,
-	TTestContext,
-	TTestEvent,
-	TTestEventMeta,
-	TTestPayload,
-	TTestState,
-} from '../../../tests/fixtures/fsm';
+import AutomataEventAdapter from '../lib/EventAdapter';
+import { TAutomataEventEmitter, TAutomataEventHandler, TValidator } from '../types';
+import { TTestAction, TTestContext, TTestEvent, TTestEventMeta, TTestPayload, TTestState } from './fixtures/index';
+import Utils from '../utils';
+
+const { pickFromArray, sampleArray, sampleRange } = Utils;
 
 class EventAdapterTest extends AutomataEventAdapter<
 	TTestState,
@@ -84,7 +76,7 @@ describe(`EventAdapter`, () => {
 	});
 
 	describe('getObservedEvents', () => {
-		const sampleEvents = arraySample(lengthArray<number>(null, 1000), sampleRange(13, 25));
+		const sampleEvents = pickFromArray(sampleArray<number>(null, 1000), sampleRange(13, 25));
 
 		test('returns an empty array by default', () => {
 			expect(sampleInstance.getObservedEvents()).toEqual([]);
@@ -112,7 +104,7 @@ describe(`EventAdapter`, () => {
 			);
 
 			const filteredEventsQuantity = 4;
-			const filteredEvents = arraySample(sampleEvents, filteredEventsQuantity);
+			const filteredEvents = pickFromArray(sampleEvents, filteredEventsQuantity);
 			const eventValidator = (event: number) => !filteredEvents.includes(event);
 			sampleInstance.setEventValidator(eventValidator as TValidator<TTestEvent>);
 			sampleEvents.filter(eventValidator).forEach((eventId) => {
@@ -123,7 +115,7 @@ describe(`EventAdapter`, () => {
 	});
 
 	describe('getObservedStates', () => {
-		const sampleStates = arraySample(lengthArray<number>(null, 1000), sampleRange(13, 25));
+		const sampleStates = pickFromArray(sampleArray<number>(null, 1000), sampleRange(13, 25));
 
 		test('returns an empty array by default', () => {
 			expect(sampleInstance.getObservedStates()).toEqual([]);
@@ -150,7 +142,7 @@ describe(`EventAdapter`, () => {
 				}))
 			);
 			const filteredStateQuantity = 4;
-			const filteredStates = arraySample(sampleStates, filteredStateQuantity);
+			const filteredStates = pickFromArray(sampleStates, filteredStateQuantity);
 			const stateValidator = (event: number) => !filteredStates.includes(event);
 			sampleInstance.setStateValidator(stateValidator as TValidator<TTestState>);
 			sampleStates.filter(stateValidator).forEach((eventId) => {
@@ -317,7 +309,7 @@ describe(`EventAdapter`, () => {
 				});
 			});
 			test('returns a related stack of actions on success', () => {
-				const testEvent = arraySample(sampleEvents)[0];
+				const testEvent = pickFromArray(sampleEvents)[0];
 				const testMeta = (sampleRange(1000, 10000) / 100).toFixed(2);
 				const result = sampleInstance.handleEvent({
 					event: testEvent,
@@ -326,7 +318,7 @@ describe(`EventAdapter`, () => {
 				expect(result).toHaveLength(sampleEvents.filter((v) => v === testEvent).length);
 			});
 			test('applies multiple event handlers to each event in original order', () => {
-				const testEvent = arraySample(sampleEvents)[0];
+				const testEvent = pickFromArray(sampleEvents)[0];
 				const testMeta = (sampleRange(1000, 10000) / 100).toFixed(2);
 				const result = sampleInstance.handleEvent({
 					event: testEvent,
@@ -344,7 +336,7 @@ describe(`EventAdapter`, () => {
 		});
 		describe('removeAllListeners', () => {
 			beforeEach(() => {
-				sampleEvents = lengthArray<number>(null, sampleRange(10, 40));
+				sampleEvents = sampleArray<number>(null, sampleRange(10, 40));
 				sampleEvents.forEach((eventId, ix) => {
 					sampleInstance.addEventListener(eventId, ({ event, meta }) => ({
 						action: 0,
@@ -359,7 +351,7 @@ describe(`EventAdapter`, () => {
 				expect(sampleInstance.getObservedEvents()).toEqual([]);
 			});
 			test('removes typed listeners with a typed argument', () => {
-				const sampleEvent = arraySample(sampleEvents)[0];
+				const sampleEvent = pickFromArray(sampleEvents)[0];
 				sampleInstance.removeAllListeners(sampleEvent);
 				expect(sampleInstance.getObservedEvents().sort()).toEqual(
 					sampleEvents.filter((v) => v !== sampleEvent).sort()
@@ -376,7 +368,7 @@ describe(`EventAdapter`, () => {
 
 			test('ignores Events discarded by Event Validator', () => {
 				const observedEvents = sampleInstance.getObservedEvents();
-				const sampleEvent = arraySample(observedEvents)[0];
+				const sampleEvent = pickFromArray(observedEvents)[0];
 				const eventValidator = (t: number) => t !== sampleEvent;
 				sampleInstance
 					.setEventValidator(eventValidator as TValidator<TTestEvent>)
@@ -546,7 +538,7 @@ describe(`EventAdapter`, () => {
 				});
 			});
 			test('returns a related stack of actions on success', () => {
-				const testState = arraySample(sampleStates)[0];
+				const testState = pickFromArray(sampleStates)[0];
 				const testContext = sampleRange(1000, 10000);
 				const result = sampleInstance.handleTransition({
 					state: testState,
@@ -555,7 +547,7 @@ describe(`EventAdapter`, () => {
 				expect(result).toHaveLength(sampleStates.filter((v) => v === testState).length);
 			});
 			test('applies multiple event handlers to each event in original order', () => {
-				const testState = arraySample(sampleStates)[0];
+				const testState = pickFromArray(sampleStates)[0];
 				const testContext = sampleRange(1000, 10000);
 				const result = sampleInstance.handleTransition({
 					state: testState,
@@ -573,7 +565,7 @@ describe(`EventAdapter`, () => {
 		});
 		describe('removeAllEmitters', () => {
 			beforeEach(() => {
-				sampleStates = lengthArray<number>(null, sampleRange(20, 30));
+				sampleStates = sampleArray<number>(null, sampleRange(20, 30));
 				sampleStates.forEach((stateId, ix) => {
 					sampleInstance.addEventEmitter(stateId, ({ state, context }) => ({
 						event: stateId,
@@ -588,7 +580,7 @@ describe(`EventAdapter`, () => {
 				expect(sampleInstance.getObservedStates()).toEqual([]);
 			});
 			test('removes emitters for a specific state when called with a typed argument', () => {
-				const sampleState = arraySample(sampleStates)[0];
+				const sampleState = pickFromArray(sampleStates)[0];
 				sampleInstance.removeAllEmitters(sampleState);
 
 				expect(sampleInstance.getObservedStates()).toHaveLength(sampleStates.length - 1);
@@ -606,7 +598,7 @@ describe(`EventAdapter`, () => {
 
 			test('ignores States discarded by State Validator', () => {
 				const observedStates = sampleInstance.getObservedStates();
-				const sampleState = arraySample(observedStates)[0];
+				const sampleState = pickFromArray(observedStates)[0];
 				const stateValidator = (t: number) => t !== sampleState;
 				sampleInstance
 					.setEventValidator(stateValidator as TValidator<TTestEvent>)

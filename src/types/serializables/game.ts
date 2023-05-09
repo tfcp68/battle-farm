@@ -3,7 +3,8 @@ import { TTargetModeContext } from '~/src/types/fsm/slices/target';
 import { ICard, IDeck, TCard, TDeck } from '~/src/types/serializables/cards';
 import { IPlayer, TPlayer, TPlayerClass } from '~/src/types/serializables/players';
 import { TGameStat } from '~/src/types/serializables/stat';
-import { LengthArray, TPlayerRecord } from '~/src/types/shared';
+import { TPlayerRecord } from '~/src/types/shared';
+import { LengthArray } from '~/src/automata/utils/types';
 
 export const MARKET_SIZE = 6;
 export const MAX_PLAYERS = 6;

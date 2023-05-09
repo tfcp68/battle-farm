@@ -1,18 +1,12 @@
 import { beforeEach, describe, expect, jest, test } from '@jest/globals';
 
-import { GenericAutomata } from '~/src/automata/Automata';
-import AutomataEventAdapter from '~/src/automata/EventAdapter';
-import { TAutomataActionPayload, TAutomataEvent } from '~/src/types/fsm/automata';
-import { TValidator } from '~/src/types/typeGuards';
-import { sampleRange } from '~/src/utils/sampleRange';
-import {
-	TTestAction,
-	TTestContext,
-	TTestEvent,
-	TTestEventMeta,
-	TTestPayload,
-	TTestState,
-} from '../../../tests/fixtures/fsm';
+import { GenericAutomata } from '../lib/Automata';
+import AutomataEventAdapter from '../lib/EventAdapter';
+import { TAutomataActionPayload, TAutomataEvent, TValidator } from '../types';
+import { TTestAction, TTestContext, TTestEvent, TTestEventMeta, TTestPayload, TTestState } from './fixtures';
+import Utils from '../utils';
+
+const { sampleRange } = Utils;
 
 class EventAdapterTest extends AutomataEventAdapter<
 	TTestState,

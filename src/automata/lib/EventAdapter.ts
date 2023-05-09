@@ -1,6 +1,5 @@
-import { AutomataValidatorContainer } from '~/src/automata/ValidatorContainer';
+import { AutomataValidatorContainer } from './ValidatorContainer';
 import {
-	IAutomataEventAdapter,
 	TAutomataBaseActionType,
 	TAutomataBaseEventType,
 	TAutomataBaseStateType,
@@ -8,9 +7,13 @@ import {
 	TAutomataEventHandler,
 	TAutomataEventMetaType,
 	TAutomataStateContext,
-} from '~/src/types/fsm/automata';
-import { TValidator } from '~/src/types/typeGuards';
-import unifyObjectKey from '~/src/utils/unifyObjectKey';
+	TValidator,
+} from '../types';
+
+import { IAutomataEventAdapter } from '../types/interfaces';
+import Utils from '../utils';
+
+const { unifyObjectKey } = Utils;
 
 export abstract class AutomataEventAdapter<
 		StateType extends TAutomataBaseStateType,

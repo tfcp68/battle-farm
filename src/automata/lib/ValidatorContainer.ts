@@ -1,10 +1,9 @@
-import {
-	IAutomataValidatorContainer,
-	TAutomataBaseActionType,
-	TAutomataBaseEventType,
-	TAutomataBaseStateType,
-} from '~/src/types/fsm/automata';
-import { isPositiveInteger, TValidator } from '~/src/types/typeGuards';
+import { TAutomataBaseActionType, TAutomataBaseEventType, TAutomataBaseStateType, TValidator } from '../types';
+
+import { IAutomataValidatorContainer } from '../types/interfaces';
+import Utils from '../utils';
+
+const { isPositiveInteger } = Utils;
 
 export abstract class AutomataValidatorContainer<
 	StateType extends TAutomataBaseStateType,
@@ -24,15 +23,15 @@ export abstract class AutomataValidatorContainer<
 
 	protected constructor() {}
 
-	protected get validateEvent() {
+	public get validateEvent() {
 		return this.#eventValidator ?? this.defaultEventValidator;
 	}
 
-	protected get validateAction() {
+	public get validateAction() {
 		return this.#actionValidator ?? this.defaultActionValidator;
 	}
 
-	protected get validateState() {
+	public get validateState() {
 		return this.#stateValidator ?? this.defaultStateValidator;
 	}
 

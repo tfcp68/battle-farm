@@ -3,12 +3,12 @@ import { isCropColor } from '~/src/types/guards/crops';
 import { ActionCardId, TActionCard } from '~/src/types/serializables/actions';
 import { TCard, TCardType, TDeck } from '~/src/types/serializables/cards';
 import { CropCardId, TCropCard, TCropColor } from '~/src/types/serializables/crops';
-import { lengthArray } from '~/src/utils/lengthArray';
-import { sampleRange } from '~/src/utils/sampleRange';
-import arraySample from '../../src/utils/arraySample';
+import { Utils } from '~/src/automata';
+
+const { sampleRange, pickFromArray, sampleArray } = Utils;
 
 export function actionCardFixture(props: Partial<TActionCard> = {}) {
-	const [CardIdName] = arraySample(Object.values(ActionCardId));
+	const [CardIdName] = pickFromArray(Object.values(ActionCardId));
 	const id = getCardIDByType({ type: TCardType.ACTION, id: CardIdName });
 	if (id === null) throw new Error('Card ID not found');
 	const defaults: TActionCard = {
@@ -21,8 +21,8 @@ export function actionCardFixture(props: Partial<TActionCard> = {}) {
 }
 
 export function cropCardFixture(props: Partial<TCropCard> = {}) {
-	const [cardIdName] = arraySample(Object.values(CropCardId));
-	const [group] = arraySample(Object.values(TCropColor).filter((v) => typeof v === 'number'));
+	const [cardIdName] = pickFromArray(Object.values(CropCardId));
+	const [group] = pickFromArray(Object.values(TCropColor).filter((v) => typeof v === 'number'));
 	const id = getCardIDByType({ type: TCardType.CROP, id: cardIdName });
 	if (!isCropColor(group)) throw new Error('Group is invalid');
 	if (id === null) throw new Error('Card ID not found');
@@ -39,9 +39,9 @@ export function cropCardFixture(props: Partial<TCropCard> = {}) {
 }
 
 export function cardFixture(): TCard {
-	return arraySample([cropCardFixture, actionCardFixture])[0]();
+	return pickFromArray([cropCardFixture, actionCardFixture])[0]();
 }
 
 export function deckFixture(deckSize?: number): TDeck {
-	return lengthArray(cardFixture, deckSize || sampleRange(0, 10));
+	return sampleArray(cardFixture, deckSize || sampleRange(0, 10));
 }
