@@ -4,15 +4,32 @@ import {
 	TAssetNamesDict,
 	TAssetsDictionary,
 	TBaseAsset,
-	TBaseAssetSize,
-} from '../../../src/types/build/assetBuilderTypes';
-import * as path from 'path';
-import { TPlayerClass, TPlayerClassKeys } from '../../../src/types/serializables/players';
-import { ActionCardId, TActionId } from '../../../src/types/serializables/actions';
-import { CropCardId, TCropId } from '../../../src/types/serializables/crops';
-import { UICardSize, UIClassSize } from '../../../frontend/constants/assetSIzes';
-import * as fs from 'fs';
-import { ROOT_DIR } from '../../paths';
+	TBaseAssetSize
+} from "../../../src/types/build/assetBuilderTypes";
+import * as path from "path";
+import { TPlayerClass, TPlayerClassKeys } from "../../../src/types/serializables/players";
+import { ActionCardId, TActionId } from "../../../src/types/serializables/actions";
+import { CropCardId, TCropId } from "../../../src/types/serializables/crops";
+import { UICardSize, UIClassSize } from "../../../frontend/constants/assetSIzes";
+import * as fs from "fs";
+import { ROOT_DIR } from "../../paths";
+
+// Injected through webpack/DefinePlugin
+declare const webpSMALLClasses: string;
+declare const webpLARGEClasses: string;
+declare const avifSMALLClasses: string;
+declare const avifLARGEClasses: string;
+declare const jpegLARGEClasses: string;
+declare const jpegSMALLClasses: string;
+declare const webpSMALLCards: string;
+declare const webpMEDIUMCards: string;
+declare const webpLARGECards: string;
+declare const avifSMALLCards: string;
+declare const avifMEDIUMCards: string;
+declare const avifLARGECards: string;
+declare const jpegSMALLCards: string;
+declare const jpegMEDIUMCards: string;
+declare const jpegLARGECards: string;
 
 export const assetsDictionary: TAssetsDictionary = {
 	[TAssetNamesDict.CLASSES]: {},
@@ -25,9 +42,9 @@ Object.keys(TPlayerClass).forEach((c) => {
 		assetsDictionary[TAssetNamesDict.CLASSES][classKey] = {};
 		Object.keys(UIClassSize).forEach((size) => {
 			const sizeKey = size as keyof typeof UIClassSize;
-			assetsDictionary[TAssetNamesDict.CLASSES][classKey]![sizeKey] = {};
+			assetsDictionary[TAssetNamesDict.CLASSES][classKey][sizeKey] = {};
 			Object.keys(extTypes).forEach((ext) => {
-				assetsDictionary[TAssetNamesDict.CLASSES][classKey]![sizeKey]![ext as ExtKeysT] = '';
+				assetsDictionary[TAssetNamesDict.CLASSES][classKey][sizeKey][ext as ExtKeysT] = '';
 			});
 		});
 	}
@@ -38,9 +55,9 @@ Object.keys(ActionCardId).forEach((c) => {
 		assetsDictionary[TAssetNamesDict.ACTIONS][cardKey] = {};
 		Object.keys(UICardSize).forEach((size) => {
 			const sizeKey = size as keyof typeof UICardSize;
-			assetsDictionary[TAssetNamesDict.ACTIONS][cardKey]![sizeKey] = {};
+			assetsDictionary[TAssetNamesDict.ACTIONS][cardKey][sizeKey] = {};
 			Object.keys(extTypes).forEach((ext) => {
-				assetsDictionary[TAssetNamesDict.ACTIONS][cardKey]![sizeKey]![ext as ExtKeysT] = '';
+				assetsDictionary[TAssetNamesDict.ACTIONS][cardKey][sizeKey][ext as ExtKeysT] = '';
 			});
 		});
 	}
@@ -51,9 +68,9 @@ Object.keys(CropCardId).forEach((c) => {
 		assetsDictionary[TAssetNamesDict.CROPS][cardKey] = {};
 		Object.keys(UICardSize).forEach((size) => {
 			const sizeKey = size as keyof typeof UICardSize;
-			assetsDictionary[TAssetNamesDict.CROPS][cardKey]![sizeKey] = {};
+			assetsDictionary[TAssetNamesDict.CROPS][cardKey][sizeKey] = {};
 			Object.keys(extTypes).forEach((ext) => {
-				assetsDictionary[TAssetNamesDict.CROPS][cardKey]![sizeKey]![ext as ExtKeysT] = '';
+				assetsDictionary[TAssetNamesDict.CROPS][cardKey][sizeKey][ext as ExtKeysT] = '';
 			});
 		});
 	}
@@ -68,138 +85,113 @@ export function importAll<K extends TAssetNamesDict>(
 		const pathArray = parsedPath.dir.split(path.posix.sep);
 		const fullPathToAsset = f(key);
 		const assetName = path.basename(key, '.png').toUpperCase() as TBaseAsset<K>;
-		dict[assetName]![pathArray[2] as TBaseAssetSize<K>]![pathArray[3].toUpperCase() as ExtKeysT] = fullPathToAsset;
+		dict[assetName][pathArray[2] as TBaseAssetSize<K>][pathArray[3].toUpperCase() as ExtKeysT] = fullPathToAsset;
 	});
 }
 
 importAll<TAssetNamesDict.CLASSES>(
-	// @ts-ignore
 	require.context(`~/assets/classes?as=${webpSMALLClasses}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CLASSES]
 );
 importAll<TAssetNamesDict.CLASSES>(
-	// @ts-ignore
 	require.context(`~/assets/classes?as=${webpLARGEClasses}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CLASSES]
 );
 importAll<TAssetNamesDict.CLASSES>(
-	// @ts-ignore
 	require.context(`~/assets/classes?as=${webpLARGEClasses}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CLASSES]
 );
 importAll<TAssetNamesDict.CLASSES>(
-	// @ts-ignore
 	require.context(`~/assets/classes?as=${avifSMALLClasses}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CLASSES]
 );
 importAll<TAssetNamesDict.CLASSES>(
-	// @ts-ignore
 	require.context(`~/assets/classes?as=${avifLARGEClasses}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CLASSES]
 );
 importAll<TAssetNamesDict.CLASSES>(
-	// @ts-ignore
 	require.context(`~/assets/classes?as=${jpegLARGEClasses}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CLASSES]
 );
 importAll<TAssetNamesDict.CLASSES>(
-	// @ts-ignore
 	require.context(`~/assets/classes?as=${jpegSMALLClasses}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CLASSES]
 );
 
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${webpSMALLCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${webpMEDIUMCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${webpLARGECards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${avifSMALLCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${avifMEDIUMCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${avifLARGECards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${jpegSMALLCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${jpegMEDIUMCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 importAll<TAssetNamesDict.ACTIONS>(
-	// @ts-ignore
 	require.context(`~/assets/actions?as=${jpegLARGECards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.ACTIONS]
 );
 
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${webpSMALLCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${webpMEDIUMCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${webpLARGECards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${avifSMALLCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${avifMEDIUMCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${avifLARGECards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${jpegSMALLCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${jpegMEDIUMCards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
 importAll<TAssetNamesDict.CROPS>(
-	// @ts-ignore
 	require.context(`~/assets/crops?as=${jpegLARGECards}`, true, /\.png$/),
 	assetsDictionary[TAssetNamesDict.CROPS]
 );
