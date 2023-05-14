@@ -1,5 +1,6 @@
-import React, { Children, Dispatch, ReactNode, SetStateAction } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction } from 'react';
 import styles from './Overlay.module.scss';
+import { createPortal } from 'react-dom';
 
 interface IOverlayProps {
 	children: ReactNode;
@@ -8,13 +9,9 @@ interface IOverlayProps {
 }
 
 const Overlay = ({ children, hideOverlay, isShow }: IOverlayProps) => {
-	const mappedChildren = Children.map(children, (child) => <div onClick={(e) => e.stopPropagation()}>{child}</div>);
+	const overlay = document.getElementById('overlay') as Element;
 	if (!isShow) return null;
-	return (
-		<div onClick={() => hideOverlay(!isShow)} className={styles.overlay}>
-			{mappedChildren}
-		</div>
-	);
+	return createPortal(<div className={styles.overlay}>{children}</div>, overlay);
 };
 
 export default Overlay;

@@ -14,7 +14,7 @@ const GameApp = () => {
 	const [show, setShow] = useState<boolean>(false);
 	return (
 		<>
-			<Overlay hideOverlay={setShow} isShow={show}>
+			<Overlay isShow={show} hideOverlay={setShow}>
 				{}
 			</Overlay>
 			<div className={styles.gameApp}>
