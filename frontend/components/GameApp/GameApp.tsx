@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './GameApp.module.scss';
 import GameBlockInfo from '~/components/GameBlockInfo/GameBlockInfo';
 import GameDeck from '~/components/GameDeck/GameDeck';
@@ -8,15 +8,14 @@ import { enemyInfo, listCards, playerInfo } from '../../constants/gameConstants'
 import GameEnemyInfo from '~/components/GameEnemyInfo/GameEnemyInfo';
 import { TTurnPhase } from '~/src/types/fsm';
 import { TShoppingPhase } from '~/src/types/fsm/slices/shopping';
-import Overlay from '../../HOC/Overlay/Overlay';
+import { useOverlay } from '~/hooks/useOverlay';
 
 const GameApp = () => {
-	const [show, setShow] = useState<boolean>(false);
+	const [portal, setOverlay] = useOverlay();
 	return (
 		<>
-			<Overlay isShow={show} hideOverlay={setShow}>
-				{}
-			</Overlay>
+			{portal}
+			<div onClick={() => setOverlay(<GameDeck listCards={listCards} />)}>Click</div>
 			<div className={styles.gameApp}>
 				<div className={'container'}>
 					<div className={styles.gameApp__wrapper}>
