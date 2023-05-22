@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './GameAmountCoins.module.scss';
-import iconCoin from '~/assets/elements/coin.png';
+import iconCoin from '~/assets/elements/coin.png?as=jpeg&width=50&height=50@loader';
 
 interface IGameAmountCoins {
 	amountCoins: number;

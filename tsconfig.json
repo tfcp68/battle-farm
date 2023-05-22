@@ -23,7 +23,7 @@
 			"~/src/*": ["src/*"],
 			"~/assets/*": ["assets/*"],
 			"~/components/*": ["frontend/components/*"],
-			"~/hooks/*": ["frontend/hooks/*"]
+			"~/frontend/*": ["frontend/*"]
 		}
 	},
 	"include": ["./frontend/**/*", "./src/**/*", "./tests/**/*"],

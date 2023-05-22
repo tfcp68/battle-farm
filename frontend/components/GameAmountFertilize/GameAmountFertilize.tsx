@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import styles from './GameAmountFertilize.module.scss';
-import iconFertilize from '~/assets/elements/fertilize_icon.png';
+import iconFertilize from '~/assets/elements/fertilize_icon.png?as=avif&width=40&height=40@loader';
 
 interface IGameAmountFertilize {
 	amountFertilize: number;

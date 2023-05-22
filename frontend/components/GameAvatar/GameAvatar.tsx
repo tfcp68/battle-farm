@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
-import styles from './GameAvatar.module.scss';
-import { TPlayerClass } from '~/src/types/serializables/players';
-import useImage from '~/hooks/useImage';
-import { TCardType } from '~/src/types/serializables/cards';
+import { useImage } from '~/frontend/hooks/useImage';
 import { getPlayerClassName } from '~/src/helpers/playerClass';
+import { TPlayerClass } from '~/src/types/serializables/players';
+import styles from './GameAvatar.module.scss';
 
 interface IGameAvatarProps {
 	avatarImageIx: TPlayerClass;
@@ -12,8 +11,7 @@ interface IGameAvatarProps {
 
 const GameAvatar: FC<IGameAvatarProps> = ({ avatarImageIx, typeAvatar }) => {
 	const avatarName = getPlayerClassName(avatarImageIx);
-
-	const { image } = useImage(avatarName, TCardType.CLASS_HERO);
+	const { image } = useImage(avatarName, 'SMALL');
 	return (
 		<div className={styles.gameAvatar}>
 			<div

@@ -14,7 +14,7 @@ const config: Configuration = {
 			'~/components': path.resolve(ROOT_DIR, 'frontend/components'),
 			'~/assets': path.resolve(ROOT_DIR, 'assets'),
 			'~/src': path.resolve(ROOT_DIR, 'src'),
-			'~/hooks': path.resolve(ROOT_DIR, 'frontend/hooks'),
+			'~/frontend': path.resolve(ROOT_DIR, 'frontend'),
 		},
 		extensions: ['.tsx', '.ts', '.js'],
 	},

@@ -1,7 +1,7 @@
-import { TActionId } from '~/src/types/serializables/actions';
 import { TCropId } from '~/src/types/serializables/crops';
+import { TActionId } from '~/src/types/serializables/actions';
 import { TPlayerClassKeys } from '~/src/types/serializables/players';
-import { UICardSize, UIClassSize } from '../../../frontend/constants/assetSIzes';
+import { UICardSize, UIClassSize } from '~/frontend/constants/assetSIzes';
 
 export type TAssetsDictionary = {
 	[T in TAssetNamesDict]: Partial<
@@ -36,5 +36,12 @@ export type TBaseAssetSize<K extends TAssetNamesDict> = K extends TAssetNamesDic
 	: K extends TAssetNamesDict.CROPS
 	? keyof typeof UICardSize
 	: K extends TAssetNamesDict.CLASSES
+	? keyof typeof UIClassSize
+	: never;
+export type TBaseSizeKeys<K extends TActionId | TCropId | TPlayerClassKeys> = K extends TActionId
+	? keyof typeof UICardSize
+	: K extends TCropId
+	? keyof typeof UICardSize
+	: K extends TPlayerClassKeys
 	? keyof typeof UIClassSize
 	: never;

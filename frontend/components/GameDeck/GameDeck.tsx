@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react';
 import styles from './GameDeck.module.scss';
 import { TCard } from '~/src/types/serializables/cards';
-import cardBack from '~/assets/elements/card_back.png';
+import cardBack from '~/assets/elements/card_back.png?as=webp&width=300&height==300@loader';
 
 interface IGameDeckProps {
 	listCards: TCard[];
 }
 
 const GameDeck: FC<IGameDeckProps> = ({ listCards }) => {
-	const [amountCards, setAmountCards] = useState(listCards);
+	const [amountCards] = useState(listCards);
 	return (
 		<div className={styles.deck}>
 			<div className={styles.deck__info}>

@@ -1,15 +1,17 @@
 import React from 'react';
-import styles from './GameCard.module.scss';
-import useImage from '~/hooks/useImage';
+import { useImage } from '~/frontend/hooks/useImage';
+import { TActionId } from '~/src/types/serializables/actions';
 import { TCardType } from '~/src/types/serializables/cards';
+import { TCropId } from '~/src/types/serializables/crops';
+import styles from './GameCard.module.scss';
 
 interface IGameCardProps {
-	cropImage: string;
+	cropImage: TCropId | TActionId;
 	typeCard: TCardType;
 }
 
-const GameCard: React.FC<IGameCardProps> = ({ cropImage, typeCard }) => {
-	const { image, loading, error } = useImage(cropImage, typeCard);
+const GameCard: React.FC<IGameCardProps> = ({ cropImage }) => {
+	const { image, loading, error } = useImage(cropImage, 'SMALL');
 	if (error) return <p>{'Error loading images'}</p>;
 	return !loading ? (
 		<section className={styles.gameCard}>
