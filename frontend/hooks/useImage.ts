@@ -15,14 +15,14 @@ export const useImage = <T extends TActionId | TCropId | TPlayerClassKeys>(fileN
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 	useEffect(() => {
+		let imgPath = '';
+		const ext = getExt();
+		if (isCropCardId(fileName)) imgPath = getAssetPath(TAssetNamesDict.CROPS, fileName, size, ext);
+		if (isActionCardId(fileName)) imgPath = getAssetPath(TAssetNamesDict.ACTIONS, fileName, size, ext);
+		if (isPlayerClassKey(fileName) && isUIClassSizeKeys(size)) {
+			imgPath = getAssetPath(TAssetNamesDict.CLASSES, fileName, size, ext);
+		}
 		const fetchImage = async () => {
-			let imgPath: string | undefined;
-			const ext = getExt();
-			if (isCropCardId(fileName)) imgPath = getAssetPath(TAssetNamesDict.CROPS, fileName, size, ext);
-			if (isActionCardId(fileName)) imgPath = getAssetPath(TAssetNamesDict.ACTIONS, fileName, size, ext);
-			if (isPlayerClassKey(fileName) && isUIClassSizeKeys(size)) {
-				imgPath = getAssetPath(TAssetNamesDict.CLASSES, fileName, size, ext);
-			}
 			try {
 				const response = await import(/* webpackMode: "lazy-once" */ `~/assets/thumbs/${imgPath}`);
 				setImage(response.default);
