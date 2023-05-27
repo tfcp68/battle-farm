@@ -1,4 +1,4 @@
-import { TUIAllSizesKeys } from '../../../frontend/constants/assetSIzes';
+import { TUIAllSizes } from '../../../frontend/constants/assetSIzes';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import { extTypes, TAssetNamesKeys } from '../../../src/types/build/assetBuilderTypes';
 import { getPresetName } from '../uitls';
@@ -9,7 +9,7 @@ const formatSettings: {
 	// https://sharp.pixelplumbing.com/api-output#avif
 	avif: {
 		effort: 9,
-		qualitys: 75,
+		quality: 75,
 	},
 
 	// https://sharp.pixelplumbing.com/api-output#webp
@@ -31,7 +31,7 @@ type baseDefaultLayout = {
 	filename: () => string;
 };
 
-export function getPresets(sizes: TUIAllSizesKeys, assetType: TAssetNamesKeys) {
+export function getPresets(sizes: TUIAllSizes, assetType: TAssetNamesKeys) {
 	const result: baseDefaultLayout[] = [];
 	const values = Object.values(sizes);
 
@@ -48,6 +48,7 @@ export function getPresets(sizes: TUIAllSizesKeys, assetType: TAssetNamesKeys) {
 							...formatSettings[ext],
 						},
 					},
+
 					resize: {
 						enabled: true,
 						width: values[index],

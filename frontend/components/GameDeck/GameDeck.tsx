@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import styles from './GameDeck.module.scss';
 import { TCard } from '~/src/types/serializables/cards';
-import cardBack from '~/assets/elements/card_back.png?as=webp&width=300&height==300@loader';
+import cardBack from '~/assets/elements/card_back.png?as=avif&width=20&height=20@loader';
 
 interface IGameDeckProps {
 	listCards: TCard[];

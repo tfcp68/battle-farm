@@ -1,8 +1,8 @@
 import { extTypes, TAssetNamesKeys } from '../../../src/types/build/assetBuilderTypes';
-import { TUIAllSizesKeys } from '../../../frontend/constants/assetSIzes';
+import { TUIAllSizes } from '../../../frontend/constants/assetSIzes';
 import { getPresetName } from '../uitls';
 
-export const GetPresetsDefinePlugin = (sizes: TUIAllSizesKeys, assetType: TAssetNamesKeys) => {
+export const GetPresetsDefinePlugin = (sizes: TUIAllSizes, assetType: TAssetNamesKeys) => {
 	const preset: any = {};
 	const keys = Object.keys(sizes);
 	Object.values(extTypes).forEach((ext) => {

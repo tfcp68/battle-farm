@@ -14,6 +14,7 @@ export const useImage = <T extends TActionId | TCropId | TPlayerClassKeys>(fileN
 	const [image, setImage] = useState<string>('');
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
+
 	useEffect(() => {
 		let imgPath = '';
 		const ext = getExt();
@@ -24,8 +25,13 @@ export const useImage = <T extends TActionId | TCropId | TPlayerClassKeys>(fileN
 		}
 		const fetchImage = async () => {
 			try {
-				const response = await import(/* webpackMode: "lazy-once" */ `~/assets/thumbs/${imgPath}`);
-				setImage(response.default);
+				const response = await import(
+					/* webpackMode: "lazy-once" */
+					// 1 async chunk for all  assets
+					`~/assets/thumbs/${imgPath}?version=3`
+				);
+
+				setImage(response.default + '?version=3');
 			} catch (err) {
 				setError(err);
 			} finally {

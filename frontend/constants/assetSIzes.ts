@@ -4,14 +4,14 @@ export const UIClassSize = {
 };
 
 export const UICardSize = {
-	SMALL: 300,
-	MEDIUM: 450,
-	LARGE: 600,
+	SMALL: 160,
+	MEDIUM: 550,
+	LARGE: 750,
 };
 
 export type TUICardSizeKeys = keyof typeof UICardSize;
 export type TUIClassSizeKeys = keyof typeof UIClassSize;
-export type TUIAllSizesKeys = typeof UIClassSize | typeof UICardSize;
+export type TUIAllSizes = typeof UIClassSize | typeof UICardSize;
 
 export const isUIClassSizeKeys = (s: any): s is TUIClassSizeKeys => {
 	return Object.keys(UIClassSize).includes(s);
