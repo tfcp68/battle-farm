@@ -1,10 +1,10 @@
 import {
-  ExtKeysT,
-  extTypes,
-  TAssetNamesDict,
-  TAssetsDictionary,
-  TBaseAsset,
-  TBaseAssetSize
+	ExtKeysT,
+	extTypes,
+	TAssetNamesDict,
+	TAssetsDictionary,
+	TBaseAsset,
+	TBaseAssetSize
 } from "../../../src/types/build/assetBuilderTypes";
 import * as path from "path";
 import { TPlayerClass, TPlayerClassKeys } from "../../../src/types/serializables/players";
@@ -85,7 +85,7 @@ export function importAll<K extends TAssetNamesDict>(
 		const pathArray = parsedPath.dir.split(path.posix.sep);
 		const fullPathToAsset = f(key);
 		const assetName = path.basename(key, '.png').toUpperCase() as TBaseAsset<K>;
-		dict[assetName]![pathArray[2] as TBaseAssetSize<K>]![pathArray[3].toUpperCase() as ExtKeysT] = fullPathToAsset;
+		dict[assetName][pathArray[2] as TBaseAssetSize<K>][pathArray[3].toUpperCase() as ExtKeysT] = fullPathToAsset;
 	});
 }
 

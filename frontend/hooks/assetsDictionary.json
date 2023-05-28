@@ -1,1044 +1,1044 @@
 {
-	"CLASSES": {
-		"EMPTY": {
-			"SMALL": {
-				"AVIF": "",
-				"WEBP": "",
-				"JPEG": ""
-			},
-			"LARGE": {
-				"AVIF": "",
-				"WEBP": "",
-				"JPEG": ""
-			}
-		},
-		"LAND_BARON": {
-			"SMALL": {
-				"AVIF": "assets/classes/SMALL/avif/land_baron.avif",
-				"WEBP": "assets/classes/SMALL/webp/land_baron.webp",
-				"JPEG": "assets/classes/SMALL/jpeg/land_baron.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/classes/LARGE/avif/land_baron.avif",
-				"WEBP": "assets/classes/LARGE/webp/land_baron.webp",
-				"JPEG": "assets/classes/LARGE/jpeg/land_baron.jpeg"
-			}
-		},
-		"GRIM_REAPER": {
-			"SMALL": {
-				"AVIF": "assets/classes/SMALL/avif/grim_reaper.avif",
-				"WEBP": "assets/classes/SMALL/webp/grim_reaper.webp",
-				"JPEG": "assets/classes/SMALL/jpeg/grim_reaper.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/classes/LARGE/avif/grim_reaper.avif",
-				"WEBP": "assets/classes/LARGE/webp/grim_reaper.webp",
-				"JPEG": "assets/classes/LARGE/jpeg/grim_reaper.jpeg"
-			}
-		},
-		"MASTER_GARDENER": {
-			"SMALL": {
-				"AVIF": "assets/classes/SMALL/avif/master_gardener.avif",
-				"WEBP": "assets/classes/SMALL/webp/master_gardener.webp",
-				"JPEG": "assets/classes/SMALL/jpeg/master_gardener.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/classes/LARGE/avif/master_gardener.avif",
-				"WEBP": "assets/classes/LARGE/webp/master_gardener.webp",
-				"JPEG": "assets/classes/LARGE/jpeg/master_gardener.jpeg"
-			}
-		},
-		"CROP_SCIENTIST": {
-			"SMALL": {
-				"AVIF": "assets/classes/SMALL/avif/crop_scientist.avif",
-				"WEBP": "assets/classes/SMALL/webp/crop_scientist.webp",
-				"JPEG": "assets/classes/SMALL/jpeg/crop_scientist.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/classes/LARGE/avif/crop_scientist.avif",
-				"WEBP": "assets/classes/LARGE/webp/crop_scientist.webp",
-				"JPEG": "assets/classes/LARGE/jpeg/crop_scientist.jpeg"
-			}
-		},
-		"SEED_TRADER": {
-			"SMALL": {
-				"AVIF": "assets/classes/SMALL/avif/seed_trader.avif",
-				"WEBP": "assets/classes/SMALL/webp/seed_trader.webp",
-				"JPEG": "assets/classes/SMALL/jpeg/seed_trader.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/classes/LARGE/avif/seed_trader.avif",
-				"WEBP": "assets/classes/LARGE/webp/seed_trader.webp",
-				"JPEG": "assets/classes/LARGE/jpeg/seed_trader.jpeg"
-			}
-		},
-		"WEATHER_WATCHER": {
-			"SMALL": {
-				"AVIF": "assets/classes/SMALL/avif/weather_watcher.avif",
-				"WEBP": "assets/classes/SMALL/webp/weather_watcher.webp",
-				"JPEG": "assets/classes/SMALL/jpeg/weather_watcher.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/classes/LARGE/avif/weather_watcher.avif",
-				"WEBP": "assets/classes/LARGE/webp/weather_watcher.webp",
-				"JPEG": "assets/classes/LARGE/jpeg/weather_watcher.jpeg"
-			}
-		}
-	},
-	"CROPS": {
-		"WHEAT": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/wheat.avif",
-				"WEBP": "assets/crops/SMALL/webp/wheat.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/wheat.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/wheat.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/wheat.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/wheat.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/wheat.avif",
-				"WEBP": "assets/crops/LARGE/webp/wheat.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/wheat.jpeg"
-			}
-		},
-		"CHERRY": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/cherry.avif",
-				"WEBP": "assets/crops/SMALL/webp/cherry.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/cherry.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/cherry.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/cherry.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/cherry.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/cherry.avif",
-				"WEBP": "assets/crops/LARGE/webp/cherry.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/cherry.jpeg"
-			}
-		},
-		"CABBAGE": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/cabbage.avif",
-				"WEBP": "assets/crops/SMALL/webp/cabbage.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/cabbage.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/cabbage.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/cabbage.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/cabbage.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/cabbage.avif",
-				"WEBP": "assets/crops/LARGE/webp/cabbage.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/cabbage.jpeg"
-			}
-		},
-		"CORN": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/corn.avif",
-				"WEBP": "assets/crops/SMALL/webp/corn.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/corn.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/corn.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/corn.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/corn.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/corn.avif",
-				"WEBP": "assets/crops/LARGE/webp/corn.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/corn.jpeg"
-			}
-		},
-		"CARROTS": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/carrots.avif",
-				"WEBP": "assets/crops/SMALL/webp/carrots.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/carrots.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/carrots.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/carrots.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/carrots.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/carrots.avif",
-				"WEBP": "assets/crops/LARGE/webp/carrots.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/carrots.jpeg"
-			}
-		},
-		"ONION": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/onion.avif",
-				"WEBP": "assets/crops/SMALL/webp/onion.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/onion.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/onion.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/onion.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/onion.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/onion.avif",
-				"WEBP": "assets/crops/LARGE/webp/onion.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/onion.jpeg"
-			}
-		},
-		"MANGO": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/mango.avif",
-				"WEBP": "assets/crops/SMALL/webp/mango.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/mango.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/mango.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/mango.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/mango.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/mango.avif",
-				"WEBP": "assets/crops/LARGE/webp/mango.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/mango.jpeg"
-			}
-		},
-		"TOMATO": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/tomato.avif",
-				"WEBP": "assets/crops/SMALL/webp/tomato.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/tomato.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/tomato.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/tomato.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/tomato.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/tomato.avif",
-				"WEBP": "assets/crops/LARGE/webp/tomato.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/tomato.jpeg"
-			}
-		},
-		"POTATO": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/potato.avif",
-				"WEBP": "assets/crops/SMALL/webp/potato.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/potato.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/potato.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/potato.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/potato.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/potato.avif",
-				"WEBP": "assets/crops/LARGE/webp/potato.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/potato.jpeg"
-			}
-		},
-		"MELON": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/melon.avif",
-				"WEBP": "assets/crops/SMALL/webp/melon.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/melon.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/melon.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/melon.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/melon.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/melon.avif",
-				"WEBP": "assets/crops/LARGE/webp/melon.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/melon.jpeg"
-			}
-		},
-		"BEANS": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/beans.avif",
-				"WEBP": "assets/crops/SMALL/webp/beans.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/beans.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/beans.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/beans.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/beans.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/beans.avif",
-				"WEBP": "assets/crops/LARGE/webp/beans.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/beans.jpeg"
-			}
-		},
-		"WASABI": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/wasabi.avif",
-				"WEBP": "assets/crops/SMALL/webp/wasabi.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/wasabi.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/wasabi.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/wasabi.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/wasabi.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/wasabi.avif",
-				"WEBP": "assets/crops/LARGE/webp/wasabi.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/wasabi.jpeg"
-			}
-		},
-		"PINEAPPLE": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/pineapple.avif",
-				"WEBP": "assets/crops/SMALL/webp/pineapple.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/pineapple.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/pineapple.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/pineapple.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/pineapple.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/pineapple.avif",
-				"WEBP": "assets/crops/LARGE/webp/pineapple.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/pineapple.jpeg"
-			}
-		},
-		"EGGPLANT": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/eggplant.avif",
-				"WEBP": "assets/crops/SMALL/webp/eggplant.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/eggplant.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/eggplant.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/eggplant.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/eggplant.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/eggplant.avif",
-				"WEBP": "assets/crops/LARGE/webp/eggplant.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/eggplant.jpeg"
-			}
-		},
-		"PEPPER": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/pepper.avif",
-				"WEBP": "assets/crops/SMALL/webp/pepper.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/pepper.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/pepper.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/pepper.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/pepper.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/pepper.avif",
-				"WEBP": "assets/crops/LARGE/webp/pepper.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/pepper.jpeg"
-			}
-		},
-		"TANGERINE": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/tangerine.avif",
-				"WEBP": "assets/crops/SMALL/webp/tangerine.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/tangerine.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/tangerine.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/tangerine.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/tangerine.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/tangerine.avif",
-				"WEBP": "assets/crops/LARGE/webp/tangerine.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/tangerine.jpeg"
-			}
-		},
-		"PUMPKIN": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/pumpkin.avif",
-				"WEBP": "assets/crops/SMALL/webp/pumpkin.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/pumpkin.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/pumpkin.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/pumpkin.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/pumpkin.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/pumpkin.avif",
-				"WEBP": "assets/crops/LARGE/webp/pumpkin.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/pumpkin.jpeg"
-			}
-		},
-		"GRAPE": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/grape.avif",
-				"WEBP": "assets/crops/SMALL/webp/grape.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/grape.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/grape.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/grape.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/grape.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/grape.avif",
-				"WEBP": "assets/crops/LARGE/webp/grape.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/grape.jpeg"
-			}
-		},
-		"CLOUDBERRY": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/cloudberry.avif",
-				"WEBP": "assets/crops/SMALL/webp/cloudberry.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/cloudberry.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/cloudberry.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/cloudberry.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/cloudberry.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/cloudberry.avif",
-				"WEBP": "assets/crops/LARGE/webp/cloudberry.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/cloudberry.jpeg"
-			}
-		},
-		"STRAWBERRY": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/strawberry.avif",
-				"WEBP": "assets/crops/SMALL/webp/strawberry.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/strawberry.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/strawberry.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/strawberry.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/strawberry.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/strawberry.avif",
-				"WEBP": "assets/crops/LARGE/webp/strawberry.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/strawberry.jpeg"
-			}
-		},
-		"BLUEBERRY": {
-			"SMALL": {
-				"AVIF": "assets/crops/SMALL/avif/blueberry.avif",
-				"WEBP": "assets/crops/SMALL/webp/blueberry.webp",
-				"JPEG": "assets/crops/SMALL/jpeg/blueberry.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/crops/MEDIUM/avif/blueberry.avif",
-				"WEBP": "assets/crops/MEDIUM/webp/blueberry.webp",
-				"JPEG": "assets/crops/MEDIUM/jpeg/blueberry.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/crops/LARGE/avif/blueberry.avif",
-				"WEBP": "assets/crops/LARGE/webp/blueberry.webp",
-				"JPEG": "assets/crops/LARGE/jpeg/blueberry.jpeg"
-			}
-		}
-	},
-	"ACTIONS": {
-		"GARDEN_GOURMET": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/garden_gourmet.avif",
-				"WEBP": "assets/actions/SMALL/webp/garden_gourmet.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/garden_gourmet.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/garden_gourmet.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/garden_gourmet.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/garden_gourmet.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/garden_gourmet.avif",
-				"WEBP": "assets/actions/LARGE/webp/garden_gourmet.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/garden_gourmet.jpeg"
-			}
-		},
-		"FERTILIZER_FRENZY": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/fertilizer_frenzy.avif",
-				"WEBP": "assets/actions/SMALL/webp/fertilizer_frenzy.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/fertilizer_frenzy.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/fertilizer_frenzy.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/fertilizer_frenzy.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/fertilizer_frenzy.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/fertilizer_frenzy.avif",
-				"WEBP": "assets/actions/LARGE/webp/fertilizer_frenzy.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/fertilizer_frenzy.jpeg"
-			}
-		},
-		"RECYCLE": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/recycle.avif",
-				"WEBP": "assets/actions/SMALL/webp/recycle.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/recycle.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/recycle.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/recycle.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/recycle.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/recycle.avif",
-				"WEBP": "assets/actions/LARGE/webp/recycle.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/recycle.jpeg"
-			}
-		},
-		"LUCKY_FIND": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/lucky_find.avif",
-				"WEBP": "assets/actions/SMALL/webp/lucky_find.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/lucky_find.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/lucky_find.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/lucky_find.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/lucky_find.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/lucky_find.avif",
-				"WEBP": "assets/actions/LARGE/webp/lucky_find.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/lucky_find.jpeg"
-			}
-		},
-		"GREEN_DAY": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/green_day.avif",
-				"WEBP": "assets/actions/SMALL/webp/green_day.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/green_day.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/green_day.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/green_day.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/green_day.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/green_day.avif",
-				"WEBP": "assets/actions/LARGE/webp/green_day.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/green_day.jpeg"
-			}
-		},
-		"RED_HEAT": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/red_heat.avif",
-				"WEBP": "assets/actions/SMALL/webp/red_heat.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/red_heat.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/red_heat.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/red_heat.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/red_heat.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/red_heat.avif",
-				"WEBP": "assets/actions/LARGE/webp/red_heat.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/red_heat.jpeg"
-			}
-		},
-		"YELLOW_GOLD": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/yellow_gold.avif",
-				"WEBP": "assets/actions/SMALL/webp/yellow_gold.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/yellow_gold.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/yellow_gold.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/yellow_gold.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/yellow_gold.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/yellow_gold.avif",
-				"WEBP": "assets/actions/LARGE/webp/yellow_gold.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/yellow_gold.jpeg"
-			}
-		},
-		"WEED_WHACKER": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/weed_whacker.avif",
-				"WEBP": "assets/actions/SMALL/webp/weed_whacker.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/weed_whacker.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/weed_whacker.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/weed_whacker.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/weed_whacker.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/weed_whacker.avif",
-				"WEBP": "assets/actions/LARGE/webp/weed_whacker.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/weed_whacker.jpeg"
-			}
-		},
-		"PEST_CONTROL": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/pest_control.avif",
-				"WEBP": "assets/actions/SMALL/webp/pest_control.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/pest_control.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/pest_control.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/pest_control.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/pest_control.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/pest_control.avif",
-				"WEBP": "assets/actions/LARGE/webp/pest_control.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/pest_control.jpeg"
-			}
-		},
-		"SUPERNATURAL_SELECTION": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/supernatural_selection.avif",
-				"WEBP": "assets/actions/SMALL/webp/supernatural_selection.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/supernatural_selection.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/supernatural_selection.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/supernatural_selection.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/supernatural_selection.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/supernatural_selection.avif",
-				"WEBP": "assets/actions/LARGE/webp/supernatural_selection.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/supernatural_selection.jpeg"
-			}
-		},
-		"FLOWER_POWER": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/flower_power.avif",
-				"WEBP": "assets/actions/SMALL/webp/flower_power.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/flower_power.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/flower_power.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/flower_power.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/flower_power.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/flower_power.avif",
-				"WEBP": "assets/actions/LARGE/webp/flower_power.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/flower_power.jpeg"
-			}
-		},
-		"FUNGUS_FLAY": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/fungus_flay.avif",
-				"WEBP": "assets/actions/SMALL/webp/fungus_flay.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/fungus_flay.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/fungus_flay.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/fungus_flay.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/fungus_flay.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/fungus_flay.avif",
-				"WEBP": "assets/actions/LARGE/webp/fungus_flay.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/fungus_flay.jpeg"
-			}
-		},
-		"SURGING_SEEDLINGS": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/surging_seedlings.avif",
-				"WEBP": "assets/actions/SMALL/webp/surging_seedlings.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/surging_seedlings.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/surging_seedlings.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/surging_seedlings.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/surging_seedlings.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/surging_seedlings.avif",
-				"WEBP": "assets/actions/LARGE/webp/surging_seedlings.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/surging_seedlings.jpeg"
-			}
-		},
-		"THORNY_FENCE": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/thorny_fence.avif",
-				"WEBP": "assets/actions/SMALL/webp/thorny_fence.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/thorny_fence.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/thorny_fence.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/thorny_fence.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/thorny_fence.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/thorny_fence.avif",
-				"WEBP": "assets/actions/LARGE/webp/thorny_fence.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/thorny_fence.jpeg"
-			}
-		},
-		"SOIL_ENRICHMENT": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/soil_enrichment.avif",
-				"WEBP": "assets/actions/SMALL/webp/soil_enrichment.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/soil_enrichment.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/soil_enrichment.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/soil_enrichment.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/soil_enrichment.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/soil_enrichment.avif",
-				"WEBP": "assets/actions/LARGE/webp/soil_enrichment.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/soil_enrichment.jpeg"
-			}
-		},
-		"SEED_SPROUT": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/seed_sprout.avif",
-				"WEBP": "assets/actions/SMALL/webp/seed_sprout.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/seed_sprout.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/seed_sprout.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/seed_sprout.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/seed_sprout.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/seed_sprout.avif",
-				"WEBP": "assets/actions/LARGE/webp/seed_sprout.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/seed_sprout.jpeg"
-			}
-		},
-		"POLLEN_PARADISE": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/pollen_paradise.avif",
-				"WEBP": "assets/actions/SMALL/webp/pollen_paradise.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/pollen_paradise.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/pollen_paradise.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/pollen_paradise.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/pollen_paradise.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/pollen_paradise.avif",
-				"WEBP": "assets/actions/LARGE/webp/pollen_paradise.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/pollen_paradise.jpeg"
-			}
-		},
-		"RETRACTABLE_GREENHOUSE": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/retractable_greenhouse.avif",
-				"WEBP": "assets/actions/SMALL/webp/retractable_greenhouse.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/retractable_greenhouse.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/retractable_greenhouse.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/retractable_greenhouse.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/retractable_greenhouse.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/retractable_greenhouse.avif",
-				"WEBP": "assets/actions/LARGE/webp/retractable_greenhouse.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/retractable_greenhouse.jpeg"
-			}
-		},
-		"GARDEN_GNOME": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/garden_gnome.avif",
-				"WEBP": "assets/actions/SMALL/webp/garden_gnome.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/garden_gnome.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/garden_gnome.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/garden_gnome.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/garden_gnome.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/garden_gnome.avif",
-				"WEBP": "assets/actions/LARGE/webp/garden_gnome.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/garden_gnome.jpeg"
-			}
-		},
-		"TRELLIS_BED": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/trellis_bed.avif",
-				"WEBP": "assets/actions/SMALL/webp/trellis_bed.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/trellis_bed.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/trellis_bed.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/trellis_bed.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/trellis_bed.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/trellis_bed.avif",
-				"WEBP": "assets/actions/LARGE/webp/trellis_bed.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/trellis_bed.jpeg"
-			}
-		},
-		"VERTICAL_BED": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/vertical_bed.avif",
-				"WEBP": "assets/actions/SMALL/webp/vertical_bed.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/vertical_bed.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/vertical_bed.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/vertical_bed.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/vertical_bed.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/vertical_bed.avif",
-				"WEBP": "assets/actions/LARGE/webp/vertical_bed.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/vertical_bed.jpeg"
-			}
-		},
-		"ROTATIONAL_BED": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/rotational_bed.avif",
-				"WEBP": "assets/actions/SMALL/webp/rotational_bed.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/rotational_bed.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/rotational_bed.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/rotational_bed.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/rotational_bed.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/rotational_bed.avif",
-				"WEBP": "assets/actions/LARGE/webp/rotational_bed.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/rotational_bed.jpeg"
-			}
-		},
-		"WASTE_DISPOSAL": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/waste_disposal.avif",
-				"WEBP": "assets/actions/SMALL/webp/waste_disposal.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/waste_disposal.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/waste_disposal.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/waste_disposal.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/waste_disposal.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/waste_disposal.avif",
-				"WEBP": "assets/actions/LARGE/webp/waste_disposal.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/waste_disposal.jpeg"
-			}
-		},
-		"CARTEL_AGREEMENT": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/cartel_agreement.avif",
-				"WEBP": "assets/actions/SMALL/webp/cartel_agreement.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/cartel_agreement.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/cartel_agreement.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/cartel_agreement.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/cartel_agreement.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/cartel_agreement.avif",
-				"WEBP": "assets/actions/LARGE/webp/cartel_agreement.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/cartel_agreement.jpeg"
-			}
-		},
-		"CHEMICAL_BLISS": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/chemical_bliss.avif",
-				"WEBP": "assets/actions/SMALL/webp/chemical_bliss.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/chemical_bliss.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/chemical_bliss.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/chemical_bliss.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/chemical_bliss.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/chemical_bliss.avif",
-				"WEBP": "assets/actions/LARGE/webp/chemical_bliss.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/chemical_bliss.jpeg"
-			}
-		},
-		"DROUGHT": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/drought.avif",
-				"WEBP": "assets/actions/SMALL/webp/drought.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/drought.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/drought.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/drought.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/drought.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/drought.avif",
-				"WEBP": "assets/actions/LARGE/webp/drought.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/drought.jpeg"
-			}
-		},
-		"CLONE": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/clone.avif",
-				"WEBP": "assets/actions/SMALL/webp/clone.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/clone.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/clone.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/clone.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/clone.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/clone.avif",
-				"WEBP": "assets/actions/LARGE/webp/clone.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/clone.jpeg"
-			}
-		},
-		"WITHER": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/wither.avif",
-				"WEBP": "assets/actions/SMALL/webp/wither.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/wither.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/wither.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/wither.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/wither.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/wither.avif",
-				"WEBP": "assets/actions/LARGE/webp/wither.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/wither.jpeg"
-			}
-		},
-		"BLACK_FRIDAY": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/black_friday.avif",
-				"WEBP": "assets/actions/SMALL/webp/black_friday.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/black_friday.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/black_friday.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/black_friday.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/black_friday.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/black_friday.avif",
-				"WEBP": "assets/actions/LARGE/webp/black_friday.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/black_friday.jpeg"
-			}
-		},
-		"CLOUD_COVER": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/cloud_cover.avif",
-				"WEBP": "assets/actions/SMALL/webp/cloud_cover.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/cloud_cover.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/cloud_cover.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/cloud_cover.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/cloud_cover.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/cloud_cover.avif",
-				"WEBP": "assets/actions/LARGE/webp/cloud_cover.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/cloud_cover.jpeg"
-			}
-		},
-		"DEMON": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/demon.avif",
-				"WEBP": "assets/actions/SMALL/webp/demon.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/demon.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/demon.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/demon.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/demon.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/demon.avif",
-				"WEBP": "assets/actions/LARGE/webp/demon.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/demon.jpeg"
-			}
-		},
-		"EARLY_BIRD": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/early_bird.avif",
-				"WEBP": "assets/actions/SMALL/webp/early_bird.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/early_bird.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/early_bird.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/early_bird.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/early_bird.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/early_bird.avif",
-				"WEBP": "assets/actions/LARGE/webp/early_bird.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/early_bird.jpeg"
-			}
-		},
-		"REAP_AND_SOW": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/reap_and_sow.avif",
-				"WEBP": "assets/actions/SMALL/webp/reap_and_sow.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/reap_and_sow.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/reap_and_sow.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/reap_and_sow.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/reap_and_sow.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/reap_and_sow.avif",
-				"WEBP": "assets/actions/LARGE/webp/reap_and_sow.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/reap_and_sow.jpeg"
-			}
-		},
-		"LAND_RECLAMATION": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/land_reclamation.avif",
-				"WEBP": "assets/actions/SMALL/webp/land_reclamation.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/land_reclamation.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/land_reclamation.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/land_reclamation.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/land_reclamation.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/land_reclamation.avif",
-				"WEBP": "assets/actions/LARGE/webp/land_reclamation.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/land_reclamation.jpeg"
-			}
-		},
-		"GENETIC_MODIFICATION": {
-			"SMALL": {
-				"AVIF": "assets/actions/SMALL/avif/genetic_modification.avif",
-				"WEBP": "assets/actions/SMALL/webp/genetic_modification.webp",
-				"JPEG": "assets/actions/SMALL/jpeg/genetic_modification.jpeg"
-			},
-			"MEDIUM": {
-				"AVIF": "assets/actions/MEDIUM/avif/genetic_modification.avif",
-				"WEBP": "assets/actions/MEDIUM/webp/genetic_modification.webp",
-				"JPEG": "assets/actions/MEDIUM/jpeg/genetic_modification.jpeg"
-			},
-			"LARGE": {
-				"AVIF": "assets/actions/LARGE/avif/genetic_modification.avif",
-				"WEBP": "assets/actions/LARGE/webp/genetic_modification.webp",
-				"JPEG": "assets/actions/LARGE/jpeg/genetic_modification.jpeg"
-			}
-		}
-	}
+    "CLASSES": {
+        "EMPTY": {
+            "SMALL": {
+                "AVIF": "",
+                "WEBP": "",
+                "JPEG": ""
+            },
+            "LARGE": {
+                "AVIF": "",
+                "WEBP": "",
+                "JPEG": ""
+            }
+        },
+        "LAND_BARON": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/land_baron.avif",
+                "WEBP": "assets/classes/SMALL/webp/land_baron.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/land_baron.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/land_baron.avif",
+                "WEBP": "assets/classes/LARGE/webp/land_baron.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/land_baron.jpeg"
+            }
+        },
+        "GRIM_REAPER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/grim_reaper.avif",
+                "WEBP": "assets/classes/SMALL/webp/grim_reaper.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/grim_reaper.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/grim_reaper.avif",
+                "WEBP": "assets/classes/LARGE/webp/grim_reaper.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/grim_reaper.jpeg"
+            }
+        },
+        "MASTER_GARDENER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/master_gardener.avif",
+                "WEBP": "assets/classes/SMALL/webp/master_gardener.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/master_gardener.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/master_gardener.avif",
+                "WEBP": "assets/classes/LARGE/webp/master_gardener.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/master_gardener.jpeg"
+            }
+        },
+        "CROP_SCIENTIST": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/crop_scientist.avif",
+                "WEBP": "assets/classes/SMALL/webp/crop_scientist.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/crop_scientist.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/crop_scientist.avif",
+                "WEBP": "assets/classes/LARGE/webp/crop_scientist.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/crop_scientist.jpeg"
+            }
+        },
+        "SEED_TRADER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/seed_trader.avif",
+                "WEBP": "assets/classes/SMALL/webp/seed_trader.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/seed_trader.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/seed_trader.avif",
+                "WEBP": "assets/classes/LARGE/webp/seed_trader.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/seed_trader.jpeg"
+            }
+        },
+        "WEATHER_WATCHER": {
+            "SMALL": {
+                "AVIF": "assets/classes/SMALL/avif/weather_watcher.avif",
+                "WEBP": "assets/classes/SMALL/webp/weather_watcher.webp",
+                "JPEG": "assets/classes/SMALL/jpeg/weather_watcher.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/classes/LARGE/avif/weather_watcher.avif",
+                "WEBP": "assets/classes/LARGE/webp/weather_watcher.webp",
+                "JPEG": "assets/classes/LARGE/jpeg/weather_watcher.jpeg"
+            }
+        }
+    },
+    "CROPS": {
+        "WHEAT": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/wheat.avif",
+                "WEBP": "assets/crops/SMALL/webp/wheat.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/wheat.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/wheat.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/wheat.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/wheat.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/wheat.avif",
+                "WEBP": "assets/crops/LARGE/webp/wheat.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/wheat.jpeg"
+            }
+        },
+        "CHERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/cherry.avif",
+                "WEBP": "assets/crops/SMALL/webp/cherry.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/cherry.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/cherry.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/cherry.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/cherry.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/cherry.avif",
+                "WEBP": "assets/crops/LARGE/webp/cherry.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/cherry.jpeg"
+            }
+        },
+        "CABBAGE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/cabbage.avif",
+                "WEBP": "assets/crops/SMALL/webp/cabbage.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/cabbage.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/cabbage.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/cabbage.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/cabbage.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/cabbage.avif",
+                "WEBP": "assets/crops/LARGE/webp/cabbage.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/cabbage.jpeg"
+            }
+        },
+        "CORN": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/corn.avif",
+                "WEBP": "assets/crops/SMALL/webp/corn.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/corn.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/corn.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/corn.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/corn.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/corn.avif",
+                "WEBP": "assets/crops/LARGE/webp/corn.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/corn.jpeg"
+            }
+        },
+        "CARROTS": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/carrots.avif",
+                "WEBP": "assets/crops/SMALL/webp/carrots.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/carrots.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/carrots.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/carrots.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/carrots.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/carrots.avif",
+                "WEBP": "assets/crops/LARGE/webp/carrots.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/carrots.jpeg"
+            }
+        },
+        "ONION": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/onion.avif",
+                "WEBP": "assets/crops/SMALL/webp/onion.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/onion.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/onion.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/onion.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/onion.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/onion.avif",
+                "WEBP": "assets/crops/LARGE/webp/onion.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/onion.jpeg"
+            }
+        },
+        "MANGO": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/mango.avif",
+                "WEBP": "assets/crops/SMALL/webp/mango.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/mango.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/mango.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/mango.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/mango.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/mango.avif",
+                "WEBP": "assets/crops/LARGE/webp/mango.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/mango.jpeg"
+            }
+        },
+        "TOMATO": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/tomato.avif",
+                "WEBP": "assets/crops/SMALL/webp/tomato.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/tomato.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/tomato.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/tomato.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/tomato.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/tomato.avif",
+                "WEBP": "assets/crops/LARGE/webp/tomato.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/tomato.jpeg"
+            }
+        },
+        "POTATO": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/potato.avif",
+                "WEBP": "assets/crops/SMALL/webp/potato.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/potato.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/potato.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/potato.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/potato.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/potato.avif",
+                "WEBP": "assets/crops/LARGE/webp/potato.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/potato.jpeg"
+            }
+        },
+        "MELON": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/melon.avif",
+                "WEBP": "assets/crops/SMALL/webp/melon.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/melon.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/melon.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/melon.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/melon.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/melon.avif",
+                "WEBP": "assets/crops/LARGE/webp/melon.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/melon.jpeg"
+            }
+        },
+        "BEANS": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/beans.avif",
+                "WEBP": "assets/crops/SMALL/webp/beans.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/beans.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/beans.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/beans.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/beans.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/beans.avif",
+                "WEBP": "assets/crops/LARGE/webp/beans.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/beans.jpeg"
+            }
+        },
+        "WASABI": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/wasabi.avif",
+                "WEBP": "assets/crops/SMALL/webp/wasabi.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/wasabi.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/wasabi.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/wasabi.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/wasabi.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/wasabi.avif",
+                "WEBP": "assets/crops/LARGE/webp/wasabi.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/wasabi.jpeg"
+            }
+        },
+        "PINEAPPLE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/pineapple.avif",
+                "WEBP": "assets/crops/SMALL/webp/pineapple.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/pineapple.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/pineapple.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/pineapple.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/pineapple.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/pineapple.avif",
+                "WEBP": "assets/crops/LARGE/webp/pineapple.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/pineapple.jpeg"
+            }
+        },
+        "EGGPLANT": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/eggplant.avif",
+                "WEBP": "assets/crops/SMALL/webp/eggplant.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/eggplant.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/eggplant.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/eggplant.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/eggplant.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/eggplant.avif",
+                "WEBP": "assets/crops/LARGE/webp/eggplant.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/eggplant.jpeg"
+            }
+        },
+        "PEPPER": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/pepper.avif",
+                "WEBP": "assets/crops/SMALL/webp/pepper.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/pepper.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/pepper.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/pepper.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/pepper.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/pepper.avif",
+                "WEBP": "assets/crops/LARGE/webp/pepper.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/pepper.jpeg"
+            }
+        },
+        "TANGERINE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/tangerine.avif",
+                "WEBP": "assets/crops/SMALL/webp/tangerine.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/tangerine.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/tangerine.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/tangerine.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/tangerine.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/tangerine.avif",
+                "WEBP": "assets/crops/LARGE/webp/tangerine.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/tangerine.jpeg"
+            }
+        },
+        "PUMPKIN": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/pumpkin.avif",
+                "WEBP": "assets/crops/SMALL/webp/pumpkin.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/pumpkin.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/pumpkin.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/pumpkin.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/pumpkin.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/pumpkin.avif",
+                "WEBP": "assets/crops/LARGE/webp/pumpkin.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/pumpkin.jpeg"
+            }
+        },
+        "GRAPE": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/grape.avif",
+                "WEBP": "assets/crops/SMALL/webp/grape.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/grape.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/grape.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/grape.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/grape.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/grape.avif",
+                "WEBP": "assets/crops/LARGE/webp/grape.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/grape.jpeg"
+            }
+        },
+        "CLOUDBERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/cloudberry.avif",
+                "WEBP": "assets/crops/SMALL/webp/cloudberry.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/cloudberry.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/cloudberry.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/cloudberry.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/cloudberry.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/cloudberry.avif",
+                "WEBP": "assets/crops/LARGE/webp/cloudberry.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/cloudberry.jpeg"
+            }
+        },
+        "STRAWBERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/strawberry.avif",
+                "WEBP": "assets/crops/SMALL/webp/strawberry.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/strawberry.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/strawberry.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/strawberry.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/strawberry.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/strawberry.avif",
+                "WEBP": "assets/crops/LARGE/webp/strawberry.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/strawberry.jpeg"
+            }
+        },
+        "BLUEBERRY": {
+            "SMALL": {
+                "AVIF": "assets/crops/SMALL/avif/blueberry.avif",
+                "WEBP": "assets/crops/SMALL/webp/blueberry.webp",
+                "JPEG": "assets/crops/SMALL/jpeg/blueberry.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/crops/MEDIUM/avif/blueberry.avif",
+                "WEBP": "assets/crops/MEDIUM/webp/blueberry.webp",
+                "JPEG": "assets/crops/MEDIUM/jpeg/blueberry.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/crops/LARGE/avif/blueberry.avif",
+                "WEBP": "assets/crops/LARGE/webp/blueberry.webp",
+                "JPEG": "assets/crops/LARGE/jpeg/blueberry.jpeg"
+            }
+        }
+    },
+    "ACTIONS": {
+        "GARDEN_GOURMET": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/garden_gourmet.avif",
+                "WEBP": "assets/actions/SMALL/webp/garden_gourmet.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/garden_gourmet.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/garden_gourmet.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/garden_gourmet.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/garden_gourmet.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/garden_gourmet.avif",
+                "WEBP": "assets/actions/LARGE/webp/garden_gourmet.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/garden_gourmet.jpeg"
+            }
+        },
+        "FERTILIZER_FRENZY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/fertilizer_frenzy.avif",
+                "WEBP": "assets/actions/SMALL/webp/fertilizer_frenzy.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/fertilizer_frenzy.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/fertilizer_frenzy.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/fertilizer_frenzy.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/fertilizer_frenzy.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/fertilizer_frenzy.avif",
+                "WEBP": "assets/actions/LARGE/webp/fertilizer_frenzy.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/fertilizer_frenzy.jpeg"
+            }
+        },
+        "RECYCLE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/recycle.avif",
+                "WEBP": "assets/actions/SMALL/webp/recycle.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/recycle.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/recycle.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/recycle.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/recycle.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/recycle.avif",
+                "WEBP": "assets/actions/LARGE/webp/recycle.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/recycle.jpeg"
+            }
+        },
+        "LUCKY_FIND": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/lucky_find.avif",
+                "WEBP": "assets/actions/SMALL/webp/lucky_find.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/lucky_find.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/lucky_find.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/lucky_find.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/lucky_find.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/lucky_find.avif",
+                "WEBP": "assets/actions/LARGE/webp/lucky_find.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/lucky_find.jpeg"
+            }
+        },
+        "GREEN_DAY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/green_day.avif",
+                "WEBP": "assets/actions/SMALL/webp/green_day.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/green_day.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/green_day.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/green_day.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/green_day.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/green_day.avif",
+                "WEBP": "assets/actions/LARGE/webp/green_day.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/green_day.jpeg"
+            }
+        },
+        "RED_HEAT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/red_heat.avif",
+                "WEBP": "assets/actions/SMALL/webp/red_heat.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/red_heat.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/red_heat.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/red_heat.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/red_heat.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/red_heat.avif",
+                "WEBP": "assets/actions/LARGE/webp/red_heat.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/red_heat.jpeg"
+            }
+        },
+        "YELLOW_GOLD": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/yellow_gold.avif",
+                "WEBP": "assets/actions/SMALL/webp/yellow_gold.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/yellow_gold.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/yellow_gold.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/yellow_gold.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/yellow_gold.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/yellow_gold.avif",
+                "WEBP": "assets/actions/LARGE/webp/yellow_gold.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/yellow_gold.jpeg"
+            }
+        },
+        "WEED_WHACKER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/weed_whacker.avif",
+                "WEBP": "assets/actions/SMALL/webp/weed_whacker.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/weed_whacker.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/weed_whacker.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/weed_whacker.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/weed_whacker.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/weed_whacker.avif",
+                "WEBP": "assets/actions/LARGE/webp/weed_whacker.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/weed_whacker.jpeg"
+            }
+        },
+        "PEST_CONTROL": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/pest_control.avif",
+                "WEBP": "assets/actions/SMALL/webp/pest_control.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/pest_control.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/pest_control.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/pest_control.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/pest_control.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/pest_control.avif",
+                "WEBP": "assets/actions/LARGE/webp/pest_control.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/pest_control.jpeg"
+            }
+        },
+        "SUPERNATURAL_SELECTION": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/supernatural_selection.avif",
+                "WEBP": "assets/actions/SMALL/webp/supernatural_selection.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/supernatural_selection.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/supernatural_selection.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/supernatural_selection.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/supernatural_selection.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/supernatural_selection.avif",
+                "WEBP": "assets/actions/LARGE/webp/supernatural_selection.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/supernatural_selection.jpeg"
+            }
+        },
+        "FLOWER_POWER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/flower_power.avif",
+                "WEBP": "assets/actions/SMALL/webp/flower_power.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/flower_power.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/flower_power.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/flower_power.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/flower_power.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/flower_power.avif",
+                "WEBP": "assets/actions/LARGE/webp/flower_power.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/flower_power.jpeg"
+            }
+        },
+        "FUNGUS_FLAY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/fungus_flay.avif",
+                "WEBP": "assets/actions/SMALL/webp/fungus_flay.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/fungus_flay.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/fungus_flay.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/fungus_flay.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/fungus_flay.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/fungus_flay.avif",
+                "WEBP": "assets/actions/LARGE/webp/fungus_flay.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/fungus_flay.jpeg"
+            }
+        },
+        "SURGING_SEEDLINGS": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/surging_seedlings.avif",
+                "WEBP": "assets/actions/SMALL/webp/surging_seedlings.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/surging_seedlings.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/surging_seedlings.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/surging_seedlings.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/surging_seedlings.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/surging_seedlings.avif",
+                "WEBP": "assets/actions/LARGE/webp/surging_seedlings.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/surging_seedlings.jpeg"
+            }
+        },
+        "THORNY_FENCE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/thorny_fence.avif",
+                "WEBP": "assets/actions/SMALL/webp/thorny_fence.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/thorny_fence.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/thorny_fence.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/thorny_fence.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/thorny_fence.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/thorny_fence.avif",
+                "WEBP": "assets/actions/LARGE/webp/thorny_fence.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/thorny_fence.jpeg"
+            }
+        },
+        "SOIL_ENRICHMENT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/soil_enrichment.avif",
+                "WEBP": "assets/actions/SMALL/webp/soil_enrichment.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/soil_enrichment.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/soil_enrichment.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/soil_enrichment.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/soil_enrichment.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/soil_enrichment.avif",
+                "WEBP": "assets/actions/LARGE/webp/soil_enrichment.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/soil_enrichment.jpeg"
+            }
+        },
+        "SEED_SPROUT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/seed_sprout.avif",
+                "WEBP": "assets/actions/SMALL/webp/seed_sprout.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/seed_sprout.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/seed_sprout.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/seed_sprout.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/seed_sprout.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/seed_sprout.avif",
+                "WEBP": "assets/actions/LARGE/webp/seed_sprout.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/seed_sprout.jpeg"
+            }
+        },
+        "POLLEN_PARADISE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/pollen_paradise.avif",
+                "WEBP": "assets/actions/SMALL/webp/pollen_paradise.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/pollen_paradise.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/pollen_paradise.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/pollen_paradise.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/pollen_paradise.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/pollen_paradise.avif",
+                "WEBP": "assets/actions/LARGE/webp/pollen_paradise.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/pollen_paradise.jpeg"
+            }
+        },
+        "RETRACTABLE_GREENHOUSE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/retractable_greenhouse.avif",
+                "WEBP": "assets/actions/SMALL/webp/retractable_greenhouse.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/retractable_greenhouse.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/retractable_greenhouse.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/retractable_greenhouse.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/retractable_greenhouse.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/retractable_greenhouse.avif",
+                "WEBP": "assets/actions/LARGE/webp/retractable_greenhouse.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/retractable_greenhouse.jpeg"
+            }
+        },
+        "GARDEN_GNOME": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/garden_gnome.avif",
+                "WEBP": "assets/actions/SMALL/webp/garden_gnome.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/garden_gnome.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/garden_gnome.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/garden_gnome.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/garden_gnome.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/garden_gnome.avif",
+                "WEBP": "assets/actions/LARGE/webp/garden_gnome.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/garden_gnome.jpeg"
+            }
+        },
+        "TRELLIS_BED": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/trellis_bed.avif",
+                "WEBP": "assets/actions/SMALL/webp/trellis_bed.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/trellis_bed.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/trellis_bed.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/trellis_bed.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/trellis_bed.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/trellis_bed.avif",
+                "WEBP": "assets/actions/LARGE/webp/trellis_bed.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/trellis_bed.jpeg"
+            }
+        },
+        "VERTICAL_BED": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/vertical_bed.avif",
+                "WEBP": "assets/actions/SMALL/webp/vertical_bed.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/vertical_bed.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/vertical_bed.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/vertical_bed.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/vertical_bed.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/vertical_bed.avif",
+                "WEBP": "assets/actions/LARGE/webp/vertical_bed.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/vertical_bed.jpeg"
+            }
+        },
+        "ROTATIONAL_BED": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/rotational_bed.avif",
+                "WEBP": "assets/actions/SMALL/webp/rotational_bed.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/rotational_bed.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/rotational_bed.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/rotational_bed.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/rotational_bed.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/rotational_bed.avif",
+                "WEBP": "assets/actions/LARGE/webp/rotational_bed.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/rotational_bed.jpeg"
+            }
+        },
+        "WASTE_DISPOSAL": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/waste_disposal.avif",
+                "WEBP": "assets/actions/SMALL/webp/waste_disposal.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/waste_disposal.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/waste_disposal.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/waste_disposal.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/waste_disposal.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/waste_disposal.avif",
+                "WEBP": "assets/actions/LARGE/webp/waste_disposal.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/waste_disposal.jpeg"
+            }
+        },
+        "CARTEL_AGREEMENT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/cartel_agreement.avif",
+                "WEBP": "assets/actions/SMALL/webp/cartel_agreement.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/cartel_agreement.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/cartel_agreement.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/cartel_agreement.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/cartel_agreement.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/cartel_agreement.avif",
+                "WEBP": "assets/actions/LARGE/webp/cartel_agreement.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/cartel_agreement.jpeg"
+            }
+        },
+        "CHEMICAL_BLISS": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/chemical_bliss.avif",
+                "WEBP": "assets/actions/SMALL/webp/chemical_bliss.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/chemical_bliss.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/chemical_bliss.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/chemical_bliss.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/chemical_bliss.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/chemical_bliss.avif",
+                "WEBP": "assets/actions/LARGE/webp/chemical_bliss.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/chemical_bliss.jpeg"
+            }
+        },
+        "DROUGHT": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/drought.avif",
+                "WEBP": "assets/actions/SMALL/webp/drought.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/drought.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/drought.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/drought.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/drought.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/drought.avif",
+                "WEBP": "assets/actions/LARGE/webp/drought.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/drought.jpeg"
+            }
+        },
+        "CLONE": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/clone.avif",
+                "WEBP": "assets/actions/SMALL/webp/clone.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/clone.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/clone.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/clone.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/clone.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/clone.avif",
+                "WEBP": "assets/actions/LARGE/webp/clone.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/clone.jpeg"
+            }
+        },
+        "WITHER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/wither.avif",
+                "WEBP": "assets/actions/SMALL/webp/wither.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/wither.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/wither.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/wither.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/wither.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/wither.avif",
+                "WEBP": "assets/actions/LARGE/webp/wither.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/wither.jpeg"
+            }
+        },
+        "BLACK_FRIDAY": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/black_friday.avif",
+                "WEBP": "assets/actions/SMALL/webp/black_friday.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/black_friday.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/black_friday.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/black_friday.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/black_friday.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/black_friday.avif",
+                "WEBP": "assets/actions/LARGE/webp/black_friday.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/black_friday.jpeg"
+            }
+        },
+        "CLOUD_COVER": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/cloud_cover.avif",
+                "WEBP": "assets/actions/SMALL/webp/cloud_cover.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/cloud_cover.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/cloud_cover.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/cloud_cover.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/cloud_cover.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/cloud_cover.avif",
+                "WEBP": "assets/actions/LARGE/webp/cloud_cover.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/cloud_cover.jpeg"
+            }
+        },
+        "DEMON": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/demon.avif",
+                "WEBP": "assets/actions/SMALL/webp/demon.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/demon.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/demon.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/demon.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/demon.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/demon.avif",
+                "WEBP": "assets/actions/LARGE/webp/demon.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/demon.jpeg"
+            }
+        },
+        "EARLY_BIRD": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/early_bird.avif",
+                "WEBP": "assets/actions/SMALL/webp/early_bird.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/early_bird.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/early_bird.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/early_bird.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/early_bird.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/early_bird.avif",
+                "WEBP": "assets/actions/LARGE/webp/early_bird.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/early_bird.jpeg"
+            }
+        },
+        "REAP_AND_SOW": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/reap_and_sow.avif",
+                "WEBP": "assets/actions/SMALL/webp/reap_and_sow.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/reap_and_sow.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/reap_and_sow.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/reap_and_sow.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/reap_and_sow.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/reap_and_sow.avif",
+                "WEBP": "assets/actions/LARGE/webp/reap_and_sow.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/reap_and_sow.jpeg"
+            }
+        },
+        "LAND_RECLAMATION": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/land_reclamation.avif",
+                "WEBP": "assets/actions/SMALL/webp/land_reclamation.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/land_reclamation.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/land_reclamation.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/land_reclamation.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/land_reclamation.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/land_reclamation.avif",
+                "WEBP": "assets/actions/LARGE/webp/land_reclamation.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/land_reclamation.jpeg"
+            }
+        },
+        "GENETIC_MODIFICATION": {
+            "SMALL": {
+                "AVIF": "assets/actions/SMALL/avif/genetic_modification.avif",
+                "WEBP": "assets/actions/SMALL/webp/genetic_modification.webp",
+                "JPEG": "assets/actions/SMALL/jpeg/genetic_modification.jpeg"
+            },
+            "MEDIUM": {
+                "AVIF": "assets/actions/MEDIUM/avif/genetic_modification.avif",
+                "WEBP": "assets/actions/MEDIUM/webp/genetic_modification.webp",
+                "JPEG": "assets/actions/MEDIUM/jpeg/genetic_modification.jpeg"
+            },
+            "LARGE": {
+                "AVIF": "assets/actions/LARGE/avif/genetic_modification.avif",
+                "WEBP": "assets/actions/LARGE/webp/genetic_modification.webp",
+                "JPEG": "assets/actions/LARGE/jpeg/genetic_modification.jpeg"
+            }
+        }
+    }
 }
