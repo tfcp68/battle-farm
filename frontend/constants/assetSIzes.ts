@@ -16,3 +16,7 @@ export type TUIAllSizes = typeof UIClassSize | typeof UICardSize;
 export const isUIClassSizeKeys = (s: any): s is TUIClassSizeKeys => {
 	return Object.keys(UIClassSize).includes(s);
 };
+
+export const isUICardSizeKeys = (s: any): s is TUICardSizeKeys => {
+	return Object.keys(UICardSize).includes(s);
+};
