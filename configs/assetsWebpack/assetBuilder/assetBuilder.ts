@@ -4,15 +4,15 @@ import {
 	TAssetNamesDict,
 	TAssetsDictionary,
 	TBaseAsset,
-	TBaseAssetSize
-} from "../../../src/types/build/assetBuilderTypes";
-import * as path from "path";
-import { TPlayerClass, TPlayerClassKeys } from "../../../src/types/serializables/players";
-import { ActionCardId, TActionId } from "../../../src/types/serializables/actions";
-import { CropCardId, TCropId } from "../../../src/types/serializables/crops";
-import { UICardSize, UIClassSize } from "../../../frontend/constants/assetSIzes";
-import * as fs from "fs";
-import { ROOT_DIR } from "../../paths";
+	TBaseAssetSize,
+} from '../../../src/types/build/assetBuilderTypes';
+import * as path from 'path';
+import { TPlayerClass, TPlayerClassKeys } from '../../../src/types/serializables/players';
+import { ActionCardId, TActionId } from '../../../src/types/serializables/actions';
+import { CropCardId, TCropId } from '../../../src/types/serializables/crops';
+import { UICardSize, UIClassSize } from '../../../frontend/constants/assetSizes';
+import * as fs from 'fs';
+import { ROOT_DIR } from '../../paths';
 
 // Injected through webpack/DefinePlugin
 declare const webpSMALLClasses: string;

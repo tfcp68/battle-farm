@@ -1,7 +1,7 @@
 import { TCropId } from '~/src/types/serializables/crops';
 import { TActionId } from '~/src/types/serializables/actions';
 import { TPlayerClassKeys } from '~/src/types/serializables/players';
-import { UICardSize, UIClassSize } from '~/frontend/constants/assetSIzes';
+import { UICardSize, UIClassSize } from '~/frontend/constants/assetSizes';
 
 export type TAssetsDictionary = {
 	[T in TAssetNamesDict]: Partial<

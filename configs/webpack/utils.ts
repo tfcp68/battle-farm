@@ -19,6 +19,14 @@ export const getPlugins = (isDev: boolean) => {
 				new CompressionPlugin({
 					algorithm: 'gzip',
 				}),
+				new CopyPlugin({
+					patterns: [
+						{
+							from: path.resolve(ROOT_DIR, 'assets', 'thumbs'),
+							to: path.resolve(ROOT_DIR, 'dist'),
+						},
+					],
+				}),
 		  ]);
 	return plugins;
 };

@@ -17,5 +17,5 @@ const GameHand: FC<IGameHandProps> = ({ listCards }) => {
 		</ul>
 	);
 };
-d;
+
 export default GameHand;
