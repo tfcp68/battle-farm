@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { getPlayerClassName } from '~/src/helpers/playerClass';
 import { TPlayerClass } from '~/src/types/serializables/players';
 import styles from './GameAvatar.module.scss';
-import { ImageLoader } from '~/components/LazyAsset/LazyAsset';
 import { useAsset } from '~/frontend/hooks/useAsset';
 
 interface IGameAvatarProps {
