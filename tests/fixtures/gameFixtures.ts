@@ -2,9 +2,7 @@ import { TGame, TGameContainer, TGamePhase, TTurnContainer } from '~/src/types/s
 import { deckFixture } from './cardsFixtures';
 import { marketFixture } from './marketFixtures';
 import { playerRecordFixturePlayer, playerRecordFixtureTurnContext, randomPlayerClass } from './playersFixture';
-import { Utils } from '~/src/automata';
-
-const { sampleRange, pickFromArray } = Utils;
+import { sampleRange, pickFromArray } from '@yantrix/utils';
 
 export function turnContainerFixture(props: Partial<TTurnContainer> = {}) {
 	const currentTurn = randomPlayerClass();

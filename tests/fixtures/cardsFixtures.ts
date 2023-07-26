@@ -3,9 +3,7 @@ import { isCropColor } from '~/src/types/guards/crops';
 import { ActionCardId, TActionCard } from '~/src/types/serializables/actions';
 import { TCard, TCardType, TDeck } from '~/src/types/serializables/cards';
 import { CropCardId, TCropCard, TCropColor } from '~/src/types/serializables/crops';
-import { Utils } from '~/src/automata';
-
-const { sampleRange, pickFromArray, sampleArray } = Utils;
+import { sampleRange, pickFromArray, sampleArray } from '@yantrix/utils';
 
 export function actionCardFixture(props: Partial<TActionCard> = {}) {
 	const [CardIdName] = pickFromArray(Object.values(ActionCardId));
