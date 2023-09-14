@@ -1,14 +1,10 @@
-export const getExt = () => {
-	return localStorage.getItem('AVIF') ? 'AVIF' : localStorage.getItem('WEBP') ? 'WEBP' : 'JPEG';
-};
+const storageKey = 'supportedImageFormat'
 
 export const canUseAviF: () => Promise<boolean> = () => {
+	debugger
 	return new Promise((resolve, reject) => {
-		if (localStorage.getItem('AVIF')) resolve(Boolean(localStorage.getItem('AVIF')));
-		localStorage.setItem('AVIF', '');
 		const AVIF = new Image();
 		AVIF.onload = () => {
-			localStorage.setItem('AVIF', 'true');
 			resolve(true);
 		};
 		setTimeout(() => {
@@ -26,12 +22,18 @@ export const canUseWebP = () => {
 	if (elem.getContext && elem.getContext('2d')) {
 		// was able or not to get WebP representation
 		webpSupport = elem.toDataURL('image/webp').indexOf('data:image/webp') === 0;
-		localStorage.setItem('WEBP', String(webpSupport));
 		return webpSupport;
 		// very old browser like IE 8, canvas not supported
 	}
 	return webpSupport;
 };
-Promise.all([canUseAviF(), canUseWebP()]).then(() => {
-	localStorage.setItem('checked', 'true');
-});
+
+export const setSupportedExt = (resArr:  [PromiseSettledResult<boolean>, PromiseSettledResult<boolean>])=>{
+	console.log(resArr)
+	if (resArr[1]) return localStorage.setItem(storageKey,'AVIF')
+	if(resArr[0]) return localStorage.setItem(storageKey, 'WEBP')
+	else return localStorage.setItem(storageKey, 'JPEG')
+}
+export const getExt = () => {
+	return localStorage.getItem(storageKey)
+};
