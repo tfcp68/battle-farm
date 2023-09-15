@@ -4,15 +4,32 @@ import {
 	TAssetNamesDict,
 	TAssetsDictionary,
 	TBaseAsset,
-	TBaseAssetSize,
-} from '../../../src/types/build/assetBuilderTypes';
-import * as path from 'path';
-import { TPlayerClass, TPlayerClassKeys } from '../../../src/types/serializables/players';
-import { ActionCardId, TActionId } from '../../../src/types/serializables/actions';
-import { CropCardId, TCropId } from '../../../src/types/serializables/crops';
-import { UICardSize, UIClassSize } from '../../../frontend/constants/assetSizes';
-import * as fs from 'fs';
-import { ROOT_DIR } from '../../paths';
+	TBaseAssetSize
+} from "../../../src/types/build/assetBuilderTypes";
+import * as path from "path";
+import { TPlayerClass, TPlayerClassKeys } from "../../../src/types/serializables/players";
+import { ActionCardId, TActionId } from "../../../src/types/serializables/actions";
+import { CropCardId, TCropId } from "../../../src/types/serializables/crops";
+import { UICardSize, UIClassSize } from "../../../frontend/constants/assetSIzes";
+import * as fs from "fs";
+import { ROOT_DIR } from "../../paths";
+
+// Injected through webpack/DefinePlugin
+declare const webpSMALLClasses: string;
+declare const webpLARGEClasses: string;
+declare const avifSMALLClasses: string;
+declare const avifLARGEClasses: string;
+declare const jpegLARGEClasses: string;
+declare const jpegSMALLClasses: string;
+declare const webpSMALLCards: string;
+declare const webpMEDIUMCards: string;
+declare const webpLARGECards: string;
+declare const avifSMALLCards: string;
+declare const avifMEDIUMCards: string;
+declare const avifLARGECards: string;
+declare const jpegSMALLCards: string;
+declare const jpegMEDIUMCards: string;
+declare const jpegLARGECards: string;
 
 // Injected through webpack/DefinePlugin
 declare const webpSMALLClasses: string;
