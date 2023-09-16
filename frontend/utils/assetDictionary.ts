@@ -1,62 +1,26 @@
-import assetsDictionaryJson from '~/hooks/assetsDictionary.json';
-import { TAssetNamesDict, TAssetsDictionary } from '~/src/types/build/assetBuilderTypes';
-import { TPlayerClassKeys } from '~/src/types/serializables/players';
-import { TUICardSizeKeys, TUIClassSizeKeys } from '../constants/assetSIzes';
-import { TActionId } from '~/src/types/serializables/actions';
-import { TCropId } from '~/src/types/serializables/crops';
+import assetsDictionaryJson from '~/frontend/hooks/assetsDictionary.json';
+import { extTypes, TAssetNamesDict, TAssetsDictionary, TBaseAssetSize } from '~/src/types/build/assetBuilderTypes';
 
 const assetDictionary = assetsDictionaryJson as TAssetsDictionary;
-export const getClassesAssets = (className: TPlayerClassKeys, size: TUIClassSizeKeys) => {
-	const assetTypes = assetDictionary[TAssetNamesDict.CLASSES];
-	if (!assetTypes) {
-		throw new Error('Assets directory is empty');
-	} else {
-		const assetClass = assetTypes[className];
-		if (!assetClass) {
-			throw new Error(`Asset is missing with this className: ${className}`);
-		} else {
-			const assetSize = assetClass[size];
-			if (!assetSize) {
-				throw new Error(`Asset ${className} doesn't have this size: ${size}`);
-			} else {
-				return assetSize;
-			}
-		}
-	}
-};
 
-export const getActionsAssets = (actionName: TActionId, size: TUICardSizeKeys) => {
-	const assetTypes = assetDictionary[TAssetNamesDict.ACTIONS];
-	if (!assetTypes) {
-		throw new Error('Assets directory is empty');
-	} else {
-		const assetClass = assetTypes[actionName];
-		if (!assetClass) {
-			throw new Error(`Asset is missing with this actionName: ${actionName}`);
-		} else {
+export const getAssetPath = <T extends TAssetNamesDict>(
+	assetType: T,
+	assetName: keyof TAssetsDictionary[T],
+	size: TBaseAssetSize<T>,
+	ext: keyof typeof extTypes
+) => {
+	const assetTypes = assetDictionary[assetType];
+	if (!assetTypes) throw new Error('Assets directory is empty');
+	else {
+		const assetClass = assetTypes[assetName];
+		if (!assetClass) throw new Error(`Asset is missing with this className: ${assetName.toString}`);
+		else {
 			const assetSize = assetClass[size];
-			if (!assetSize) {
-				throw new Error(`Asset ${actionName} doesn't have this size: ${size}`);
-			} else {
-				return assetSize;
-			}
-		}
-	}
-};
-export const getCropsAssets = (cropName: TCropId, size: TUICardSizeKeys) => {
-	const assetTypes = assetDictionary[TAssetNamesDict.CROPS];
-	if (!assetTypes) {
-		throw new Error('Assets directory is empty');
-	} else {
-		const assetClass = assetTypes[cropName];
-		if (!assetClass) {
-			throw new Error(`Asset is missing with this cropName: ${cropName}`);
-		} else {
-			const assetSize = assetClass[size];
-			if (!assetSize) {
-				throw new Error(`Asset ${cropName} doesn't have this size: ${size}`);
-			} else {
-				return assetSize;
+			if (!assetSize) throw new Error(`Asset ${assetName.toString} doesn't have this size: ${size}`);
+			else {
+				const assetExt = assetSize[ext];
+				if (!assetExt) throw new Error(`Asset ${assetName.toString} doesn't have this ext: ${ext}`);
+				else return assetExt;
 			}
 		}
 	}

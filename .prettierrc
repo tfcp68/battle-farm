@@ -1,17 +1,17 @@
 {
-  "singleQuote": true,
-  "jsxBracketSameLine": true,
-  "tabWidth": 4,
-  "useTabs": true,
-  "printWidth": 120,
-  "endOfLine": "lf",
-  "semi": true,
-  "overrides": [
-	{
-	  "files": ".ts?x",
-	  "options": {
-		"parser": "typescript"
-	  }
-	}
-  ]
+	"singleQuote": true,
+	"jsxBracketSameLine": true,
+	"tabWidth": 4,
+	"useTabs": true,
+	"printWidth": 120,
+	"endOfLine": "lf",
+	"semi": true,
+	"overrides": [
+		{
+			"files": ".ts?x",
+			"options": {
+				"parser": "typescript"
+			}
+		}
+	]
 }

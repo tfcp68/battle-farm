@@ -31,6 +31,23 @@ declare const jpegSMALLCards: string;
 declare const jpegMEDIUMCards: string;
 declare const jpegLARGECards: string;
 
+// Injected through webpack/DefinePlugin
+declare const webpSMALLClasses: string;
+declare const webpLARGEClasses: string;
+declare const avifSMALLClasses: string;
+declare const avifLARGEClasses: string;
+declare const jpegLARGEClasses: string;
+declare const jpegSMALLClasses: string;
+declare const webpSMALLCards: string;
+declare const webpMEDIUMCards: string;
+declare const webpLARGECards: string;
+declare const avifSMALLCards: string;
+declare const avifMEDIUMCards: string;
+declare const avifLARGECards: string;
+declare const jpegSMALLCards: string;
+declare const jpegMEDIUMCards: string;
+declare const jpegLARGECards: string;
+
 export const assetsDictionary: TAssetsDictionary = {
 	[TAssetNamesDict.CLASSES]: {},
 	[TAssetNamesDict.CROPS]: {},
