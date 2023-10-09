@@ -6,8 +6,8 @@
 	"scripts": {
 		"test": "jest",
 		"start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts",
-		"generate-images": "webpack --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js && npx rimraf assets/thumbs/dictGenerate.js",
-		"build": "npm run generate-images && cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist "
+		"generate-images": "webpack --progress --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js && npx rimraf assets/thumbs/dictGenerate.js",
+		"build": "cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist "
 	},
 	"repository": {
 		"type": "git",
@@ -66,9 +66,10 @@
 		"ts-loader": "^9.4.2",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.0.4",
-		"webpack": "^5.81.0",
-		"webpack-cli": "^5.1.1",
-		"webpack-dev-server": "^4.15.0"
+		"webpack-dev-server": "^4.15.0",
+		"webpack-cli": "^5.0.2",
+		"webpack-dev-server": "^4.13.3",
+		"webpackbar": "^5.0.2"
 	},
 	"dependencies": {}
 }

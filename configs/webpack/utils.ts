@@ -22,8 +22,8 @@ export const getPlugins = (isDev: boolean) => {
 				new CopyPlugin({
 					patterns: [
 						{
-							from: path.resolve(ROOT_DIR, 'assets/thumbs/assets'),
-							to: path.resolve(ROOT_DIR, 'dist/assets'),
+							from: path.resolve(ROOT_DIR, 'assets', 'thumbs'),
+							to: path.resolve(ROOT_DIR, 'dist'),
 						},
 					],
 				}),

@@ -3,7 +3,7 @@ import styles from './GamePlayerInfo.module.scss';
 import { TPlayer } from '~/src/types/serializables/players';
 import GameAvatar from '~/components/GameAvatar/GameAvatar';
 import GameHand from '~/components/GameHand/GameHand';
-import { listCards } from '../../constants/gameConstants';
+import { listCards } from '~/frontend/constants/gameConstants';
 import GameBeds from '~/components/GameBeds/GameBeds';
 import GameAmountCoins from '~/components/GameAmountCoins/GameAmountCoins';
 import GameAmountFertilize from '~/components/GameAmountFertilize/GameAmountFertilize';

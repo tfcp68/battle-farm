@@ -1,10 +1,12 @@
 import * as webpack from 'webpack';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import { getPresets } from './pluginsPresets/ImageMinimizerPresets';
-import { UICardSize, UIClassSize } from '../../frontend/constants/assetSIzes';
+import { UICardSize, UIClassSize } from '../../frontend/constants/assetSizes';
 import * as path from 'path';
 import { ROOT_DIR } from '../paths';
 import { GetPresetsDefinePlugin } from './pluginsPresets/definePluginPresets';
+
+const WebpackBar = require('webpackbar');
 
 const config: webpack.Configuration = {
 	mode: 'production',
@@ -26,6 +28,11 @@ const config: webpack.Configuration = {
 			...GetPresetsDefinePlugin(UIClassSize, 'Classes'),
 			...GetPresetsDefinePlugin(UICardSize, 'Cards'),
 		}),
+		new WebpackBar({
+			profile: true,
+			name: 'Asset builder',
+			fancy: true,
+		}),
 	],
 	module: {
 		rules: [
@@ -40,9 +47,9 @@ const config: webpack.Configuration = {
 			},
 			{
 				test: /\.(jpe?g|gif|png|svg)$/i,
-				type: 'asset',
+				type: 'asset/resource',
 				generator: {
-					filename: '[path][name]_[hash:4][ext]',
+					filename: '[path][name][ext]',
 				},
 				use: [
 					{

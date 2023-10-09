@@ -13,7 +13,7 @@ const GameMarket: FC<IGameMarketProps> = ({ listCards }) => {
 			<h1 className={styles.market__title}>Market</h1>
 			<div className={styles.market__wrapper}>
 				{listCards.map((card) => {
-					return <GameCard key={card.id} cropImage={card.id} typeCard={card.type} />;
+					return <GameCard key={card.id} card={card} />;
 				})}
 			</div>
 		</div>

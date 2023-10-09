@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import styles from './GameBlockInfo.module.scss';
 import { TPlayer } from '~/src/types/serializables/players';
 import GameProgressBar from '~/components/GameProgressBar/GameProgressBar';
-import { GAME_AMOUNT_PLAYERS, GAME_WIN_LIMIT, TOTAL_SUM_VALUES_IN_DECK } from '../../constants/gameConstants';
+import { GAME_AMOUNT_PLAYERS, GAME_WIN_LIMIT, TOTAL_SUM_VALUES_IN_DECK } from '~/frontend/constants/gameConstants';
 import { getPlayerClassName } from '~/src/helpers/playerClass';
 
 interface IGameBlockInfoProps {

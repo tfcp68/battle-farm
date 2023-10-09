@@ -10,7 +10,7 @@ import * as path from "path";
 import { TPlayerClass, TPlayerClassKeys } from "../../../src/types/serializables/players";
 import { ActionCardId, TActionId } from "../../../src/types/serializables/actions";
 import { CropCardId, TCropId } from "../../../src/types/serializables/crops";
-import { UICardSize, UIClassSize } from "../../../frontend/constants/assetSIzes";
+import { UICardSize, UIClassSize } from "../../../frontend/constants/assetSizes";
 import * as fs from "fs";
 import { ROOT_DIR } from "../../paths";
 
@@ -30,6 +30,8 @@ declare const avifLARGECards: string;
 declare const jpegSMALLCards: string;
 declare const jpegMEDIUMCards: string;
 declare const jpegLARGECards: string;
+
+
 
 export const assetsDictionary: TAssetsDictionary = {
 	[TAssetNamesDict.CLASSES]: {},
