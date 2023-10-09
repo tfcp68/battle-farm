@@ -5,9 +5,7 @@ import { TPlayerRecord } from '~/src/types/shared';
 import { isPlayerClass } from '~/src/types/typeGuards';
 import { cardFixture } from './cardsFixtures';
 import { bedFixture } from './cropsFixture';
-import { Utils } from '~/src/automata';
-
-const { sampleRange, pickFromArray, sampleArray } = Utils;
+import { sampleRange, pickFromArray, sampleArray } from '@yantrix/utils';
 
 export function randomPlayerClass() {
 	return pickFromArray(Object.values(TPlayerClass).filter((v) => typeof v === 'number'))[0] as TPlayerClass;

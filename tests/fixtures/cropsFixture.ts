@@ -1,9 +1,7 @@
 import { getCardIDByType } from '~/src/helpers/cards';
 import { TCardType } from '~/src/types/serializables/cards';
 import { CropCardId, TBed, TCrop, TCropColor, TGardenBedType } from '~/src/types/serializables/crops';
-import { Utils } from '~/src/automata';
-
-const { sampleRange, pickFromArray } = Utils;
+import { sampleRange, pickFromArray } from '@yantrix/utils';
 
 export function cropFixture(props: Partial<TCrop> = {}) {
 	const [id] = pickFromArray(Object.values(CropCardId));

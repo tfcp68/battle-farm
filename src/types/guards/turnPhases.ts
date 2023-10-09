@@ -1,8 +1,6 @@
 import { TTurnPhase, TTurnSubphaseAction, TTurnSubphaseContext } from '~/src/types/fsm';
 import { TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { Utils } from '~/src/automata';
-
-const { isPositiveInteger } = Utils;
+import { isPositiveInteger } from '@yantrix/utils';
 
 export const isFertilizeSubphase =
 	<T extends TFertilizePhase>(targetSubphase: T | null = null) =>

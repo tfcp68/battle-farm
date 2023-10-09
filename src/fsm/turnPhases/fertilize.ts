@@ -1,4 +1,3 @@
-import * as Automata from '~/src/automata';
 import { turnPhaseReducer_Fertilize } from '~/src/reducers/fertilize';
 import { TGameEvent, TMappedGameEventMeta } from '~/src/types/fsm/events';
 import {
@@ -9,8 +8,9 @@ import {
 } from '~/src/types/fsm/slices/fertilize';
 import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
 import { isGameEvent } from '~/src/types/typeGuards';
+import { GenericAutomata } from '@yantrix/automata';
 
-class TurnPhaseAutomata_Fertilize extends Automata.FSM<
+class TurnPhaseAutomata_Fertilize extends GenericAutomata<
 	TFertilizePhase,
 	TFertilizeAction,
 	TGameEvent,
