@@ -103,6 +103,7 @@ stateDiagram-v2
     gameReady --> LOBBY
     hasSpace -->LOBBY 
     canKick --> LOBBY
+    GAME_STARTING-->GAME_STARTED: LAUNCH
 
 note right of [*]
 define/empty_map () => zip([],[])
@@ -113,6 +114,7 @@ define/game_ready (map) => isEqual(len(keys(map)),sum(values(map)))
 subscribe/join_lobby JOIN (gameId, playerId, isHost)
 subscribe/join_game_request PLAYER_JOINING (gameId, playerId) 
 subscribe/player_state_change UPDATE (playerReadyMap)
+subscribe/game_start LAUNCH
 end note
 note right of LOBBY_INIT
 +ByPass
@@ -122,6 +124,7 @@ end note
 note right of JOIN_REQUEST
 +ByPass
 #{playerReadyMap} <= map_set(#playerReadyMap,$playerId,0)
+emit/request_accepted (game_id)
 end note
 note right of KICK_PLAYER
 +ByPass
@@ -135,6 +138,9 @@ end note
 note right of EXTERNAL_UPDATE
 +ByPass
 #{playerReadyMap} <= $playerReadyMap
+end note
+note right of GAME_STARTING
+emit/game_start (gameId, playerIds) <= #gameId, keys(#playerReadyMap)
 end note
 ```
 
