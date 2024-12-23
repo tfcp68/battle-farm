@@ -4,6 +4,8 @@ State Diagrams for Finite State Machines
 <!-- TOC -->
 
 * [Window Mode](#window-mode)
+    * [Menu submode](#menu-submode)
+    * [Lobby submode](#lobby-submode)
 * [Target Mode](#target-mode)
 * [Game Loop](#game-loop)
 * [Turn Loop](#turn-loop)
@@ -19,26 +21,121 @@ State Diagrams for Finite State Machines
 
 ## Window Mode
 
-Every Window Mode represent different visual layout and different reactions to user input, including keystrokes
+Every Window Mode represent different visual layout and different reactions to user input, including keystrokes. Most of window modes have submachines to control local visuals.
 
 ```mermaid
 stateDiagram-v2
-    [*] --> INIT: RESET
-    INIT --> INTRO: RUN
+    [*] --> INTRO: RESET
     INTRO --> MAIN_MENU: TO_MENU
-    MAIN_MENU --> [*]: EXIT
-    MAIN_MENU --> MAIN_MENU: MENU_HOVER (index)
-    MAIN_MENU --> GAME_LOBBY: CREATE_GAME (playerId)
-    MAIN_MENU --> GAME_LOBBY: JOIN_GAME (gameId, playerId)
-    GAME_LOBBY --> [*]: EXIT
-    GAME_LOBBY --> MAIN_MENU: TO_MENU
+    GAME_LOBBY --> MAIN_MENU: EXIT
+    MAIN_MENU --> JOIN_REQUEST: JOIN_GAME (gameId)
+    JOIN_REQUEST --> MAIN_MENU: CANCEL
+    JOIN_REQUEST --> GAME_LOBBY: REQUEST_ACCEPTED(gameId)
+    MAIN_MENU --> GAME_LOBBY: CREATE_GAME (gameId = random_hash(), isHost = 1)  
     GAME_LOBBY --> GAME_STARTING: START_GAME (gameId, playerIds)
-    GAME_STARTING --> IN_GAME: BEGIN_GAME (gameId, game)
-    IN_GAME --> [*]: EXIT
-    IN_GAME --> SCORE_SCREEN: END_GAME
-    IN_GAME --> MAIN_MENU: TO_MENU
-    SCORE_SCREEN --> MAIN_MENU: TO_MENU
-    SCORE_SCREEN --> [*]: EXIT
+    GAME_STARTING --> IN_GAME: START_GAME    
+    IN_GAME --> SCORE_SCREEN: END_GAME (scoreBoard)
+    IN_GAME --> MAIN_MENU: ERROR
+    IN_GAME --> MAIN_MENU: EXIT
+    SCORE_SCREEN --> MAIN_MENU: EXIT
+
+note right of [*]
+#{playerId = getPlayerId()}
+subscribe/intro_complete TO_MENU
+subscribe/cancel_game_request CANCEL
+subscribe/request_accepted REQUEST_ACCEPTED (gameId) 
+subscribe/game_start START_GAME (gameId, playerIds)
+subscribe/game_end END_GAME (scoreBoard)
+subscribe/player_exit EXIT
+subscribe/player_cancel CANCEL
+end note 
+
+note right of INTRO
++Initial
+end note
+
+note left of GAME_LOBBY
+#{gameId, isHost} <= $gameId, $isHost = 0
+emit/join_lobby (gameId, playerId, isHost)
+end note 
+
+note right of JOIN_REQUEST
+#{gameId} <= $gameId
+emit/join_game_request (gameId, playerId)
+end note
+note left of GAME_STARTING
++ByPass
+#{gameId, playerIds} <= $gameId, $playerIds
+emit/game_started (gameId, playerIds)
+end note
+note right of SCORE_SCREEN
+#{scoreBoard} <= $scoreBoard
+end note
+```
+
+### Menu submode
+
+### Lobby submode
+Represents the behaviour of game lobby. 
+- all players must call to be "ready" for game
+- automatically concludes to game launch whenever all players are ready
+- once ready, the call can't be revoked
+- a game host can kick a player, resetting the readiness of _all_ players
+  
+```mermaid
+stateDiagram-v2
+    state hasSpace <<choice>>
+    state canKick <<choice>>
+    state gameReady <<choice>>
+    [*] --> LOBBY_INIT: JOIN (gameId, playerId, isHost)
+    LOBBY --> hasSpace: PLAYER_JOINING (gameId, playerId)
+    hasSpace --> JOIN_REQUEST: and(isEqual(#gameId,$gameId),has_player_slots(#playerReadyMap,#maxPlayers))
+    LOBBY_INIT --> LOBBY: JOIN
+    LOBBY --> EXTERNAL_UPDATE: UPDATE (playerReadyMap)
+    LOBBY-->canKick: KICK (playerId)
+    canKick-->KICK_PLAYER: and(map_has_key(#playerReadyMap,$playerId),isEqual(#isHost,1))
+    KICK_PLAYER-->gameReady: KICK
+    LOBBY --> READY_STATE_CHANGE: READY
+    READY_STATE_CHANGE --> gameReady: READY
+    EXTERNAL_UPDATE --> gameReady: UPDATE
+    JOIN_REQUEST --> gameReady: PLAYER_JOINING
+    gameReady --> GAME_STARTING: game_ready(#playerReadyMap)
+    gameReady --> LOBBY
+    hasSpace -->LOBBY 
+    canKick --> LOBBY
+
+note right of [*]
+define/empty_map () => zip([],[])
+define/reset_map (players) => zip(players,repeat(0, len(players)))
+define/has_player_slots (map, maxPlayers) => isGreater(maxPlayers,len(keys(map)))
+define/game_ready (map) => isEqual(len(keys(map)),sum(values(map)))
+#{playerId, gameId, playerReadyMap = empty_map(), hostPlayerId, maxPlayers = 7, readyState = 0}
+subscribe/join_lobby JOIN (gameId, playerId, isHost)
+subscribe/join_game_request PLAYER_JOINING (gameId, playerId) 
+subscribe/player_state_change UPDATE (playerReadyMap)
+end note
+note right of LOBBY_INIT
++ByPass
+#{gameId, hostPlayerId = 0} <= $gameId, if(isEqual($isHost,1), $playerId, #hostPlayerId)
+#{playerReadyMap} <= map_set(#playerReadyMap,$playerId,0)
+end note
+note right of JOIN_REQUEST
++ByPass
+#{playerReadyMap} <= map_set(#playerReadyMap,$playerId,0)
+end note
+note right of KICK_PLAYER
++ByPass
+#{playerReadyMap} <= reset_map(omit(keys(#playerReadyMap),$playerId))
+end note
+note right of READY_STATE_CHANGE
++ByPass
+#{playerReadyMap, readyState} <= map_set(#playerReadyMap, #playerId, 1), 1
+emit/player_state_change (game_id, playerReadyMap)
+end note
+note right of EXTERNAL_UPDATE
++ByPass
+#{playerReadyMap} <= $playerReadyMap
+end note
 ```
 
 ## Target Mode
