@@ -126,7 +126,7 @@ stateDiagram-v2
     LOBBY_INIT --> LOBBY: CREATE_GAME
     LOBBY --> EXTERNAL_UPDATE: UPDATE (playerReadyMap)
     LOBBY-->canKick: KICK (playerId)
-    canKick-->KICK_PLAYER: and(map_has_key(#playerReadyMap,$playerId),isEqual(#isHost,1))
+    canKick-->KICK_PLAYER: and(has(#playerReadyMap,$playerId),isEqual(#isHost,1))
     KICK_PLAYER-->gameReady: KICK
     LOBBY --> READY_STATE_CHANGE: READY
     READY_STATE_CHANGE --> gameReady: READY
@@ -154,11 +154,11 @@ end note
 note right of LOBBY_INIT
 +ByPass
 #{gameId, hostPlayerId = 0} <= $gameId, if(isEqual($isHost,1), $playerId, #hostPlayerId)
-#{playerReadyMap} <= map_set(#playerReadyMap,$playerId,0)
+#{playerReadyMap} <= setAttr(#playerReadyMap,$playerId,0)
 end note
 note right of JOIN_REQUEST
 +ByPass
-#{playerReadyMap} <= map_set(#playerReadyMap,$playerId,0)
+#{playerReadyMap} <= setAttr(#playerReadyMap,$playerId,0)
 emit/request_accepted (game_id)
 end note
 note right of KICK_PLAYER
@@ -167,7 +167,7 @@ note right of KICK_PLAYER
 end note
 note right of READY_STATE_CHANGE
 +ByPass
-#{playerReadyMap, readyState} <= map_set(#playerReadyMap, #playerId, 1), 1
+#{playerReadyMap, readyState} <= setAttr(#playerReadyMap, #playerId, 1), 1
 emit/player_state_change (game_id, playerReadyMap)
 end note
 note right of EXTERNAL_UPDATE
