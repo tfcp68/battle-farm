@@ -1,6 +1,6 @@
 import { TTurnPhase, TTurnSubphaseAction, TTurnSubphaseContext } from '~/src/types/fsm';
 import { TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { isPositiveInteger } from '@yantrix/utils';
+import { isPositiveInteger } from '@yantrix/core';
 
 export const isFertilizeSubphase =
 	<T extends TFertilizePhase>(targetSubphase: T | null = null) =>

@@ -1,0 +1,92 @@
+:root {
+    color-scheme: dark;
+    --bg: #0f1115;
+    --panel: #171a21;
+    --muted: #99a2b2;
+    --text: #eef1f7;
+    --accent: #4fd1c5;
+    --accent-2: #63b3ed;
+    --danger: #fc8181;
+    --warn: #f6ad55;
+    --ok: #68d391;
+    --border: #2a2f3a;
+
+    /* compact tune */
+    --space-1: 6px;
+    --space-2: 10px;
+    --space-3: 14px;
+    --radius: 10px;
+}
+
+* { box-sizing: border-box }
+
+html, body, #root { height: 100% }
+body {
+    margin: 0;
+    background: radial-gradient(1200px 800px at 20% -10%, #1c2030, #0f1115 60%);
+    color: var(--text);
+    font: 13px/1.45 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+}
+
+a { color: var(--accent) }
+a.active { color: var(--accent-2) }
+
+.app-shell { display: grid; grid-template-rows: auto 1fr; min-height: 100% }
+
+.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border); background: rgba(23,26,33,0.8);
+    backdrop-filter: blur(8px);
+    font-size: 13px;
+}
+.brand { font-weight: 700; letter-spacing: 0.5px }
+.nav { display: flex; gap: var(--space-1) }
+.nav a { text-decoration: none; padding: 4px 6px; border-radius: 6px; background: transparent }
+.nav a.active { background: rgba(79,209,197,0.12) }
+
+.content { padding: var(--space-3); display: grid; gap: var(--space-3) }
+.content.compact { padding: var(--space-2); gap: var(--space-2) }
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-2);
+    display: grid;
+    gap: var(--space-2);
+}
+
+.grid { display: grid; gap: var(--space-2) }
+.row { display: flex; gap: var(--space-1); flex-wrap: wrap }
+.section-title { font-weight: 700; opacity: 0.9; font-size: 14px }
+
+.state-badge {
+    display: inline-flex; gap: 6px; align-items: center;
+    background: #12151c; border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 8px; width: max-content; font-size: 11px;
+}
+.state-badge-label { color: var(--muted); text-transform: uppercase; font-size: 10px; letter-spacing: 0.6px }
+.state-badge-value { color: var(--accent-2); font-weight: 700 }
+
+button {
+    border: 1px solid var(--border);
+    background: #0f141b; color: var(--text);
+    border-radius: 8px; padding: 6px 8px; cursor: pointer; font-size: 13px;
+}
+button.primary { border-color: rgba(79,209,197,0.5); background: rgba(79,209,197,0.12) }
+button.warn { border-color: rgba(246,173,85,0.5); background: rgba(246,173,85,0.12) }
+button.danger { border-color: rgba(252,129,129,0.5); background: rgba(252,129,129,0.12) }
+button.ok { border-color: rgba(104,211,145,0.5); background: rgba(104,211,145,0.12) }
+
+.field { display: grid; gap: 4px; min-width: 200px }
+.field-label { color: var(--muted); font-size: 11px }
+.field-input {
+    border: 1px solid var(--border); background: #0f141b; color: var(--text);
+    border-radius: 8px; padding: 6px 8px; outline: none; font-size: 13px;
+}
+
+hr { border: 0; border-top: 1px solid var(--border); margin: 6px 0 }
+small.muted { color: var(--muted); font-size: 12px }
+.table { width: 100%; border-collapse: collapse; font-size: 12px }
+.table th, .table td { border: 1px solid var(--border); padding: 6px 8px }

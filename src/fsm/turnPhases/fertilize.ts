@@ -8,16 +8,9 @@ import {
 } from '~/src/types/fsm/slices/fertilize';
 import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
 import { isGameEvent } from '~/src/types/typeGuards';
-import { GenericAutomata } from '@yantrix/automata';
+import { GenericAutomata } from '@yantrix/core';
 
-class TurnPhaseAutomata_Fertilize extends GenericAutomata<
-	TFertilizePhase,
-	TFertilizeAction,
-	TGameEvent,
-	TFertilizeMappedContext,
-	TFertilizeMappedPayload,
-	TMappedGameEventMeta
-> {
+class TurnPhaseAutomata_Fertilize extends GenericAutomata {
 	constructor() {
 		super();
 		this.init({
