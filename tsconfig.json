@@ -12,7 +12,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "~/src/*": ["src/*"],
+      "~/*": ["src/*"],
 //      "~/assets/*": ["assets/*"],
 //      "~/components/*": ["frontend/components/*"],
 //      "~/frontend/*": ["frontend/*"]
