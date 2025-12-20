@@ -17,10 +17,10 @@ export default class PlayersController extends BaseController {
 		this.authModel = authModel;
 	}
 
-	// Регистрация: создаём Player через AuthModel.register / signUp, поэтому
-	// прямого доступа к Supabase здесь больше не держим.
+	
+	
 	async register(nickname: string) {
-		// для обратной совместимости: создаём игрока без userId
+		
 		return await this.players.create({ nickname });
 	}
 
@@ -44,8 +44,8 @@ export default class PlayersController extends BaseController {
 		return await this.players.delete(playerId);
 	}
 
-	// Новый метод: получить id текущего игрока через AuthModel.getCurrentPlayer,
-	// который уже знает, как ходить в Supabase и players.
+	
+	
 	async getCurrentPlayerId(): Promise<string> {
 		const current = await this.authModel.getCurrentPlayer();
 		if (!current) {

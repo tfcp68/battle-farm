@@ -16,35 +16,34 @@ export default function RegisterPage() {
 		const name = nickname.trim();
 		const pass = password.trim();
 		if (!name) {
-			setMessage('Введите ник');
+			setMessage('Enter a nickname');
 			return;
 		}
 		if (!pass) {
-			setMessage('Введите пароль');
+			setMessage('Enter a password');
 			return;
 		}
 		try {
 			await register.mutateAsync({ nickname: name, password: pass });
-			// После успешной регистрации currentPlayer подтянется через useCurrentPlayer, просто идём на intro
+
 			navigate('/intro', { replace: true });
 		} catch (e: unknown) {
 			const err = e as { message?: string };
-			setMessage(err?.message || 'Ошибка регистрации');
+			setMessage(err?.message || 'Registration error');
 		}
 	};
 
 	return (
 		<div className="auth-page">
 			<form className="auth-card" onSubmit={submit}>
-				<h3 className="section-title" style={{ margin: 0, textAlign: 'center' }}>Регистрация</h3>
-				<small className="muted" style={{ textAlign: 'center' }}>
-					Введите ник и пароль — создадим аккаунт в Supabase и привяжем игрока
-				</small>
-				<Field label="Ник" value={nickname} onChange={setNickname} placeholder="Введите ник" />
-				<Field label="Пароль" value={password} onChange={setPassword} placeholder="Введите пароль" />
+				<h3 className="section-title" style={{ margin: 0, textAlign: 'center' }}>
+					Sign up
+				</h3>
+				<Field label="Nickname" value={nickname} onChange={setNickname} placeholder="Enter a nickname" />
+				<Field label="Password" value={password} onChange={setPassword} placeholder="Enter a password" />
 				<div className="actions">
 					<button className="primary" type="submit" disabled={register.isPending}>
-						{register.isPending ? '...' : 'Зарегистрироваться'}
+						{register.isPending ? '...' : 'Create account'}
 					</button>
 				</div>
 				{message && (

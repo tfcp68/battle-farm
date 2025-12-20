@@ -5,7 +5,7 @@ stateDiagram-v2
     MAIN_MENU --> JOIN_REQUEST: JOIN_GAME (gameId)
     JOIN_REQUEST --> MAIN_MENU: CANCEL
     JOIN_REQUEST --> GAME_LOBBY: REQUEST_ACCEPTED(gameId)
-    MAIN_MENU --> GAME_LOBBY: CREATE_GAME (gameId, isHost = 1)
+    MAIN_MENU --> GAME_LOBBY: CREATE_GAME (gameId, isHost = 1, lobbyId)
     GAME_LOBBY --> GAME_STARTING: START_GAME (gameId, playerIds)
     GAME_STARTING --> IN_GAME: [-]
     IN_GAME --> SCORE_SCREEN: END_GAME (scoreBoard)
@@ -30,7 +30,7 @@ note right of INTRO
 end note
 
 note left of GAME_LOBBY
-#{ gameId, isHost } <= $gameId, $isHost = 0
+#{ gameId, isHost, lobbyId } <= $gameId, $isHost = 0, $lobbyId
 emit/join_lobby ($gameId, $playerId, $isHost)
 end note
 
@@ -38,6 +38,7 @@ note right of JOIN_REQUEST
 #{gameId} <= $gameId
 emit/join_game_request ($gameId, $playerId)
 end note
+
 note left of GAME_STARTING
 +ByPass
 #{gameId, playerIds} <= $gameId, $playerIds

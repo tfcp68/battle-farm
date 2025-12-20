@@ -1,32 +1,18 @@
 import BaseModel from './BaseModel';
 
-/**
- * Контроллер для работы с лобби.
- * Логика:
- * - createLobby: создает запись в lobbies + добавляет host в lobby_players
- * - closeLobby: помечает lobby как closed и опционально удаляет игроков
- * - joinLobby: добавляет запись в lobby_players
- * - requestJoin / approveJoin / rejectJoin: flow с таблицей lobby_requests
- */
 export default class LobbiesModel extends BaseModel {
 	private readonly table = 'lobbies';
 	private readonly playersTable = 'lobby_players';
 	private readonly requestsTable = 'lobby_requests';
 
-	async createLobby(payload: {
-		gameId: string;
-		hostPlayerId: string;
-		maxPlayers?: number;
-	}) {
+	async createLobby(payload: { hostPlayerId: string; maxPlayers?: number }) {
 		const row = {
-			game_id: payload.gameId,
 			host_player_id: payload.hostPlayerId,
 			max_players: payload.maxPlayers ?? 7,
 		};
 		const { data, error } = await this.db.from(this.table).insert(row).select().single();
 		if (error) throw error;
 
-		// add host to lobby_players, теперь связываемся по lobby_id (id лобби)
 		await this.db.from(this.playersTable).insert({
 			lobby_id: data.id,
 			player_id: payload.hostPlayerId,
@@ -35,7 +21,6 @@ export default class LobbiesModel extends BaseModel {
 
 		return {
 			lobbyId: data.id,
-			gameId: data.game_id,
 			hostPlayerId: data.host_player_id,
 			status: data.status,
 			maxPlayers: data.max_players,
@@ -50,7 +35,6 @@ export default class LobbiesModel extends BaseModel {
 		if (!data) return null;
 		return {
 			lobbyId: data.id,
-			gameId: data.game_id,
 			hostPlayerId: data.host_player_id,
 			status: data.status,
 			maxPlayers: data.max_players,
@@ -59,39 +43,21 @@ export default class LobbiesModel extends BaseModel {
 		};
 	}
 
-	// Старый метод по gameId оставляем как обертку, чтобы не ломать существующий код
-	async getLobby(gameId: string) {
-		const { data, error } = await this.db.from(this.table).select('*').eq('game_id', gameId).single();
-		if (error && error.code !== 'PGRST116') throw error; // single() throws when not found
-		if (!data) return null;
-		return {
-			lobbyId: data.id,
-			gameId: data.game_id,
-			hostPlayerId: data.host_player_id,
-			status: data.status,
-			maxPlayers: data.max_players,
-			createdAt: data.created_at,
-			updatedAt: data.updated_at,
-		};
-	}
-
-	async listLobbies(params: {
-		status: string;
-		excludeHostPLayerId?: string;
-	}) {
+	async listLobbies(params: { status: string; excludeHostPLayerId?: string }) {
 		const { status, excludeHostPLayerId } = params;
 		let q = this.db
 			.from(this.table)
-			.select(`
+			.select(
+				`
 			id,
-			game_id,
 			host_player_id,
 			status,
 			max_players,
 			created_at,
 			updated_at,
 			host:players!lobbies_host_player_id_fkey ( nickname )
-			`)
+			`
+			)
 			.order('created_at', { ascending: false });
 		if (status) q = q.eq('status', status);
 		if (excludeHostPLayerId) {
@@ -102,7 +68,6 @@ export default class LobbiesModel extends BaseModel {
 		return (data || []).map((d) => {
 			const row = d as {
 				id: string;
-				game_id: string;
 				host_player_id: string;
 				status: string;
 				max_players: number;
@@ -112,7 +77,6 @@ export default class LobbiesModel extends BaseModel {
 			};
 			return {
 				lobbyId: row.id,
-				gameId: row.game_id,
 				hostPlayerId: row.host_player_id,
 				hostNickname: row.host?.nickname || null,
 				status: row.status,
@@ -130,14 +94,6 @@ export default class LobbiesModel extends BaseModel {
 			.eq('id', lobbyId);
 		if (error) throw error;
 		return true;
-	}
-
-	// Обратная совместимость по gameId
-	async closeLobby(gameId: string): Promise<boolean> {
-		const { data, error } = await this.db.from(this.table).select('id').eq('game_id', gameId).single();
-		if (error) throw error;
-		if (!data) return true;
-		return this.closeLobbyById(data.id);
 	}
 
 	async addPlayerByLobbyId(lobbyId: string, playerId: string, isHost = false) {
@@ -158,15 +114,8 @@ export default class LobbiesModel extends BaseModel {
 			playerId: data.player_id,
 			isHost: data.is_host,
 			joinedAt: data.joined_at,
+			isReady: data.is_ready ?? false,
 		};
-	}
-
-	// Обратная совместимость по gameId: ищем lobbyId по gameId
-	async addPlayer(gameId: string, playerId: string, isHost = false) {
-		const { data, error } = await this.db.from(this.table).select('id').eq('game_id', gameId).single();
-		if (error) throw error;
-		if (!data) throw new Error('Lobby not found');
-		return this.addPlayerByLobbyId(data.id, playerId, isHost);
 	}
 
 	async removePlayerByLobbyId(lobbyId: string, playerId: string): Promise<boolean> {
@@ -176,13 +125,6 @@ export default class LobbiesModel extends BaseModel {
 			.match({ lobby_id: lobbyId, player_id: playerId });
 		if (error) throw error;
 		return true;
-	}
-
-	async removePlayer(gameId: string, playerId: string): Promise<boolean> {
-		const { data, error } = await this.db.from(this.table).select('id').eq('game_id', gameId).single();
-		if (error) throw error;
-		if (!data) return true;
-		return this.removePlayerByLobbyId(data.id, playerId);
 	}
 
 	async listPlayersByLobbyId(lobbyId: string) {
@@ -198,6 +140,7 @@ export default class LobbiesModel extends BaseModel {
 				lobby_id: string;
 				player_id: string;
 				is_host: boolean;
+				is_ready?: boolean | null;
 				joined_at: string;
 			};
 			return {
@@ -206,18 +149,11 @@ export default class LobbiesModel extends BaseModel {
 				playerId: row.player_id,
 				isHost: row.is_host,
 				joinedAt: row.joined_at,
+				isReady: row.is_ready ?? false,
 			};
 		});
 	}
 
-	async listPlayers(gameId: string) {
-		const { data, error } = await this.db.from(this.table).select('id').eq('game_id', gameId).single();
-		if (error) throw error;
-		if (!data) return [];
-		return this.listPlayersByLobbyId(data.id);
-	}
-
-	// Update ready state for a specific player in a lobby by lobbyId
 	async setPlayerReadyByLobbyId(lobbyId: string, playerId: string, isReady: boolean) {
 		const { data, error } = await this.db
 			.from(this.playersTable)
@@ -239,22 +175,12 @@ export default class LobbiesModel extends BaseModel {
 		};
 	}
 
-	// Backward-compatible variant by gameId, if needed elsewhere
-	async setPlayerReady(gameId: string, playerId: string, isReady: boolean) {
-		const { data, error } = await this.db.from(this.table).select('id').eq('game_id', gameId).single();
-		if (error) throw error;
-		if (!data) throw new Error('Lobby not found');
-		return this.setPlayerReadyByLobbyId(data.id, playerId, isReady);
-	}
-
-	/* Join requests flow */
-	async requestJoinByLobbyId(lobbyId: string, playerId: string, nickname?: string) {
+	async requestJoinByLobbyId(lobbyId: string, playerId) {
 		const { data, error } = await this.db
 			.from(this.requestsTable)
 			.insert({
 				lobby_id: lobbyId,
 				player_id: playerId,
-				nickname: nickname ?? null,
 				status: 'pending',
 			})
 			.select()
@@ -269,13 +195,6 @@ export default class LobbiesModel extends BaseModel {
 			createdAt: data.created_at,
 			processedAt: data.processed_at,
 		};
-	}
-
-	async requestJoin(gameId: string, playerId: string, nickname?: string) {
-		const { data, error } = await this.db.from(this.table).select('id').eq('game_id', gameId).single();
-		if (error) throw error;
-		if (!data) throw new Error('Lobby not found');
-		return this.requestJoinByLobbyId(data.id, playerId, nickname);
 	}
 
 	async listJoinRequestsByLobbyId(lobbyId: string) {
@@ -307,23 +226,17 @@ export default class LobbiesModel extends BaseModel {
 		});
 	}
 
-	async listJoinRequests(gameId: string) {
-		const { data, error } = await this.db.from(this.table).select('id').eq('game_id', gameId).single();
-		if (error) throw error;
-		if (!data) return [];
-		return this.listJoinRequestsByLobbyId(data.id);
-	}
-
 	async approveJoin(requestId: string): Promise<boolean> {
-		// find request
-		const { data: req, error: getErr } = await this.db.from(this.requestsTable).select('*').eq('id', requestId).single();
+		const { data: req, error: getErr } = await this.db
+			.from(this.requestsTable)
+			.select('*')
+			.eq('id', requestId)
+			.single();
 		if (getErr) throw getErr;
 		if (!req) throw new Error('Request not found');
 
-		// add player в соответствующее лобби по lobby_id
 		await this.addPlayerByLobbyId(req.lobby_id, req.player_id, false);
 
-		// update request
 		const { error } = await this.db
 			.from(this.requestsTable)
 			.update({ status: 'approved', processed_at: new Date().toISOString() })
@@ -341,3 +254,4 @@ export default class LobbiesModel extends BaseModel {
 		return true;
 	}
 }
+

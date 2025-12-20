@@ -1,19 +1,10 @@
 import BaseModel from './BaseModel';
 
-/**
- * CRUD-операции для players
- */
 export default class PlayersModel extends BaseModel {
 	private readonly table = 'players';
 
-	// playerId теперь это id (uuid) из таблицы players
 	async getById(playerId: string) {
-		const { data, error } = await this.db
-			.from(this.table)
-			.select('*')
-			.eq('id', playerId)
-			.limit(1)
-			.single();
+		const { data, error } = await this.db.from(this.table).select('*').eq('id', playerId).limit(1).single();
 
 		if (error) throw error;
 		if (!data) return null;
@@ -25,18 +16,19 @@ export default class PlayersModel extends BaseModel {
 		});
 	}
 
-	async list(){
+	async list() {
 		const { data, error } = await this.db.from(this.table).select('*').order('created_at', { ascending: false });
 		if (error) throw error;
-		return (data || []).map((d: any) => this.mapRow({
-			playerId: d.id,
-			nickname: d.nickname,
-			createdAt: d.created_at,
-			lastSeen: d.last_seen ?? null,
-		}));
+		return (data || []).map((d: any) =>
+			this.mapRow({
+				playerId: d.id,
+				nickname: d.nickname,
+				createdAt: d.created_at,
+				lastSeen: d.last_seen ?? null,
+			})
+		);
 	}
 
-	// создаём игрока; id генерится на стороне базы, можно дополнительно привязать userId
 	async create(p: { nickname: string; userId?: string }) {
 		const row: any = {
 			nickname: p.nickname,
@@ -53,7 +45,7 @@ export default class PlayersModel extends BaseModel {
 		});
 	}
 
-	async update(playerId: string, patch: Partial<{ nickname: string; lastSeen: string }>){
+	async update(playerId: string, patch: Partial<{ nickname: string; lastSeen: string }>) {
 		const body: any = {};
 		if (patch.nickname !== undefined) body.nickname = patch.nickname;
 		if (patch.lastSeen !== undefined) body.last_seen = patch.lastSeen;

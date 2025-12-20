@@ -24,6 +24,7 @@ export type Database = {
           place: number | null
           player_id: string
           score: number
+          updated_at: string | null
         }
         Insert: {
           created_at?: string
@@ -34,6 +35,7 @@ export type Database = {
           place?: number | null
           player_id: string
           score?: number
+          updated_at?: string | null
         }
         Update: {
           created_at?: string
@@ -44,8 +46,16 @@ export type Database = {
           place?: number | null
           player_id?: string
           score?: number
+          updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "game_history_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "game_history_player_id_fkey"
             columns: ["player_id"]
@@ -55,10 +65,38 @@ export type Database = {
           },
         ]
       }
+      games: {
+        Row: {
+          created_at: string
+          id: string
+          lobby_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lobby_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lobby_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "games_lobby_id_fkey"
+            columns: ["lobby_id"]
+            isOneToOne: true
+            referencedRelation: "lobbies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       lobbies: {
         Row: {
           created_at: string
-          game_id: string
           host_player_id: string
           id: string
           max_players: number
@@ -67,7 +105,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          game_id: string
           host_player_id: string
           id?: string
           max_players?: number
@@ -76,7 +113,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          game_id?: string
           host_player_id?: string
           id?: string
           max_players?: number

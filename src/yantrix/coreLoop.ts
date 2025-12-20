@@ -1,54 +1,42 @@
-import {
-	AutomataEventAdapter,
-	CoreLoop,
-	EventDictionary as GlobalEventDictionary
-} from '@yantrix/core';
+import { AutomataEventAdapter, CoreLoop, EventDictionary as GlobalEventDictionary } from '@yantrix/core';
 import WindowModeAutomata from '~/fsm/window/WindowModeAutomata';
 import WindowMenuAutomata from '~/fsm/window/WindowMenuAutomata';
 import WindowLobbyAutomata from '~/fsm/window/WindowLobbyAutomata';
-import { useEffect } from 'react';
-import { registerYantrixFunctions } from './register-functions';
-import { useServices } from '~/providers/AppServicesProvider';
 import { windowAutomataIds } from '~/yantrix/automataIds';
-import { WindowEvents, TWindowMeta, registerWindowEvents } from '~/yantrix/windowEvents';
+import { registerWindowEvents, TWindowMeta, WindowEvents } from '~/yantrix/windowEvents';
 import { buildWindowEventAdapter } from '~/yantrix/buildWindowAdapter';
-import { TAutomata } from '../../../yantrix/packages/react';
 
 type Machines = {
-	mode: WindowModeAutomata;
-	menu: WindowMenuAutomata;
-	lobby: WindowLobbyAutomata;
+	modeFSM: WindowModeAutomata;
+	menuFSM: WindowMenuAutomata;
+	lobbyFSM: WindowLobbyAutomata;
 };
 
 let loop: CoreLoop<WindowEvents, TWindowMeta> | null = null;
-let machines: Machines | null = null;
 let eventAdapter: AutomataEventAdapter | null = null;
 
-export function startYantrixCore(): void {
+export function startYantrixCore() {
 	if (loop) return;
 
 	registerWindowEvents();
 
+
 	loop = new CoreLoop<WindowEvents, TWindowMeta>();
-	const mode = new WindowModeAutomata();
-	const menu = new WindowMenuAutomata();
-	const lobby = new WindowLobbyAutomata();
+	const modeFSM = new WindowModeAutomata();
+	const menuFSM = new WindowMenuAutomata();
+	const lobbyFSM = new WindowLobbyAutomata();
 
 	eventAdapter = buildWindowEventAdapter();
 
-	loop.registerAutomata(windowAutomataIds.mode, mode, eventAdapter);
-	loop.registerAutomata(windowAutomataIds.menu, menu, eventAdapter);
-	loop.registerAutomata(windowAutomataIds.lobby, lobby, eventAdapter);
+	loop.registerAutomata(windowAutomataIds.mode, modeFSM);
+	loop.registerAutomata(windowAutomataIds.menu, menuFSM);
+	loop.registerAutomata(windowAutomataIds.lobby, lobbyFSM);
 
 	loop.start();
-	machines = { mode, menu, lobby };
-}
 
-export function registerAutomataToCoreLoop(id: string, snapshotAutomata: TAutomata): void {
-	if (!loop) throw new Error('Yantrix CoreLoop is not started');
-	if(!eventAdapter) throw new Error('Event Adapter is not built');
+	console.log(GlobalEventDictionary.getDictionary())
 
-	loop.registerAutomata(id, snapshotAutomata, eventAdapter);
+	return { modeFSM, menuFSM, lobbyFSM }
 }
 
 export function getBus() {
@@ -105,14 +93,4 @@ export function dispatchEvent(name: string, meta: any = {}): void {
 	const id = GlobalEventDictionary.getDictionary()[name];
 	if (!id) throw new Error(`Unknown event name: ${name}`);
 	bus.dispatch({ event: id , meta });
-}
-
-export function YantrixBootstrap() {
-	const services = useServices();
-
-	useEffect(() => {
-		registerYantrixFunctions(services);
-	}, [services]);
-
-	return null;
 }

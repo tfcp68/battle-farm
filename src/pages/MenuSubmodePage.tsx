@@ -1,21 +1,24 @@
 import React from 'react';
 import WindowMenuAutomata from '~/fsm/window/WindowMenuAutomata';
-import WindowModeAutomata from '~/fsm/window/WindowModeAutomata';
+import WindowModeAutomata, { statesDictionary } from '~/fsm/window/WindowModeAutomata';
 import { useNavigate } from 'react-router-dom';
 import DevSidebar from '~/components/DevSidebar';
 import JoinRequestPopup from '~/components/JoinRequestPopup';
-import {
-	useCreateLobby,
-	useLobbiesList,
-	useRequestJoinLobby,
-	useJoinLobby,
-} from '~/hooks/useLobbies';
+import { useCreateLobby, useJoinLobbyById, useLobbiesList, useRequestJoinLobbyById } from '~/hooks/useLobbies';
 import { useAuthActions, useCurrentPlayer } from '~/hooks/useAuth';
 import { useFSM } from '@yantrix/react';
+import { getStateName } from '~/helpers/fsm';
+import { windowAutomataIds } from '~/yantrix/automataIds';
+import { useCreateGame, useGameByLobbyId } from '~/hooks/useGame';
+import { useMachines } from '~/yantrix/MachinesContext';
 
 export default function MenuSubmodePage() {
-	const { dispatch: menuDispatch } = useFSM({ id: WindowMenuAutomata.id, Automata: WindowMenuAutomata });
-	const { dispatch: modeDispatch, getContext: getModeContext } = useFSM({ id: WindowModeAutomata.id, Automata: WindowModeAutomata });
+	const { menuFSM, modeFSM } = useMachines();
+	const { dispatch: menuDispatch } = useFSM({ id: windowAutomataIds.menu, Automata: menuFSM });
+	const { dispatch: modeDispatch, getContext: getModeContext } = useFSM({
+		id: windowAutomataIds.mode,
+		Automata: modeFSM,
+	});
 
 	const navigate = useNavigate();
 
@@ -37,58 +40,70 @@ export default function MenuSubmodePage() {
 		menuDispatch({ action: aId, payload });
 	};
 
-	const { data: lobbies = [], isLoading, refetch } = useLobbiesList({
+	const {
+		data: lobbies = [],
+		isLoading,
+		refetch,
+	} = useLobbiesList({
 		status: 'open',
-		excludeHostPLayerId: currentPlayerId ?? undefined,
+		excludeHostPlayerId: currentPlayerId ?? '',
 	});
 	const { mutateAsync: createLobby, isPending: creatingLobby } = useCreateLobby();
-	const { mutateAsync: requestJoin, isPending: requesting } = useRequestJoinLobby();
-	const { mutateAsync: joinLobby, isPending: joining } = useJoinLobby();
+	const { mutateAsync: requestJoin, isPending: requesting } = useRequestJoinLobbyById();
+	const { mutateAsync: joinLobby, isPending: joining } = useJoinLobbyById();
+	const { mutateAsync: createGame } = useCreateGame();
 
 	const onCreateLobby = async () => {
 		if (!currentPlayerId) return;
 		const lobby = await createLobby({ hostPlayerId: currentPlayerId });
-		// Прокидываем и gameId, и lobbyId в FSM-контекст
-		actMenu('CREATE_LOBBY', { gameId: lobby.gameId, lobbyId: lobby.lobbyId });
-		// Mode FSM тоже может знать оба идентификатора, если он сохраняет payload в контекст
-		const createGame = WindowModeAutomata.getAction?.('CREATE_GAME');
-		if (createGame) {
-			modeDispatch({ action: createGame, payload: { gameId: lobby.gameId, lobbyId: lobby.lobbyId, playerId: currentPlayerId, isHost: 1 } });
+		const game = await createGame({
+			lobbyId: lobby.lobbyId,
+		});
+		actMenu('CREATE_LOBBY', { gameId: game.id, lobbyId: lobby.lobbyId });
+		const createGameAction = WindowModeAutomata.getAction?.('CREATE_GAME');
+		if (createGameAction) {
+			modeDispatch({
+				action: createGameAction,
+				payload: {
+					gameId: game.id,
+					lobbyId: lobby.lobbyId,
+					playerId: currentPlayerId,
+					isHost: 1,
+				},
+			});
 		}
 		navigate('/lobby');
 		refetch();
 	};
 
-	const onJoinLobby = async (gameId: string) => {
+	const onJoinLobby = async (lobbyId: string) => {
 		if (!currentPlayerId) return;
-		// Находим лобби по gameId, чтобы вытащить lobbyId
-		const lobby = lobbies.find(l => l.gameId === gameId) ?? null;
-		const lobbyId = lobby?.lobbyId ?? null;
 
-		actMenu('JOIN_GAME');
-		actMenu('ENTER_GAME_ID', { gameId, lobbyId });
-		actMenu('JOINING_GAME', { gameId, lobbyId });
+		const actJoin = WindowModeAutomata.getAction?.('JOIN_GAME');
+		if (actJoin) modeDispatch({ action: actJoin, payload: { lobbyId } });
 
-		const joinId = WindowModeAutomata.getAction?.('JOIN_GAME');
-		if (joinId) modeDispatch({ action: joinId, payload: { gameId, lobbyId } });
-
-		await requestJoin({ gameId, playerId: currentPlayerId }).catch(() => {});
+		await requestJoin({ lobbyId, playerId: currentPlayerId });
 	};
 
 	const modeCtx = getModeContext();
-	const getState = (WindowModeAutomata.getState?.bind(WindowModeAutomata) as unknown) as (k: string) => number;
+	const getState = WindowModeAutomata.getState?.bind(WindowModeAutomata);
 	const isJoinRequest = modeCtx?.state === getState('JOIN_REQUEST');
-	const modeContextData = (modeCtx?.context ?? {}) as { gameId?: string | null; lobbyId?: string | null };
-	const joinGameId = modeContextData.gameId ?? null;
+	const modeContextData = modeCtx?.context;
 	const joinLobbyId = modeContextData.lobbyId ?? null;
-	const lobby = lobbies.find(l => l.gameId === joinGameId) ?? null;
+	const { data: joinGame } = useGameByLobbyId(joinLobbyId);
+	const joinGameId = joinGame?.id ?? modeContextData.gameId ?? null;
+	const lobby = joinLobbyId ? lobbies.find((l) => l.lobbyId === joinLobbyId) ?? null : null;
 
 	const acceptJoin = async () => {
-		if (!joinGameId || !currentPlayerId) return;
-		await joinLobby({ gameId: joinGameId, playerId: currentPlayerId });
+		if (!joinLobbyId || !currentPlayerId) return;
+
+		await joinLobby({ lobbyId: joinLobbyId, playerId: currentPlayerId });
+
+		const resolvedGameId = joinGameId;
 		const accepted = WindowModeAutomata.getAction?.('REQUEST_ACCEPTED');
-		if (accepted) modeDispatch({ action: accepted, payload: { gameId: joinGameId, lobbyId: joinLobbyId } });
-		actMenu('LOBBY_JOINED', { gameId: joinGameId, lobbyId: joinLobbyId });
+		if (accepted) modeDispatch({ action: accepted, payload: { gameId: resolvedGameId, lobbyId: joinLobbyId } });
+		actMenu('LOBBY_JOINED', { gameId: resolvedGameId, lobbyId: joinLobbyId });
+
 		navigate('/lobby');
 		refetch();
 	};
@@ -102,7 +117,6 @@ export default function MenuSubmodePage() {
 		try {
 			await signOut.mutateAsync();
 		} finally {
-			// Reset automata states (mode + menu)
 			const modeReset = WindowModeAutomata.getAction?.('RESET');
 			if (modeReset) modeDispatch({ action: modeReset, payload: {} });
 
@@ -127,17 +141,25 @@ export default function MenuSubmodePage() {
 
 	return (
 		<>
-			{/* DevSidebar больше не может брать snapshot из useAutomata, поэтому используем getModeContext */}
-			<DevSidebar automataName={WindowModeAutomata.name} stateName={String(modeCtx?.state ?? '')} snapshot={modeCtx} />
+			<DevSidebar
+				automataName={WindowModeAutomata.name}
+				stateName={getStateName(statesDictionary, modeCtx.state)}
+				snapshot={modeCtx}
+			/>
 
 			<div className="with-dev">
 				<div className="menu-page">
 					<div className="menu-card">
-						<h3 className="section-title" style={{ margin: 0 }}>Main Menu</h3>
+						<h3 className="section-title" style={{ margin: 0 }}>
+							Main Menu
+						</h3>
 						<small className="muted">Player: {currentPlayer?.nickname ?? 'Unknown'}</small>
 
 						<div className="actions" style={{ width: '100%' }}>
-							<button className="primary" onClick={onCreateLobby} disabled={creatingLobby || !currentPlayerId}>
+							<button
+								className="primary"
+								onClick={onCreateLobby}
+								disabled={creatingLobby || !currentPlayerId}>
 								{creatingLobby ? 'Creating…' : 'Create Lobby'}
 							</button>
 						</div>
@@ -146,7 +168,9 @@ export default function MenuSubmodePage() {
 
 						<div style={{ width: '100%' }}>
 							<div className="row" style={{ justifyContent: 'space-between' }}>
-								<h4 className="section-title" style={{ marginTop: 0 }}>Available Lobbies</h4>
+								<h4 className="section-title" style={{ marginTop: 0 }}>
+									Available Lobbies
+								</h4>
 								<button onClick={() => refetch()} disabled={isLoading}>
 									{isLoading ? 'Loading…' : 'Refresh'}
 								</button>
@@ -159,28 +183,30 @@ export default function MenuSubmodePage() {
 							) : (
 								<table className="table" style={{ width: '100%' }}>
 									<thead>
-									<tr>
-										<th>Game</th>
-										<th>Host</th>
-										<th>Max</th>
-										<th>Action</th>
-									</tr>
+										<tr>
+											<th>Lobby</th>
+											<th>Host</th>
+											<th>Max</th>
+											<th>Action</th>
+										</tr>
 									</thead>
 									<tbody>
-									{lobbies.map(l => (
-										<tr key={l.gameId}>
-											<td>{l.gameId}</td>
-											<td>{l.hostNickname}</td>
-											<td>{l.maxPlayers}</td>
-											<td>
-												<div className="row">
-													<button onClick={() => onJoinLobby(l.gameId)} disabled={requesting || joining || !currentPlayerId}>
-														{requesting || joining ? '...' : 'Join'}
-													</button>
-												</div>
-											</td>
-										</tr>
-									))}
+										{lobbies.map((l) => (
+											<tr key={l.lobbyId}>
+												<td>{l.lobbyId}</td>
+												<td>{l.hostNickname}</td>
+												<td>{l.maxPlayers}</td>
+												<td>
+													<div className="row">
+														<button
+															onClick={() => onJoinLobby(l.lobbyId)}
+															disabled={requesting || joining || !currentPlayerId}>
+															{requesting || joining ? '...' : 'Join'}
+														</button>
+													</div>
+												</td>
+											</tr>
+										))}
 									</tbody>
 								</table>
 							)}
@@ -193,8 +219,7 @@ export default function MenuSubmodePage() {
 								className="danger"
 								style={{ width: '50%' }}
 								onClick={handleLogout}
-								disabled={signOut.isPending}
-							>
+								disabled={signOut.isPending}>
 								{signOut.isPending ? 'Logging out…' : 'Logout'}
 							</button>
 						</div>

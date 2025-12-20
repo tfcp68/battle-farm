@@ -2,7 +2,7 @@ import React from 'react';
 
 type DevSidebarProps = {
     automataName?: string;
-    stateName?: string;
+    stateName?: string | null;
     snapshot?: unknown;
     children?: React.ReactNode;
 };
