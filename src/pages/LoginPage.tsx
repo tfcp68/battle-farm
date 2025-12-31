@@ -44,7 +44,7 @@ export default function LoginPage() {
 					<button className="primary" type="submit" disabled={register.isPending || signIn.isPending}>
 						{register.isPending || signIn.isPending ? '...' : isRegister ? 'Create account' : 'Sign in'}
 					</button>
-					<button type="button" onClick={() => setIsRegister((v) => !v)} style={{ marginLeft: 8 }}>
+					<button type="button" onClick={() => setIsRegister((v) => !v)}>
 						{isRegister ? 'I already have an account' : 'Create an account'}
 					</button>
 				</div>

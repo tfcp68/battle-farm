@@ -1,96 +1,96 @@
-import { AutomataEventAdapter, CoreLoop, EventDictionary as GlobalEventDictionary } from '@yantrix/core';
+/**
+ * Client-side entry point for bootstrapping the Yantrix CoreLoop.
+ * - Instantiates and registers window FSMs.
+ * - Wires event sources (UI bridge and domain events from the query cache).
+ * - Wires a destination that executes domain commands (mutations/services).
+ * The module is idempotent and uses lazy singleton initialization.
+ */
+
+import { CoreLoop } from '@yantrix/core';
 import WindowModeAutomata from '~/fsm/window/WindowModeAutomata';
 import WindowMenuAutomata from '~/fsm/window/WindowMenuAutomata';
 import WindowLobbyAutomata from '~/fsm/window/WindowLobbyAutomata';
-import { windowAutomataIds } from '~/yantrix/automataIds';
-import { registerWindowEvents, TWindowMeta, WindowEvents } from '~/yantrix/windowEvents';
-import { buildWindowEventAdapter } from '~/yantrix/buildWindowAdapter';
 
-type Machines = {
-	modeFSM: WindowModeAutomata;
-	menuFSM: WindowMenuAutomata;
-	lobbyFSM: WindowLobbyAutomata;
-};
+import { createUIBridgeSource } from '~/yantrix/sources/uiBridgeSource';
+import { createQueryDomainEventSource } from '~/yantrix/sources/queryDomainEventSource';
+import { createDomainCommandsDestination } from '~/yantrix/destinations/domainCommandsDestination';
 
-let loop: CoreLoop<WindowEvents, TWindowMeta> | null = null;
-let eventAdapter: AutomataEventAdapter | null = null;
+import type { Services } from '~/services/createServices';
+import type { QueryClient } from '@tanstack/react-query';
 
-export function startYantrixCore() {
-	if (loop) return;
+// Numeric event identifier used by the CoreLoop.
+type EventId = number;
 
-	registerWindowEvents();
+export const windowAutomataIds = {
+	mode: WindowModeAutomata.id,
+	menu: WindowMenuAutomata.id,
+	lobby: WindowLobbyAutomata.id,
+} as const;
 
 
-	loop = new CoreLoop<WindowEvents, TWindowMeta>();
+/**
+ * References to window-level state machines exposed to the UI.
+ * Keep these to interact with FSMs from hooks/controllers.
+ */
+export type Machines = Record<string, {
+	instance: WindowModeAutomata | WindowMenuAutomata | WindowLobbyAutomata;
+	id: string;
+}>
+
+// Single CoreLoop instance for the entire application (lazy singleton).
+let loop: CoreLoop<EventId, Record<number, any>> | null = null;
+// Cached FSM instances to avoid re-creating them on repeated calls.
+let machines: Machines | null = null;
+
+/**
+ * Start the Yantrix CoreLoop and wire up FSMs, sources, and destinations.
+ * Safe to call multiple times; returns the same machine instances.
+ *
+ * @param deps.services Domain services used by the destination (mutations).
+ * @param deps.queryClient React Query client used as a domain-events source.
+ * @returns A struct with created window FSM instances.
+ */
+export function startYantrixCore(deps: { services: Services; queryClient: QueryClient }): Machines {
+	if (loop && machines) return machines; // Already initialized — return the singleton.
+
+	// Initialize the event-processing core.
+	loop = new CoreLoop<EventId, Record<number, any>>();
+
+	// Create window state machines.
 	const modeFSM = new WindowModeAutomata();
 	const menuFSM = new WindowMenuAutomata();
 	const lobbyFSM = new WindowLobbyAutomata();
 
-	eventAdapter = buildWindowEventAdapter();
-
+	// Register machines with fixed identifiers.
 	loop.registerAutomata(windowAutomataIds.mode, modeFSM);
 	loop.registerAutomata(windowAutomataIds.menu, menuFSM);
 	loop.registerAutomata(windowAutomataIds.lobby, lobbyFSM);
 
 	loop.start();
 
-	console.log(GlobalEventDictionary.getDictionary())
+	// Event sources:
+	// - UI bridge: dispatch user-driven events into the CoreLoop
+	loop.registerSource(createUIBridgeSource());
+	// - Query client: emit domain events on cache/state changes
+	loop.registerSource(createQueryDomainEventSource({ queryClient: deps.queryClient }));
 
-	return { modeFSM, menuFSM, lobbyFSM }
-}
+	// Domain commands destination (mutations/service calls) initiated by machines.
+	loop.registerDestination(createDomainCommandsDestination({ services: deps.services, queryClient: deps.queryClient }));
 
-export function getBus() {
-	if (!loop) throw new Error('Yantrix CoreLoop is not started');
-	return loop.getBus();
-}
-
-export function getMachines(): Machines {
-	if (!machines) throw new Error('Yantrix CoreLoop is not started');
+	// Expose created machines for UI consumption.
+	machines = {
+		mode: {
+			instance: modeFSM,
+			id: windowAutomataIds.mode
+		},
+		menu: {
+				instance: menuFSM,
+				id: windowAutomataIds.menu
+		},
+		lobby: {
+				instance: lobbyFSM,
+				id: windowAutomataIds.lobby
+		}
+	};
 	return machines;
-}
-
-export function subscribeUiRender(onRender: () => void): () => void {
-	const bus = getBus();
-	const handler = () => {
-		onRender();
-		return {
-			event: WindowEvents.UI_RENDER,
-			meta: {} as TWindowMeta[WindowEvents.UI_RENDER],
-			task_id: 'ui_render',
-			result: null,
-		};
-	};
-	bus.subscribe(WindowEvents.UI_RENDER, handler);
-	return () => bus.unsubscribe(WindowEvents.UI_RENDER, handler );
-}
-
-export function subscribeAllEvents(onAnyEvent: () => void): () => void {
-	const bus = getBus();
-	const dict = GlobalEventDictionary.getDictionary();
-	const unsubs: Array<() => void> = [];
-
-	Object.values(dict).forEach((evtId) => {
-		const handler = () => {
-			onAnyEvent();
-			return {
-				event: evtId,
-				meta: {},
-				task_id: `ui_pulse_${String(evtId)}`,
-				result: null,
-			};
-		};
-		bus.subscribe(evtId , handler );
-		unsubs.push(() => bus.unsubscribe(evtId , handler ));
-	});
-
-	return () => {
-		unsubs.forEach(u => u());
-	};
-}
-
-export function dispatchEvent(name: string, meta: any = {}): void {
-	const bus = getBus();
-	const id = GlobalEventDictionary.getDictionary()[name];
-	if (!id) throw new Error(`Unknown event name: ${name}`);
-	bus.dispatch({ event: id , meta });
 }

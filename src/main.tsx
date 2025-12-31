@@ -5,7 +5,7 @@ import App from './App';
 import './styles.css';
 import { AppServicesProvider } from '~/providers/AppServicesProvider';
 import { registerYantrixFunctions } from '~/yantrix/register-functions';
-import { MachinesProvider } from '~/yantrix/MachinesContext';
+import { MachinesProvider } from '~/providers/MachinesContext';
 
 registerYantrixFunctions();
 
@@ -13,11 +13,11 @@ const el = document.getElementById('root')!;
 createRoot(el).render(
 	<React.StrictMode>
 		<BrowserRouter>
-			<MachinesProvider>
-				<AppServicesProvider>
+			<AppServicesProvider>
+				<MachinesProvider>
 					<App />
-				</AppServicesProvider>
-			</MachinesProvider>
+				</MachinesProvider>
+			</AppServicesProvider>
 		</BrowserRouter>
 	</React.StrictMode>
 );

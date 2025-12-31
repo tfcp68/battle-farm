@@ -107,6 +107,22 @@ small.muted { color: var(--muted); font-size: 12px }
 .table { width: 100%; border-collapse: collapse; font-size: 12px }
 .table th, .table td { border: 1px solid var(--border); padding: 6px 8px }
 
+/* Scroll container for tables (e.g. lobbies list) */
+.table-scroll {
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.table-scroll .table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    z-index: 1;
+}
+
 /* Auth/Register centered card */
 .auth-page { min-height: calc(100dvh - 56px); display: grid; place-items: center; }
 .auth-card {

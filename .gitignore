@@ -7,3 +7,5 @@ assets/thumbs/dictGenerate.js
 **/webp
 **/avif
 .env
+
+packages/

@@ -2,9 +2,9 @@ stateDiagram-v2
     [*] --> INTRO: RESET
     INTRO --> MAIN_MENU: TO_MENU
     GAME_LOBBY --> MAIN_MENU: EXIT
-    MAIN_MENU --> JOIN_REQUEST: JOIN_GAME (gameId)
+    MAIN_MENU --> JOIN_REQUEST: JOIN_GAME (gameId, lobbyId)
     JOIN_REQUEST --> MAIN_MENU: CANCEL
-    JOIN_REQUEST --> GAME_LOBBY: REQUEST_ACCEPTED(gameId)
+    JOIN_REQUEST --> GAME_LOBBY: REQUEST_ACCEPTED(gameId, lobbyId)
     MAIN_MENU --> GAME_LOBBY: CREATE_GAME (gameId, isHost = 1, lobbyId)
     GAME_LOBBY --> GAME_STARTING: START_GAME (gameId, playerIds)
     GAME_STARTING --> IN_GAME: [-]
@@ -17,12 +17,13 @@ note right of [*]
 #{playerId = getPlayerId()}
 subscribe/intro_complete TO_MENU
 subscribe/cancel_game_request CANCEL
-subscribe/request_accepted REQUEST_ACCEPTED ($gameId)
-subscribe/lobby_created GAME_LOBBY ($gameId)
+subscribe/request_accepted REQUEST_ACCEPTED ($gameId, $lobbyId)
+subscribe/lobby_created CREATE_GAME ($gameId, $isHost = 1, $lobbyId)
 subscribe/game_start START_GAME ($gameId, $playerIds)
 subscribe/game_end END_GAME ($scoreBoard)
 subscribe/player_exit EXIT
 subscribe/player_cancel CANCEL
+subscribe/lobby_closed EXIT
 end note
 
 note right of INTRO
@@ -31,12 +32,12 @@ end note
 
 note left of GAME_LOBBY
 #{ gameId, isHost, lobbyId } <= $gameId, $isHost = 0, $lobbyId
-emit/join_lobby ($gameId, $playerId, $isHost)
+emit/join_lobby ($gameId, $playerId, $isHost, $lobbyId)
 end note
 
 note right of JOIN_REQUEST
-#{gameId} <= $gameId
-emit/join_game_request ($gameId, $playerId)
+#{gameId, lobbyId} <= $gameId, $lobbyId
+emit/join_game_request ($playerId, $lobbyId, $gameId)
 end note
 
 note left of GAME_STARTING

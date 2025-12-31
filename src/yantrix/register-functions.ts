@@ -7,7 +7,7 @@ const registries = [windowModeFD, windowMenuFD, windowLobbyFD].filter(Boolean);
 let alreadyRegistered = false;
 
 
-function getPlayerId(): string | null {
+export function getPlayerId(): string | null {
 	if (typeof window === 'undefined') return null;
 	return window.localStorage.getItem(CURRENT_PLAYER_ID_KEY);
 }

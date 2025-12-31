@@ -175,7 +175,38 @@ export default class LobbiesModel extends BaseModel {
 		};
 	}
 
-	async requestJoinByLobbyId(lobbyId: string, playerId) {
+	async requestJoinByLobbyId(lobbyId: string, playerId: string) {
+		// Do not allow host to create join requests for own lobby.
+		const { data: lobby, error: lobbyErr } = await this.db
+			.from(this.table)
+			.select('host_player_id')
+			.eq('id', lobbyId)
+			.maybeSingle();
+		if (lobbyErr) throw lobbyErr;
+		if (lobby && lobby.host_player_id === playerId) {
+			return null;
+		}
+
+		const { data: existing, error: existingErr } = await this.db
+			.from(this.requestsTable)
+			.select('*')
+			.match({ lobby_id: lobbyId, player_id: playerId, status: 'pending' })
+			.order('created_at', { ascending: false })
+			.limit(1)
+			.maybeSingle();
+		if (existingErr) throw existingErr;
+		if (existing) {
+			return {
+				id: existing.id,
+				lobbyId: existing.lobby_id,
+				playerId: existing.player_id,
+				nickname: existing.nickname,
+				status: existing.status,
+				createdAt: existing.created_at,
+				processedAt: existing.processed_at,
+			};
+		}
+
 		const { data, error } = await this.db
 			.from(this.requestsTable)
 			.insert({
@@ -198,32 +229,43 @@ export default class LobbiesModel extends BaseModel {
 	}
 
 	async listJoinRequestsByLobbyId(lobbyId: string) {
+		// Safety net: never show requests made by the host.
+		const { data: lobby, error: lobbyErr } = await this.db
+			.from(this.table)
+			.select('host_player_id')
+			.eq('id', lobbyId)
+			.maybeSingle();
+		if (lobbyErr) throw lobbyErr;
+		const hostPlayerId = lobby?.host_player_id ?? null;
+
 		const { data, error } = await this.db
 			.from(this.requestsTable)
 			.select('*')
 			.eq('lobby_id', lobbyId)
 			.order('created_at', { ascending: true });
 		if (error) throw error;
-		return (data || []).map((d) => {
-			const row = d as {
-				id: string;
-				lobby_id: string;
-				player_id: string;
-				nickname: string | null;
-				status: string;
-				created_at: string;
-				processed_at: string | null;
-			};
-			return {
-				id: row.id,
-				lobbyId: row.lobby_id,
-				playerId: row.player_id,
-				nickname: row.nickname,
-				status: row.status,
-				createdAt: row.created_at,
-				processedAt: row.processed_at,
-			};
-		});
+		return (data || [])
+			.filter((d) => !hostPlayerId || d.player_id !== hostPlayerId)
+			.map((d) => {
+				const row = d as {
+					id: string;
+					lobby_id: string;
+					player_id: string;
+					nickname: string | null;
+					status: string;
+					created_at: string;
+					processed_at: string | null;
+				};
+				return {
+					id: row.id,
+					lobbyId: row.lobby_id,
+					playerId: row.player_id,
+					nickname: row.nickname,
+					status: row.status,
+					createdAt: row.created_at,
+					processedAt: row.processed_at,
+				};
+			});
 	}
 
 	async approveJoin(requestId: string): Promise<boolean> {
