@@ -40,24 +40,7 @@ export function createDomainCommandsDestination(opts: {
 				unsubs.push(() => bus.unsubscribe(event, h));
 			};
 
-			// UI: Create lobby flow
-			on(WindowDomainEvents.lobby_created, async ({ meta }) => {
-
-				const playerId = meta.playerId ?? getPlayerId();
-				if (!playerId) return;
-
-				const lobby = await services.controllers.lobbies.create(playerId, { maxPlayers: 7 });
-				await services.controllers.games.create({ lobbyId: lobby.lobbyId });
-
-				await queryClient.invalidateQueries({ queryKey: ['lobbies'] });
-				await queryClient.invalidateQueries({ queryKey: ['games'] });
-			});
-
-			// UI: Request join lobby (creates lobby_request row in DB)
 			on(WindowDomainEvents.join_game_request, async ({ meta }) => {
-				// Mode FSM emits join_game_request automatically on JOIN_REQUEST state entry.
-				// That event is useful for "intent" semantics in the FSM, but must NOT trigger DB writes,
-				// otherwise we can create event storms (FSM -> destination -> invalidation -> state churn -> FSM ...).
 
 				const lobbyId = meta.lobbyId ?? null;
 				const playerId = meta.playerId ?? getPlayerId();
@@ -71,7 +54,6 @@ export function createDomainCommandsDestination(opts: {
 				}
 			});
 
-			// UI: Accept join => add player to lobby_players
 			on(WindowDomainEvents.request_accepted, async ({ meta }) => {
 
 				const lobbyId = meta.lobbyId ?? null;

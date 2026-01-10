@@ -1,10 +1,11 @@
 import React from 'react';
 
 type DevSidebarProps = {
-    automataName?: string;
-    stateName?: string | null;
-    snapshot?: unknown;
-    children?: React.ReactNode;
+	automataName?: string;
+	stateName?: string | null;
+	snapshot?: unknown;
+	children?: React.ReactNode;
+	style?: React.CSSProperties;
 };
 
 export default function DevSidebar({
@@ -12,11 +13,12 @@ export default function DevSidebar({
                                        stateName,
                                        snapshot,
                                        children,
+	style
                                    }: DevSidebarProps) {
     return (
         <aside
             className="dev-fixed"
-            style={{ height: 'auto', border: '1px solid var(--border)', borderRadius: 10 }}
+            style={{ height: 'auto', border: '1px solid var(--border)', borderRadius: 10, ...style }}
         >
             <div className="dev-fixed-inner">
                 {(automataName || stateName || snapshot != null) && (

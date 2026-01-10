@@ -27,32 +27,15 @@ export function useMenuController() {
 				await qc.invalidateQueries({ queryKey: ['lobbies', 'players', 'byLobby', lobby.lobbyId] });
 				await qc.invalidateQueries({ queryKey: ['lobbies', 'requests', 'byLobby', lobby.lobbyId] });
 
-				// Go to lobby immediately.
 				navigate('/lobby', { replace: true });
 			},
 
 			async requestJoin(lobbyId: string, playerId: string) {
-				// DB side-effect through DI
 				await services.controllers.lobbies.requestJoinByLobbyId(lobbyId, playerId);
 
-				// FSM/UI intent
 				emitDomainEvent(WindowDomainEvents.join_game_request, { src: 'ui', lobbyId, playerId, gameId: null });
 
 				await qc.invalidateQueries({ queryKey: ['lobbies', 'requests', 'byLobby', lobbyId] });
-			},
-
-			async acceptJoin(lobbyId: string, playerId: string, gameId: string | null) {
-				// DB side-effect through DI
-				const existingPlayers = await services.controllers.lobbies.listPlayersByLobbyId(lobbyId);
-				if (!existingPlayers.some((p) => p.playerId === playerId)) {
-					await services.controllers.lobbies.addPlayerByLobbyId(lobbyId, playerId, false);
-				}
-
-				// FSM/UI intent
-				emitDomainEvent(WindowDomainEvents.request_accepted, { src: 'ui', lobbyId, playerId, gameId });
-
-				await qc.invalidateQueries({ queryKey: ['lobbies', 'players', 'byLobby', lobbyId] });
-				await qc.invalidateQueries({ queryKey: ['lobbies', 'lobby', 'byId', lobbyId] });
 			},
 
 			cancelJoin() {

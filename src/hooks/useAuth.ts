@@ -28,7 +28,6 @@ export function useAuthActions() {
 		mutationFn: ({ nickname, password }: { nickname: string; password: string }) =>
 			controllers.auth.register(nickname, password),
 		onSuccess: (data) => {
-			// data is { user, player }
 			if (data?.player?.playerId) {
 				setCurrentPlayerId(data.player.playerId);
 			}

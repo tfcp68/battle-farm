@@ -3,12 +3,11 @@ import React from 'react';
 export default function JoinRequestPopup({
 	gameId,
 	hostPlayerId,
-	onAccept,
 	onCancel,
 }: {
 	gameId?: string | null;
 	hostPlayerId?: string | null;
-	onAccept: () => void;
+	onAccept?: () => void;
 	onCancel: () => void;
 }) {
 	return (
@@ -27,17 +26,14 @@ export default function JoinRequestPopup({
 			}}>
 			<div className="auth-card" onClick={(e) => e.stopPropagation()} style={{ width: 420, maxWidth: '92vw' }}>
 				<h3 className="section-title" style={{ margin: 0, textAlign: 'center' }}>
-					Join request
+					Заявка на вступление
 				</h3>
 				<small className="muted" style={{ textAlign: 'center' }}>
-					You’ve sent a request to join lobby {gameId ?? '—'}
-					{hostPlayerId ? `, host: ${hostPlayerId}` : ''}
+					Заявка отправлена в лобби {gameId ?? '—'}
+					{hostPlayerId ? `, хост: ${hostPlayerId}` : ''}. Ожидайте решения хоста.
 				</small>
 
 				<div className="actions">
-					<button className="ok" onClick={onAccept}>
-						Accept request
-					</button>
 					<button className="warn" onClick={onCancel}>
 						Cancel
 					</button>

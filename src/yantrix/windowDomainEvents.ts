@@ -13,8 +13,6 @@ export const WindowDomainEvents = {
 	join_lobby: modeEvents.join_lobby,
 	join_game_request: modeEvents.join_game_request,
 	game_started: modeEvents.game_started,
-
 	player_state_change: lobbyEvents.player_state_change,
-
 	lobby_closed: modeEvents.lobby_closed,
 } as const;

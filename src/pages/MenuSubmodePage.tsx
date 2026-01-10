@@ -11,6 +11,10 @@ import { useMenuController } from '~/hooks/useMenuController';
 import { useCurrentPlayer } from '~/hooks/useAuth';
 import { useLobbiesList } from '~/hooks/useLobbies';
 import { useGameByLobbyId } from '~/hooks/useGame';
+import { useQuery } from '@tanstack/react-query';
+import { useServices } from '~/providers/AppServicesProvider';
+import { emitDomainEvent } from '~/yantrix/sources/uiBridgeSource';
+import { WindowDomainEvents } from '~/yantrix/windowDomainEvents';
 
 export default function MenuSubmodePage() {
 	const navigate = useNavigate();
@@ -33,7 +37,6 @@ export default function MenuSubmodePage() {
 		refetch,
 	} = useLobbiesList({
 		status: 'open',
-		excludeHostPlayerId: currentPlayerId ?? '',
 	});
 
 	const getState = WindowModeAutomata.getState?.bind(WindowModeAutomata);
@@ -47,9 +50,36 @@ export default function MenuSubmodePage() {
 
 	const [isJoinPopupOpen, setIsJoinPopupOpen] = React.useState(false);
 
+	const cancelledByMeRef = React.useRef(false);
+
+	const [isCreatingLobby, setIsCreatingLobby] = React.useState(false);
+
 	React.useEffect(() => {
-		if (isJoinRequest) setIsJoinPopupOpen(false);
+		if (isJoinRequest) cancelledByMeRef.current = false;
 	}, [isJoinRequest]);
+
+	const { controllers } = useServices();
+	const { data: myJoinRequest } = useQuery({
+		queryKey: ['lobbyRequests', 'byLobbyAndPlayer', modeCtx?.context?.lobbyId ?? 'nil', currentPlayerId ?? 'nil'],
+		queryFn: async () => {
+			const lid = modeCtx?.context?.lobbyId;
+			const pid = currentPlayerId;
+			const list = await controllers.lobbies.listRequestsByLobbyId(lid);
+			return list.find((r: any) => r.playerId === pid) ?? null;
+		},
+		enabled: !!isJoinRequest && !!modeCtx?.context?.lobbyId && !!currentPlayerId,
+		refetchInterval: 1500,
+	});
+
+	React.useEffect(() => {
+		if (!isJoinRequest) return;
+		if (myJoinRequest?.status === 'approved') {
+			navigate('/lobby', { replace: true });
+		} else if (myJoinRequest?.status === 'rejected') {
+			setIsJoinPopupOpen(false);
+			navigate('/menu', { replace: true });
+		}
+	}, [myJoinRequest, isJoinRequest, navigate]);
 
 	if (loadingCurrentPlayer) {
 		return (
@@ -83,10 +113,16 @@ export default function MenuSubmodePage() {
 							<button
 								className="primary"
 								onClick={async () => {
-									await ctrl.createLobby(currentPlayerId);
+									if (isCreatingLobby) return;
+									setIsCreatingLobby(true);
+									try {
+										await ctrl.createLobby(currentPlayerId);
+									} finally {
+										setIsCreatingLobby(false);
+									}
 								}}
-								disabled={!currentPlayerId}>
-								Create Lobby
+								disabled={!currentPlayerId || isCreatingLobby}>
+								{isCreatingLobby ? 'Creating…' : 'Create Lobby'}
 							</button>
 						</div>
 
@@ -128,6 +164,21 @@ export default function MenuSubmodePage() {
 															<button
 																onClick={() => {
 																	if (!currentPlayerId) return;
+																	if (l.hostPlayerId === currentPlayerId) {
+																		navigate('/lobby', {
+																			replace: true,
+																			state: { lobbyId: l.lobbyId },
+																		});
+																		emitDomainEvent(
+																			WindowDomainEvents.lobby_created,
+																			{
+																				gameId: null,
+																				isHost: 1,
+																				lobbyId: l.lobbyId,
+																			}
+																		);
+																		return;
+																	}
 																	// First: move FSM to JOIN_REQUEST. That will emit join_game_request.
 																	dispatchMode({
 																		action: WindowModeAutomata.getAction(
@@ -137,9 +188,10 @@ export default function MenuSubmodePage() {
 																	});
 																	// Then: perform DB write explicitly (src='ui' guarded on destination).
 																	ctrl.requestJoin(l.lobbyId, currentPlayerId);
+																	setIsJoinPopupOpen(true);
 																}}
 																disabled={!currentPlayerId}>
-																Join
+																{l.hostPlayerId === currentPlayerId ? 'Enter' : 'Join'}
 															</button>
 														</div>
 													</td>
@@ -162,17 +214,13 @@ export default function MenuSubmodePage() {
 				</div>
 			</div>
 
-			{isJoinRequest && !isJoinPopupOpen && (
+			{isJoinRequest && isJoinPopupOpen && (
 				<JoinRequestPopup
 					gameId={joinGameId}
 					hostPlayerId={lobby?.hostPlayerId ?? null}
-					onAccept={() => {
-						if (!joinLobbyId || !currentPlayerId) return;
-						ctrl.acceptJoin(joinLobbyId, currentPlayerId, joinGameId);
-						navigate('/lobby', { replace: true });
-					}}
 					onCancel={() => {
-						setIsJoinPopupOpen(true);
+						cancelledByMeRef.current = true;
+						setIsJoinPopupOpen(false);
 						ctrl.cancelJoin();
 					}}
 				/>

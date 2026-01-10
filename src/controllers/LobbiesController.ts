@@ -24,7 +24,7 @@ export default class LobbiesController extends BaseController {
 		return this.model.getLobbyById(lobbyId);
 	}
 
-	async list(params: { excludeHostPlayerId: string; status: string }) {
+	async list(params: { status: string }) {
 		return this.model.listLobbies(params);
 	}
 

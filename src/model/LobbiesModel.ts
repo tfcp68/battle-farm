@@ -43,8 +43,8 @@ export default class LobbiesModel extends BaseModel {
 		};
 	}
 
-	async listLobbies(params: { status: string; excludeHostPLayerId?: string }) {
-		const { status, excludeHostPLayerId } = params;
+	async listLobbies(params: { status: string }) {
+		const { status } = params;
 		let q = this.db
 			.from(this.table)
 			.select(
@@ -60,9 +60,7 @@ export default class LobbiesModel extends BaseModel {
 			)
 			.order('created_at', { ascending: false });
 		if (status) q = q.eq('status', status);
-		if (excludeHostPLayerId) {
-			q = q.neq('host_player_id', excludeHostPLayerId);
-		}
+
 		const { data, error } = await q;
 		if (error) throw error;
 		return (data || []).map((d) => {
@@ -134,15 +132,7 @@ export default class LobbiesModel extends BaseModel {
 			.eq('lobby_id', lobbyId)
 			.order('joined_at', { ascending: true });
 		if (error) throw error;
-		return (data || []).map((d) => {
-			const row = d as {
-				id: string;
-				lobby_id: string;
-				player_id: string;
-				is_host: boolean;
-				is_ready?: boolean | null;
-				joined_at: string;
-			};
+		return (data || []).map((row) => {
 			return {
 				id: row.id,
 				lobbyId: row.lobby_id,

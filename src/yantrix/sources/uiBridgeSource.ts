@@ -7,7 +7,8 @@ type WindowEventMetaMap = Record<number, unknown>;
 
 let publishRef: null | ((e: TAutomataEventMetaType<WindowEventId, WindowEventMetaMap>) => void) = null;
 
-export function emitDomainEvent(event: WindowEventId, meta: unknown = null) {
+export function emitDomainEvent(event: TAutomataEventMetaType<WindowEventId, WindowEventMetaMap>['event'],
+								meta: TAutomataEventMetaType<WindowEventId, WindowEventMetaMap>['meta'] = null) {
 	if (!publishRef) {
 		throw new Error(
 			`uiBridgeSource.publishRef is null. CoreLoop is not started yet (event=${String(event)}). ` +
@@ -15,7 +16,7 @@ export function emitDomainEvent(event: WindowEventId, meta: unknown = null) {
 		);
 	}
 	console.log(`Emitting UI Bridge Event: ${String(event)}`, publishRef);
-	publishRef({ event, meta } as TAutomataEventMetaType<WindowEventId, WindowEventMetaMap>);
+	publishRef({ event, meta });
 }
 
 export function createUIBridgeSource(): IEventSource<WindowEventId, WindowEventMetaMap> {

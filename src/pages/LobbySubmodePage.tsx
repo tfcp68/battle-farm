@@ -1,6 +1,6 @@
 import React from 'react';
 import DevSidebar from '~/components/DevSidebar';
-import { Switch } from '~/components/ui/switch';
+import RequestTable from '~/components/RequestTable';
 
 import WindowLobbyAutomata, { statesDictionary as statesLobbyAutomata } from '~/fsm/window/WindowLobbyAutomata';
 
@@ -8,12 +8,12 @@ import { useMachines } from '~/hooks/useMachines';
 import { useFSM } from '@yantrix/react';
 
 import { useLobbyController } from '~/hooks/useLobbyController';
-import { useLobbyById, useLobbyPlayersByLobbyId, useLobbyRequestsByLobbyId } from '~/hooks/useLobbies';
+import { useLobbyById, useLobbyPlayersByLobbyId } from '~/hooks/useLobbies';
 import { usePlayersList } from '~/hooks/usePlayers';
 import { useCurrentPlayer } from '~/hooks/useAuth';
 import { getStateName } from '~/helpers/fsm';
 import WindowModeAutomata, { statesDictionary as statuesModeAutomata } from '~/fsm/window/WindowModeAutomata';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function LobbySubmodePage() {
 	const navigate = useNavigate();
@@ -27,14 +27,14 @@ export default function LobbySubmodePage() {
 	const lobbyCtx = getLobbyContext();
 	const modeCtx = getModeContext();
 
-	const lobbyId = modeCtx?.context?.lobbyId ?? null;
+	const location = useLocation();
+	const lobbyId = modeCtx?.context?.lobbyId ?? (location.state as any)?.lobbyId ?? null;
 
 	const { data: currentPlayer } = useCurrentPlayer();
 	const currentPlayerId = currentPlayer?.playerId ?? null;
 
 	const { data: lobby } = useLobbyById(lobbyId);
 	const { data: lobbyPlayers = [] } = useLobbyPlayersByLobbyId(lobbyId);
-	const { data: requests = [] } = useLobbyRequestsByLobbyId(lobbyId);
 	const { data: allPlayers = [] } = usePlayersList();
 
 	const nicknameById: Record<string, string> = React.useMemo(() => {
@@ -77,6 +77,9 @@ export default function LobbySubmodePage() {
 				automataName={WindowModeAutomata.name}
 				stateName={getStateName(statuesModeAutomata, modeCtx?.state)}
 				snapshot={modeCtx}
+				style={{
+					top: 400,
+				}}
 			/>
 
 			<div className="with-dev">
@@ -108,7 +111,7 @@ export default function LobbySubmodePage() {
 									<button
 										className="danger"
 										onClick={() => currentPlayerId && ctrl.leaveLobby(lobbyId, currentPlayerId)}>
-										Exit Lobby
+										Exit from Lobby
 									</button>
 									<small className="muted">Waiting for host...</small>
 								</>
@@ -118,21 +121,6 @@ export default function LobbySubmodePage() {
 
 					<div className="panel">
 						<h4 className="section-title">Players</h4>
-
-						{currentPlayerId && (
-							<div className="row" style={{ alignItems: 'center', marginBottom: 8 }}>
-								<small className="muted" style={{ marginRight: 8 }}>
-									Your status:
-								</small>
-								<Switch
-									checked={myReadyValue === 1}
-									onCheckedChange={(checked) => ctrl.toggleReady(lobbyId, currentPlayerId, checked)}
-								/>
-								<small className="muted" style={{ marginLeft: 8 }}>
-									{myReadyValue === 1 ? 'Ready' : 'Not ready'}
-								</small>
-							</div>
-						)}
 
 						<table className="table" style={{ marginTop: 8 }}>
 							<thead>
@@ -162,35 +150,11 @@ export default function LobbySubmodePage() {
 						</table>
 					</div>
 
-					{isHost && (
-						<div className="panel">
-							<h4 className="section-title">Join Requests</h4>
-							<table className="table" style={{ marginTop: 8 }}>
-								<thead>
-									<tr>
-										<th>Player</th>
-										<th>Status</th>
-									</tr>
-								</thead>
-								<tbody>
-									{requests.length === 0 ? (
-										<tr>
-											<td colSpan={2}>
-												<small className="muted">No requests</small>
-											</td>
-										</tr>
-									) : (
-										requests.map((r) => (
-											<tr key={r.id}>
-												<td>{nicknameById[r.playerId] ?? r.playerId}</td>
-												<td>{r.status}</td>
-											</tr>
-										))
-									)}
-								</tbody>
-							</table>
-						</div>
-					)}
+					<RequestTable
+						lobbyId={lobbyId}
+						hostPlayerId={lobby?.hostPlayerId ?? null}
+						currentPlayerId={currentPlayerId}
+					/>
 				</div>
 			</div>
 		</>

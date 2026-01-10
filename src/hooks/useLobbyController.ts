@@ -11,11 +11,6 @@ export function useLobbyController() {
 
 	return React.useMemo(() => {
 		return {
-			async toggleReady(lobbyId: string, playerId: string, isReady: boolean) {
-				await services.controllers.lobbies.setPlayerReadyByLobbyId(lobbyId, playerId, isReady);
-				await qc.invalidateQueries({ queryKey: ['lobbies', 'players', 'byLobby', lobbyId] });
-			},
-
 			async closeLobby(lobbyId: string) {
 				await services.controllers.lobbies.closeByLobbyId(lobbyId);
 				await qc.invalidateQueries({ queryKey: ['lobbies'] });
