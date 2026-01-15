@@ -1,6 +1,6 @@
-import { TCard, TCardType } from '~/src/types/serializables/cards';
-import { TCropColor, TGardenBedType } from '~/src/types/serializables/crops';
-import { TPlayer, TPlayerClass } from '~/src/types/serializables/players';
+import { TCard, TCardType } from '~/types/serializables/cards';
+import { TCropColor, TGardenBedType } from '~/types/serializables/crops';
+import { TPlayer, TPlayerClass } from '~/types/serializables/players';
 
 export const GAME_AMOUNT_PLAYERS = 4;
 export const TOTAL_SUM_VALUES_IN_DECK = 582;

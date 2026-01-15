@@ -1,8 +1,8 @@
-import { TTurnPhase, TTurnSubAction, TTurnSubPayload } from '~/src/types/fsm';
-import { TGameEvent, TGameEventObject } from '~/src/types/fsm/events/index';
-import { TWaitAction } from '~/src/types/fsm/slices/waiting';
-import { IGame } from '~/src/types/serializables/game';
-import { TPlayerClass } from '~/src/types/serializables/players';
+import { TTurnPhase, TTurnSubAction, TTurnSubPayload } from '~/types/fsm';
+import { TGameEvent, TGameEventObject } from '~/types/fsm/events/index';
+import { TWaitAction } from '~/types/fsm/slices/waiting';
+import { IGame } from '~/types/serializables/game';
+import { TPlayerClass } from '~/types/serializables/players';
 
 export type TEventEmitter<T extends TTurnPhase, A extends TTurnSubAction<T> = TTurnSubAction<T>> = {
 	turnPhase: T;

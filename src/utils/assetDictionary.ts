@@ -1,5 +1,5 @@
-import assetsDictionaryJson from '~/frontend/hooks/assetsDictionary.json';
-import { extTypes, TAssetNamesDict, TAssetsDictionary, TBaseAssetSize } from '~/src/types/build/assetBuilderTypes';
+import assetsDictionaryJson from '~/hooks/assetsDictionary.json';
+import { extTypes, TAssetNamesDict, TAssetsDictionary, TBaseAssetSize } from '~/types/build/assetBuilderTypes';
 
 const assetDictionary = assetsDictionaryJson as TAssetsDictionary;
 

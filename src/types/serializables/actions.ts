@@ -1,5 +1,5 @@
-import { TTargetMode } from '~/src/types/fsm/slices/target';
-import { TCardType, TGenericCard } from '~/src/types/serializables/cards';
+import { TTargetMode } from '~/types/fsm/slices/target';
+import { TCardType, TGenericCard } from '~/types/serializables/cards';
 
 export const ActionCardId = {
 	GARDEN_GOURMET: 1,

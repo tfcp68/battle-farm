@@ -1,8 +1,8 @@
-import { TTurnBasedDispatch } from '~/src/types/fsm';
-import { TPlayerIndex, TTargetIndex } from '~/src/types/fsm/shared';
-import { TCard } from '~/src/types/serializables/cards';
-import { TBed, TCrop, TCropColor, TWithCropColor } from '~/src/types/serializables/crops';
-import { TPlayer, TPlayerTarget } from '~/src/types/serializables/players';
+import { TTurnBasedDispatch } from '~/types/fsm';
+import { TPlayerIndex, TTargetIndex } from '~/types/fsm/shared';
+import { TCard } from '~/types/serializables/cards';
+import { TBed, TCrop, TCropColor, TWithCropColor } from '~/types/serializables/crops';
+import { TPlayer, TPlayerTarget } from '~/types/serializables/players';
 import { TGame } from '../../serializables/game';
 
 export enum TTargetMode {

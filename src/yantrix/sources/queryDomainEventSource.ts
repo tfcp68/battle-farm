@@ -9,6 +9,8 @@ type MetaMap = Record<number, unknown>;
 
 type Emit = (e: TAutomataEventMetaType<EventId, MetaMap>) => void;
 
+
+
 function stableStringify(x: unknown): string {
 	try {
 		const obj = (x && typeof x === 'object') ? (x as Record<string, unknown>) : {};
@@ -25,7 +27,7 @@ export function createQueryDomainEventSource(opts: { queryClient: QueryClient })
 	let emit: Emit | null = null;
 	let unsub: (() => void) | null = null;
 
-	let lastReadyMapByLobby: Record<string, string> = {}; // lobbyId -> json hash
+	let lastReadyMapByLobby: Record<string, string> = {};
 
 	function computeReadyMap(players: Array<{ playerId: string; isReady?: boolean | null }> | null | undefined) {
 		const map: Record<string, 0 | 1> = {};
@@ -62,7 +64,7 @@ export function createQueryDomainEventSource(opts: { queryClient: QueryClient })
 	return {
 		id,
 		start(publish) {
-			emit = publish as Emit;
+			emit = publish;
 			onSnapshot();
 			unsub = qc.getQueryCache().subscribe(() => {
 				onSnapshot();

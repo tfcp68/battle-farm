@@ -1,7 +1,7 @@
-import { TPlayerIndex, TTrade } from '~/src/types/fsm/shared';
-import { TTargetModeContext } from '~/src/types/fsm/slices/target';
-import { TGameEffect } from '~/src/types/fsm';
-import { TPlayerTarget } from '~/src/types/serializables/players';
+import { TPlayerIndex, TTrade } from '~/types/fsm/shared';
+import { TTargetModeContext } from '~/types/fsm/slices/target';
+import { TGameEffect } from '~/types/fsm';
+import { TPlayerTarget } from '~/types/serializables/players';
 
 export enum TWaitPhase {
 	INIT,

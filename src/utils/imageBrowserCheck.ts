@@ -1,7 +1,9 @@
-const storageKey = 'supportedImageFormat'
+import { ExtKeysT } from '~/types/build/assetBuilderTypes';
+
+const storageKey = 'supportedImageFormat';
 
 export const canUseAviF: () => Promise<boolean> = () => {
-	debugger
+	// debugger
 	return new Promise((resolve, reject) => {
 		const AVIF = new Image();
 		AVIF.onload = () => {
@@ -34,6 +36,6 @@ export const setSupportedExt = (resArr:  [PromiseSettledResult<boolean>, Promise
 	if(resArr[0]) return localStorage.setItem(storageKey, 'WEBP')
 	else return localStorage.setItem(storageKey, 'JPEG')
 }
-export const getExt = () => {
-	return localStorage.getItem(storageKey)
+export const getExt = (): ExtKeysT => {
+	return localStorage.getItem(storageKey) as ExtKeysT
 };

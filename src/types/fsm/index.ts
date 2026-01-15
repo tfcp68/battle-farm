@@ -3,13 +3,13 @@ import {
 	TFertilizeMappedContext,
 	TFertilizeMappedPayload,
 	TFertilizePhase,
-} from '~/src/types/fsm/slices/fertilize';
-import { TPlayAction, TPlayContext, TPlayPayload, TPlayPhase } from '~/src/types/fsm/slices/play';
-import { TShoppingAction, TShoppingContext, TShoppingPayload, TShoppingPhase } from '~/src/types/fsm/slices/shopping';
-import { TTradeAction, TTradeContext, TTradePayload, TTradePhase } from '~/src/types/fsm/slices/trade';
-import { TWaitAction, TWaitContext, TWaitPayload, TWaitPhase } from '~/src/types/fsm/slices/waiting';
-import { IGame } from '~/src/types/serializables/game';
-import { TPlayerClass } from '~/src/types/serializables/players';
+} from '~/types/fsm/slices/fertilize';
+import { TPlayAction, TPlayContext, TPlayPayload, TPlayPhase } from '~/types/fsm/slices/play';
+import { TShoppingAction, TShoppingContext, TShoppingPayload, TShoppingPhase } from '~/types/fsm/slices/shopping';
+import { TTradeAction, TTradeContext, TTradePayload, TTradePhase } from '~/types/fsm/slices/trade';
+import { TWaitAction, TWaitContext, TWaitPayload, TWaitPhase } from '~/types/fsm/slices/waiting';
+import { IGame } from '~/types/serializables/game';
+import { TPlayerClass } from '~/types/serializables/players';
 
 export enum TTurnPhase {
 	WAITING,

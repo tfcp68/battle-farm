@@ -1,10 +1,10 @@
-import { TTurnPhase, TTurnSubPhase, TTurnSubphaseContext } from '~/src/types/fsm';
-import { TTargetModeContext } from '~/src/types/fsm/slices/target';
-import { ICard, IDeck, TCard, TDeck } from '~/src/types/serializables/cards';
-import { IPlayer, TPlayer, TPlayerClass } from '~/src/types/serializables/players';
-import { TGameStat } from '~/src/types/serializables/stat';
-import { TPlayerRecord } from '~/src/types/shared';
-import { LengthArray } from '~/src/automata/utils/types';
+import { TTurnPhase, TTurnSubPhase, TTurnSubphaseContext } from '~/types/fsm';
+import { TTargetModeContext } from '~/types/fsm/slices/target';
+import { ICard, IDeck, TCard, TDeck } from '~/types/serializables/cards';
+import { IPlayer, TPlayer, TPlayerClass } from '~/types/serializables/players';
+import { TGameStat } from '~/types/serializables/stat';
+import { TPlayerRecord } from '~/types/shared';
+// import { LengthArray } from '~/automata/utils/types';
 
 export const MARKET_SIZE = 6;
 export const MAX_PLAYERS = 6;
@@ -57,7 +57,7 @@ export type TGame = {
 	players: TPlayerRecord<TPlayer> | null;
 	deck: TDeck;
 	winLimit: number;
-	market: LengthArray<TCard, typeof MARKET_SIZE>;
+	// market: LengthArray<TCard, typeof MARKET_SIZE>;
 };
 
 export type TGameScore = {
@@ -78,7 +78,7 @@ export interface IGame {
 	deck: IDeck;
 	turns: TTurnContainer;
 	phase: TGamePhase;
-	market: LengthArray<ICard, typeof MARKET_SIZE>;
+	// market: LengthArray<ICard, typeof MARKET_SIZE>;
 	targetingContext: TTargetModeContext<any>;
 	exportGame: () => TGameContainer;
 	importGame: (savedGame: TGameContainer) => this;

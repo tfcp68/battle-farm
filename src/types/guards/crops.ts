@@ -1,5 +1,5 @@
-import { TCardId } from '~/src/types/serializables/cards';
-import { CropCardId, TCropColor, TCropId } from '~/src/types/serializables/crops';
+import { TCardId } from '~/types/serializables/cards';
+import { CropCardId, TCropColor, TCropId } from '~/types/serializables/crops';
 
 export const isCropId = (id: TCardId): id is TCropId => Object.keys(CropCardId).includes(id);
 export const isCropColor = (cropColor: any): cropColor is TCropColor =>

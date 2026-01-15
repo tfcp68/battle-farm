@@ -1,6 +1,6 @@
-import { TActionId } from '~/src/types/serializables/actions';
-import { TCropId } from '~/src/types/serializables/crops';
-import { TPlayerRecord } from '~/src/types/shared';
+import { TActionId } from '~/types/serializables/actions';
+import { TCropId } from '~/types/serializables/crops';
+import { TPlayerRecord } from '~/types/shared';
 
 export type TPlayerStat = {
 	cardsBought: number;

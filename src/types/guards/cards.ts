@@ -1,6 +1,6 @@
-import { ActionCardId, TActionCard } from '~/src/types/serializables/actions';
-import { TCard, TCardId, TCardType } from '~/src/types/serializables/cards';
-import { CropCardId, TCropCard } from '~/src/types/serializables/crops';
+import { ActionCardId, TActionCard } from '~/types/serializables/actions';
+import { TCard, TCardId, TCardType } from '~/types/serializables/cards';
+import { CropCardId, TCropCard } from '~/types/serializables/crops';
 
 export const isCropCard = (card: TCard): card is TCropCard => card?.type === TCardType.CROP;
 export const isActionCard = (card: TCard): card is TActionCard => card?.type === TCardType.ACTION;

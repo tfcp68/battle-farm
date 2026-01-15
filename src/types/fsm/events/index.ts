@@ -1,11 +1,11 @@
-import { TTurnPhase } from '~/src/types/fsm';
-import { TPlayerIndex } from '~/src/types/fsm/shared';
-import { TTargetContext } from '~/src/types/fsm/slices/target';
-import { TActionCard } from '~/src/types/serializables/actions';
-import { TCard } from '~/src/types/serializables/cards';
-import { TCrop } from '~/src/types/serializables/crops';
-import { IGame } from '~/src/types/serializables/game';
-import { TPlayerClass, TPlayerTarget } from '~/src/types/serializables/players';
+import { TTurnPhase } from '~/types/fsm';
+import { TPlayerIndex } from '~/types/fsm/shared';
+import { TTargetContext } from '~/types/fsm/slices/target';
+import { TActionCard } from '~/types/serializables/actions';
+import { TCard } from '~/types/serializables/cards';
+import { TCrop } from '~/types/serializables/crops';
+import { IGame } from '~/types/serializables/game';
+import { TPlayerClass, TPlayerTarget } from '~/types/serializables/players';
 
 export enum TGameEvent {
 	RESET,

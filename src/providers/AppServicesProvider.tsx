@@ -13,13 +13,16 @@ export function AppServicesProvider({ children }: { children: React.ReactNode })
 
 
 	// for tanstack query extension debugging
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-expect-error
 	declare global {
 		interface Window {
 			__TANSTACK_QUERY_CLIENT__:
 				import("@tanstack/query-core").QueryClient;
 		}
 	}
-
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-expect-error
 	window.__TANSTACK_QUERY_CLIENT__ = queryClientRef.current;
 
 	const value = React.useMemo(() => ({ services, queryClient: queryClientRef.current! }), [services]);

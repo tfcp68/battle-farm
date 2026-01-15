@@ -16,9 +16,8 @@
 //      "~/assets/*": ["assets/*"],
 //      "~/components/*": ["frontend/components/*"],
 //      "~/frontend/*": ["frontend/*"]
-    }
-  },
+    },},
   "include": ["./frontend/**/*", "./src/**/*", "./tests/**/*"],
-  "exclude": ["node_modules", "dist", "src/**/*.js"],
+  "exclude": ["node_modules", "dist", "src/**/*.js", "frontend", "tests"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

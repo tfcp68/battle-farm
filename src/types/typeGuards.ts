@@ -1,6 +1,6 @@
-import { TGameEvent } from '~/src/types/fsm/events';
-import { TPlayerClass } from '~/src/types/serializables/players';
-import { isPositiveInteger } from '@yantrix/utils';
+import { TGameEvent } from '~/types/fsm/events';
+import { TPlayerClass } from '~/types/serializables/players';
+import { isPositiveInteger } from '@yantrix/core';
 
 export const isPlayerClass = (t: any): t is TPlayerClass =>
 	Object.values(TPlayerClass).filter(isPositiveInteger).includes(t);

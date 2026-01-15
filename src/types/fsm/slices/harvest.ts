@@ -1,5 +1,5 @@
-import { TTargetModeContext } from '~/src/types/fsm/slices/target';
-import { TCrop } from '~/src/types/serializables/crops';
+import { TTargetModeContext } from '~/types/fsm/slices/target';
+import { TCrop } from '~/types/serializables/crops';
 
 export enum THarvestPhase {
 	IDLE,

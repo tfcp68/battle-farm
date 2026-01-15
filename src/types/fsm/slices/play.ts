@@ -1,8 +1,8 @@
-import { TPlayerIndex, TTargetIndex } from '~/src/types/fsm/shared';
-import { TCardType, TGenericCard } from '~/src/types/serializables/cards';
-import { TTargetContext } from '~/src/types/fsm/slices/target';
-import { TGameEffect } from '~/src/types/fsm';
-import { TCrop } from '~/src/types/serializables/crops';
+import { TPlayerIndex, TTargetIndex } from '~/types/fsm/shared';
+import { TCardType, TGenericCard } from '~/types/serializables/cards';
+import { TTargetContext } from '~/types/fsm/slices/target';
+import { TGameEffect } from '~/types/fsm';
+import { TCrop } from '~/types/serializables/crops';
 
 export enum TPlayPhase {
 	IDLE,

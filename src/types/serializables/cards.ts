@@ -1,6 +1,6 @@
-import { TGameEffect, TTurnPhase, TTurnSubPhase, TTurnSubphaseContext } from '~/src/types/fsm';
-import { TActionCard, TActionId } from '~/src/types/serializables/actions';
-import { TCropCard, TCropId } from '~/src/types/serializables/crops';
+import { TGameEffect, TTurnPhase, TTurnSubPhase, TTurnSubphaseContext } from '~/types/fsm';
+import { TActionCard, TActionId } from '~/types/serializables/actions';
+import { TCropCard, TCropId } from '~/types/serializables/crops';
 
 export enum TCardType {
 	UNKNOWN,

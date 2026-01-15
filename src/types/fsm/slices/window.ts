@@ -1,5 +1,5 @@
-import { TTargetIndex } from '~/src/types/fsm/shared';
-import { TGame, TGameScore } from '~/src/types/serializables/game';
+import { TTargetIndex } from '~/types/fsm/shared';
+import { TGame, TGameScore } from '~/types/serializables/game';
 
 export enum TWindowState {
 	INIT,

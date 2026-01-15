@@ -1,4 +1,4 @@
-import { TTargetIndex } from '~/src/types/fsm/shared';
+import { TTargetIndex } from '~/types/fsm/shared';
 
 export enum TShoppingPhase {
 	IDLE,

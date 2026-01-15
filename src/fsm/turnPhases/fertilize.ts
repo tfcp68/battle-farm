@@ -1,13 +1,7 @@
-import { turnPhaseReducer_Fertilize } from '~/src/reducers/fertilize';
-import { TGameEvent, TMappedGameEventMeta } from '~/src/types/fsm/events';
-import {
-	TFertilizeAction,
-	TFertilizeMappedContext,
-	TFertilizeMappedPayload,
-	TFertilizePhase,
-} from '~/src/types/fsm/slices/fertilize';
-import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
-import { isGameEvent } from '~/src/types/typeGuards';
+import { turnPhaseReducer_Fertilize } from '~/reducers/fertilize';
+import { TFertilizePhase } from '~/types/fsm/slices/fertilize';
+import { isFertilizeAction, isFertilizeSubphase } from '~/types/guards/turnPhases';
+import { isGameEvent } from '~/types/typeGuards';
 import { GenericAutomata } from '@yantrix/core';
 
 class TurnPhaseAutomata_Fertilize extends GenericAutomata {

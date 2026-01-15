@@ -1,5 +1,5 @@
-import { TOffers, TTargetIndex, TTargetIndexList, TTrade } from '~/src/types/fsm/shared';
-import { TPlayerTarget } from '~/src/types/serializables/players';
+import { TOffers, TTargetIndex, TTargetIndexList, TTrade } from '~/types/fsm/shared';
+import { TPlayerTarget } from '~/types/serializables/players';
 
 export enum TTradePhase {
 	INIT,

@@ -1,7 +1,7 @@
-import { isActionCardId, isCropCardId } from '~/src/types/guards/cards';
-import { ActionCardId, TActionId } from '~/src/types/serializables/actions';
-import { TCardDescriptor, TCardId, TCardType } from '~/src/types/serializables/cards';
-import { CropCardId, TCropId } from '~/src/types/serializables/crops';
+import { isActionCardId, isCropCardId } from '~/types/guards/cards';
+import { ActionCardId, TActionId } from '~/types/serializables/actions';
+import { TCardDescriptor, TCardId, TCardType } from '~/types/serializables/cards';
+import { CropCardId, TCropId } from '~/types/serializables/crops';
 
 function _getCardIDByType(card: TCardDescriptor<TCardType.ACTION>): TActionId | null;
 function _getCardIDByType(card: TCardDescriptor<TCardType.CROP>): TCropId | null;

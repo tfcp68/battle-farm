@@ -1,6 +1,10 @@
-import { TPlayerClass, TPlayerClassKeys } from "~/src/types/serializables/players"
+import { TPlayerClass, TPlayerClassKeys } from '~/types/serializables/players';
 
 export const isPlayerClassKey = (t: any): t is TPlayerClassKeys => {
-    return Object.keys(TPlayerClass).filter((key) => { return Number.isNaN(Number(key)) }).includes(t)
-}
+	return Object.keys(TPlayerClass)
+		.filter((key) => {
+			return Number.isNaN(Number(key));
+		})
+		.includes(t);
+};
 

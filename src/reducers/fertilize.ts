@@ -1,6 +1,6 @@
-import { TTurnBasedReducer, TTurnPhase } from '~/src/types/fsm';
-import { CONTEXT_FERTILIZE, TFertilizeAction, TFertilizePhase } from '~/src/types/fsm/slices/fertilize';
-import { isFertilizeAction, isFertilizeSubphase } from '~/src/types/guards/turnPhases';
+import { TTurnBasedReducer, TTurnPhase } from '~/types/fsm';
+import { CONTEXT_FERTILIZE, TFertilizeAction, TFertilizePhase } from '~/types/fsm/slices/fertilize';
+import { isFertilizeAction, isFertilizeSubphase } from '~/types/guards/turnPhases';
 
 export const reducer_Fertilize_IDLE: TTurnBasedReducer<TTurnPhase.FERTILIZE, TFertilizePhase.IDLE> = (params) => {
 	const { subPhase, context = CONTEXT_FERTILIZE, payload, action } = params;

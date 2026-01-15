@@ -1,4 +1,4 @@
-import { TCardType, TGenericCard } from '~/src/types/serializables/cards';
+import { TCardType, TGenericCard } from '~/types/serializables/cards';
 
 export enum TCropColor {
 	UNKNOWN,
