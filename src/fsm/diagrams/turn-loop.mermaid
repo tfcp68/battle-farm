@@ -1,0 +1,12 @@
+stateDiagram-v2
+    [*] --> WAITING
+    WAITING --> HARVEST
+    HARVEST --> SHOPPING
+    SHOPPING --> TRADE
+    TRADE --> PLAYING
+    PLAYING --> FERTILIZE
+    FERTILIZE --> CALCULATION
+    state isLastTurn <<choice>>
+    CALCULATION --> isLastTurn
+    isLastTurn --> [*]: is last turn
+    isLastTurn --> WAITING: game continues

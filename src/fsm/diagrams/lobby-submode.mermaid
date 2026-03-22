@@ -1,0 +1,63 @@
+stateDiagram-v2
+    state hasSpace <<choice>>
+    state canKick <<choice>>
+    state gameReady <<choice>>
+    [*] --> LOBBY_INIT: CREATE_GAME
+    LOBBY --> hasSpace: PLAYER_JOINING
+    hasSpace --> JOIN_REQUEST: and(isEqual(#gameId,$gameId),has_player_slots(#playerReadyMap,#maxPlayers))
+    LOBBY_INIT --> LOBBY: [-]
+    LOBBY --> EXTERNAL_UPDATE: UPDATE
+    LOBBY-->canKick: KICK
+    canKick-->KICK_PLAYER: and(has(#playerReadyMap,$playerId),isEqual(#isHost,1))
+    KICK_PLAYER-->gameReady: [-]
+    LOBBY --> READY_STATE_CHANGE: READY
+    READY_STATE_CHANGE --> gameReady: [-]
+    EXTERNAL_UPDATE --> gameReady: [-]
+    JOIN_REQUEST --> gameReady: [-]
+    gameReady --> GAME_STARTING: game_ready(#playerReadyMap)
+    gameReady --> LOBBY
+    hasSpace --> LOBBY
+    canKick --> LOBBY
+    GAME_STARTING-->IN_GAME: [-]
+
+note left of [*]
+define/empty_map () => zip([],[])
+define/reset_map (players) => zip(players,repeat(0, len(players)))
+define/has_player_slots (map, maxPlayers) => isGreater(maxPlayers,len(keys(map)))
+define/game_ready (map) => isEqual(len(keys(map)),sum(values(map)))
+end note
+note right of [*]
+#{playerId, gameId, playerReadyMap = empty_map(), hostPlayerId, maxPlayers = 7, readyState = 0}
+subscribe/lobby_created CREATE_GAME (#gameId, #playerId)
+subscribe/join_game_request PLAYER_JOINING (#gameId, #playerId)
+subscribe/player_state_change UPDATE (#playerReadyMap)
+subscribe/game_start LAUNCH
+end note
+note right of LOBBY_INIT
++ByPass
+#{gameId, hostPlayerId = 0} <= $gameId, if(isEqual($isHost,1), $playerId, #hostPlayerId)
+#{playerReadyMap} <= setAttr(#playerReadyMap, $playerId, 0)
+end note
+note right of JOIN_REQUEST
++ByPass
+#{playerReadyMap} <= setAttr(#playerReadyMap, $playerId, 0)
+emit/request_accepted (#gameId)
+end note
+note right of KICK_PLAYER
++ByPass
+#{playerReadyMap} <= reset_map(omit(keys(#playerReadyMap), $playerId))
+end note
+note right of READY_STATE_CHANGE
++ByPass
+#{playerReadyMap, readyState} <= setAttr(#playerReadyMap, #playerId, 1), 1
+emit/player_state_change (#gameId, #playerReadyMap)
+end note
+note right of EXTERNAL_UPDATE
++ByPass
+#{playerReadyMap} <= $playerReadyMap
+end note
+note right of GAME_STARTING
++ByPass
+#{playerIds} <= keys(#playerReadyMap)
+emit/game_start (#gameId, #playerIds)
+end note
