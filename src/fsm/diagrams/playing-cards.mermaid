@@ -1,0 +1,48 @@
+stateDiagram-v2
+    direction LR
+    [*] --> IDLE: RESET
+    state gotMoreCards <<choice>>
+    IDLE --> gotMoreCards: START_PLAY
+    gotMoreCards --> PLAYING: yes
+    state isCropCard <<choice>>
+    PLAYING --> isCropCard: CHOOSE_CARD
+    PLAYING --> PLAYING: HOVER_CARD (index)
+    PLAYING --> FINISHED: SKIP
+    isCropCard --> PLANTING: yes
+    isCropCard --> TARGETING: no
+    PLANTING --> FINISHED: SKIP
+    state hasAfterPlanting <<choice>>
+    PLANTING --> CROP_PLANTED: PLANT_CROP
+    CROP_PLANTED --> hasAfterPlanting: PLANT_CROP
+    PLANTING --> PLAYING: CANCEL_SELECTION
+    hasAfterPlanting --> TARGETING: yes
+    hasAfterPlanting --> gotMoreCards: no
+    TARGETING --> PLAYING: CANCEL_SELECTION
+    TARGETING --> EXECUTION: EXECUTE_ACTION
+    TARGETING --> FINISHED: SKIP
+    EXECUTION --> gotMoreCards: EXECUTE_ACTION
+    gotMoreCards --> FINISHED: no
+    FINISHED --> [*]
+    note right of IDLE
+        emit/startPlay
+        subscribe/startPlay START_PLAY
+    end note
+    note left of PLANTING
+        emit/enableTargetMode (#BED_EMPTY)
+    end note
+    note right of EXECUTION
+        emit/disableTargetMode
+        emit/applyEffect
+        subscribe/applyEffect EXECUTE_ACTION
+    end note
+    note left of TARGETING
+        emit/enableTargetMode
+    end note
+    note left of PLAYING
+        emit/enableTargetMode (#CARD_OWN)
+        subscribe/forceEndPhase SKIP
+    end note
+    note left of CROP_PLANTED
+        emit/cropPlanted
+        subscribe/cropPlanted PLANT_CROP
+    end note

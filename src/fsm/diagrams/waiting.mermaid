@@ -1,0 +1,43 @@
+stateDiagram-v2
+    direction LR
+    [*] --> IDLE: RESET
+    IDLE --> FINISHED: SKIP
+    note left of IDLE
+        subscribe/startTrade START_TRADE
+        subscribe/cropHarvested ENTER_TARGET_MODE
+        subscribe/cropFertilized ENTER_TARGET_MODE
+        subscribe/cropPlanted ENTER_TARGET_MODE
+        subscribe/forceEndPhase SKIP
+        emit/revokeTradeOffers
+        emit/disableTargetMode
+    end note
+    state hasMoney <<choice>>
+    IDLE --> hasMoney: START_TRADE
+    hasMoney --> IDLE: no
+    hasMoney --> HAS_TRADE: yes
+    HAS_TRADE --> FINISHED: SKIP
+    HAS_TRADE --> HAS_TRADE: CHANGE_TRADE_OFFER
+    HAS_TRADE --> OFFER_SENT: MAKE_OFFER
+    note left of OFFER_SENT
+        emit/makeTradeOffer
+    end note
+    OFFER_SENT --> IDLE: CANCEL_SELECTION
+    OFFER_SENT --> IDLE: OFFER_ACCEPTED
+    OFFER_SENT --> FINISHED: SKIP
+    state isAffected <<choice>>
+    IDLE --> isAffected: ENTER_TARGET_MODE
+    isAffected --> IDLE: no
+    isAffected --> TARGETING: yes
+    note left of TARGETING
+        emit/enableTargetMode
+    end note
+    TARGETING --> IDLE: CANCEL_SELECTION
+    TARGETING --> FINISHED: SKIP
+    TARGETING --> EFFECT_APPLIED: APPLY_EFFECT
+    note right of EFFECT_APPLIED
+        emit/applyEffect
+        emit/disableTargetMode
+        subscribe/applyEffect APPLY_EFFECT
+    end note
+    EFFECT_APPLIED --> IDLE: APPLY_EFFECT
+    FINISHED --> [*]

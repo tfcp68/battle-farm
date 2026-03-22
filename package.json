@@ -7,7 +7,8 @@
 		"test": "jest",
 		"start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts",
 		"generate-images": "webpack --progress --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js && npx rimraf assets/thumbs/dictGenerate.js",
-		"build": "cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist "
+		"build": "cross-env NODE_ENV=production  webpack --config configs/webpack/webpack.config.ts  &&  npx serve dist ",
+		"codegen": "node scripts/codegen-fsm.mjs"
 	},
 	"repository": {
 		"type": "git",
@@ -66,10 +67,14 @@
 		"ts-loader": "^9.4.2",
 		"ts-node": "^10.9.1",
 		"typescript": "^5.0.4",
-		"webpack-dev-server": "^4.15.0",
 		"webpack-cli": "^5.0.2",
 		"webpack-dev-server": "^4.13.3",
 		"webpackbar": "^5.0.2"
 	},
-	"dependencies": {}
+	"dependencies": {
+		"@yantrix/automata": "^0.3.0",
+		"@yantrix/cli": "^0.3.0",
+		"@yantrix/codegen": "^0.3.0",
+		"@yantrix/mermaid-parser": "^0.3.0"
+	}
 }
