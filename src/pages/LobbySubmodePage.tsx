@@ -14,6 +14,7 @@ import { useCurrentPlayer } from '~/hooks/useAuth';
 import { getStateName } from '~/helpers/fsm';
 import WindowModeAutomata, { statesDictionary as statuesModeAutomata } from '~/fsm/window/WindowModeAutomata';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { TLobbySettings, TWindowModeContext } from '~/types/types';
 
 export default function LobbySubmodePage() {
 	const navigate = useNavigate();
@@ -21,14 +22,14 @@ export default function LobbySubmodePage() {
 	const ctrl = useLobbyController();
 
 	const { lobby: lobbyFSM, mode: modeFSM } = useMachines();
-	const { getContext: getLobbyContext } = useFSM({ id: lobbyFSM.id, Automata: lobbyFSM.instance });
-	const { getContext: getModeContext } = useFSM({ id: modeFSM.id, Automata: modeFSM.instance });
+	const { getContext: getLobbyContext } = useFSM<TLobbySettings>({ id: lobbyFSM.id, Automata: lobbyFSM.instance });
+	const { getContext: getModeContext } = useFSM<TWindowModeContext>({ id: modeFSM.id, Automata: modeFSM.instance });
 
 	const lobbyCtx = getLobbyContext();
 	const modeCtx = getModeContext();
 
 	const location = useLocation();
-	const lobbyId = modeCtx?.context?.lobbyId ?? (location.state as any)?.lobbyId ?? null;
+	const lobbyId = modeCtx?.context?.lobbyId ?? location.state?.lobbyId ?? null;
 
 	const { data: currentPlayer } = useCurrentPlayer();
 	const currentPlayerId = currentPlayer?.playerId ?? null;
@@ -37,7 +38,7 @@ export default function LobbySubmodePage() {
 	const { data: lobbyPlayers = [] } = useLobbyPlayersByLobbyId(lobbyId);
 	const { data: allPlayers = [] } = usePlayersList();
 
-	const nicknameById: Record<string, string> = React.useMemo(() => {
+	const nicknameById = React.useMemo(() => {
 		const map: Record<string, string> = {};
 		for (const p of allPlayers) if (p.playerId && p.nickname) map[p.playerId] = p.nickname;
 		return map;
@@ -45,12 +46,9 @@ export default function LobbySubmodePage() {
 
 	const isHost = !!(lobby?.hostPlayerId && currentPlayerId && lobby.hostPlayerId === currentPlayerId);
 
-	const readyMap = React.useMemo<Record<string, 0 | 1> | undefined>(() => {
+	const readyMap = React.useMemo(() => {
 		const ctx = lobbyCtx?.context;
-		if (!ctx || typeof ctx !== 'object') return undefined;
-		const m = (ctx as { playerReadyMap?: unknown }).playerReadyMap;
-		if (!m || typeof m !== 'object') return undefined;
-		return m as Record<string, 0 | 1>;
+		return ctx.playerReadyMap;
 	}, [lobbyCtx?.context]);
 
 	const normalizedReadyMap = React.useMemo(() => readyMap ?? {}, [readyMap]);
@@ -62,10 +60,6 @@ export default function LobbySubmodePage() {
 		return Array.from(ids);
 	}, [normalizedReadyMap, lobbyPlayers]);
 
-	const myReadyValue: 0 | 1 =
-		currentPlayerId && normalizedReadyMap[currentPlayerId] !== undefined ? normalizedReadyMap[currentPlayerId] : 0;
-
-	// if (!lobbyId) return <div>lobbyId is not exist</div>;
 	return (
 		<>
 			<DevSidebar

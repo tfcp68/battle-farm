@@ -16,8 +16,6 @@ export default class PlayersController extends BaseController {
 		this.players = playersModel;
 		this.authModel = authModel;
 	}
-
-	
 	
 	async register(nickname: string) {
 		

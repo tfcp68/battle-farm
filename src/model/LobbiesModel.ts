@@ -166,7 +166,6 @@ export default class LobbiesModel extends BaseModel {
 	}
 
 	async requestJoinByLobbyId(lobbyId: string, playerId: string) {
-		// Do not allow host to create join requests for own lobby.
 		const { data: lobby, error: lobbyErr } = await this.db
 			.from(this.table)
 			.select('host_player_id')
@@ -218,8 +217,9 @@ export default class LobbiesModel extends BaseModel {
 		};
 	}
 
-	async listJoinRequestsByLobbyId(lobbyId: string) {
-		// Safety net: never show requests made by the host.
+	async listJoinRequestsByLobbyId(lobbyId: string | null) {
+		if (!lobbyId) throw new Error('Invalid lobby id or lobbyId is empty');
+
 		const { data: lobby, error: lobbyErr } = await this.db
 			.from(this.table)
 			.select('host_player_id')

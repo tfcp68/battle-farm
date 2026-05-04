@@ -11,6 +11,7 @@ export function MachinesProvider({ children }: { children: React.ReactNode }) {
 	const machinesRef = useRef<Machines | null>(null);
 	if (!machinesRef.current) {
 		machinesRef.current = startYantrixCore({ services, queryClient });
+		console.log('Machines started', machinesRef.current);
 	}
 
 	return <MachinesContext.Provider value={machinesRef.current}>{children}</MachinesContext.Provider>;

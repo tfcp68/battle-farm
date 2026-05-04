@@ -15,6 +15,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useServices } from '~/providers/AppServicesProvider';
 import { emitDomainEvent } from '~/yantrix/sources/uiBridgeSource';
 import { WindowDomainEvents } from '~/yantrix/windowDomainEvents';
+import { TWindowModeContext } from '~/types/types';
 
 export default function MenuSubmodePage() {
 	const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function MenuSubmodePage() {
 
 	const { mode: modeFSM } = useMachines();
 
-	const { getContext: getModeContext, dispatch: dispatchMode } = useFSM({
+	const { getContext: getModeContext, dispatch: dispatchMode } = useFSM<TWindowModeContext>({
 		id: modeFSM.id,
 		Automata: modeFSM.instance,
 	});
@@ -59,15 +60,14 @@ export default function MenuSubmodePage() {
 	}, [isJoinRequest]);
 
 	const { controllers } = useServices();
+	const lobbyId = modeCtx?.context?.lobbyId;
 	const { data: myJoinRequest } = useQuery({
-		queryKey: ['lobbyRequests', 'byLobbyAndPlayer', modeCtx?.context?.lobbyId ?? 'nil', currentPlayerId ?? 'nil'],
+		queryKey: ['lobbyRequests', 'byLobbyAndPlayer', lobbyId ?? 'nil', currentPlayerId ?? 'nil'],
 		queryFn: async () => {
-			const lid = modeCtx?.context?.lobbyId;
-			const pid = currentPlayerId;
-			const list = await controllers.lobbies.listRequestsByLobbyId(lid);
-			return list.find((r: any) => r.playerId === pid) ?? null;
+			const list = await controllers.lobbies.listRequestsByLobbyId(lobbyId);
+			return list.find((r) => r.playerId === currentPlayerId) ?? null;
 		},
-		enabled: !!isJoinRequest && !!modeCtx?.context?.lobbyId && !!currentPlayerId,
+		enabled: !!isJoinRequest && !!lobbyId && !!currentPlayerId,
 		refetchInterval: 1500,
 	});
 

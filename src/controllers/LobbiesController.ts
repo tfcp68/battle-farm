@@ -52,7 +52,7 @@ export default class LobbiesController extends BaseController {
 		return await this.model.requestJoinByLobbyId(lobbyId, playerId);
 	}
 
-	async listRequestsByLobbyId(lobbyId: string) {
+	async listRequestsByLobbyId(lobbyId: string | null) {
 		return this.model.listJoinRequestsByLobbyId(lobbyId);
 	}
 

@@ -4,9 +4,7 @@ import type { Database } from '~/types/supabase';
 export default class GameModel extends BaseModel {
 	private readonly table = 'games';
 
-	async create(payload: {
-		lobbyId: string;
-	}): Promise<{ id: string; lobbyId: string; createdAt: string; updatedAt: string | null }> {
+	async create(payload: { lobbyId: string }) {
 		const row = {
 			lobby_id: payload.lobbyId,
 		};
@@ -20,9 +18,7 @@ export default class GameModel extends BaseModel {
 		};
 	}
 
-	async getById(
-		id: string
-	): Promise<{ id: string; lobbyId: string; createdAt: string; updatedAt: string | null } | null> {
+	async getById(id: string) {
 		const { data, error } = await this.db.from(this.table).select('*').eq('id', id).maybeSingle();
 		if (error) throw error;
 		if (!data) return null;
@@ -34,9 +30,7 @@ export default class GameModel extends BaseModel {
 		};
 	}
 
-	async getByLobbyId(
-		lobbyId: string
-	): Promise<{ id: string; lobbyId: string; createdAt: string; updatedAt: string | null } | null> {
+	async getByLobbyId(lobbyId: string) {
 		const { data, error } = await this.db.from(this.table).select('*').eq('lobby_id', lobbyId).maybeSingle();
 		if (error) throw error;
 		if (!data) return null;
@@ -48,7 +42,7 @@ export default class GameModel extends BaseModel {
 		};
 	}
 
-	async list(): Promise<Array<{ id: string; lobbyId: string; createdAt: string; updatedAt: string | null }>> {
+	async list() {
 		const { data, error } = await this.db.from(this.table).select('*').order('created_at', { ascending: false });
 		if (error) throw error;
 		return (data || []).map((d) => ({
@@ -59,10 +53,7 @@ export default class GameModel extends BaseModel {
 		}));
 	}
 
-	async update(
-		id: string,
-		patch: Partial<{ lobbyId: string; updatedAt: string | null }>
-	): Promise<{ id: string; lobbyId: string; createdAt: string; updatedAt: string | null }> {
+	async update(id: string, patch: Partial<{ lobbyId: string; updatedAt: string | null }>) {
 		const body: Partial<Database['public']['Tables']['games']['Update']> = {};
 		if (patch.lobbyId !== undefined) body.lobby_id = patch.lobbyId;
 		if (patch.updatedAt !== undefined) body.updated_at = patch.updatedAt;
@@ -77,7 +68,7 @@ export default class GameModel extends BaseModel {
 		};
 	}
 
-	async delete(id: string): Promise<boolean> {
+	async delete(id: string) {
 		const { error } = await this.db.from(this.table).delete().eq('id', id);
 		if (error) throw error;
 		return true;
