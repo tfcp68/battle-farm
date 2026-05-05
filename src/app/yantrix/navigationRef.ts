@@ -1,7 +1,3 @@
-/**
- * Allows non-React code (e.g. domain command destination) to trigger navigation.
- * Register the navigate function from within a React component tree via `registerNavigate`.
- */
 
 type NavigateOptions = { replace?: boolean; state?: unknown };
 type NavigateFn = (path: string, opts?: NavigateOptions) => void;

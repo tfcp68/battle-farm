@@ -165,10 +165,6 @@ export default class LobbiesModel {
 		if (lobbyErr) throw lobbyErr;
 		if (lobby && lobby.host_player_id === playerId) return null;
 
-		// Look for ANY existing request for this player in this lobby (any status).
-		// If a pending one already exists, return it as-is (idempotent).
-		// If an old non-pending one exists (approved/rejected from a prior session),
-		// reset it to 'pending' so the UI does not see stale 'approved' status.
 		const { data: existing, error: existingErr } = await this.db
 			.from(this.requestsTable)
 			.select('*')
@@ -239,7 +235,7 @@ export default class LobbiesModel {
 			.from(this.requestsTable)
 			.select('*')
 			.eq('lobby_id', lobbyId)
-			.order('created_at', { ascending: false }); // newest first so UI always sees latest status
+			.order('created_at', { ascending: false });
 		if (error) throw error;
 
 		return (data || [])
@@ -263,7 +259,12 @@ export default class LobbiesModel {
 		if (getErr) throw getErr;
 		if (!req) throw new Error('Request not found');
 
-		await this.addPlayerByLobbyId(req.lobby_id as string, req.player_id as string, false);
+		const { error: addErr } = await this.db
+			.from(this.playersTable)
+			.insert({ lobby_id: req.lobby_id, player_id: req.player_id, is_host: false })
+			.select()
+			.single();
+		if (addErr && addErr.code !== '23505') throw addErr;
 
 		const { error } = await this.db
 			.from(this.requestsTable)

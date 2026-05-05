@@ -7,7 +7,7 @@ import { useMachines } from '~/app/providers/MachinesContext';
 import { useFSM } from '@yantrix/react';
 import { getStateName } from '~/shared/helpers/fsm';
 import { useCurrentPlayer } from '~/entities/auth/queries';
-import { useLobbiesList, useLobbyRequestsByLobbyId, lobbyKeys } from '~/entities/lobby/queries';
+import { lobbyKeys, useLobbiesList, useLobbyRequestsByLobbyId } from '~/entities/lobby/queries';
 import { useGameByLobbyId } from '~/entities/game/queries';
 import { emitDomainEvent } from '~/app/yantrix/sources/uiBridgeSource';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
@@ -34,11 +34,7 @@ export default function MenuSubmodePage() {
 	const { data: currentPlayer, isLoading: loadingCurrentPlayer } = useCurrentPlayer();
 	const currentPlayerId = currentPlayer?.playerId ?? null;
 
-	const {
-		data: lobbies = [],
-		isLoading,
-		refetch,
-	} = useLobbiesList({ status: 'open' });
+	const { data: lobbies = [], isLoading, refetch } = useLobbiesList({ status: 'open' });
 
 	const getState = WindowModeAutomata.getState?.bind(WindowModeAutomata);
 	const isJoinRequest = modeCtx?.state === getState('JOIN_REQUEST');
@@ -61,9 +57,7 @@ export default function MenuSubmodePage() {
 	const qc = useQueryClient();
 
 	// Poll the current player's join request status (refetch every 1.5s while in JOIN_REQUEST state)
-	const { data: allRequestsForLobby } = useLobbyRequestsByLobbyId(
-		isJoinRequest && lobbyId ? lobbyId : null
-	);
+	const { data: allRequestsForLobby } = useLobbyRequestsByLobbyId(isJoinRequest && lobbyId ? lobbyId : null);
 	// Manually trigger polling via useEffect while waiting for join approval
 	React.useEffect(() => {
 		if (!isJoinRequest || !lobbyId) return;
@@ -82,12 +76,21 @@ export default function MenuSubmodePage() {
 	React.useEffect(() => {
 		if (!isJoinRequest) return;
 		if (myJoinRequest?.status === 'approved') {
+			dispatchMode({
+				action: WindowModeAutomata.getAction('REQUEST_ACCEPTED'),
+				payload: { lobbyId: joinLobbyId, playerId: currentPlayerId },
+			});
 			navigate('/lobby', { replace: true });
 		} else if (myJoinRequest?.status === 'rejected') {
+			// Transition FSM: JOIN_REQUEST → MAIN_MENU via CANCEL action.
+			dispatchMode({
+				action: WindowModeAutomata.getAction('CANCEL'),
+				payload: {},
+			});
 			setIsJoinPopupOpen(false);
 			navigate('/menu', { replace: true });
 		}
-	}, [myJoinRequest, isJoinRequest, navigate]);
+	}, [myJoinRequest, isJoinRequest, navigate, dispatchMode, joinLobbyId, currentPlayerId]);
 
 	if (loadingCurrentPlayer) {
 		return (
@@ -176,16 +179,21 @@ export default function MenuSubmodePage() {
 																			replace: true,
 																			state: { lobbyId: l.lobbyId },
 																		});
-																		emitDomainEvent(WindowDomainEvents.lobby_created, {
-																			gameId: null,
-																			isHost: 1,
-																			lobbyId: l.lobbyId,
-																			playerId: currentPlayerId,
-																		});
+																		emitDomainEvent(
+																			WindowDomainEvents.lobby_created,
+																			{
+																				gameId: null,
+																				isHost: 1,
+																				lobbyId: l.lobbyId,
+																				playerId: currentPlayerId,
+																			}
+																		);
 																		return;
 																	}
 																	dispatchMode({
-																		action: WindowModeAutomata.getAction('JOIN_GAME'),
+																		action: WindowModeAutomata.getAction(
+																			'JOIN_GAME'
+																		),
 																		payload: { gameId: null, lobbyId: l.lobbyId },
 																	});
 																	requestJoin(l.lobbyId, currentPlayerId);
@@ -207,10 +215,7 @@ export default function MenuSubmodePage() {
 						<hr style={{ width: '100%' }} />
 
 						<div style={{ width: '100%', marginTop: 12, display: 'flex', justifyContent: 'center' }}>
-							<button
-								className="danger"
-								style={{ width: '50%' }}
-								onClick={() => signOut.mutate()}>
+							<button className="danger" style={{ width: '50%' }} onClick={() => signOut.mutate()}>
 								Logout
 							</button>
 						</div>

@@ -53,10 +53,15 @@ export default function LobbySubmodePage() {
 		return Array.from(ids);
 	}, [readyMap, lobbyPlayers]);
 
-	// Navigate back to menu when FSM transitions out of GAME_LOBBY
+	// Navigate back to menu when FSM transitions to MAIN_MENU (after player_exit / lobby_closed)
+	// Also handle edge-case where FSM is in JOIN_REQUEST (should not happen after the
+	// MenuSubmodePage fix, but guard defensively).
 	React.useEffect(() => {
 		if (!modeCtx?.state) return;
-		if (modeCtx.state === statesModeAutomata.MAIN_MENU) {
+		if (
+			modeCtx.state === statesModeAutomata.MAIN_MENU ||
+			modeCtx.state === statesModeAutomata.JOIN_REQUEST
+		) {
 			navigate('/menu', { replace: true });
 		}
 	}, [modeCtx?.state, navigate]);

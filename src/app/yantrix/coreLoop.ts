@@ -1,8 +1,3 @@
-/**
- * Client-side entry point for bootstrapping the Yantrix CoreLoop.
- * Canonical location: src/app/yantrix/coreLoop.ts
- */
-
 import { CoreLoop } from '@yantrix/core';
 import WindowModeAutomata from '~/shared/lib/fsm/window/WindowModeAutomata';
 import WindowMenuAutomata from '~/shared/lib/fsm/window/WindowMenuAutomata';
