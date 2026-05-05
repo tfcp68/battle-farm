@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WINDOW_MODE_SRC="${1:-src/diagrams/windowMenu.mermaid}"
-MENU_SRC="${2:-src/diagrams/menuSubmode.mermaid}"
-LOBBY_SRC="${3:-src/diagrams/lobbySubmode.mermaid}"
+WINDOW_MODE_SRC="${1:-src/shared/lib/fsm/diagrams/windowMenu.mermaid}"
+MENU_SRC="${2:-src/shared/lib/fsm/diagrams/menuSubmode.mermaid}"
+LOBBY_SRC="${3:-src/shared/lib/fsm/diagrams/lobbySubmode.mermaid}"
 
-OUT_DIR="${OUT_DIR:-src/fsm/window}"
+OUT_DIR="${OUT_DIR:-src/shared/lib/fsm/window}"
 mkdir -p "$OUT_DIR"
 
 if command -v yantrix >/dev/null 2>&1; then

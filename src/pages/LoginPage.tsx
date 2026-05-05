@@ -1,7 +1,7 @@
 import React from 'react';
-import Field from '~/components/Field';
+import Field from '~/shared/ui/Field';
 import { useNavigate } from 'react-router-dom';
-import { useAuthActions } from '~/hooks/useAuth';
+import { useAuthActions } from '~/features/auth/useAuthActions';
 
 export default function LoginPage() {
 	const [nickname, setNickname] = React.useState('');

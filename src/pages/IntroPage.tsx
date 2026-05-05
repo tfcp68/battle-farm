@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import IntroSplash from '~/components/IntroSplash';
-import { emitDomainEvent } from '~/yantrix/sources/uiBridgeSource';
-import { WindowDomainEvents } from '~/yantrix/windowDomainEvents';
+import IntroSplash from '~/shared/ui/IntroSplash';
+import { emitDomainEvent } from '~/app/yantrix/sources/uiBridgeSource';
+import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 
 export default function IntroPage() {
 	const navigate = useNavigate();

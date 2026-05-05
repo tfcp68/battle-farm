@@ -1,25 +1,21 @@
 import React from 'react';
-import DevSidebar from '~/components/DevSidebar';
-import RequestTable from '~/components/RequestTable';
-
-import WindowLobbyAutomata, { statesDictionary as statesLobbyAutomata } from '~/fsm/window/WindowLobbyAutomata';
-
-import { useMachines } from '~/hooks/useMachines';
+import DevSidebar from '~/widgets/DevSidebar';
+import RequestTable from '~/widgets/RequestTable';
+import WindowLobbyAutomata, { statesDictionary as statesLobbyAutomata } from '~/shared/lib/fsm/window/WindowLobbyAutomata';
+import { useMachines } from '~/app/providers/MachinesContext';
 import { useFSM } from '@yantrix/react';
-
-import { useLobbyController } from '~/hooks/useLobbyController';
-import { useLobbyById, useLobbyPlayersByLobbyId } from '~/hooks/useLobbies';
-import { usePlayersList } from '~/hooks/usePlayers';
-import { useCurrentPlayer } from '~/hooks/useAuth';
-import { getStateName } from '~/helpers/fsm';
-import WindowModeAutomata, { statesDictionary as statuesModeAutomata } from '~/fsm/window/WindowModeAutomata';
+import { useLobbyById, useLobbyPlayersByLobbyId } from '~/entities/lobby/queries';
+import { usePlayersList } from '~/entities/player/queries';
+import { useCurrentPlayer } from '~/entities/auth/queries';
+import { getStateName } from '~/shared/helpers/fsm';
+import WindowModeAutomata, { statesDictionary as statesModeAutomata } from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { TLobbySettings, TWindowModeContext } from '~/types/types';
+import { TLobbySettings, TWindowModeContext } from '~/shared/types/types';
+import { useManageLobby } from '~/features/manage-lobby/useManageLobby';
 
 export default function LobbySubmodePage() {
 	const navigate = useNavigate();
-
-	const ctrl = useLobbyController();
+	const { closeLobby, leaveLobby, startGame } = useManageLobby();
 
 	const { lobby: lobbyFSM, mode: modeFSM } = useMachines();
 	const { getContext: getLobbyContext } = useFSM<TLobbySettings>({ id: lobbyFSM.id, Automata: lobbyFSM.instance });
@@ -47,18 +43,23 @@ export default function LobbySubmodePage() {
 	const isHost = !!(lobby?.hostPlayerId && currentPlayerId && lobby.hostPlayerId === currentPlayerId);
 
 	const readyMap = React.useMemo(() => {
-		const ctx = lobbyCtx?.context;
-		return ctx.playerReadyMap;
+		return lobbyCtx?.context?.playerReadyMap ?? {};
 	}, [lobbyCtx?.context]);
-
-	const normalizedReadyMap = React.useMemo(() => readyMap ?? {}, [readyMap]);
 
 	const playerIds = React.useMemo(() => {
 		const ids = new Set<string>();
-		Object.keys(normalizedReadyMap).forEach((id) => ids.add(id));
+		Object.keys(readyMap).forEach((id) => ids.add(id));
 		lobbyPlayers.forEach((p) => p.playerId && ids.add(p.playerId));
 		return Array.from(ids);
-	}, [normalizedReadyMap, lobbyPlayers]);
+	}, [readyMap, lobbyPlayers]);
+
+	// Navigate back to menu when FSM transitions out of GAME_LOBBY
+	React.useEffect(() => {
+		if (!modeCtx?.state) return;
+		if (modeCtx.state === statesModeAutomata.MAIN_MENU) {
+			navigate('/menu', { replace: true });
+		}
+	}, [modeCtx?.state, navigate]);
 
 	return (
 		<>
@@ -69,11 +70,9 @@ export default function LobbySubmodePage() {
 			/>
 			<DevSidebar
 				automataName={WindowModeAutomata.name}
-				stateName={getStateName(statuesModeAutomata, modeCtx?.state)}
+				stateName={getStateName(statesModeAutomata, modeCtx?.state)}
 				snapshot={modeCtx}
-				style={{
-					top: 400,
-				}}
+				style={{ top: 400 }}
 			/>
 
 			<div className="with-dev">
@@ -90,13 +89,10 @@ export default function LobbySubmodePage() {
 								<>
 									<button
 										className="danger"
-										onClick={() => {
-											ctrl.closeLobby(lobbyId);
-											navigate('/menu');
-										}}>
+										onClick={() => lobbyId && closeLobby(lobbyId)}>
 										Close Lobby
 									</button>
-									<button className="ok" onClick={() => ctrl.startGame(lobbyId)}>
+									<button className="ok" onClick={() => lobbyId && startGame(lobbyId)}>
 										Start Game
 									</button>
 								</>
@@ -104,7 +100,7 @@ export default function LobbySubmodePage() {
 								<>
 									<button
 										className="danger"
-										onClick={() => currentPlayerId && ctrl.leaveLobby(lobbyId, currentPlayerId)}>
+										onClick={() => currentPlayerId && lobbyId && leaveLobby(lobbyId, currentPlayerId)}>
 										Exit from Lobby
 									</button>
 									<small className="muted">Waiting for host...</small>
@@ -127,7 +123,7 @@ export default function LobbySubmodePage() {
 							<tbody>
 								{playerIds.map((pid) => {
 									const isRowHost = lobby?.hostPlayerId === pid;
-									const r = normalizedReadyMap[pid] ?? 0;
+									const r = readyMap[pid] ?? 0;
 									return (
 										<tr key={pid}>
 											<td>{nicknameById[pid] ?? pid}</td>
@@ -154,4 +150,3 @@ export default function LobbySubmodePage() {
 		</>
 	);
 }
-

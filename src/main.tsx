@@ -3,9 +3,9 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import './styles.css';
-import { AppServicesProvider } from '~/providers/AppServicesProvider';
-import { registerYantrixFunctions } from '~/yantrix/register-functions';
-import { MachinesProvider } from '~/providers/MachinesContext';
+import { AppServicesProvider } from '~/app/providers/AppServicesProvider';
+import { registerYantrixFunctions } from '~/app/yantrix/register-functions';
+import { MachinesProvider } from '~/app/providers/MachinesContext';
 
 registerYantrixFunctions();
 
