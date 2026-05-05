@@ -1,11 +1,12 @@
 import { eventDictionary as modeEvents } from '~/shared/lib/fsm/window/WindowModeAutomata';
+import { eventDictionary as menuEvents } from '~/shared/lib/fsm/window/WindowMenuAutomata';
 import { eventDictionary as lobbyEvents } from '~/shared/lib/fsm/window/WindowLobbyAutomata';
 
 export const WindowDomainEvents = {
 	intro_complete: modeEvents.intro_complete,
 	cancel_game_request: modeEvents.cancel_game_request,
-	request_accepted: modeEvents.request_accepted,
-	lobby_created: modeEvents.lobby_created,
+	request_accepted: menuEvents.request_accepted,
+	lobby_created: menuEvents.lobby_created,
 	game_start: modeEvents.game_start,
 	game_end: modeEvents.game_end,
 	player_exit: modeEvents.player_exit,

@@ -58,6 +58,7 @@ export function startYantrixCore(deps: { services: Services; queryClient: QueryC
 	loop.registerSource(createQueryDomainEventSource({ queryClient: deps.queryClient }));
 	loop.registerDestination(createDomainCommandsDestination({ services: deps.services, queryClient: deps.queryClient }));
 
+
 	machines = {
 		mode: { instance: modeFSM, id: windowAutomataIds.mode },
 		menu: { instance: menuFSM, id: windowAutomataIds.menu },

@@ -2,9 +2,10 @@ import type { QueryClient } from '@tanstack/react-query';
 import type { IEventSource, TAutomataEventMetaType } from '@yantrix/core';
 import { uniqId } from '@yantrix/core';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
+import type { WindowEventId, WindowEventMetaMap } from '~/app/yantrix/types';
 
-type EventId = number;
-type MetaMap = Record<number, unknown>;
+type EventId = WindowEventId;
+type MetaMap = WindowEventMetaMap;
 type Emit = (e: TAutomataEventMetaType<EventId, MetaMap>) => void;
 
 function stableStringify(x: unknown): string {
@@ -23,6 +24,8 @@ export function createQueryDomainEventSource(opts: { queryClient: QueryClient })
 	let emit: Emit | null = null;
 	let unsub: (() => void) | null = null;
 	let lastReadyMapByLobby: Record<string, string> = {};
+	// Guard against re-entrant calls: FSM handler → invalidateQueries → onSnapshot → loop
+	let isProcessing = false;
 
 	function computeReadyMap(players: Array<{ playerId: string; isReady?: boolean | null }> | null | undefined) {
 		const map: Record<string, 0 | 1> = {};
@@ -34,25 +37,29 @@ export function createQueryDomainEventSource(opts: { queryClient: QueryClient })
 	}
 
 	function onSnapshot() {
-		if (!emit) return;
+		if (!emit || isProcessing) return;
+		isProcessing = true;
+		try {
+			const playerQueries = qc.getQueryCache().findAll({ queryKey: ['lobbies', 'players', 'byLobby'] });
+			for (const q of playerQueries) {
+				const key = q.queryKey;
+				const lobbyId = Array.isArray(key) ? key[key.length - 1] : null;
+				if (!lobbyId) continue;
 
-		const playerQueries = qc.getQueryCache().findAll({ queryKey: ['lobbies', 'players', 'byLobby'] });
-		for (const q of playerQueries) {
-			const key = q.queryKey;
-			const lobbyId = Array.isArray(key) ? key[key.length - 1] : null;
-			if (!lobbyId) continue;
+				const players = q.state.data as Array<{ playerId: string; isReady?: boolean | null }> | undefined;
+				const readyMap = computeReadyMap(players);
+				const hash = stableStringify(readyMap);
 
-			const players = q.state.data as Array<{ playerId: string; isReady?: boolean | null }> | undefined;
-			const readyMap = computeReadyMap(players);
-			const hash = stableStringify(readyMap);
+				if (lastReadyMapByLobby[lobbyId] === hash) continue;
+				lastReadyMapByLobby[lobbyId] = hash;
 
-			if (lastReadyMapByLobby[lobbyId] === hash) continue;
-			lastReadyMapByLobby[lobbyId] = hash;
-
-			emit({
-				event: WindowDomainEvents.player_state_change,
-				meta: { playerReadyMap: readyMap, lobbyId } as unknown as MetaMap[EventId],
-			});
+				emit({
+					event: WindowDomainEvents.player_state_change,
+					meta: { playerReadyMap: readyMap, lobbyId } as unknown as MetaMap[EventId],
+				});
+			}
+		} finally {
+			isProcessing = false;
 		}
 	}
 
@@ -61,7 +68,9 @@ export function createQueryDomainEventSource(opts: { queryClient: QueryClient })
 		start(publish) {
 			emit = publish;
 			onSnapshot();
-			unsub = qc.getQueryCache().subscribe(() => {
+			unsub = qc.getQueryCache().subscribe((cacheEvent) => {
+				const queryKey = cacheEvent.query?.queryKey;
+				if (!Array.isArray(queryKey) || queryKey[0] !== 'lobbies') return;
 				onSnapshot();
 			});
 		},

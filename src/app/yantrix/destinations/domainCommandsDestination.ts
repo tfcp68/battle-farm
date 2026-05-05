@@ -11,9 +11,20 @@ import type { Services } from '~/shared/services/createServices';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 import { getPlayerId } from '~/app/yantrix/register-functions';
 import { navigateTo } from '~/app/yantrix/navigationRef';
+import type { WindowEventMetaMap } from '~/app/yantrix/types';
 
-type MetaMap = Record<TAutomataBaseEventType, unknown>;
+type MetaMap = WindowEventMetaMap;
 type TMetaEvent = TAutomataEventMetaType<TAutomataBaseEventType, MetaMap>;
+
+// D1: Centralised meta extraction to avoid repetitive casts across every handler.
+function extractMeta(meta: unknown) {
+	const m = (meta !== null && typeof meta === 'object') ? meta as Record<string, unknown> : {};
+	return {
+		playerId: (m['playerId'] as string | undefined) ?? null,
+		lobbyId:  (m['lobbyId']  as string | undefined) ?? null,
+		isHost:   (m['isHost']   as 0 | 1  | undefined) ?? 0,
+	};
+}
 
 export function createDomainCommandsDestination(opts: {
 	services: Services;
@@ -28,12 +39,21 @@ export function createDomainCommandsDestination(opts: {
 
 			const on = (event: TAutomataBaseEventType, fn: (e: TMetaEvent) => Promise<void> | void) => {
 				const h = (e: TMetaEvent): TEventBusTask<TAutomataBaseEventType, MetaMap> => {
-					const p = Promise.resolve(fn(e));
+				// A4: Catch async errors so they are logged rather than silently swallowed.
+				// The promise MUST resolve to an array (TAutomataEventStack) — Yantrix throws
+				// "Invalid event received from promise" if it resolves to null.
+				// An empty array signals "no follow-up events".
+				const result = Promise.resolve(fn(e))
+					.then(() => [] as never[])
+					.catch((err: unknown) => {
+						console.error('[domainCommandsDestination] handler error:', err);
+						return [] as never[];
+					});
 					return {
 						event: e.event,
 						meta: e.meta ?? null,
 						task_id: `dst_task_${uniqId()}`,
-						result: p.then(() => []),
+						result,
 					};
 				};
 				bus.subscribe(event, h);
@@ -43,89 +63,63 @@ export function createDomainCommandsDestination(opts: {
 			// Create lobby + game, then navigate to /lobby with real lobbyId.
 			// Skip if lobbyId already provided (host re-entering existing lobby).
 			on(WindowDomainEvents.lobby_created, async ({ meta }) => {
-				const m = meta as Record<string, unknown> | null;
-				const playerId = (m?.playerId as string | null) ?? getPlayerId();
-				const existingLobbyId = (m?.lobbyId as string | null) ?? null;
+				const { playerId: metaPlayerId, lobbyId: existingLobbyId } = extractMeta(meta);
+				const playerId = metaPlayerId ?? getPlayerId();
 
 				if (existingLobbyId) return; // Re-entry — no DB write needed.
 				if (!playerId) return;
 
-				try {
-					const lobby = await services.controllers.lobbies.create(playerId, { maxPlayers: 7 });
-					await services.controllers.games.create({ lobbyId: lobby.lobbyId });
-					await queryClient.invalidateQueries({ queryKey: ['lobbies'] });
-					await queryClient.invalidateQueries({ queryKey: ['games'] });
-					navigateTo('/lobby', { replace: true, state: { lobbyId: lobby.lobbyId } });
-				} catch (err) {
-					throw new Error('Failed to create lobby: ' + String(err));
-				}
+				const lobby = await services.controllers.lobbies.create(playerId, { maxPlayers: 7 });
+				await services.controllers.games.create({ lobbyId: lobby.lobbyId });
+				await queryClient.invalidateQueries({ queryKey: ['lobbies'] });
+				await queryClient.invalidateQueries({ queryKey: ['games'] });
+				navigateTo('/lobby', { replace: true, state: { lobbyId: lobby.lobbyId } });
 			});
 
-			// Single source of DB write for join requests
+			// Single source of DB write for join requests.
 			on(WindowDomainEvents.join_game_request, async ({ meta }) => {
-				const m = meta as Record<string, unknown> | null;
-				const lobbyId = (m?.lobbyId as string) ?? null;
-				const playerId = (m?.playerId as string) ?? getPlayerId();
+				const { playerId: metaPlayerId, lobbyId } = extractMeta(meta);
+				const playerId = metaPlayerId ?? getPlayerId();
 				if (!lobbyId || !playerId) return;
 
-				try {
-					await services.controllers.lobbies.requestJoinByLobbyId(lobbyId, playerId);
-					await queryClient.invalidateQueries({ queryKey: ['lobbies', 'requests', 'byLobby', lobbyId] });
-				} catch (err) {
-					throw new Error('Failed to request join lobby: ' + String(err));
-				}
+				await services.controllers.lobbies.requestJoinByLobbyId(lobbyId, playerId);
+				await queryClient.invalidateQueries({ queryKey: ['lobbies', 'requests', 'byLobby', lobbyId] });
 			});
 
-			// Accept join request → add player to lobby_players
+			// Accept join request → add player to lobby_players.
 			on(WindowDomainEvents.request_accepted, async ({ meta }) => {
-				const m = meta as Record<string, unknown> | null;
-				const lobbyId = (m?.lobbyId as string) ?? null;
-				const playerId = (m?.playerId as string) ?? getPlayerId();
+				const { playerId: metaPlayerId, lobbyId } = extractMeta(meta);
+				const playerId = metaPlayerId ?? getPlayerId();
 				if (!lobbyId || !playerId) return;
 
-				try {
-					const existingPlayers = await services.controllers.lobbies.listPlayersByLobbyId(lobbyId);
-					if (existingPlayers.some((p) => p.playerId === playerId)) return;
+				const existingPlayers = await services.controllers.lobbies.listPlayersByLobbyId(lobbyId);
+				if (existingPlayers.some((p) => p.playerId === playerId)) return;
 
-					await services.controllers.lobbies.addPlayerByLobbyId(lobbyId, playerId, false);
-					await queryClient.invalidateQueries({ queryKey: ['lobbies', 'players', 'byLobby', lobbyId] });
-					await queryClient.invalidateQueries({ queryKey: ['lobbies', 'lobby', 'byId', lobbyId] });
-				} catch (err) {
-					throw new Error('Failed to accept join request: ' + String(err));
-				}
+				await services.controllers.lobbies.addPlayerByLobbyId(lobbyId, playerId, false);
+				await queryClient.invalidateQueries({ queryKey: ['lobbies', 'players', 'byLobby', lobbyId] });
+				await queryClient.invalidateQueries({ queryKey: ['lobbies', 'lobby', 'byId', lobbyId] });
 			});
 
-			// Close lobby
+			// Close lobby.
 			on(WindowDomainEvents.lobby_closed, async ({ meta }) => {
-				const m = meta as Record<string, unknown> | null;
-				const lobbyId = (m?.lobbyId as string) ?? null;
+				const { lobbyId } = extractMeta(meta);
 				if (!lobbyId) return;
 
-				try {
-					await services.controllers.lobbies.closeByLobbyId(lobbyId);
-					await queryClient.invalidateQueries({ queryKey: ['lobbies'] });
-				} catch (err) {
-					throw new Error('Failed to close lobby: ' + String(err));
-				}
+				await services.controllers.lobbies.closeByLobbyId(lobbyId);
+				await queryClient.invalidateQueries({ queryKey: ['lobbies'] });
 			});
 
-			// Player leaving lobby
+			// Player leaving lobby.
 			on(WindowDomainEvents.player_exit, async ({ meta }) => {
-				const m = meta as Record<string, unknown> | null;
-				const lobbyId = (m?.lobbyId as string) ?? null;
-				const playerId = (m?.playerId as string) ?? getPlayerId();
+				const { playerId: metaPlayerId, lobbyId } = extractMeta(meta);
+				const playerId = metaPlayerId ?? getPlayerId();
 				if (!lobbyId || !playerId) return;
 
-				try {
-					await services.controllers.lobbies.removePlayerByLobbyId(lobbyId, playerId);
-					await queryClient.invalidateQueries({ queryKey: ['lobbies'] });
-				} catch (err) {
-					throw new Error('Failed to leave lobby: ' + String(err));
-				}
+				await services.controllers.lobbies.removePlayerByLobbyId(lobbyId, playerId);
+				await queryClient.invalidateQueries({ queryKey: ['lobbies'] });
 			});
 
 			return () => unsubs.forEach((u) => u());
 		},
 	};
 }
-

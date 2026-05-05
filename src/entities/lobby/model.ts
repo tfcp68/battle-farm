@@ -156,6 +156,7 @@ export default class LobbiesModel {
 	}
 
 	async requestJoinByLobbyId(lobbyId: string, playerId: string) {
+		// Guard: host cannot request to join their own lobby.
 		const { data: lobby, error: lobbyErr } = await this.db
 			.from(this.table)
 			.select('host_player_id')
@@ -164,22 +165,46 @@ export default class LobbiesModel {
 		if (lobbyErr) throw lobbyErr;
 		if (lobby && lobby.host_player_id === playerId) return null;
 
+		// Look for ANY existing request for this player in this lobby (any status).
+		// If a pending one already exists, return it as-is (idempotent).
+		// If an old non-pending one exists (approved/rejected from a prior session),
+		// reset it to 'pending' so the UI does not see stale 'approved' status.
 		const { data: existing, error: existingErr } = await this.db
 			.from(this.requestsTable)
 			.select('*')
-			.match({ lobby_id: lobbyId, player_id: playerId, status: 'pending' })
+			.match({ lobby_id: lobbyId, player_id: playerId })
 			.order('created_at', { ascending: false })
 			.limit(1)
 			.maybeSingle();
 		if (existingErr) throw existingErr;
+
 		if (existing) {
+			if (existing.status === 'pending') {
+				// Already pending — nothing to do.
+				return {
+					id: existing.id as string,
+					lobbyId: existing.lobby_id as string,
+					playerId: existing.player_id as string,
+					status: existing.status as string,
+					createdAt: existing.created_at as string,
+					processedAt: (existing.processed_at ?? null) as string | null,
+				};
+			}
+			// Stale approved/rejected — reset to pending for the new attempt.
+			const { data: updated, error: updateErr } = await this.db
+				.from(this.requestsTable)
+				.update({ status: 'pending', processed_at: null })
+				.eq('id', existing.id)
+				.select()
+				.single();
+			if (updateErr) throw updateErr;
 			return {
-				id: existing.id as string,
-				lobbyId: existing.lobby_id as string,
-				playerId: existing.player_id as string,
-				status: existing.status as string,
-				createdAt: existing.created_at as string,
-				processedAt: (existing.processed_at ?? null) as string | null,
+				id: updated.id as string,
+				lobbyId: updated.lobby_id as string,
+				playerId: updated.player_id as string,
+				status: updated.status as string,
+				createdAt: updated.created_at as string,
+				processedAt: (updated.processed_at ?? null) as string | null,
 			};
 		}
 
@@ -214,7 +239,7 @@ export default class LobbiesModel {
 			.from(this.requestsTable)
 			.select('*')
 			.eq('lobby_id', lobbyId)
-			.order('created_at', { ascending: true });
+			.order('created_at', { ascending: false }); // newest first so UI always sees latest status
 		if (error) throw error;
 
 		return (data || [])

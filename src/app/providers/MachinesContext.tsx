@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { startYantrixCore, Machines } from '~/app/yantrix/coreLoop';
+import { Machines, startYantrixCore } from '~/app/yantrix/coreLoop';
 import { useServices } from '~/app/providers/AppServicesProvider';
-import { registerNavigate } from '~/app/yantrix/navigationRef';
+import { registerNavigate, unregisterNavigate } from '~/app/yantrix/navigationRef';
 
 const MachinesContext = createContext<Machines | null>(null);
 
@@ -13,20 +13,18 @@ export function MachinesProvider({ children }: { children: React.ReactNode }) {
 	const navigate = useNavigate();
 	const machinesRef = useRef<Machines | null>(null);
 
+	// 1. Register navigate first so it is ready before the core loop starts.
 	useEffect(() => {
 		registerNavigate(navigate);
+		return () => unregisterNavigate();
 	}, [navigate]);
 
-	useEffect(() => {
-		if (!machinesRef.current) {
-			machinesRef.current = startYantrixCore({ services, queryClient });
-		}
-	}, [services, queryClient]);
-
-	const machines = machinesRef.current ?? startYantrixCore({ services, queryClient });
+	if (!machinesRef.current) {
+		machinesRef.current = startYantrixCore({ services, queryClient });
+	}
 
 	return (
-		<MachinesContext.Provider value={machines}>
+		<MachinesContext.Provider value={machinesRef.current}>
 			{children}
 		</MachinesContext.Provider>
 	);
