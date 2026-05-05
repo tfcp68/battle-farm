@@ -1,3 +1,5 @@
+import { Button } from '~/shared/ui/components/button';
+
 type JoinRequestPopupProps = {
 	gameId?: string | null;
 	hostPlayerId?: string | null;
@@ -29,13 +31,13 @@ export function JoinRequestPopup({ gameId, hostPlayerId, message = 'Your request
 				<p style={{ textAlign: 'center', marginTop: 8, marginBottom: 16 }}>{message}</p>
 				<div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
 					{onAccept ? (
-						<button className="btn btn-primary" onClick={onAccept}>
+						<Button className="btn btn-primary" onClick={onAccept}>
 							OK
-						</button>
+						</Button>
 					) : null}
-					<button className="btn btn-outline" onClick={onCancel}>
+					<Button className="btn btn-outline" onClick={onCancel}>
 						Close
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>

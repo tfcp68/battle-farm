@@ -2,6 +2,7 @@ import React from 'react';
 import Field from '~/shared/ui/Field';
 import { useNavigate } from 'react-router-dom';
 import { useAuthActions } from '~/features/auth/useAuthActions';
+import { Button } from '~/shared/ui/components/button';
 
 export default function LoginPage() {
 	const [nickname, setNickname] = React.useState('');
@@ -41,12 +42,12 @@ export default function LoginPage() {
 					placeholder="Enter your password"
 				/>
 				<div className="actions">
-					<button className="primary" type="submit" disabled={register.isPending || signIn.isPending}>
+					<Button className="primary" type="submit" disabled={register.isPending || signIn.isPending}>
 						{register.isPending || signIn.isPending ? '...' : isRegister ? 'Create account' : 'Sign in'}
-					</button>
-					<button type="button" onClick={() => setIsRegister((v) => !v)}>
+					</Button>
+					<Button type="button" onClick={() => setIsRegister((v) => !v)}>
 						{isRegister ? 'I already have an account' : 'Create an account'}
-					</button>
+					</Button>
 				</div>
 				{error && (
 					<div style={{ textAlign: 'center' }}>

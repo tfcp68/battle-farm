@@ -2,6 +2,7 @@ import React from 'react';
 import { usePlayersList } from '~/entities/player/queries';
 import { useLobbyPlayersByLobbyId, useLobbyRequestsByLobbyId } from '~/entities/lobby/queries';
 import { useServices } from '~/app/providers/AppServicesProvider';
+import { Button } from '~/shared/ui/components/button';
 
 type RequestTableProps = {
 	lobbyId: string | null | undefined;
@@ -37,19 +38,19 @@ export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }:
 		<div className="panel">
 			<div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
 				<h4 className="section-title">Join Requests</h4>
-				<button
-					className="secondary"
-					disabled={isFetching || manualRefreshing}
-					onClick={async () => {
-						try {
-							setManualRefreshing(true);
-							await Promise.all([refetchRequests(), refetchPlayers()]);
-						} finally {
-							setManualRefreshing(false);
-						}
-					}}>
-					Refresh
-				</button>
+			<Button
+				className="secondary"
+				disabled={isFetching || manualRefreshing}
+				onClick={async () => {
+					try {
+						setManualRefreshing(true);
+						await Promise.all([refetchRequests(), refetchPlayers()]);
+					} finally {
+						setManualRefreshing(false);
+					}
+				}}>
+				Refresh
+			</Button>
 			</div>
 			<div className="table-scroll" style={{ marginTop: 8 }}>
 				<table className="table" style={{ width: '100%' }}>
@@ -78,35 +79,35 @@ export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }:
 									<td>{nicknameById[r.playerId] ?? r.playerId}</td>
 									<td>
 										<div className="row">
-											<button
-												className="ok"
-												disabled={loadingId === r.id}
-												onClick={async () => {
-													try {
-														setLoadingId(r.id);
-														await controllers.lobbies.approveRequest(r.id);
-													} finally {
-														setLoadingId(null);
-														await Promise.all([refetchRequests(), refetchPlayers()]);
-													}
-												}}>
-												Accept
-											</button>
-											<button
-												className="danger"
-												disabled={loadingId === r.id}
-												onClick={async () => {
-													try {
-														setLoadingId(r.id);
-														await controllers.lobbies.rejectRequest(r.id);
-													} finally {
-														setLoadingId(null);
-														await refetchRequests();
-													}
-												}}
-												style={{ marginLeft: 8 }}>
-												Reject
-											</button>
+						<Button
+											className="ok"
+											disabled={loadingId === r.id}
+											onClick={async () => {
+												try {
+													setLoadingId(r.id);
+													await controllers.lobbies.approveRequest(r.id);
+												} finally {
+													setLoadingId(null);
+													await Promise.all([refetchRequests(), refetchPlayers()]);
+												}
+											}}>
+											Accept
+										</Button>
+										<Button
+											className="danger"
+											disabled={loadingId === r.id}
+											onClick={async () => {
+												try {
+													setLoadingId(r.id);
+													await controllers.lobbies.rejectRequest(r.id);
+												} finally {
+													setLoadingId(null);
+													await refetchRequests();
+												}
+											}}
+											style={{ marginLeft: 8 }}>
+											Reject
+										</Button>
 										</div>
 									</td>
 								</tr>

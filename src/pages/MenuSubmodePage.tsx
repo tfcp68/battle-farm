@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import DevSidebar from '~/widgets/DevSidebar';
 import JoinRequestPopup from '~/shared/ui/JoinRequestPopup';
+import { Button } from '~/shared/ui/components/button';
 import WindowModeAutomata, { statesDictionary } from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { useMachines } from '~/app/providers/MachinesContext';
 import { useFSM } from '@yantrix/react';
@@ -121,7 +122,7 @@ export default function MenuSubmodePage() {
 						<small className="muted">Player: {currentPlayer?.nickname ?? 'Unknown'}</small>
 
 						<div className="actions" style={{ width: '100%' }}>
-							<button
+							<Button
 								className="primary"
 								onClick={() => {
 									if (isCreatingLobby || !currentPlayerId) return;
@@ -132,7 +133,7 @@ export default function MenuSubmodePage() {
 								}}
 								disabled={!currentPlayerId || isCreatingLobby}>
 								{isCreatingLobby ? 'Creating…' : 'Create Lobby'}
-							</button>
+							</Button>
 						</div>
 
 						<hr style={{ width: '100%' }} />
@@ -142,9 +143,9 @@ export default function MenuSubmodePage() {
 								<h4 className="section-title" style={{ marginTop: 0 }}>
 									Available Lobbies
 								</h4>
-								<button onClick={() => refetch()} disabled={isLoading}>
+								<Button onClick={() => refetch()} disabled={isLoading}>
 									{isLoading ? 'Loading…' : 'Refresh'}
-								</button>
+								</Button>
 							</div>
 
 							{isLoading ? (
@@ -170,7 +171,7 @@ export default function MenuSubmodePage() {
 													<td>{l.maxPlayers}</td>
 													<td>
 														<div className="row">
-															<button
+															<Button
 																onClick={() => {
 																	if (!currentPlayerId) return;
 																	if (l.hostPlayerId === currentPlayerId) {
@@ -201,7 +202,7 @@ export default function MenuSubmodePage() {
 																}}
 																disabled={!currentPlayerId}>
 																{l.hostPlayerId === currentPlayerId ? 'Enter' : 'Join'}
-															</button>
+															</Button>
 														</div>
 													</td>
 												</tr>
@@ -215,9 +216,9 @@ export default function MenuSubmodePage() {
 						<hr style={{ width: '100%' }} />
 
 						<div style={{ width: '100%', marginTop: 12, display: 'flex', justifyContent: 'center' }}>
-							<button className="danger" style={{ width: '50%' }} onClick={() => signOut.mutate()}>
+							<Button className="danger" style={{ width: '50%' }} onClick={() => signOut.mutate()}>
 								Logout
-							</button>
+							</Button>
 						</div>
 					</div>
 				</div>

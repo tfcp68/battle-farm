@@ -12,6 +12,7 @@ import WindowModeAutomata, { statesDictionary as statesModeAutomata } from '~/sh
 import { useLocation, useNavigate } from 'react-router-dom';
 import { TLobbySettings, TWindowModeContext } from '~/shared/types/types';
 import { useManageLobby } from '~/features/manage-lobby/useManageLobby';
+import { Button } from '~/shared/ui/components/button';
 
 export default function LobbySubmodePage() {
 	const navigate = useNavigate();
@@ -92,22 +93,22 @@ export default function LobbySubmodePage() {
 						<div className="row">
 							{isHost ? (
 								<>
-									<button
+									<Button
 										className="danger"
 										onClick={() => lobbyId && closeLobby(lobbyId)}>
 										Close Lobby
-									</button>
-									<button className="ok" onClick={() => lobbyId && startGame(lobbyId)}>
+									</Button>
+									<Button className="ok" onClick={() => lobbyId && startGame(lobbyId)}>
 										Start Game
-									</button>
+									</Button>
 								</>
 							) : (
 								<>
-									<button
+									<Button
 										className="danger"
 										onClick={() => currentPlayerId && lobbyId && leaveLobby(lobbyId, currentPlayerId)}>
 										Exit from Lobby
-									</button>
+									</Button>
 									<small className="muted">Waiting for host...</small>
 								</>
 							)}
