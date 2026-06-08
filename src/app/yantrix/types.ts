@@ -1,4 +1,5 @@
+import { TAutomataBaseEventType } from '@yantrix/core';
 
-export type WindowEventId = number;
+export type WindowEventId = TAutomataBaseEventType;
 export type WindowEventMetaMap = Record<WindowEventId, unknown>;
 
