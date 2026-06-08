@@ -3,10 +3,10 @@ import type { Database } from '~/shared/types/supabase';
 import supabase from '~/shared/api/connect';
 
 export default class GameModel {
-	private readonly db: SupabaseClient;
+	private readonly db: SupabaseClient<Database>;
 	private readonly table = 'games';
 
-	constructor(db: SupabaseClient = supabase) {
+	constructor(db: SupabaseClient<Database> = supabase) {
 		this.db = db;
 	}
 
@@ -18,10 +18,10 @@ export default class GameModel {
 			.single();
 		if (error) throw error;
 		return {
-			id: data.id as string,
-			lobbyId: data.lobby_id as string,
-			createdAt: data.created_at as string,
-			updatedAt: (data.updated_at ?? null) as string | null,
+			id: data.id,
+			lobbyId: data.lobby_id ?? payload.lobbyId,
+			createdAt: data.created_at,
+			updatedAt: data.updated_at,
 		};
 	}
 
@@ -30,10 +30,10 @@ export default class GameModel {
 		if (error) throw error;
 		if (!data) return null;
 		return {
-			id: data.id as string,
-			lobbyId: data.lobby_id as string,
-			createdAt: data.created_at as string,
-			updatedAt: (data.updated_at ?? null) as string | null,
+			id: data.id,
+			lobbyId: data.lobby_id,
+			createdAt: data.created_at,
+			updatedAt: data.updated_at,
 		};
 	}
 
@@ -46,10 +46,10 @@ export default class GameModel {
 		if (error) throw error;
 		if (!data) return null;
 		return {
-			id: data.id as string,
-			lobbyId: data.lobby_id as string,
-			createdAt: data.created_at as string,
-			updatedAt: (data.updated_at ?? null) as string | null,
+			id: data.id,
+			lobbyId: data.lobby_id ?? lobbyId,
+			createdAt: data.created_at,
+			updatedAt: data.updated_at,
 		};
 	}
 
@@ -60,10 +60,10 @@ export default class GameModel {
 			.order('created_at', { ascending: false });
 		if (error) throw error;
 		return (data || []).map((d) => ({
-			id: d.id as string,
-			lobbyId: d.lobby_id as string,
-			createdAt: d.created_at as string,
-			updatedAt: (d.updated_at ?? null) as string | null,
+			id: d.id,
+			lobbyId: d.lobby_id,
+			createdAt: d.created_at,
+			updatedAt: d.updated_at,
 		}));
 	}
 
@@ -80,10 +80,10 @@ export default class GameModel {
 			.single();
 		if (error) throw error;
 		return {
-			id: data.id as string,
-			lobbyId: data.lobby_id as string,
-			createdAt: data.created_at as string,
-			updatedAt: (data.updated_at ?? null) as string | null,
+			id: data.id,
+			lobbyId: data.lobby_id,
+			createdAt: data.created_at,
+			updatedAt: data.updated_at,
 		};
 	}
 
@@ -93,5 +93,3 @@ export default class GameModel {
 		return true;
 	}
 }
-
-

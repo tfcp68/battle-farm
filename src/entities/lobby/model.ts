@@ -1,13 +1,15 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from '~/shared/types/supabase';
 import supabase from '~/shared/api/connect';
+import { LobbyNotOpenError } from './LobbyNotOpenError';
 
 export default class LobbiesModel {
-	private readonly db: SupabaseClient;
+	private readonly db: SupabaseClient<Database>;
 	private readonly table = 'lobbies';
 	private readonly playersTable = 'lobby_players';
 	private readonly requestsTable = 'lobby_requests';
 
-	constructor(db: SupabaseClient = supabase) {
+	constructor(db: SupabaseClient<Database> = supabase) {
 		this.db = db;
 	}
 
@@ -26,12 +28,12 @@ export default class LobbiesModel {
 		});
 
 		return {
-			lobbyId: data.id as string,
-			hostPlayerId: data.host_player_id as string,
-			status: data.status as string,
-			maxPlayers: data.max_players as number,
-			createdAt: data.created_at as string,
-			updatedAt: (data.updated_at ?? null) as string | null,
+			lobbyId: data.id,
+			hostPlayerId: data.host_player_id,
+			status: data.status,
+			maxPlayers: data.max_players,
+			createdAt: data.created_at,
+			updatedAt: data.updated_at,
 		};
 	}
 
@@ -40,12 +42,12 @@ export default class LobbiesModel {
 		if (error && error.code !== 'PGRST116') throw error;
 		if (!data) return null;
 		return {
-			lobbyId: data.id as string,
-			hostPlayerId: data.host_player_id as string,
-			status: data.status as string,
-			maxPlayers: data.max_players as number,
-			createdAt: data.created_at as string,
-			updatedAt: (data.updated_at ?? null) as string | null,
+			lobbyId: data.id,
+			hostPlayerId: data.host_player_id,
+			status: data.status,
+			maxPlayers: data.max_players,
+			createdAt: data.created_at,
+			updatedAt: data.updated_at,
 		};
 	}
 
@@ -62,26 +64,15 @@ export default class LobbiesModel {
 
 		const { data, error } = await q;
 		if (error) throw error;
-		return (data || []).map((d) => {
-			const row = d as {
-				id: string;
-				host_player_id: string;
-				status: string;
-				max_players: number;
-				created_at: string;
-				updated_at: string | null;
-				host?: { nickname?: string | null } | null;
-			};
-			return {
-				lobbyId: row.id,
-				hostPlayerId: row.host_player_id,
-				hostNickname: row.host?.nickname || null,
-				status: row.status,
-				maxPlayers: row.max_players,
-				createdAt: row.created_at,
-				updatedAt: row.updated_at,
-			};
-		});
+		return (data || []).map((d) => ({
+			lobbyId: d.id,
+			hostPlayerId: d.host_player_id,
+			hostNickname: d.host && !Array.isArray(d.host) ? d.host.nickname || null : null,
+			status: d.status,
+			maxPlayers: d.max_players,
+			createdAt: d.created_at,
+			updatedAt: d.updated_at,
+		}));
 	}
 
 	async closeLobbyById(lobbyId: string): Promise<boolean> {
@@ -101,12 +92,12 @@ export default class LobbiesModel {
 			.single();
 		if (error) throw error;
 		return {
-			id: data.id as string,
-			lobbyId: data.lobby_id as string,
-			playerId: data.player_id as string,
-			isHost: data.is_host as boolean,
-			joinedAt: data.joined_at as string,
-			isReady: (data.is_ready ?? false) as boolean,
+			id: data.id,
+			lobbyId: data.lobby_id,
+			playerId: data.player_id,
+			isHost: data.is_host,
+			joinedAt: data.joined_at,
+			isReady: data.is_ready,
 		};
 	}
 
@@ -127,12 +118,12 @@ export default class LobbiesModel {
 			.order('joined_at', { ascending: true });
 		if (error) throw error;
 		return (data || []).map((row) => ({
-			id: row.id as string,
-			lobbyId: row.lobby_id as string,
-			playerId: row.player_id as string,
-			isHost: row.is_host as boolean,
-			joinedAt: row.joined_at as string,
-			isReady: (row.is_ready ?? false) as boolean,
+			id: row.id,
+			lobbyId: row.lobby_id,
+			playerId: row.player_id,
+			isHost: row.is_host,
+			joinedAt: row.joined_at,
+			isReady: row.is_ready,
 		}));
 	}
 
@@ -146,24 +137,27 @@ export default class LobbiesModel {
 		if (error) throw error;
 		if (!data) throw new Error('Lobby player not found');
 		return {
-			id: data.id as string,
-			lobbyId: data.lobby_id as string,
-			playerId: data.player_id as string,
-			isHost: data.is_host as boolean,
-			joinedAt: data.joined_at as string,
-			isReady: (data.is_ready ?? false) as boolean,
+			id: data.id,
+			lobbyId: data.lobby_id,
+			playerId: data.player_id,
+			isHost: data.is_host,
+			joinedAt: data.joined_at,
+			isReady: data.is_ready,
 		};
 	}
 
 	async requestJoinByLobbyId(lobbyId: string, playerId: string) {
-		// Guard: host cannot request to join their own lobby.
+		// Guard: host cannot request to join their own lobby; lobby must be open.
 		const { data: lobby, error: lobbyErr } = await this.db
 			.from(this.table)
-			.select('host_player_id')
+			.select('host_player_id, status')
 			.eq('id', lobbyId)
 			.maybeSingle();
 		if (lobbyErr) throw lobbyErr;
 		if (lobby && lobby.host_player_id === playerId) return null;
+		if (!lobby || lobby.status !== 'open') {
+			throw new LobbyNotOpenError(`Lobby ${lobbyId} is not open (status: ${lobby?.status ?? 'not found'})`);
+		}
 
 		const { data: existing, error: existingErr } = await this.db
 			.from(this.requestsTable)
@@ -178,12 +172,12 @@ export default class LobbiesModel {
 			if (existing.status === 'pending') {
 				// Already pending — nothing to do.
 				return {
-					id: existing.id as string,
-					lobbyId: existing.lobby_id as string,
-					playerId: existing.player_id as string,
-					status: existing.status as string,
-					createdAt: existing.created_at as string,
-					processedAt: (existing.processed_at ?? null) as string | null,
+					id: existing.id,
+					lobbyId: existing.lobby_id,
+					playerId: existing.player_id,
+					status: existing.status,
+					createdAt: existing.created_at,
+					processedAt: existing.processed_at,
 				};
 			}
 			// Stale approved/rejected — reset to pending for the new attempt.
@@ -195,12 +189,12 @@ export default class LobbiesModel {
 				.single();
 			if (updateErr) throw updateErr;
 			return {
-				id: updated.id as string,
-				lobbyId: updated.lobby_id as string,
-				playerId: updated.player_id as string,
-				status: updated.status as string,
-				createdAt: updated.created_at as string,
-				processedAt: (updated.processed_at ?? null) as string | null,
+				id: updated.id,
+				lobbyId: updated.lobby_id,
+				playerId: updated.player_id,
+				status: updated.status,
+				createdAt: updated.created_at,
+				processedAt: updated.processed_at,
 			};
 		}
 
@@ -211,12 +205,12 @@ export default class LobbiesModel {
 			.single();
 		if (error) throw error;
 		return {
-			id: data.id as string,
-			lobbyId: data.lobby_id as string,
-			playerId: data.player_id as string,
-			status: data.status as string,
-			createdAt: data.created_at as string,
-			processedAt: (data.processed_at ?? null) as string | null,
+			id: data.id,
+			lobbyId: data.lobby_id,
+			playerId: data.player_id,
+			status: data.status,
+			createdAt: data.created_at,
+			processedAt: data.processed_at,
 		};
 	}
 
@@ -241,12 +235,12 @@ export default class LobbiesModel {
 		return (data || [])
 			.filter((d) => !hostPlayerId || d.player_id !== hostPlayerId)
 			.map((d) => ({
-				id: d.id as string,
-				lobbyId: d.lobby_id as string,
-				playerId: d.player_id as string,
-				status: d.status as string,
-				createdAt: d.created_at as string,
-				processedAt: (d.processed_at ?? null) as string | null,
+				id: d.id,
+				lobbyId: d.lobby_id,
+				playerId: d.player_id,
+				status: d.status,
+				createdAt: d.created_at,
+				processedAt: d.processed_at,
 			}));
 	}
 
@@ -283,4 +277,3 @@ export default class LobbiesModel {
 		return true;
 	}
 }
-

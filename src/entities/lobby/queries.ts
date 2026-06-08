@@ -1,5 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServices } from '~/app/providers/AppServicesProvider';
+import supabase from '~/shared/api/connect';
 
 export const lobbyKeys = {
 	all: ['lobbies'] as const,
@@ -42,5 +44,37 @@ export function useLobbyRequestsByLobbyId(lobbyId: string | null | undefined) {
 		queryFn: () => controllers.lobbies.listRequestsByLobbyId(lobbyId!),
 		enabled: !!lobbyId,
 	});
+}
+
+/**
+ * Live-updates the lobby's join-request and player caches via Supabase Realtime.
+ * Mount this where the host views the lobby so incoming requests appear instantly,
+ * without polling or a manual refresh.
+ *
+ * Prerequisite: Realtime must be enabled for the `lobby_requests` table in Supabase
+ * (Database → Replication / the `supabase_realtime` publication).
+ */
+export function useLobbyRequestsRealtime(lobbyId: string | null | undefined) {
+	const queryClient = useQueryClient();
+
+	useEffect(() => {
+		if (!lobbyId) return;
+
+		const channel = supabase
+			.channel(`lobby_requests:${lobbyId}`)
+			.on(
+				'postgres_changes',
+				{ event: '*', schema: 'public', table: 'lobby_requests', filter: `lobby_id=eq.${lobbyId}` },
+				() => {
+					queryClient.invalidateQueries({ queryKey: lobbyKeys.requestsByLobbyId(lobbyId) });
+					queryClient.invalidateQueries({ queryKey: lobbyKeys.playersByLobbyId(lobbyId) });
+				},
+			)
+			.subscribe();
+
+		return () => {
+			supabase.removeChannel(channel);
+		};
+	}, [lobbyId, queryClient]);
 }
 

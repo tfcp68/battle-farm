@@ -31,6 +31,9 @@ export async function signUpWithNickname(nickname: string, password: string) {
 				`Supabase rejected "${email}". Check VITE_AUTH_BASE_EMAIL_LOCAL and VITE_AUTH_BASE_EMAIL_DOMAIN.`
 			);
 		}
+		if (error.code === 'user_already_exists' || /already registered/i.test(error.message)) {
+			throw new Error('This nickname is already taken. Try signing in instead.');
+		}
 		throw error;
 	}
 	return data;
