@@ -23,7 +23,6 @@ export default function App() {
 					<Route path="/login" element={<LoginPage />} />
 				</Routes>
 			</main>
-			min
 		</div>
 	);
 }
