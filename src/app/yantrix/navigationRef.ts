@@ -8,10 +8,6 @@ export function registerNavigate(fn: NavigateFn) {
 	navigateFn = fn;
 }
 
-export function unregisterNavigate() {
-	navigateFn = null;
-}
-
 export function navigateTo(path: string, opts?: NavigateOptions) {
 	if (navigateFn) {
 		navigateFn(path, opts);
