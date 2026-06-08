@@ -81,7 +81,6 @@ button {
     border: 1px solid var(--border);
     background: #0f141b; color: var(--text);
     border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 13px;
-    min-width: 160px;
     transition: transform .05s ease, box-shadow .15s ease;
 }
 button:hover { box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 6px 18px rgba(0,0,0,0.25) }

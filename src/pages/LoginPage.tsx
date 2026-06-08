@@ -1,29 +1,32 @@
 import React from 'react';
 import Field from '~/shared/ui/Field';
-import { useNavigate } from 'react-router-dom';
 import { useAuthActions } from '~/features/auth/useAuthActions';
 import { Button } from '~/shared/ui/components/button';
+import { useMachines } from '~/app/providers/MachinesContext';
+import { useFSM } from '@yantrix/react';
+import { selectAuthError, selectAuthPending } from '~/shared/lib/fsm/selectors';
+import type { TWindowModeContext } from '~/shared/types/types';
 
 export default function LoginPage() {
 	const [nickname, setNickname] = React.useState('');
 	const [password, setPassword] = React.useState('');
 	const [isRegister, setIsRegister] = React.useState(false);
-	const [error, setError] = React.useState<string>('');
-	const { register, signIn } = useAuthActions();
-	const navigate = useNavigate();
+	const { signIn, register } = useAuthActions();
 
-	const submit = async (e: React.FormEvent) => {
+	const { mode: modeFSM } = useMachines();
+	const { getContext: getModeContext } = useFSM<TWindowModeContext>(modeFSM.instance);
+	const modeCtx = getModeContext();
+
+	const isPending = selectAuthPending(modeCtx?.state);
+	const authError = selectAuthError(modeCtx);
+
+	const submit = (e: React.FormEvent) => {
 		e.preventDefault();
-		setError('');
-		try {
-			if (isRegister) {
-				await register.mutateAsync({ nickname, password });
-			} else {
-				await signIn.mutateAsync({ nickname, password });
-			}
-			navigate('/intro', { replace: true });
-		} catch (e: any) {
-			setError(e?.message ?? 'Auth error');
+		if (isPending || !nickname || !password) return;
+		if (isRegister) {
+			register(nickname, password);
+		} else {
+			signIn(nickname, password);
 		}
 	};
 
@@ -42,16 +45,16 @@ export default function LoginPage() {
 					placeholder="Enter your password"
 				/>
 				<div className="actions">
-					<Button className="primary" type="submit" disabled={register.isPending || signIn.isPending}>
-						{register.isPending || signIn.isPending ? '...' : isRegister ? 'Create account' : 'Sign in'}
+					<Button className="primary" type="submit" disabled={isPending}>
+						{isPending ? '...' : isRegister ? 'Create account' : 'Sign in'}
 					</Button>
 					<Button type="button" onClick={() => setIsRegister((v) => !v)}>
 						{isRegister ? 'I already have an account' : 'Create an account'}
 					</Button>
 				</div>
-				{error && (
+				{authError && (
 					<div style={{ textAlign: 'center' }}>
-						<small className="muted">{error}</small>
+						<small className="muted">{authError}</small>
 					</div>
 				)}
 			</form>

@@ -1,35 +1,27 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import DevSidebar from '~/widgets/DevSidebar';
 import JoinRequestPopup from '~/shared/ui/JoinRequestPopup';
 import { Button } from '~/shared/ui/components/button';
-import WindowModeAutomata, { statesDictionary } from '~/shared/lib/fsm/window/WindowModeAutomata';
+import { statesDictionary } from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { useMachines } from '~/app/providers/MachinesContext';
 import { useFSM } from '@yantrix/react';
-import { getStateName } from '~/shared/helpers/fsm';
 import { useCurrentPlayer } from '~/entities/auth/queries';
-import { lobbyKeys, useLobbiesList, useLobbyRequestsByLobbyId } from '~/entities/lobby/queries';
+import { useLobbiesList } from '~/entities/lobby/queries';
 import { useGameByLobbyId } from '~/entities/game/queries';
-import { emitDomainEvent } from '~/app/yantrix/sources/uiBridgeSource';
+import { emitDomainEvent } from '~/app/yantrix/data/sources/UIBridgeDataSource';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 import { TWindowModeContext } from '~/shared/types/types';
 import { useCreateLobby } from '~/features/create-lobby/useCreateLobby';
 import { useJoinLobby } from '~/features/join-lobby/useJoinLobby';
 import { useAuthActions } from '~/features/auth/useAuthActions';
-import { useQueryClient } from '@tanstack/react-query';
+import { selectIsJoinRequest, selectJoinLobbyId } from '~/shared/lib/fsm/selectors';
 
 export default function MenuSubmodePage() {
-	const navigate = useNavigate();
 	const { createLobby } = useCreateLobby();
 	const { requestJoin, cancelJoin } = useJoinLobby();
 	const { signOut } = useAuthActions();
 
 	const { mode: modeFSM } = useMachines();
-
-	const { getContext: getModeContext, dispatch: dispatchMode } = useFSM<TWindowModeContext>({
-		id: modeFSM.id,
-		Automata: modeFSM.instance,
-	});
+	const { getContext: getModeContext } = useFSM<TWindowModeContext>(modeFSM.instance);
 	const modeCtx = getModeContext();
 
 	const { data: currentPlayer, isLoading: loadingCurrentPlayer } = useCurrentPlayer();
@@ -37,61 +29,20 @@ export default function MenuSubmodePage() {
 
 	const { data: lobbies = [], isLoading, refetch } = useLobbiesList({ status: 'open' });
 
-	const getState = WindowModeAutomata.getState?.bind(WindowModeAutomata);
-	const isJoinRequest = modeCtx?.state === getState('JOIN_REQUEST');
-	const joinLobbyId = modeCtx?.context?.lobbyId ?? null;
+	const isJoinRequest = selectIsJoinRequest(modeCtx?.state);
+	const joinLobbyId = selectJoinLobbyId(modeCtx);
+	const joinGameId = modeCtx?.context?.gameId ?? null;
+	const didTimeOut = modeCtx?.context?.timedOut === 1;
 
 	const { data: joinGame } = useGameByLobbyId(joinLobbyId);
-	const joinGameId = joinGame?.id ?? modeCtx?.context?.gameId ?? null;
+	const resolvedJoinGameId = joinGame?.id ?? joinGameId;
 
 	const lobby = joinLobbyId ? lobbies.find((l) => l.lobbyId === joinLobbyId) ?? null : null;
 
-	const [isJoinPopupOpen, setIsJoinPopupOpen] = React.useState(false);
-	const cancelledByMeRef = React.useRef(false);
-	const [isCreatingLobby, setIsCreatingLobby] = React.useState(false);
-
-	React.useEffect(() => {
-		if (isJoinRequest) cancelledByMeRef.current = false;
-	}, [isJoinRequest]);
-
-	const lobbyId = modeCtx?.context?.lobbyId;
-	const qc = useQueryClient();
-
-	// Poll the current player's join request status (refetch every 1.5s while in JOIN_REQUEST state)
-	const { data: allRequestsForLobby } = useLobbyRequestsByLobbyId(isJoinRequest && lobbyId ? lobbyId : null);
-	// Manually trigger polling via useEffect while waiting for join approval
-	React.useEffect(() => {
-		if (!isJoinRequest || !lobbyId) return;
-		const timer = setInterval(() => {
-			qc.invalidateQueries({ queryKey: lobbyKeys.requestsByLobbyId(lobbyId) });
-		}, 1500);
-		return () => clearInterval(timer);
-	}, [isJoinRequest, lobbyId, qc]);
-
-	const myJoinRequest = React.useMemo(
-		() => (allRequestsForLobby ?? []).find((r) => r.playerId === currentPlayerId) ?? null,
-		[allRequestsForLobby, currentPlayerId]
-	);
-
-	// Navigate when join request is approved or rejected
-	React.useEffect(() => {
-		if (!isJoinRequest) return;
-		if (myJoinRequest?.status === 'approved') {
-			dispatchMode({
-				action: WindowModeAutomata.getAction('REQUEST_ACCEPTED'),
-				payload: { lobbyId: joinLobbyId, playerId: currentPlayerId },
-			});
-			navigate('/lobby', { replace: true });
-		} else if (myJoinRequest?.status === 'rejected') {
-			// Transition FSM: JOIN_REQUEST → MAIN_MENU via CANCEL action.
-			dispatchMode({
-				action: WindowModeAutomata.getAction('CANCEL'),
-				payload: {},
-			});
-			setIsJoinPopupOpen(false);
-			navigate('/menu', { replace: true });
-		}
-	}, [myJoinRequest, isJoinRequest, navigate, dispatchMode, joinLobbyId, currentPlayerId]);
+	const isCreatingLobby =
+		modeCtx?.state === statesDictionary.MAIN_MENU
+			? false
+			: modeCtx?.state !== statesDictionary.MAIN_MENU && !isJoinRequest;
 
 	if (loadingCurrentPlayer) {
 		return (
@@ -107,12 +58,6 @@ export default function MenuSubmodePage() {
 
 	return (
 		<>
-			<DevSidebar
-				automataName={WindowModeAutomata.name}
-				stateName={getStateName(statesDictionary, modeCtx.state)}
-				snapshot={modeCtx}
-			/>
-
 			<div className="with-dev">
 				<div className="menu-page">
 					<div className="menu-card">
@@ -125,11 +70,8 @@ export default function MenuSubmodePage() {
 							<Button
 								className="primary"
 								onClick={() => {
-									if (isCreatingLobby || !currentPlayerId) return;
-									setIsCreatingLobby(true);
+									if (!currentPlayerId) return;
 									createLobby(currentPlayerId);
-									// Reset creating state after a brief moment to avoid double-clicks
-									setTimeout(() => setIsCreatingLobby(false), 2000);
 								}}
 								disabled={!currentPlayerId || isCreatingLobby}>
 								{isCreatingLobby ? 'Creating…' : 'Create Lobby'}
@@ -175,30 +117,17 @@ export default function MenuSubmodePage() {
 																onClick={() => {
 																	if (!currentPlayerId) return;
 																	if (l.hostPlayerId === currentPlayerId) {
-																		// Re-enter own lobby
-																		navigate('/lobby', {
-																			replace: true,
-																			state: { lobbyId: l.lobbyId },
-																		});
 																		emitDomainEvent(
-																			WindowDomainEvents.lobby_created,
+																			WindowDomainEvents.re_enter_lobby,
 																			{
-																				gameId: null,
-																				isHost: 1,
 																				lobbyId: l.lobbyId,
 																				playerId: currentPlayerId,
+																				isHost: 1,
 																			}
 																		);
 																		return;
 																	}
-																	dispatchMode({
-																		action: WindowModeAutomata.getAction(
-																			'JOIN_GAME'
-																		),
-																		payload: { gameId: null, lobbyId: l.lobbyId },
-																	});
 																	requestJoin(l.lobbyId, currentPlayerId);
-																	setIsJoinPopupOpen(true);
 																}}
 																disabled={!currentPlayerId}>
 																{l.hostPlayerId === currentPlayerId ? 'Enter' : 'Join'}
@@ -215,8 +144,17 @@ export default function MenuSubmodePage() {
 
 						<hr style={{ width: '100%' }} />
 
+						{didTimeOut && !isJoinRequest && (
+							<div
+								role="alert"
+								data-testid="join-request-timeout-notice"
+								style={{ width: '100%', padding: 8, textAlign: 'center', color: '#a40' }}>
+								Your join request timed out. Try again.
+							</div>
+						)}
+
 						<div style={{ width: '100%', marginTop: 12, display: 'flex', justifyContent: 'center' }}>
-							<Button className="danger" style={{ width: '50%' }} onClick={() => signOut.mutate()}>
+							<Button className="danger" style={{ width: '50%' }} onClick={() => signOut()}>
 								Logout
 							</Button>
 						</div>
@@ -224,18 +162,13 @@ export default function MenuSubmodePage() {
 				</div>
 			</div>
 
-			{isJoinRequest && isJoinPopupOpen && (
+			{isJoinRequest && (
 				<JoinRequestPopup
-					gameId={joinGameId}
+					gameId={resolvedJoinGameId}
 					hostPlayerId={lobby?.hostPlayerId ?? null}
-					onCancel={() => {
-						cancelledByMeRef.current = true;
-						setIsJoinPopupOpen(false);
-						cancelJoin();
-					}}
+					onCancel={() => cancelJoin()}
 				/>
 			)}
 		</>
 	);
 }
-

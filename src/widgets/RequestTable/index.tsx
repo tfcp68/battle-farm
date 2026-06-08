@@ -1,8 +1,9 @@
 import React from 'react';
 import { usePlayersList } from '~/entities/player/queries';
-import { useLobbyPlayersByLobbyId, useLobbyRequestsByLobbyId } from '~/entities/lobby/queries';
-import { useServices } from '~/app/providers/AppServicesProvider';
+import { useLobbyRequestsByLobbyId } from '~/entities/lobby/queries';
+import { useLobbyRequests } from '~/features/lobby-requests/useLobbyRequests';
 import { Button } from '~/shared/ui/components/button';
+import { selectIsHost, selectNicknameById, selectPendingRequests } from '~/shared/lib/fsm/selectors';
 
 type RequestTableProps = {
 	lobbyId: string | null | undefined;
@@ -11,26 +12,16 @@ type RequestTableProps = {
 };
 
 export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }: RequestTableProps) {
-	const isHost = !!(lobbyId && hostPlayerId && currentPlayerId && hostPlayerId === currentPlayerId);
-	const { controllers } = useServices();
+	const isHost = selectIsHost(hostPlayerId, currentPlayerId);
+	const { approve, reject } = useLobbyRequests();
 
-	const { data: requests = [], refetch: refetchRequests, isFetching } = useLobbyRequestsByLobbyId(lobbyId || null);
-	const { refetch: refetchPlayers } = useLobbyPlayersByLobbyId(lobbyId || null);
+	const { data: requests = [], isFetching } = useLobbyRequestsByLobbyId(lobbyId || null);
 	const { data: allPlayers = [] } = usePlayersList();
 
-	const nicknameById: Record<string, string> = React.useMemo(() => {
-		const map: Record<string, string> = {};
-		for (const p of allPlayers) if (p.playerId && p.nickname) map[p.playerId] = p.nickname;
-		return map;
-	}, [allPlayers]);
-
-	const pendingRequests = React.useMemo(
-		() => requests.filter((r) => r.status === 'pending'),
-		[requests]
-	);
+	const nicknameById   = selectNicknameById(allPlayers);
+	const pendingRequests = selectPendingRequests(requests);
 
 	const [loadingId, setLoadingId] = React.useState<string | null>(null);
-	const [manualRefreshing, setManualRefreshing] = React.useState(false);
 
 	if (!isHost) return null;
 
@@ -38,19 +29,6 @@ export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }:
 		<div className="panel">
 			<div className="row" style={{ justifyContent: 'space-between', alignItems: 'center' }}>
 				<h4 className="section-title">Join Requests</h4>
-			<Button
-				className="secondary"
-				disabled={isFetching || manualRefreshing}
-				onClick={async () => {
-					try {
-						setManualRefreshing(true);
-						await Promise.all([refetchRequests(), refetchPlayers()]);
-					} finally {
-						setManualRefreshing(false);
-					}
-				}}>
-				Refresh
-			</Button>
 			</div>
 			<div className="table-scroll" style={{ marginTop: 8 }}>
 				<table className="table" style={{ width: '100%' }}>
@@ -79,35 +57,31 @@ export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }:
 									<td>{nicknameById[r.playerId] ?? r.playerId}</td>
 									<td>
 										<div className="row">
-						<Button
-											className="ok"
-											disabled={loadingId === r.id}
-											onClick={async () => {
-												try {
+											<Button
+												className="ok"
+												disabled={loadingId === r.id}
+												onClick={() => {
+													if (!lobbyId) return;
 													setLoadingId(r.id);
-													await controllers.lobbies.approveRequest(r.id);
-												} finally {
-													setLoadingId(null);
-													await Promise.all([refetchRequests(), refetchPlayers()]);
-												}
-											}}>
-											Accept
-										</Button>
-										<Button
-											className="danger"
-											disabled={loadingId === r.id}
-											onClick={async () => {
-												try {
+													approve(r.id, lobbyId);
+													// Loading clears when query invalidation causes re-render.
+													// Optimistic: reset after brief delay.
+													setTimeout(() => setLoadingId(null), 1500);
+												}}>
+												Accept
+											</Button>
+											<Button
+												className="danger"
+												disabled={loadingId === r.id}
+												onClick={() => {
+													if (!lobbyId) return;
 													setLoadingId(r.id);
-													await controllers.lobbies.rejectRequest(r.id);
-												} finally {
-													setLoadingId(null);
-													await refetchRequests();
-												}
-											}}
-											style={{ marginLeft: 8 }}>
-											Reject
-										</Button>
+													reject(r.id, lobbyId);
+													setTimeout(() => setLoadingId(null), 1500);
+												}}
+												style={{ marginLeft: 8 }}>
+												Reject
+											</Button>
 										</div>
 									</td>
 								</tr>
@@ -119,4 +93,3 @@ export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }:
 		</div>
 	);
 }
-
