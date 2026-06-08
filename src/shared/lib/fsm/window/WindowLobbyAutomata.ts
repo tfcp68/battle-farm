@@ -249,7 +249,7 @@ export const eventDictionary = {
   "join_game_request": 1925485623,
   "player_state_change": 1732543556,
   "game_start": 970405333,
-  "request_accepted": 1109700777
+  "menu_join_accepted": 75777988
 };
 GlobalEventDictionary.addEvents({
   keys: Object.keys(eventDictionary).filter(e => GlobalEventDictionary.getEventValues({ keys: [e] })[0] == null)
@@ -495,12 +495,12 @@ eventAdapter.addEventEmitter(
   ({ state, context }) => {
     const eventsToEmit = [
       {
-  event: eventDictionary["request_accepted"],
+  event: eventDictionary["menu_join_accepted"],
   meta: {
-    game_id: (function(){
+    gameId: (function(){
   const boundValue = (function(){
-  if(context !== null && context['game_id'] !== undefined && context['game_id'] !== null) {
-	return context['game_id'];
+  if(context !== null && context['gameId'] !== undefined && context['gameId'] !== null) {
+	return context['gameId'];
   }
   else {
 	return null;
@@ -889,14 +889,14 @@ gameId: (function(){
     return {
 playerReadyMap: (function(){
 	const boundValue = (function(){
-	return functionDictionary.get('setAttr')((function(){
+	return functionDictionary.get('setAttr')(functionDictionary.get('resetMap')(functionDictionary.get('keys')((function(){
   if(prevContext !== null && prevContext['playerReadyMap'] !== undefined && prevContext['playerReadyMap'] !== null) {
 	return prevContext['playerReadyMap'];
   }
   else {
 	return null;
   }
-}()),(function(){
+}()))),(function(){
   if(payload !== null && payload['playerId'] !== undefined && payload['playerId'] !== null) {
 	return payload['playerId'];
   }
@@ -1058,7 +1058,7 @@ playerId: (function(){
   return Object.assign({}, prevContext, ctx);
 }
 export class WindowLobbyAutomata extends GenericAutomata {
-  static id = 'WindowLobbyAutomata_1777918984067';
+  static id = 'WindowLobbyAutomata_1780340201280';
   static actions = actionsMap;
   static states = statesMap;
   static getState = (state: keyof typeof statesMap) => statesDictionary[state];

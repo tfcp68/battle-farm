@@ -28,7 +28,7 @@ export const actionsDictionary = {
 };
 
 export const eventDictionary = {
-  "request_accepted": 1109700777,
+  "menu_join_accepted": 75777988,
   "lobby_created": 1462619007
 };
 GlobalEventDictionary.addEvents({
@@ -206,7 +206,7 @@ eventAdapter.addEventEmitter(
   },
 );
 eventAdapter.addEventListener(
-  eventDictionary["request_accepted"],
+  eventDictionary["menu_join_accepted"],
   ({ event, meta }) => {
     return {
       action: actionsDictionary["LOBBY_JOINED"],
@@ -391,7 +391,7 @@ selectedIndex: (function(){
   return Object.assign({}, prevContext, ctx);
 }
 export class WindowMenuAutomata extends GenericAutomata {
-  static id = 'WindowMenuAutomata_1777918983625';
+  static id = 'WindowMenuAutomata_1780340199812';
   static actions = actionsMap;
   static states = statesMap;
   static getState = (state: keyof typeof statesMap) => statesDictionary[state];

@@ -43,8 +43,8 @@ end note
 
 note right of JOIN_REQUEST
 +ByPass
-#{playerReadyMap} <= setAttr(#playerReadyMap,$playerId,0)
-emit/request_accepted ($game_id)
+#{playerReadyMap} <= setAttr(resetMap(keys(#playerReadyMap)),$playerId,0)
+emit/menu_join_accepted (#gameId)
 end note
 
 note right of KICK_PLAYER

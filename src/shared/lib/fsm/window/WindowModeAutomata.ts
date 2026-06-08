@@ -8,6 +8,9 @@ const predicates = {
 };
 export const statesDictionary = {
   "~~~START~~~": 74979334,
+  "UNAUTHENTICATED": 849706474,
+  "AUTHENTICATING": 1750284718,
+  "AUTH_FAILED": 455703884,
   "INTRO": 69824076,
   "MAIN_MENU": 1730055131,
   "GAME_LOBBY": 1929949911,
@@ -18,13 +21,23 @@ export const statesDictionary = {
 };
 
 export const actionsDictionary = {
-  "RESET": 77866287,
+  "~~~START~~~, UNAUTHENTICATED, 0": 26484436,
+  "AUTH_REQUESTED": 1747158391,
+  "SESSION_RESTORED": 1670875329,
+  "AUTH_SUCCEEDED": 1998958698,
+  "FAIL_AUTH": 2020376023,
   "TO_MENU": 407301981,
+  "SIGN_OUT": 1095242156,
   "JOIN_GAME": 1973300761,
   "CREATE_GAME": 1688544597,
+  "RE_ENTER_LOBBY": 1268850531,
   "EXIT": 2142494,
   "START_GAME": 1058895409,
+  "APPROVE_REQUEST": 1480144733,
+  "REJECT_REQUEST": 1951367729,
   "CANCEL": 1980572282,
+  "REJECTED": 174130302,
+  "TIMED_OUT": 1466757626,
   "REQUEST_ACCEPTED": 1455755127,
   "[-]": 88939,
   "END_GAME": 1757631242,
@@ -32,17 +45,27 @@ export const actionsDictionary = {
 };
 
 export const eventDictionary = {
+  "auth_requested": 1626373527,
+  "auth_succeeded": 1878173834,
+  "auth_failed": 944011596,
+  "auth_signed_out": 2138685790,
+  "session_restored": 58636063,
+  "request_rejected": 428327982,
+  "request_timeout": 726276175,
   "intro_complete": 1206028884,
   "cancel_game_request": 73997081,
-  "request_accepted": 1109700777,
+  "join_game_request": 1925485623,
+  "mode_join_accepted": 1263200896,
   "lobby_created": 1462619007,
+  "re_enter_lobby": 1597211741,
   "game_start": 970405333,
   "game_end": 1768834290,
   "player_exit": 556694460,
   "player_cancel": 1965899368,
   "lobby_closed": 2120164853,
+  "lobby_request_approved": 94764112,
+  "lobby_request_rejected": 1888505481,
   "join_lobby": 1855984769,
-  "join_game_request": 1925485623,
   "game_started": 551625012
 };
 GlobalEventDictionary.addEvents({
@@ -52,13 +75,23 @@ GlobalEventDictionary.addEvents({
 export const functionDictionary = new FunctionDictionary();
 
 const actionsMap = {
-  "RESET": "RESET",
+  "~~~START~~~, UNAUTHENTICATED, 0": "~~~START~~~, UNAUTHENTICATED, 0",
+  "AUTH_REQUESTED": "AUTH_REQUESTED",
+  "SESSION_RESTORED": "SESSION_RESTORED",
+  "AUTH_SUCCEEDED": "AUTH_SUCCEEDED",
+  "FAIL_AUTH": "FAIL_AUTH",
   "TO_MENU": "TO_MENU",
+  "SIGN_OUT": "SIGN_OUT",
   "JOIN_GAME": "JOIN_GAME",
   "CREATE_GAME": "CREATE_GAME",
+  "RE_ENTER_LOBBY": "RE_ENTER_LOBBY",
   "EXIT": "EXIT",
   "START_GAME": "START_GAME",
+  "APPROVE_REQUEST": "APPROVE_REQUEST",
+  "REJECT_REQUEST": "REJECT_REQUEST",
   "CANCEL": "CANCEL",
+  "REJECTED": "REJECTED",
+  "TIMED_OUT": "TIMED_OUT",
   "REQUEST_ACCEPTED": "REQUEST_ACCEPTED",
   "[-]": "[-]",
   "END_GAME": "END_GAME",
@@ -67,6 +100,9 @@ const actionsMap = {
 
 const statesMap = {
   "~~~START~~~": "~~~START~~~",
+  "UNAUTHENTICATED": "UNAUTHENTICATED",
+  "AUTHENTICATING": "AUTHENTICATING",
+  "AUTH_FAILED": "AUTH_FAILED",
   "INTRO": "INTRO",
   "MAIN_MENU": "MAIN_MENU",
   "GAME_LOBBY": "GAME_LOBBY",
@@ -77,8 +113,8 @@ const statesMap = {
 };
 const actionToStateFromStateDict = {
   69824076: {
-  77866287: {
-  state: [69824076]}
+  26484436: {
+  state: [849706474]}
 
 ,  407301981: {
   state: [1730055131]}
@@ -86,20 +122,47 @@ const actionToStateFromStateDict = {
 }
 
 ,  74979334: {
-  77866287: {
-  state: [69824076]}
+  26484436: {
+  state: [849706474]}
 
 }
 
 ,  94228390: {
-  77866287: {
-  state: [69824076]}
+  26484436: {
+  state: [849706474]}
+
+,  174130302: {
+  state: [1730055131]}
 
 ,  1455755127: {
   state: [1929949911]}
 
+,  1466757626: {
+  state: [1730055131]}
+
 ,  1980572282: {
   state: [1730055131]}
+
+}
+
+,  455703884: {
+  26484436: {
+  state: [849706474]}
+
+,  1747158391: {
+  state: [1750284718]}
+
+}
+
+,  849706474: {
+  26484436: {
+  state: [849706474]}
+
+,  1670875329: {
+  state: [1730055131]}
+
+,  1747158391: {
+  state: [1750284718]}
 
 }
 
@@ -107,8 +170,8 @@ const actionToStateFromStateDict = {
   88939: {
   state: [1608719668]}
 
-,  77866287: {
-  state: [69824076]}
+,  26484436: {
+  state: [849706474]}
 
 }
 
@@ -116,11 +179,11 @@ const actionToStateFromStateDict = {
   2142494: {
   state: [1730055131]}
 
+,  26484436: {
+  state: [849706474]}
+
 ,  66247144: {
   state: [1730055131]}
-
-,  77866287: {
-  state: [69824076]}
 
 ,  1757631242: {
   state: [1985829159]}
@@ -128,8 +191,14 @@ const actionToStateFromStateDict = {
 }
 
 ,  1730055131: {
-  77866287: {
-  state: [69824076]}
+  26484436: {
+  state: [849706474]}
+
+,  1095242156: {
+  state: [849706474]}
+
+,  1268850531: {
+  state: [1929949911]}
 
 ,  1688544597: {
   state: [1929949911]}
@@ -139,15 +208,39 @@ const actionToStateFromStateDict = {
 
 }
 
+,  1750284718: {
+  26484436: {
+  state: [849706474]}
+
+,  1670875329: {
+  state: [1730055131]}
+
+,  1998958698: {
+  state: [69824076]}
+
+,  2020376023: {
+  state: [455703884]}
+
+}
+
 ,  1929949911: {
   2142494: {
   state: [1730055131]}
 
-,  77866287: {
-  state: [69824076]}
+,  26484436: {
+  state: [849706474]}
 
 ,  1058895409: {
   state: [1032785389]}
+
+,  1480144733: {
+  state: [1929949911]}
+
+,  1688544597: {
+  state: [1929949911]}
+
+,  1951367729: {
+  state: [1929949911]}
 
 }
 
@@ -155,8 +248,8 @@ const actionToStateFromStateDict = {
   2142494: {
   state: [1730055131]}
 
-,  77866287: {
-  state: [69824076]}
+,  26484436: {
+  state: [849706474]}
 
 }
 
@@ -299,64 +392,6 @@ eventAdapter.addEventEmitter(
   },
 );
 eventAdapter.addEventEmitter(
-  statesDictionary["JOIN_REQUEST"],
-  ({ state, context }) => {
-    const eventsToEmit = [
-      {
-  event: eventDictionary["join_game_request"],
-  meta: {
-    playerId: (function(){
-  const boundValue = (function(){
-  if(context !== null && context['playerId'] !== undefined && context['playerId'] !== null) {
-	return context['playerId'];
-  }
-  else {
-	return null;
-  }
-}())
-
-
-  return boundValue
-}())
-
-,
-        lobbyId: (function(){
-  const boundValue = (function(){
-  if(context !== null && context['lobbyId'] !== undefined && context['lobbyId'] !== null) {
-	return context['lobbyId'];
-  }
-  else {
-	return null;
-  }
-}())
-
-
-  return boundValue
-}())
-
-,
-        gameId: (function(){
-  const boundValue = (function(){
-  if(context !== null && context['gameId'] !== undefined && context['gameId'] !== null) {
-	return context['gameId'];
-  }
-  else {
-	return null;
-  }
-}())
-
-
-  return boundValue
-}())
-
-  },
-}
-    ];
-
-    return eventsToEmit[0];
-  },
-);
-eventAdapter.addEventEmitter(
   statesDictionary["GAME_STARTING"],
   ({ state, context }) => {
     const eventsToEmit = [
@@ -392,11 +427,196 @@ eventAdapter.addEventEmitter(
   return boundValue
 }())
 
+,
+        lobbyId: (function(){
+  const boundValue = (function(){
+  if(context !== null && context['lobbyId'] !== undefined && context['lobbyId'] !== null) {
+	return context['lobbyId'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
   },
 }
     ];
 
     return eventsToEmit[0];
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["auth_requested"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["AUTH_REQUESTED"],
+      payload: {
+        mode: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['mode'] !== undefined && meta['mode'] !== null) {
+	return meta['mode'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+,
+        nickname: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['nickname'] !== undefined && meta['nickname'] !== null) {
+	return meta['nickname'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+,
+        password: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['password'] !== undefined && meta['password'] !== null) {
+	return meta['password'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+      },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["auth_succeeded"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["AUTH_SUCCEEDED"],
+      payload: {
+        playerId: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['playerId'] !== undefined && meta['playerId'] !== null) {
+	return meta['playerId'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+      },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["auth_failed"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["FAIL_AUTH"],
+      payload: {
+        error: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['error'] !== undefined && meta['error'] !== null) {
+	return meta['error'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+      },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["auth_signed_out"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["SIGN_OUT"],
+      payload: {
+              },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["session_restored"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["SESSION_RESTORED"],
+      payload: {
+        playerId: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['playerId'] !== undefined && meta['playerId'] !== null) {
+	return meta['playerId'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+      },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["request_rejected"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["REJECTED"],
+      payload: {
+              },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["request_timeout"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["TIMED_OUT"],
+      payload: {
+        timedOut: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['timedOut'] !== undefined && meta['timedOut'] !== null) {
+	return meta['timedOut'];
+  }
+  else {
+	return 1;
+  }
+}())
+
+
+  return boundValue
+}())
+
+      },
+    };
   },
 );
 eventAdapter.addEventListener(
@@ -420,7 +640,46 @@ eventAdapter.addEventListener(
   },
 );
 eventAdapter.addEventListener(
-  eventDictionary["request_accepted"],
+  eventDictionary["join_game_request"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["JOIN_GAME"],
+      payload: {
+        gameId: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['gameId'] !== undefined && meta['gameId'] !== null) {
+	return meta['gameId'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+,
+        lobbyId: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['lobbyId'] !== undefined && meta['lobbyId'] !== null) {
+	return meta['lobbyId'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+      },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["mode_join_accepted"],
   ({ event, meta }) => {
     return {
       action: actionsDictionary["REQUEST_ACCEPTED"],
@@ -486,6 +745,45 @@ eventAdapter.addEventListener(
   }
   else {
 	return 1;
+  }
+}())
+
+
+  return boundValue
+}())
+
+,
+        lobbyId: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['lobbyId'] !== undefined && meta['lobbyId'] !== null) {
+	return meta['lobbyId'];
+  }
+  else {
+	return null;
+  }
+}())
+
+
+  return boundValue
+}())
+
+      },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["re_enter_lobby"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["RE_ENTER_LOBBY"],
+      payload: {
+        gameId: (function(){
+  const boundValue = (function(){
+  if(meta !== null && meta['gameId'] !== undefined && meta['gameId'] !== null) {
+	return meta['gameId'];
+  }
+  else {
+	return null;
   }
 }())
 
@@ -605,6 +903,26 @@ eventAdapter.addEventListener(
     };
   },
 );
+eventAdapter.addEventListener(
+  eventDictionary["lobby_request_approved"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["APPROVE_REQUEST"],
+      payload: {
+              },
+    };
+  },
+);
+eventAdapter.addEventListener(
+  eventDictionary["lobby_request_rejected"],
+  ({ event, meta }) => {
+    return {
+      action: actionsDictionary["REJECT_REQUEST"],
+      payload: {
+              },
+    };
+  },
+);
 export function createEventBus(id, FSMs) {
   const EventBus = new BasicEventBus();
   EventBus.correlationId = id;
@@ -675,13 +993,107 @@ playerId: (function(){
   }
 }())
 
+,
+	authError: (function(){
+  if(prevContext !== null && prevContext['authError'] !== undefined && prevContext['authError'] !== null) {
+	return prevContext['authError'];
+  }
+  else {
+	return 0;
+  }
+}())
+
+,
+	timedOut: (function(){
+  if(prevContext !== null && prevContext['timedOut'] !== undefined && prevContext['timedOut'] !== null) {
+	return prevContext['timedOut'];
+  }
+  else {
+	return 0;
+  }
+}())
+
+}
+  },
+  849706474: (prevContext: TAutomataContext, payload: TReducerPayload, functionDictionary: FunctionDictionary, automata: GenericAutomata) => {
+    return prevContext
+  },
+  1750284718: (prevContext: TAutomataContext, payload: TReducerPayload, functionDictionary: FunctionDictionary, automata: GenericAutomata) => {
+    return prevContext
+  },
+  455703884: (prevContext: TAutomataContext, payload: TReducerPayload, functionDictionary: FunctionDictionary, automata: GenericAutomata) => {
+    return {
+authError: (function(){
+	const boundValue = (function(){
+  if(payload !== null && payload['error'] !== undefined && payload['error'] !== null) {
+	return payload['error'];
+  }
+  else {
+	return null;
+  }
+}())
+
+	return boundValue
+}())
+
 }
   },
   69824076: (prevContext: TAutomataContext, payload: TReducerPayload, functionDictionary: FunctionDictionary, automata: GenericAutomata) => {
-    return prevContext
+    return {
+playerId: (function(){
+	const boundValue = (function(){
+  if(payload !== null && payload['playerId'] !== undefined && payload['playerId'] !== null) {
+	return payload['playerId'];
+  }
+  else {
+	return null;
+  }
+}())
+
+	return boundValue
+}())
+
+}
   },
   1730055131: (prevContext: TAutomataContext, payload: TReducerPayload, functionDictionary: FunctionDictionary, automata: GenericAutomata) => {
-    return prevContext
+    return {
+playerId: (function(){
+	const boundValue = (function(){
+	return functionDictionary.get('coalesce')((function(){
+  if(payload !== null && payload['playerId'] !== undefined && payload['playerId'] !== null) {
+	return payload['playerId'];
+  }
+  else {
+	return null;
+  }
+}()),(function(){
+  if(prevContext !== null && prevContext['playerId'] !== undefined && prevContext['playerId'] !== null) {
+	return prevContext['playerId'];
+  }
+  else {
+	return null;
+  }
+}()))}())
+
+	return boundValue
+}())
+
+,
+	timedOut: (function(){
+	const boundValue = (function(){
+	return functionDictionary.get('coalesce')((function(){
+  if(payload !== null && payload['timedOut'] !== undefined && payload['timedOut'] !== null) {
+	return payload['timedOut'];
+  }
+  else {
+	return null;
+  }
+}()),0)}())
+
+	return boundValue
+}())
+
+}
   },
   1929949911: (prevContext: TAutomataContext, payload: TReducerPayload, functionDictionary: FunctionDictionary, automata: GenericAutomata) => {
     return {
@@ -757,6 +1169,14 @@ gameId: (function(){
 	return boundValue
 }())
 
+,
+	timedOut: (function(){
+	const boundValue = (function(){
+	return 0}())
+
+	return boundValue
+}())
+
 }
   },
   1032785389: (prevContext: TAutomataContext, payload: TReducerPayload, functionDictionary: FunctionDictionary, automata: GenericAutomata) => {
@@ -822,12 +1242,32 @@ playerId: (function(){
   }
 }())
 
+,
+	authError: (function(){
+  if(prevContext !== null && prevContext['authError'] !== undefined && prevContext['authError'] !== null) {
+	return prevContext['authError'];
+  }
+  else {
+	return 0;
+  }
+}())
+
+,
+	timedOut: (function(){
+  if(prevContext !== null && prevContext['timedOut'] !== undefined && prevContext['timedOut'] !== null) {
+	return prevContext['timedOut'];
+  }
+  else {
+	return 0;
+  }
+}())
+
 }
 ;
   return Object.assign({}, prevContext, ctx);
 }
 export class WindowModeAutomata extends GenericAutomata {
-  static id = 'WindowModeAutomata_1777918983218';
+  static id = 'WindowModeAutomata_1780340198482';
   static actions = actionsMap;
   static states = statesMap;
   static getState = (state: keyof typeof statesMap) => statesDictionary[state];
@@ -841,8 +1281,8 @@ export class WindowModeAutomata extends GenericAutomata {
   constructor() {
     super(eventAdapter);
     this.init({
-      state: 69824076,
-      context: {"playerId":null},
+      state: 849706474,
+      context: {"playerId":null,"authError":null,"timedOut":null},
       rootReducer: ((input: TRootReducerInput): TRootReducerOutput => {
   const { action, context, payload, state } = input;
   if (action === null || payload === null) return { state, context };
