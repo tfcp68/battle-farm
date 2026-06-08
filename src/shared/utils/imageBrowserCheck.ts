@@ -36,6 +36,11 @@ export const setSupportedExt = (resArr:  [PromiseSettledResult<boolean>, Promise
 	if(resArr[0]) return localStorage.setItem(storageKey, 'WEBP')
 	else return localStorage.setItem(storageKey, 'JPEG')
 }
+function isExtKey(value: string | null): value is ExtKeysT {
+	return value === 'AVIF' || value === 'WEBP' || value === 'JPEG';
+}
+
 export const getExt = (): ExtKeysT => {
-	return localStorage.getItem(storageKey) as ExtKeysT
+	const value = localStorage.getItem(storageKey);
+	return isExtKey(value) ? value : 'JPEG';
 };

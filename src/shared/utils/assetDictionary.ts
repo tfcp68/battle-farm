@@ -1,7 +1,7 @@
 import assetsDictionaryJson from '~/shared/assets/assetsDictionary.json';
 import { extTypes, TAssetNamesDict, TAssetsDictionary, TBaseAssetSize } from '~/shared/types/build/assetBuilderTypes';
 
-const assetDictionary = assetsDictionaryJson as TAssetsDictionary;
+const assetDictionary: TAssetsDictionary = assetsDictionaryJson;
 
 export const getAssetPath = <T extends TAssetNamesDict>(
 	assetType: T,

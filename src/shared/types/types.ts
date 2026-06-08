@@ -11,6 +11,9 @@ export type TWindowModeContext = {
 	playerId: string | null;
 	lobbyId: string | null;
 	gameId: string | null;
+	isHost: 0 | 1;
+	authError: string | 0;
+	timedOut: 0 | 1;
 };
 
 
