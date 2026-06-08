@@ -1,44 +1,24 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useServices } from '~/app/providers/AppServicesProvider';
-import { setCurrentPlayerId } from '~/entities/auth/queries';
-import { useNavigate } from 'react-router-dom';
+import { emitDomainEvent } from '~/app/yantrix/data/sources/UIBridgeDataSource';
+import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 
 export function useAuthActions() {
-	const { controllers } = useServices();
-	const qc = useQueryClient();
-	const navigate = useNavigate();
-
-	const register = useMutation({
-		mutationFn: ({ nickname, password }: { nickname: string; password: string }) =>
-			controllers.auth.register(nickname, password),
-		onSuccess: (data) => {
-			if (data?.player?.playerId) {
-				setCurrentPlayerId(data.player.playerId);
-			}
-			qc.invalidateQueries({ queryKey: ['auth', 'currentPlayer'] });
+	return {
+		signIn(nickname: string, password: string) {
+			emitDomainEvent(WindowDomainEvents.auth_requested, {
+				mode: 'signIn',
+				nickname,
+				password,
+			});
 		},
-	});
-
-	const signIn = useMutation({
-		mutationFn: ({ nickname, password }: { nickname: string; password: string }) =>
-			controllers.auth.signIn(nickname, password),
-		onSuccess: (data) => {
-			if (data?.player?.playerId) {
-				setCurrentPlayerId(data.player.playerId);
-			}
-			qc.invalidateQueries({ queryKey: ['auth', 'currentPlayer'] });
+		register(nickname: string, password: string) {
+			emitDomainEvent(WindowDomainEvents.auth_requested, {
+				mode: 'signUp',
+				nickname,
+				password,
+			});
 		},
-	});
-
-	const signOut = useMutation({
-		mutationFn: () => controllers.auth.signOut(),
-		onSuccess: () => {
-			setCurrentPlayerId(null);
-			qc.clear();
-			navigate('/', { replace: true });
+		signOut() {
+			emitDomainEvent(WindowDomainEvents.auth_signed_out, null);
 		},
-	});
-
-	return { register, signIn, signOut };
+	};
 }
-

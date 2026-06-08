@@ -1,4 +1,4 @@
-import { emitDomainEvent } from '~/app/yantrix/sources/uiBridgeSource';
+import { emitDomainEvent } from '~/app/yantrix/data/sources/UIBridgeDataSource';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 
 export function useJoinLobby() {
