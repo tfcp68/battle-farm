@@ -9,3 +9,5 @@ assets/thumbs/dictGenerate.js
 .env
 
 packages/
+.claude
+CLAUDE.md
