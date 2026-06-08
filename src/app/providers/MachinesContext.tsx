@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Machines, startYantrixCore } from '~/app/yantrix/coreLoop';
 import { useServices } from '~/app/providers/AppServicesProvider';
-import { registerNavigate, unregisterNavigate } from '~/app/yantrix/navigationRef';
+import { registerNavigate } from '~/app/yantrix/navigationRef';
 
 const MachinesContext = createContext<Machines | null>(null);
 
@@ -13,11 +13,9 @@ export function MachinesProvider({ children }: { children: React.ReactNode }) {
 	const navigate = useNavigate();
 	const machinesRef = useRef<Machines | null>(null);
 
-	// 1. Register navigate first so it is ready before the core loop starts.
-	useEffect(() => {
-		registerNavigate(navigate);
-		return () => unregisterNavigate();
-	}, [navigate]);
+	// sources may emit session_restored event synchronously during startYantrixCore, which fires navigationDestination -> navigateTo
+	// navigate must be registered before the loop starts, not in a useEffect, registerNavigate overwrites the ref on every render, so it stays fresh
+	registerNavigate(navigate);
 
 	if (!machinesRef.current) {
 		machinesRef.current = startYantrixCore({ services, queryClient });

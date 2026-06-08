@@ -35,10 +35,3 @@ export function useServices(): Services {
 	if (!ctx) throw new Error('useServices must be used inside AppServicesProvider');
 	return ctx;
 }
-
-export function useAppQueryClient(): QueryClient {
-	const ctx = useContext(AppServicesContext);
-	if (!ctx) throw new Error('useAppQueryClient must be used inside AppServicesProvider');
-	return ctx.queryClient;
-}
-
