@@ -1,7 +1,6 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { uniqId } from '@yantrix/core';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
-import { fsmLogger } from '~/shared/lib/fsm/devLogger';
 import { isRecord } from '~/shared/helpers/typeGuards';
 import { AbstractWindowDataSource, type FollowUp } from '../shared/AbstractWindowDataSource';
 
@@ -102,12 +101,6 @@ export class QueryDomainDataSource extends AbstractWindowDataSource<PlayerStateC
 				if (this.#lastReadyMapByLobby[lobbyId] === hash) continue;
 				this.#lastReadyMapByLobby[lobbyId] = hash;
 
-				fsmLogger()?.logSourceFire(
-					'queryDomain',
-					WindowDomainEvents.player_state_change,
-					{ lobbyId, readyMap },
-					'readyMap diff detected',
-				);
 				this.emit({ lobbyId, playerReadyMap: readyMap });
 			}
 		} finally {

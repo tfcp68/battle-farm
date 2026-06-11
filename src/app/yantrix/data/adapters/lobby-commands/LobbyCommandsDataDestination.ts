@@ -1,10 +1,5 @@
 import type { QueryClient } from '@tanstack/react-query';
-import {
-	createDataDestinationAdapter,
-	NamedDataDestination,
-	uniqId,
-	type TAutomataEventMetaType,
-} from '@yantrix/core';
+import { createDataDestinationAdapter, NamedDataDestination, type TAutomataEventMetaType, uniqId } from '@yantrix/core';
 import type { Services } from '~/shared/services/createServices';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 import { getPlayerId } from '~/app/yantrix/register-functions';
@@ -43,9 +38,9 @@ export interface LobbyCommandsDataDestinationOpts {
  * Data Destination half of the lobby-commands promise adapter. Owns the
  * resolvers for the three follow-up-emitting commands:
  *
- *  - `lobby_created`     → DB create lobby + game → enriched `lobby_created`
- *  - `re_enter_lobby`    → fetch real `gameId`    → enriched `lobby_created`
- *  - `join_game_request` → DB write request      → maybe `request_rejected`
+ *  - `lobby_created` -> DB create lobby + game -> enriched `lobby_created`
+ *  - `re_enter_lobby` -> fetch real `gameId` -> enriched `lobby_created`
+ *  - `join_game_request` -> DB write request -> maybe `request_rejected`
  *
  * The resolver NEVER rejects — it returns a discriminated {@link LobbyCommandsOutput}
  * (including `{ kind: 'noop' }` for the success-no-follow-up case) so the

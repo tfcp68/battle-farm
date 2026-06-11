@@ -1,9 +1,8 @@
 import { uniqId } from '@yantrix/core';
 import WindowModeAutomata from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
-import { fsmLogger } from '~/shared/lib/fsm/devLogger';
 import { isRecord } from '~/shared/helpers/typeGuards';
-import { watchFsmState, type FsmStateWatcher } from '~/app/yantrix/shared/fsmStateWatcher';
+import { type FsmStateWatcher, watchFsmState } from '~/app/yantrix/shared/fsmStateWatcher';
 import { AbstractWindowDataSource, type FollowUp } from '../shared/AbstractWindowDataSource';
 
 export const JOIN_REQUEST_TIMEOUT_MS = 30_000;
@@ -82,12 +81,6 @@ export class JoinRequestTimeoutDataSource extends AbstractWindowDataSource<Timeo
 		this.#timer = setTimeout(() => {
 			if (!this.isActive() || !this.#isInJoinRequest()) return;
 			const lobbyId = this.#getLobbyIdFromContext();
-			fsmLogger()?.logSourceFire(
-				'joinRequestTimeout',
-				WindowDomainEvents.request_timeout,
-				{ lobbyId },
-				`no host action after ${this.#timeoutMs}ms`,
-			);
 			this.emit({ lobbyId });
 		}, this.#timeoutMs);
 	}

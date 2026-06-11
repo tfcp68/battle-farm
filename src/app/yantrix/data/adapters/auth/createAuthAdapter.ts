@@ -19,25 +19,6 @@ export interface AuthAdapter {
  * `IDataSource` / `IDataDestination` halves, registered directly with `CoreLoop`.
  *
  * Wiring (mirrors `IOPromiseAdapter.createPromiseDataAdapter`):
- *
- *   bus ──auth_requested──▶ CoreLoop subscribes destination's bound events
- *                                  │
- *                                  ▼
- *                          AuthDataDestination.update
- *                                  │
- *                                  ▼ (selector → packet → resolver)
- *                          async resolver: AuthInput → AuthOutput
- *                                  │
- *                                  ▼ onResolved
- *                          AuthDataSource.push (setter → queue → setNotifier)
- *                                  │
- *                                  ▼ (CoreLoop drains on microtask)
- *                          AuthDataSource.eventEmitter.next → responseMapper
- *                                  │
- *   bus ◀──auth_succeeded | auth_failed
- *
- * No bridge or tick is required: CoreLoop pumps the source the moment the resolver pushes its
- * result (the inherited `setNotifier` wakes the loop).
  */
 export function createAuthAdapter(opts: { services: Services; queryClient: QueryClient }): AuthAdapter {
 	const dataSource = new AuthDataSource();

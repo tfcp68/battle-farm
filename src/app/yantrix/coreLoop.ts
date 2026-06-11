@@ -1,36 +1,29 @@
 import { CoreLoop } from '@yantrix/core';
 import WindowModeAutomata, {
 	eventDictionary as modeEvents,
-	statesDictionary as modeStates,
+	statesDictionary as modeStates
 } from '~/shared/lib/fsm/window/WindowModeAutomata';
 import WindowMenuAutomata, {
 	eventDictionary as menuEvents,
-	statesDictionary as menuStates,
+	statesDictionary as menuStates
 } from '~/shared/lib/fsm/window/WindowMenuAutomata';
 import WindowLobbyAutomata, {
 	eventDictionary as lobbyEvents,
-	statesDictionary as lobbyStates,
+	statesDictionary as lobbyStates
 } from '~/shared/lib/fsm/window/WindowLobbyAutomata';
 import { FsmDevLogger, setFsmDevLogger } from '~/shared/lib/fsm/devLogger';
-
-// Data Sources (real IDataSource classes inheriting from createDataSourceAdapter/NamedDataSource).
-// Registered directly with CoreLoop, which pumps each source's `eventEmitter()` generator (woken
-// by the inherited `setNotifier`). No bus bridge needed.
 import { UIBridgeDataSource } from '~/app/yantrix/data/sources/UIBridgeDataSource';
 import { QueryDomainDataSource } from '~/app/yantrix/data/sources/QueryDomainDataSource';
 import { JoinRequestStatusDataSource } from '~/app/yantrix/data/sources/JoinRequestStatusDataSource';
 import { JoinRequestTimeoutDataSource } from '~/app/yantrix/data/sources/JoinRequestTimeoutDataSource';
 import { AuthStatusDataSource } from '~/app/yantrix/data/sources/AuthStatusDataSource';
-
-// Data Destinations (real IDataDestination classes inheriting from createDataDestinationAdapter/
-// NamedDataDestination). Registered directly with CoreLoop, which subscribes their bound events.
 import { AuthSignedOutDataDestination } from '~/app/yantrix/data/destinations/AuthSignedOutDataDestination';
 import { NavigationDataDestination } from '~/app/yantrix/data/destinations/NavigationDataDestination';
 import { NotificationsDataDestination } from '~/app/yantrix/data/destinations/NotificationsDataDestination';
 import { LobbyRequestsDataDestination } from '~/app/yantrix/data/destinations/LobbyRequestsDataDestination';
 import { DomainCommandsDataDestination } from '~/app/yantrix/data/destinations/DomainCommandsDataDestination';
 
-// Promise adapters — Data Source + Data Destination pairs wired via IOPromiseAdapter pattern.
+// Promise adapters — Data Source + Data Destination pairs
 import { createAuthAdapter } from '~/app/yantrix/data/adapters/auth/createAuthAdapter';
 import { createLobbyCommandsAdapter } from '~/app/yantrix/data/adapters/lobby-commands/createLobbyCommandsAdapter';
 
@@ -86,8 +79,8 @@ export function startYantrixCore(deps: { services: Services; queryClient: QueryC
 	loop.start();
 
 	// ── Sources ───────────────────────────────────────────────────────────────
-	// Every source is a real IDataSource; CoreLoop pumps its `eventEmitter()` generator,
-	// woken by the inherited `setNotifier` after each push. No bus bridge, no tick.
+	// CoreLoop pumps its `eventEmitter()` generator,
+	// woken by the inherited `setNotifier` after each push into any registered source. Each source transforms its own input events
 
 	loop.registerSource(new UIBridgeDataSource());
 	loop.registerSource(new QueryDomainDataSource({ queryClient: deps.queryClient }));
@@ -101,7 +94,7 @@ export function startYantrixCore(deps: { services: Services; queryClient: QueryC
 
 	// ── Promise adapters ──────────────────────────────────────────────────────
 	// Each adapter pairs a Data Source with a Data Destination via the
-	// IOPromiseAdapter pattern (resolver → onResolved → source.push → responseMapper → bus).
+	// IOPromiseAdapter pattern (resolver -> onResolved -> source.push -> responseMapper -> bus).
 
 	const authAdapter = createAuthAdapter({
 		services: deps.services,

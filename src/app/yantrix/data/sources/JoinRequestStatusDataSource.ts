@@ -5,9 +5,8 @@ import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 import { getPlayerId } from '~/app/yantrix/register-functions';
 import { lobbyKeys } from '~/entities/lobby/queries';
 import type { Services } from '~/shared/services/createServices';
-import { fsmLogger } from '~/shared/lib/fsm/devLogger';
 import { isRecord } from '~/shared/helpers/typeGuards';
-import { watchFsmState, type FsmStateWatcher } from '~/app/yantrix/shared/fsmStateWatcher';
+import { type FsmStateWatcher, watchFsmState } from '~/app/yantrix/shared/fsmStateWatcher';
 import { AbstractWindowDataSource, type FollowUp } from '../shared/AbstractWindowDataSource';
 
 type RequestRow = { id: string; playerId: string; status: string };
@@ -162,21 +161,9 @@ export class JoinRequestStatusDataSource extends AbstractWindowDataSource<Status
 
 				if (myRequest.status === 'approved') {
 					this.#stopPolling();
-					fsmLogger()?.logSourceFire(
-						'joinRequestStatus',
-						WindowDomainEvents.mode_join_accepted,
-						{ playerId, lobbyId },
-						'status: pending → approved',
-					);
 					this.emit({ kind: 'approved', playerId, lobbyId });
 				} else if (myRequest.status === 'rejected') {
 					this.#stopPolling();
-					fsmLogger()?.logSourceFire(
-						'joinRequestStatus',
-						WindowDomainEvents.request_rejected,
-						{ playerId, lobbyId },
-						'status: pending → rejected',
-					);
 					this.emit({ kind: 'rejected', playerId, lobbyId });
 				}
 			}

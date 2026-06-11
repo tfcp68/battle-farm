@@ -15,9 +15,6 @@ interface AuthStatusPacket {
  * On `start()`, checks `localStorage[playerId]`. If present, queues a microtask
  * that emits a single `AuthStatusPacket` — the inherited notifier fires the
  * bridge's `scheduleDrain`, which publishes `session_restored` to the bus.
- *
- * Class-based replacement for the function-style `createAuthStatusSource`
- * factory that used to return an object literal implementing `IEventSource`.
  */
 export class AuthStatusDataSource extends AbstractWindowDataSource<AuthStatusPacket> {
 	#started = false;

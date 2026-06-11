@@ -1,14 +1,7 @@
 import { z } from 'zod';
 
-/**
- * Domain events carry a small `meta` payload that originates from `emitDomainEvent`
- * calls and from cache-driven sources. Rather than re-deriving fields with ad-hoc
- * `isRecord`/`getString` pokes in every destination, we validate once with this
- * schema and hand destinations a typed, narrowed object.
- *
- * Every field is optional: a single event never carries all of them, and handlers
- * stay in control of their own required-field checks (e.g. `auth_requested` still
- * emits `auth_failed` on missing credentials instead of being silently skipped).
+/** Schema for event metadata, which may be included with any event.
+ * 	Note that all fields are optional, as the included metadata will vary widely
  */
 export const EventMetaSchema = z.object({
 	playerId: z.string().optional(),

@@ -1,9 +1,4 @@
-import {
-	createDataDestinationAdapter,
-	NamedDataDestination,
-	uniqId,
-	type TAutomataEventMetaType,
-} from '@yantrix/core';
+import { createDataDestinationAdapter, NamedDataDestination, type TAutomataEventMetaType, uniqId } from '@yantrix/core';
 import type { QueryClient } from '@tanstack/react-query';
 import type { Services } from '~/shared/services/createServices';
 import type { WindowEventId, WindowEventMetaMap } from '~/app/yantrix/types';
@@ -45,12 +40,7 @@ export interface AuthDataDestinationOpts {
 	queryClient: QueryClient;
 	/**
 	 * Invoked with the resolver result after the async work completes.
-	 * The factory wires this to push the result into the paired {@link AuthDataSource}.
-	 *
-	 * IMPORTANT: this runs inside the resolver's promise chain — the resolver
-	 * returns the same value. The destination's internal data-packet queue
-	 * therefore also stores the result, but the source's queue (which drives
-	 * the event emission) is what the EventBus actually observes.
+	 * The factory wires this to push the result into the paired {@link AuthDataSource}
 	 */
 	onResolved: (data: AuthOutput) => void;
 }
@@ -74,10 +64,6 @@ export class AuthDataDestination extends Base {
 
 		super({
 			id: opts.id ?? `auth_data_destination_${uniqId(4)}`,
-			// The resolver never rejects. A rejected resolver would be swallowed
-			// by AbstractAgnosticDataDestination._sendDataPacket's `.catch` at :104,
-			// producing no follow-up event at all. We collapse errors into
-			// `{ ok: false, error }` instead, so the response path is always taken.
 			resolver: async (data: AuthInput): Promise<AuthOutput> => {
 				const result = await AuthDataDestination.resolveAuth(services, queryClient, data);
 				onResolved(result);
@@ -113,7 +99,8 @@ export class AuthDataDestination extends Base {
 				? services.controllers.auth.register(data.nickname, data.password)
 				: services.controllers.auth.signIn(data.nickname, data.password));
 			const playerId = result?.player?.playerId;
-			if (!playerId) throw new Error('No player ID returned from auth');
+			if (!playerId)
+				throw new Error('No player ID returned from auth');
 
 			setCurrentPlayerId(playerId);
 			await queryClient.invalidateQueries({ queryKey: ['auth', 'currentPlayer'] });

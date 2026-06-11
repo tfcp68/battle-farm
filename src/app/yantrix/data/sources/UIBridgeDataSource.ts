@@ -40,6 +40,7 @@ export class UIBridgeDataSource extends AbstractWindowDataSource<UIBridgePacket>
 
 	override start(): this {
 		super.start();
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		activeInstance = this;
 		if (pendingQueue.length > 0) {
 			fsmLogger()?.warn(`uiBridge.start: draining ${pendingQueue.length} queued events`);
@@ -79,7 +80,5 @@ export function emitDomainEvent(
 		return;
 	}
 	activeInstance.pushEvent(packet);
-	fsmLogger()?.scheduleSnapshot(
-		`after emit ${fsmLogger()?.getEventName(event) ?? String(event)}`,
-	);
+
 }
