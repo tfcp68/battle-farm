@@ -2,7 +2,6 @@ import { uniqId } from '@yantrix/core';
 import WindowModeAutomata from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 import { isRecord } from '~/shared/helpers/typeGuards';
-import { type FsmStateWatcher, watchFsmState } from '~/app/yantrix/shared/fsmStateWatcher';
 import { AbstractWindowDataSource, type FollowUp } from '../shared/AbstractWindowDataSource';
 
 export const JOIN_REQUEST_TIMEOUT_MS = 30_000;
@@ -12,19 +11,15 @@ interface TimeoutPacket {
 }
 
 /**
- * Fires a single `request_timeout` event if the FSM has been in `JOIN_REQUEST`
- * for `timeoutMs` without leaving. Replaces the function-style
- * `createJoinRequestTimeoutSource`.
- *
- * **Lifecycle.** The timer is armed on FSM-enter `JOIN_REQUEST` and cleared
- * on FSM-exit (via {@link watchFsmState}) — it never leaks across transitions.
+ * Fires a single `request_timeout` event if the FSM has been in `JOIN_REQUEST` for `timeoutMs`
+ * without leaving. The elapsed time is checked per CoreLoop tick (see `pollTick`) — no own timer.
  */
 export class JoinRequestTimeoutDataSource extends AbstractWindowDataSource<TimeoutPacket> {
 	readonly #modeFSM: InstanceType<typeof WindowModeAutomata>;
 	readonly #timeoutMs: number;
 	readonly #joinRequestState: number | null;
-	#timer: ReturnType<typeof setTimeout> | null = null;
-	#watcher: FsmStateWatcher | null = null;
+	#enterTs: number | null = null;
+	#fired = false;
 
 	constructor(opts: {
 		modeFSM: InstanceType<typeof WindowModeAutomata>;
@@ -42,24 +37,10 @@ export class JoinRequestTimeoutDataSource extends AbstractWindowDataSource<Timeo
 		this.#joinRequestState = WindowModeAutomata.getState('JOIN_REQUEST');
 	}
 
-	override start(): this {
-		super.start();
-		this.#watcher = watchFsmState(this.#modeFSM, this.#joinRequestState, {
-			onEnter: () => this.#startTimer(),
-			onExit: () => this.#clearTimer(),
-		});
-		return this;
-	}
-
 	override stop(): this {
-		this.#clearTimer();
-		this.#watcher?.stop();
-		this.#watcher = null;
+		this.#enterTs = null;
+		this.#fired = false;
 		return super.stop();
-	}
-
-	#isInJoinRequest(): boolean {
-		return this.#modeFSM.state === this.#joinRequestState;
 	}
 
 	#getLobbyIdFromContext(): string | undefined {
@@ -69,19 +50,20 @@ export class JoinRequestTimeoutDataSource extends AbstractWindowDataSource<Timeo
 		return typeof lobbyId === 'string' ? lobbyId : undefined;
 	}
 
-	#clearTimer(): void {
-		if (this.#timer) {
-			clearTimeout(this.#timer);
-			this.#timer = null;
+	/** Per-tick: arm on enter, fire once when `timeoutMs` elapsed, reset on exit. */
+	protected override pollTick(): void {
+		if (this.#modeFSM.state !== this.#joinRequestState) {
+			this.#enterTs = null;
+			this.#fired = false;
+			return;
 		}
-	}
-
-	#startTimer(): void {
-		this.#clearTimer();
-		this.#timer = setTimeout(() => {
-			if (!this.isActive() || !this.#isInJoinRequest()) return;
-			const lobbyId = this.#getLobbyIdFromContext();
-			this.emit({ lobbyId });
-		}, this.#timeoutMs);
+		if (this.#enterTs === null) {
+			this.#enterTs = Date.now();
+			this.#fired = false;
+		}
+		if (!this.#fired && Date.now() - this.#enterTs >= this.#timeoutMs) {
+			this.#fired = true;
+			this.emit({ lobbyId: this.#getLobbyIdFromContext() });
+		}
 	}
 }

@@ -7,7 +7,6 @@ import { lobbyKeys } from '~/entities/lobby/queries';
 import supabase from '~/shared/api/connect';
 import type { Services } from '~/shared/services/createServices';
 import { isRecord } from '~/shared/helpers/typeGuards';
-import { type FsmStateWatcher, watchFsmState } from '~/app/yantrix/shared/fsmStateWatcher';
 import { AbstractWindowDataSource, type FollowUp } from '../shared/AbstractWindowDataSource';
 
 type RequestRow = { id: string; playerId: string; status: string };
@@ -39,7 +38,7 @@ export class JoinRequestStatusDataSource extends AbstractWindowDataSource<Status
 	readonly #joinRequestState: number | null;
 	#unsub: (() => void) | null = null;
 	#channel: ReturnType<typeof supabase.channel> | null = null;
-	#watcher: FsmStateWatcher | null = null;
+	#wasInJoinRequest = false;
 	#lastStatusByKey: Record<string, string> = {};
 	#isProcessing = false;
 
@@ -75,30 +74,32 @@ export class JoinRequestStatusDataSource extends AbstractWindowDataSource<Status
 			this.#onSnapshot();
 		});
 
-		// Open/close the realtime channel as the FSM enters/leaves JOIN_REQUEST.
-		this.#watcher = watchFsmState(this.#modeFSM, this.#joinRequestState, {
-			onEnter: () => {
-				const lobbyId = this.#getJoinLobbyId();
-				if (lobbyId) {
-					this.#openRealtime(lobbyId);
-					this.#refetch(lobbyId);
-				}
-				this.#onSnapshot();
-			},
-			onExit: () => this.#closeRealtime(),
-		});
-
 		return this;
 	}
 
 	override stop(): this {
 		this.#closeRealtime();
-		this.#watcher?.stop();
-		this.#watcher = null;
+		this.#wasInJoinRequest = false;
 		this.#unsub?.();
 		this.#unsub = null;
 		this.#lastStatusByKey = {};
 		return super.stop();
+	}
+
+	/** Per-tick: open/close the realtime channel as the FSM enters/leaves JOIN_REQUEST. */
+	protected override pollTick(): void {
+		const inState = this.#modeFSM.state === this.#joinRequestState;
+		if (inState && !this.#wasInJoinRequest) {
+			const lobbyId = this.#getJoinLobbyId();
+			if (lobbyId) {
+				this.#openRealtime(lobbyId);
+				this.#refetch(lobbyId);
+			}
+			this.#onSnapshot();
+		} else if (!inState && this.#wasInJoinRequest) {
+			this.#closeRealtime();
+		}
+		this.#wasInJoinRequest = inState;
 	}
 
 	#getJoinLobbyId(): string | null {

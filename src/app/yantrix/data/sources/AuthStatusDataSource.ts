@@ -13,8 +13,8 @@ interface AuthStatusPacket {
  * Boot-time auth status source.
  *
  * On `start()`, checks `localStorage[playerId]`. If present, queues a microtask
- * that emits a single `AuthStatusPacket` — the inherited notifier fires the
- * bridge's `scheduleDrain`, which publishes `session_restored` to the bus.
+ * that enqueues a single `AuthStatusPacket`; CoreLoop drains it on its tick and
+ * publishes `session_restored` to the bus.
  */
 export class AuthStatusDataSource extends AbstractWindowDataSource<AuthStatusPacket> {
 	#started = false;
@@ -42,9 +42,8 @@ export class AuthStatusDataSource extends AbstractWindowDataSource<AuthStatusPac
 		);
 		if (!storedPlayerId) return this;
 
-		// Defer one microtask so the bus bridge has finished binding its
-		// `setNotifier` before we emit — otherwise the inherited emit would
-		// push into the queue with no notifier yet attached.
+		// Defer one microtask so the boot event is enqueued after startYantrixCore
+		// finishes wiring all sources and destinations (so Navigation is registered).
 		queueMicrotask(() => {
 			if (!this.isActive()) return;
 			fsmLogger()?.logSourceFire(

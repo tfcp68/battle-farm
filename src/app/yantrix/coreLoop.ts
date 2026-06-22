@@ -1,4 +1,4 @@
-import { CoreLoop } from '@yantrix/core';
+import { TimedCoreLoop } from '@yantrix/core';
 import WindowModeAutomata, {
 	eventDictionary as modeEvents,
 	statesDictionary as modeStates
@@ -37,7 +37,7 @@ export type Machines = Record<string, {
 	id: string;
 }>;
 
-let loop: CoreLoop<EventId, Record<number, unknown>> | null = null;
+let loop: TimedCoreLoop<EventId, Record<number, unknown>> | null = null;
 let machines: Machines | null = null;
 
 if (import.meta.hot) {
@@ -51,7 +51,7 @@ if (import.meta.hot) {
 export function startYantrixCore(deps: { services: Services; queryClient: QueryClient }): Machines {
 	if (loop && machines) return machines;
 
-	loop = new CoreLoop<EventId, Record<number, unknown>>();
+	loop = new TimedCoreLoop<EventId, Record<number, unknown>>();
 
 	const modeFSM = new WindowModeAutomata();
 	const menuFSM = new WindowMenuAutomata();
@@ -79,8 +79,8 @@ export function startYantrixCore(deps: { services: Services; queryClient: QueryC
 	loop.start();
 
 	// ── Sources ───────────────────────────────────────────────────────────────
-	// CoreLoop pumps its `eventEmitter()` generator,
-	// woken by the inherited `setNotifier` after each push into any registered source. Each source transforms its own input events
+	// Each source only enqueues events; CoreLoop drains every source's `eventEmitter()`
+	// generator on its tick and publishes to the bus.
 
 	loop.registerSource(new UIBridgeDataSource());
 	loop.registerSource(new QueryDomainDataSource({ queryClient: deps.queryClient }));
