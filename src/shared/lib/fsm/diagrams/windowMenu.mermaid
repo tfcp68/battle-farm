@@ -1,0 +1,86 @@
+stateDiagram-v2
+    [*] --> UNAUTHENTICATED
+    UNAUTHENTICATED --> AUTHENTICATING: AUTH_REQUESTED (mode, nickname, password)
+    AUTH_FAILED --> AUTHENTICATING: AUTH_REQUESTED (mode, nickname, password)
+    AUTHENTICATING --> INTRO: AUTH_SUCCEEDED (playerId)
+    AUTHENTICATING --> AUTH_FAILED: FAIL_AUTH (error)
+    UNAUTHENTICATED --> MAIN_MENU: SESSION_RESTORED (playerId)
+    AUTHENTICATING --> MAIN_MENU: SESSION_RESTORED (playerId)
+    INTRO --> MAIN_MENU: TO_MENU
+    MAIN_MENU --> UNAUTHENTICATED: SIGN_OUT
+    GAME_LOBBY --> MAIN_MENU: EXIT
+    MAIN_MENU --> JOIN_REQUEST: JOIN_GAME (gameId, lobbyId)
+    JOIN_REQUEST --> MAIN_MENU: CANCEL
+    JOIN_REQUEST --> MAIN_MENU: REJECTED
+    JOIN_REQUEST --> MAIN_MENU: TIMED_OUT
+    JOIN_REQUEST --> GAME_LOBBY: REQUEST_ACCEPTED(gameId, lobbyId)
+    MAIN_MENU --> GAME_LOBBY: CREATE_GAME (gameId, isHost = 1, lobbyId)
+    MAIN_MENU --> GAME_LOBBY: RE_ENTER_LOBBY (gameId, lobbyId)
+    GAME_LOBBY --> GAME_STARTING: START_GAME (gameId, playerIds)
+    GAME_LOBBY --> GAME_LOBBY: APPROVE_REQUEST
+    GAME_LOBBY --> GAME_LOBBY: REJECT_REQUEST
+    GAME_LOBBY --> GAME_LOBBY: CREATE_GAME (gameId, isHost = 1, lobbyId)
+    GAME_STARTING --> IN_GAME: [-]
+    IN_GAME --> SCORE_SCREEN: END_GAME (scoreBoard)
+    IN_GAME --> MAIN_MENU: ERROR
+    IN_GAME --> MAIN_MENU: EXIT
+    SCORE_SCREEN --> MAIN_MENU: EXIT
+
+note right of UNAUTHENTICATED
++Init
+end note
+
+note right of [*]
+#{playerId = getPlayerId(), authError = 0, timedOut = 0}
+subscribe/auth_requested AUTH_REQUESTED ($mode, $nickname, $password)
+subscribe/auth_succeeded AUTH_SUCCEEDED ($playerId)
+subscribe/auth_failed FAIL_AUTH ($error)
+subscribe/auth_signed_out SIGN_OUT
+subscribe/session_restored SESSION_RESTORED ($playerId)
+subscribe/request_rejected REJECTED
+subscribe/request_timeout TIMED_OUT ($timedOut = 1)
+subscribe/intro_complete TO_MENU
+subscribe/cancel_game_request CANCEL
+subscribe/join_game_request JOIN_GAME ($gameId, $lobbyId)
+subscribe/mode_join_accepted REQUEST_ACCEPTED ($gameId, $lobbyId)
+subscribe/lobby_created CREATE_GAME ($gameId, $isHost = 1, $lobbyId)
+subscribe/re_enter_lobby RE_ENTER_LOBBY ($gameId, $lobbyId)
+subscribe/game_start START_GAME ($gameId, $playerIds)
+subscribe/game_end END_GAME ($scoreBoard)
+subscribe/player_exit EXIT
+subscribe/player_cancel CANCEL
+subscribe/lobby_closed EXIT
+subscribe/lobby_request_approved APPROVE_REQUEST
+subscribe/lobby_request_rejected REJECT_REQUEST
+end note
+
+note right of INTRO
+#{playerId} <= $playerId
+end note
+
+note right of AUTH_FAILED
+#{authError} <= $error
+end note
+
+note right of MAIN_MENU
+#{playerId, timedOut} <= coalesce($playerId, #playerId), coalesce($timedOut, 0)
+end note
+
+note left of GAME_LOBBY
+#{ gameId, isHost, lobbyId } <= $gameId, $isHost = 0, $lobbyId
+emit/join_lobby ($gameId, $playerId, $isHost, $lobbyId)
+end note
+
+note right of JOIN_REQUEST
+#{gameId, lobbyId, timedOut} <= $gameId, $lobbyId, 0
+end note
+
+note left of GAME_STARTING
++ByPass
+#{gameId, playerIds} <= $gameId, $playerIds
+emit/game_started ($gameId, $playerIds, #lobbyId)
+end note
+
+note right of SCORE_SCREEN
+#{scoreBoard} <= $scoreBoard
+end note

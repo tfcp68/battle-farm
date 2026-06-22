@@ -1,0 +1,27 @@
+stateDiagram-v2
+    [*]-->IN_MENU: RESET
+    IN_MENU --> CREATING_GAME: CREATE_LOBBY (gameId=get_game_id())
+    IN_MENU-->IN_MENU: SELECT (index)
+    CREATING_GAME --> IN_LOBBY: [-]
+%%    CREATING_GAME-->IN_MENU: ERROR
+    IN_MENU --> GAME_JOIN: JOIN_GAME
+    GAME_JOIN --> GAME_JOIN_PENDING: JOINING_GAME (gameId)
+    GAME_JOIN-->GAME_JOIN: ENTER_GAME_ID (gameId)
+    GAME_JOIN_PENDING --> IN_LOBBY: LOBBY_JOINED (gameId)
+    GAME_JOIN_PENDING --> GAME_JOIN: ERROR
+
+note right of [*]
+subscribe/menu_join_accepted LOBBY_JOINED (#gameId)
+#{selectedIndex=-1}
+end note
+note left of IN_MENU
+#{selectedIndex} <= coalesce($index, #selectedIndex)
+end note
+note left of GAME_JOIN
+#{gameId} <= coalesce($gameId, #gameId)
+end note
+note right of CREATING_GAME
++ByPass
+#{gameId} <= $gameId
+emit/lobby_created (#gameId)
+end note

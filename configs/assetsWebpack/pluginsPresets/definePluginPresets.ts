@@ -1,5 +1,5 @@
 import { extTypes, TAssetNamesKeys } from '../../../src/types/build/assetBuilderTypes';
-import { TUIAllSizes } from '../../../frontend/constants/assetSizes';
+import { TUIAllSizes } from '../../../src/constants/assetSizes';
 import { getPresetName } from '../uitls';
 
 export const GetPresetsDefinePlugin = (sizes: TUIAllSizes, assetType: TAssetNamesKeys) => {

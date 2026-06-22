@@ -1,7 +1,7 @@
 import * as webpack from 'webpack';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import { getPresets } from './pluginsPresets/ImageMinimizerPresets';
-import { UICardSize, UIClassSize } from '../../frontend/constants/assetSizes';
+import { UICardSize, UIClassSize } from '../../src/constants/assetSizes';
 import * as path from 'path';
 import { ROOT_DIR } from '../paths';
 import { GetPresetsDefinePlugin } from './pluginsPresets/definePluginPresets';

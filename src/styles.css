@@ -1,0 +1,192 @@
+:root {
+    color-scheme: dark;
+    --bg: #0f1115;
+    --panel: #171a21;
+    --muted: #99a2b2;
+    --text: #eef1f7;
+    --accent: #4fd1c5;
+    --accent-2: #63b3ed;
+    --danger: #fc8181;
+    --warn: #f6ad55;
+    --ok: #68d391;
+    --border: #2a2f3a;
+
+    --space-1: 6px;
+    --space-2: 10px;
+    --space-3: 14px;
+    --radius: 10px;
+
+    --content-max: 1040px;
+}
+
+* { box-sizing: border-box }
+html, body, #root { height: 100% }
+
+body {
+    margin: 0;
+    color: var(--text);
+    font: 13px/1.45 ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji';
+    /* static background (original) */
+    background: radial-gradient(1200px 800px at 20% -10%, #1c2030, #0f1115 60%);
+}
+
+a { color: var(--accent) }
+a.active { color: var(--accent-2) }
+
+.app-shell { display: grid; grid-template-rows: auto 1fr; min-height: 100% }
+
+.topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--space-2) var(--space-3);
+    border-bottom: 1px solid var(--border); background: rgba(23,26,33,0.8);
+    backdrop-filter: blur(8px);
+    font-size: 13px;
+}
+.brand { font-weight: 700; letter-spacing: 0.5px }
+.nav { display: flex; gap: var(--space-1) }
+.nav a { text-decoration: none; padding: 4px 6px; border-radius: 6px; background: transparent }
+.nav a.active { background: rgba(79,209,197,0.12) }
+
+.content {
+    padding: var(--space-3);
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--content-max);
+    margin: 0 auto;
+}
+.content.compact { padding: var(--space-2); gap: var(--space-2) }
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: var(--space-2);
+    display: grid;
+    gap: var(--space-2);
+}
+
+.grid { display: grid; gap: var(--space-2) }
+.row { display: flex; gap: var(--space-1); flex-wrap: wrap; align-items: center }
+.section-title { font-weight: 700; opacity: 0.9; font-size: 14px }
+
+.state-badge {
+    display: inline-flex; gap: 6px; align-items: center;
+    background: #12151c; border: 1px solid var(--border);
+    border-radius: 999px; padding: 4px 8px; width: max-content; font-size: 11px;
+}
+.state-badge-label { color: var(--muted); font-size: 10px; letter-spacing: 0.6px; text-transform: uppercase }
+.state-badge-value { color: var(--accent-2); font-weight: 700 }
+
+button {
+    border: 1px solid var(--border);
+    background: #0f141b; color: var(--text);
+    border-radius: 8px; padding: 8px 10px; cursor: pointer; font-size: 13px;
+    transition: transform .05s ease, box-shadow .15s ease;
+}
+button:hover { box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 6px 18px rgba(0,0,0,0.25) }
+button:active { transform: translateY(1px) }
+button.primary { border-color: rgba(79,209,197,0.5); background: rgba(79,209,197,0.12) }
+button.warn { border-color: rgba(246,173,85,0.5); background: rgba(246,173,85,0.12) }
+button.danger { border-color: rgba(252,129,129,0.5); background: rgba(252,129,129,0.12) }
+button.ok { border-color: rgba(104,211,145,0.5); background: rgba(104,211,145,0.12) }
+
+@media (max-width: 560px) {
+    button { min-width: 100% }
+}
+
+.field { display: grid; gap: 4px; min-width: 200px }
+.field-label { color: var(--muted); font-size: 11px }
+.field-input {
+    border: 1px solid var(--border); background: #0f141b; color: var(--text);
+    border-radius: 8px; padding: 6px 8px; outline: none; font-size: 13px;
+}
+
+hr { border: 0; border-top: 1px solid var(--border); margin: 6px 0 }
+small.muted { color: var(--muted); font-size: 12px }
+.table { width: 100%; border-collapse: collapse; font-size: 12px }
+.table th, .table td { border: 1px solid var(--border); padding: 6px 8px }
+
+/* Scroll container for tables (e.g. lobbies list) */
+.table-scroll {
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+.table-scroll .table thead th {
+    position: sticky;
+    top: 0;
+    background: var(--panel);
+    z-index: 1;
+}
+
+/* Auth/Register centered card */
+.auth-page { min-height: calc(100dvh - 56px); display: grid; place-items: center; }
+.auth-card {
+    width: 380px; max-width: 92vw; background: var(--panel);
+    border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; display: grid; gap: 10px;
+}
+.auth-card .field { min-width: 0; width: 100% }
+.auth-card .actions { display: grid; gap: 8px; }
+.auth-card .actions button { min-width: 100% }
+
+/* Menu: single centered card with vertical stack */
+.menu-page { min-height: calc(100dvh - 56px); display: grid; place-items: center; }
+.menu-card {
+    width: 600px; max-width: 92vw;
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 16px; display: grid; gap: 12px; justify-items: center;
+}
+.menu-card .field { width: 100%; }
+.menu-card .actions { display: grid; gap: 8px; width: 100%; justify-items: center; }
+
+/* Always-visible Dev panel (top-left) */
+.dev-fixed {
+    position: fixed;
+    top: 56px; /* below header */
+    right: 20px;
+    width: 360px;
+    height: calc(100dvh - 56px);
+    background: #0e1117;
+    border-right: 1px solid var(--border);
+    box-shadow: 6px 0 24px rgba(0,0,0,0.35);
+    z-index: 10;
+    display: grid;
+}
+.dev-fixed-inner {
+    padding: 12px;
+    overflow: auto;
+    display: grid;
+    gap: 8px;
+}
+
+
+/* Intro splash overlay */
+.intro-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    pointer-events: none;
+    display: grid;
+    place-items: center;
+    background: transparent;
+}
+
+.intro-title {
+    font-size: 64px; /* bigger for full-screen intro */
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    color: var(--text);
+    text-shadow: 0 6px 28px rgba(0,0,0,0.55);
+    animation: bf-fade-in-out 6s ease forwards;
+}
+
+@keyframes bf-fade-in-out {
+    0% { opacity: 0; transform: scale(0.98) }
+    10% { opacity: 1; transform: scale(1) }
+    70% { opacity: 1; transform: scale(1) }
+    100% { opacity: 0; transform: scale(1.02) }
+}

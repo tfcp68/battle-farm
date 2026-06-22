@@ -1,4 +1,4 @@
-import { TUIAllSizes } from '../../../frontend/constants/assetSizes';
+import { TUIAllSizes } from '../../../src/constants/assetSizes';
 import * as ImageMinimizerPlugin from 'image-minimizer-webpack-plugin';
 import { extTypes, TAssetNamesKeys } from '../../../src/types/build/assetBuilderTypes';
 import { getPresetName } from '../uitls';
