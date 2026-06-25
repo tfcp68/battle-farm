@@ -1,0 +1,16 @@
+stateDiagram-v2
+    [*] --> WAITING
+    note right of [*]
+        inject/isLastTurn
+        #{lastTurn = 0}
+    end note
+    WAITING --> HARVEST
+    HARVEST --> SHOPPING
+    SHOPPING --> TRADE
+    TRADE --> PLAYING
+    PLAYING --> FERTILIZE
+    FERTILIZE --> CALCULATION
+    state isLastTurn <<choice>>
+    CALCULATION --> isLastTurn
+    isLastTurn --> [*]: isLastTurn(#lastTurn)
+    isLastTurn --> WAITING

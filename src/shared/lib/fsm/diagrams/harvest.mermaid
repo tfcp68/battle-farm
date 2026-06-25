@@ -1,0 +1,33 @@
+stateDiagram-v2
+    [*] --> IDLE: RESET
+    note right of [*]
+        inject/hasRipeCrops
+        inject/hasHarvestEffect
+        #{crops = []}
+    end note
+    note left of IDLE
+        emit/harvestNextPlant
+        emit/disableTargetMode
+        subscribe/harvestNextPlant HARVEST
+    end note
+    state hasRipeCrops <<choice>>
+    IDLE --> hasRipeCrops: HARVEST
+    hasRipeCrops --> HARVESTING: hasRipeCrops(#crops)
+    FINISHED --> [*]
+    hasRipeCrops --> FINISHED
+    state hasHarvestEffect <<choice>>
+    HARVESTING --> hasHarvestEffect: CROP_HARVESTED (crop)
+    hasHarvestEffect --> EFFECT_TARGETING: hasHarvestEffect($crop)
+    hasHarvestEffect --> IDLE
+    note right of EFFECT_TARGETING
+        emit/enableTargetMode
+        subscribe/forceEndPhase SKIP
+    end note
+    EFFECT_TARGETING --> EFFECT_APPLIANCE: EFFECT_APPLIED (Crop)
+    note right of EFFECT_APPLIANCE
+        emit/disableTargetMode
+        emit/applyEffect
+        subscribe/applyEffect EFFECT_APPLIED
+    end note
+    EFFECT_APPLIANCE --> IDLE: EFFECT_APPLIED
+    EFFECT_TARGETING --> IDLE: SKIP

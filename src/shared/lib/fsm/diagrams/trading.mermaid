@@ -1,0 +1,44 @@
+stateDiagram-v2
+    [*] --> IDLE: RESET
+    note right of [*]
+        inject/hasCardsInHand
+        inject/hasTradeOffers
+        #{hand = []}
+    end note
+    note left of IDLE
+        emit/startTradeCollection
+        subscribe/startTradeCollection START_COLLECT
+    end note
+    state hasCardsInHand <<choice>>
+    IDLE --> hasCardsInHand: START_COLLECT
+    hasCardsInHand --> COLLECT: hasCardsInHand(#hand)
+    note left of COLLECT
+        emit/enableTargetMode (#CARD_OWN)
+    end note
+    COLLECT --> COLLECT: HOVER (index)
+    COLLECT --> COLLECT: ADD_CARD_TO_TRADE (index)
+    COLLECT --> COLLECT: REMOVE_CARD_FROM_TRADE (index)
+    hasCardsInHand --> FINISHED
+    COLLECT --> FINISHED: SKIP
+    COLLECT --> OFFERS_WAITING: SEND_TRADE
+    note left of OFFERS_WAITING
+        emit/startTrade
+        emit/disableTargetMode
+        subscribe/tradeOffersGathered GATHER_OFFERS
+        subscribe/forceEndPhase SKIP
+    end note
+    state hasOffers <<choice>>
+    OFFERS_WAITING --> hasOffers: GATHER_OFFERS (offers)
+    hasOffers --> OFFERS_CHOOSING: hasTradeOffers($offers)
+    hasOffers --> FINISHED
+    note left of OFFERS_CHOOSING
+        subscribe/forceEndPhase SKIP
+    end note
+    OFFERS_CHOOSING --> FINISHED: SKIP
+    OFFERS_CHOOSING --> OFFER_ACCEPTED: ACCEPT_OFFER (player)
+    note left of OFFER_ACCEPTED
+        emit/completeTrade
+        subscribe/completeTrade ACCEPT_OFFER
+    end note
+    OFFER_ACCEPTED --> FINISHED: ACCEPT_OFFER
+    FINISHED --> [*]

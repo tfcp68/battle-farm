@@ -1,0 +1,56 @@
+stateDiagram-v2
+    direction LR
+    [*] --> FOE
+    [*] --> PLAYER
+    [*] --> BED_FOE
+    [*] --> BED_OWN
+    [*] --> BED_ANY
+    [*] --> BED_EMPTY
+    [*] --> CROP_FOE
+    [*] --> CROP_OWN
+    [*] --> CROP_ANY
+    [*] --> CARD_OWN
+    [*] --> CARD_MARKET
+    [*] --> CARD_DISCARDED
+    [*] --> CROP_COLOR
+    FOE --> FINISHED: CHOOSE_PLAYER (index)
+    FOE --> FOE: HOVER (class)
+    FOE --> [*]: QUIT
+    PLAYER --> FINISHED: CHOOSE_PLAYER (class)
+    PLAYER --> PLAYER: HOVER (class)
+    PLAYER --> [*]: QUIT
+    BED_FOE --> FINISHED: CHOOSE_BED (class,index)
+    BED_FOE --> BED_FOE: HOVER (class, index)
+    BED_FOE --> [*]: QUIT
+    BED_OWN --> FINISHED: CHOOSE_BED (self,index)
+    BED_OWN --> BED_OWN: HOVER (self, index)
+    BED_OWN --> [*]: QUIT
+    BED_ANY --> FINISHED: CHOOSE_BED (class,index)
+    BED_ANY --> BED_ANY: HOVER (class, index)
+    BED_ANY --> [*]: QUIT
+    BED_EMPTY --> FINISHED: CHOOSE_BED (self,index)
+    BED_EMPTY --> BED_EMPTY: HOVER (self, index)
+    BED_EMPTY --> [*]: QUIT
+    CROP_FOE --> FINISHED: CHOOSE_CROP (class,index)
+    CROP_FOE --> CROP_FOE: HOVER (class, index)
+    CROP_FOE --> [*]: QUIT
+    CROP_OWN --> FINISHED: CHOOSE_CROP (self,index)
+    CROP_OWN --> CROP_OWN: HOVER (self, index)
+    CROP_OWN --> [*]: QUIT
+    CROP_ANY --> FINISHED: CHOOSE_CROP (class,index)
+    CROP_ANY --> CROP_ANY: HOVER (class, index)
+    CROP_ANY --> [*]: QUIT
+    CARD_OWN --> FINISHED: CHOOSE_CARD (index)
+    CARD_OWN --> CARD_OWN: HOVER (index)
+    CARD_OWN --> [*]: QUIT
+    CARD_DISCARDED --> FINISHED: CHOOSE_CARD (index)
+    CARD_DISCARDED --> CARD_DISCARDED: HOVER (index)
+    CARD_DISCARDED --> [*]: QUIT
+    CARD_MARKET --> FINISHED: CHOOSE_MARKET_SLOT (index)
+    CARD_MARKET --> CARD_MARKET: HOVER (index)
+    CARD_MARKET --> [*]: QUIT
+    CROP_COLOR --> FINISHED: CHOOSE_COLOR (color)
+    CROP_COLOR --> CROP_COLOR: HOVER (index)
+    CROP_COLOR --> [*]: QUIT
+    FINISHED --> [*]
+    end

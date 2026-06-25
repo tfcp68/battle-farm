@@ -1,6 +1,6 @@
 stateDiagram-v2
     [*]-->IN_MENU: RESET
-    IN_MENU --> CREATING_GAME: CREATE_LOBBY (gameId=get_game_id())
+    IN_MENU --> CREATING_GAME: CREATE_LOBBY (gameId)
     IN_MENU-->IN_MENU: SELECT (index)
     CREATING_GAME --> IN_LOBBY: [-]
 %%    CREATING_GAME-->IN_MENU: ERROR

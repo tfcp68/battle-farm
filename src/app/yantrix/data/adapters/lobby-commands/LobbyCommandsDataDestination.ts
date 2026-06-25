@@ -2,7 +2,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { createDataDestinationAdapter, NamedDataDestination, type TAutomataEventMetaType, uniqId } from '@yantrix/core';
 import type { Services } from '~/shared/services/createServices';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
-import { getPlayerId } from '~/app/yantrix/register-functions';
+import { getPlayerId } from '~/shared/lib/fsm/functions';
 import { parseEventMeta } from '~/app/yantrix/eventSchemas';
 import { LobbyNotOpenError } from '~/entities/lobby/LobbyNotOpenError';
 import type { WindowEventId, WindowEventMetaMap } from '~/app/yantrix/types';

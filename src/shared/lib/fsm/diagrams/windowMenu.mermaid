@@ -31,6 +31,7 @@ note right of UNAUTHENTICATED
 end note
 
 note right of [*]
+inject/getPlayerId
 #{playerId = getPlayerId(), authError = 0, timedOut = 0}
 subscribe/auth_requested AUTH_REQUESTED ($mode, $nickname, $password)
 subscribe/auth_succeeded AUTH_SUCCEEDED ($playerId)

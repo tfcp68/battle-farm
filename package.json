@@ -5,11 +5,12 @@
   "description": "Implementation of a board game, designed with help of ChatGPT and Midjourney",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "tsc -b && vite build",
+    "codegen:fsm": "bash ./generateFsmWindow.sh",
+    "dev": "pnpm codegen:fsm && vite --host 0.0.0.0",
+    "build": "pnpm codegen:fsm && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest",
+    "test": "pnpm codegen:fsm && jest",
     "start": "cross-env NODE_ENV=development  webpack serve --config configs/webpack/webpack.config.ts",
     "generate-images": "webpack --progress --config configs/assetsWebpack/webpack_assets.config.ts && node assets/thumbs/dictGenerate.js && npx rimraf assets/thumbs/dictGenerate.js",
     "generate-types-supabase": "supabase gen types typescript --project-id imvkzmntmhxlqmzsuilw > src/types/supabase.ts"
