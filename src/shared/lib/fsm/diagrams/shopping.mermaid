@@ -1,0 +1,35 @@
+stateDiagram-v2
+    [*] --> IDLE: RESET
+    note right of [*]
+        inject/hasCoinsForTrade
+
+        #{coins = 0, marketPrices = []}
+    end note
+    note right of IDLE
+        emit/browseMarket
+        subscribe/browseMarket START_TRADE
+    end note
+    state hasMoney <<choice>>
+    IDLE --> hasMoney: START_TRADE
+    hasMoney --> TRADING: hasCoinsForTrade(#coins, #marketPrices)
+    FINISHED --> [*]
+    hasMoney --> FINISHED
+    note right of TRADING
+        emit/enableTargetMode (#CARD_MARKET)
+        subscribe/forceEndPhase SKIP
+    end note
+    TRADING --> FINISHED: SKIP
+    TRADING --> TRADING: HOVER (index)
+    TRADING --> CONFIRM_TRADE: CHOOSE_MARKET_SLOT (index)
+    note right of CONFIRM_TRADE
+        subscribe/forceEndPhase SKIP
+        emit/disableTargetMode
+    end note
+    CONFIRM_TRADE --> FINISHED: SKIP
+    CONFIRM_TRADE --> hasMoney: CANCEL_SELECTION
+    CONFIRM_TRADE --> ACCEPTING_TRADE: CONFIRM_DEAL (index)
+    ACCEPTING_TRADE --> hasMoney: START_TRADE
+    note right of ACCEPTING_TRADE
+        emit/startMarketAcquisition
+        subscribe/completeMarketAcquisition START_TRADE
+    end note

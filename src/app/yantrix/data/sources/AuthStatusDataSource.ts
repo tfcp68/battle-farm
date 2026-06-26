@@ -1,6 +1,6 @@
 import { uniqId } from '@yantrix/core';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
-import { getPlayerId } from '~/app/yantrix/register-functions';
+import { getPlayerId } from '~/shared/lib/fsm/functions';
 import { fsmLogger } from '~/shared/lib/fsm/devLogger';
 import { AbstractWindowDataSource, type FollowUp } from '../shared/AbstractWindowDataSource';
 

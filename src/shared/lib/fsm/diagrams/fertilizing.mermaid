@@ -1,0 +1,54 @@
+stateDiagram-v2
+    [*] --> IDLE: RESET
+    note right of [*]
+        inject/canFertilize
+        inject/hasFertilizeEffect
+        #{fertilizers = 0, crops = []}
+    end note
+    note right of IDLE
+        emit/disableTargetMode
+        emit/startFertilize
+        subscribe/startFertilize START_FERTILIZE
+    end note
+    state canApply <<choice>>
+    IDLE --> canApply: START_FERTILIZE
+    canApply --> CROP_SELECTION: canFertilize(#fertilizers, #crops)
+    canApply --> FINISHED
+    note left of CROP_SELECTION
+        emit/enableTargetMode (#CROP_OWN)
+        subscribe/forceEndPhase SKIP
+    end note
+    CROP_SELECTION --> CROP_SELECTION: HOVER
+    CROP_SELECTION --> FINISHED: SKIP
+    CROP_SELECTION --> CROP_CONFIRM: CHOOSE_CROP
+    note left of CROP_CONFIRM
+        emit/disableTargetMode
+    end note
+    state hasFertilizeEffect <<choice>>
+    CROP_CONFIRM --> FINISHED: SKIP
+    CROP_CONFIRM --> CROP_SELECTION: CANCEL_SELECTION
+    CROP_CONFIRM --> CROP_FERTILIZED: FERTILIZE (crop)
+    note right of CROP_FERTILIZED
+        emit/cropFertilized
+        subscribe/cropFertilized FERTILIZE
+    end note
+    CROP_FERTILIZED --> hasFertilizeEffect: FERTILIZE (crop)
+    hasFertilizeEffect --> EFFECT_TARGETING: hasFertilizeEffect($crop)
+    hasFertilizeEffect --> canApply
+    note left of EFFECT_TARGETING
+        emit/enableTargetMode
+        subscribe/forceEndPhase SKIP
+    end note
+    EFFECT_TARGETING --> canApply: CANCEL_SELECTION
+    EFFECT_TARGETING --> FINISHED: SKIP
+    EFFECT_TARGETING --> EFFECT_APPLIANCE: APPLY_EFFECT
+    note right of EFFECT_APPLIANCE
+        emit/disableTargetMode
+        emit/applyEffect
+        subscribe/applyEffect EFFECT_APPLIED
+    end note
+    EFFECT_APPLIANCE --> canApply: APPLY_EFFECT
+    FINISHED --> [*]
+    note left of FINISHED
+        emit/disableTargetMode
+    end note

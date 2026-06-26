@@ -11,3 +11,10 @@ assets/thumbs/dictGenerate.js
 packages/
 .claude
 CLAUDE.md
+
+tsconfig.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+src/shared/lib/fsm/window/
+src/shared/lib/fsm/game/

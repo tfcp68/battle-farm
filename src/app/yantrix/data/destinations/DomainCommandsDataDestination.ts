@@ -2,7 +2,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { uniqId } from '@yantrix/core';
 import type { Services } from '~/shared/services/createServices';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
-import { getPlayerId } from '~/app/yantrix/register-functions';
+import { getPlayerId } from '~/shared/lib/fsm/functions';
 import { parseEventMeta } from '~/app/yantrix/eventSchemas';
 import { AbstractWindowDataDestination, type DomainEvent } from '../shared/AbstractWindowDataDestination';
 

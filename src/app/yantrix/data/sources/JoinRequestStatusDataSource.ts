@@ -2,7 +2,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { uniqId } from '@yantrix/core';
 import WindowModeAutomata from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
-import { getPlayerId } from '~/app/yantrix/register-functions';
+import { getPlayerId } from '~/shared/lib/fsm/functions';
 import { lobbyKeys } from '~/entities/lobby/queries';
 import supabase from '~/shared/api/connect';
 import type { Services } from '~/shared/services/createServices';
