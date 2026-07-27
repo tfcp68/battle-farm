@@ -1,8 +1,7 @@
 import type { TLobbySettings } from '~/shared/types/types';
 
-type AnyPlayer = { playerId?: string | null; nickname?: string | null };
-type AnyLobbyPlayer = { playerId?: string | null };
-type AnyRequest = { id: string; playerId: string; status: string };
+type AnyLobbyPlayer = { playerId?: string | null; nickname?: string | null };
+type AnyRequest = { id: string; playerId: string; status: string; nickname?: string | null };
 
 export function selectIsHost(
 	hostPlayerId: string | null | undefined,
@@ -21,11 +20,12 @@ export function selectPlayerIds(
 	return Array.from(ids);
 }
 
+/** Nicknames now travel with the room roster, so the map is built from it. */
 export function selectNicknameById(
-	allPlayers: AnyPlayer[],
+	lobbyPlayers: AnyLobbyPlayer[],
 ): Record<string, string> {
 	const map: Record<string, string> = {};
-	for (const p of allPlayers) {
+	for (const p of lobbyPlayers) {
 		if (p.playerId && p.nickname) map[p.playerId] = p.nickname;
 	}
 	return map;

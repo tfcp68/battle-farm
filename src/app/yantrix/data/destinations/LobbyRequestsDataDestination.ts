@@ -3,6 +3,7 @@ import { uniqId } from '@yantrix/core';
 import type { Services } from '~/shared/services/createServices';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 import { parseEventMeta } from '~/app/yantrix/eventSchemas';
+import { lobbyKeys } from '~/entities/lobby/keys';
 import {
 	AbstractWindowDataDestination,
 	type DomainEvent,
@@ -13,12 +14,9 @@ type LobbyRequestPacket =
 	| { kind: 'reject'; requestId: string; lobbyId: string };
 
 /**
- * Approves or rejects a lobby join request — fire-and-forget. Replaces
- * `defineDestination`-style `createLobbyRequestsDestination`.
- *
- * On approval, performs a **capacity guard**: if the lobby is already full,
- * auto-rejects instead. The original handler did this inline; here it's
- * encapsulated in the `approve` branch of `resolve`.
+ * Host-side verdict on a join request. The capacity check lives in
+ * `HostRoom.approve` instead: it holds the authoritative roster, so it is the
+ * only place that can decide without racing another approval.
  */
 export class LobbyRequestsDataDestination extends AbstractWindowDataDestination<LobbyRequestPacket> {
 	readonly #services: Services;
@@ -46,33 +44,16 @@ export class LobbyRequestsDataDestination extends AbstractWindowDataDestination<
 
 	protected async resolve(packet: LobbyRequestPacket): Promise<null> {
 		const lobbies = this.#services.controllers.lobbies;
-		const qc = this.#queryClient;
 
-		if (packet.kind === 'reject') {
-			await lobbies.rejectRequest(packet.requestId);
-			await qc.invalidateQueries({
-				queryKey: ['lobbies', 'requests', 'byLobby', packet.lobbyId],
-			});
-			return null;
-		}
+		if (packet.kind === 'approve') await lobbies.approveRequest(packet.requestId);
+		else await lobbies.rejectRequest(packet.requestId);
 
-		// Capacity guard — auto-reject if the lobby is already full.
-		const [lobby, currentPlayers] = await Promise.all([
-			lobbies.getByLobbyId(packet.lobbyId),
-			lobbies.listPlayersByLobbyId(packet.lobbyId),
-		]);
-		if (lobby && currentPlayers.length >= lobby.maxPlayers) {
-			await lobbies.rejectRequest(packet.requestId);
-			await qc.invalidateQueries({
-				queryKey: ['lobbies', 'requests', 'byLobby', packet.lobbyId],
-			});
-			return null;
-		}
-
-		await lobbies.approveRequest(packet.requestId);
-		await qc.invalidateQueries({ queryKey: ['lobbies', 'players', 'byLobby', packet.lobbyId] });
-		await qc.invalidateQueries({ queryKey: ['lobbies', 'requests', 'byLobby', packet.lobbyId] });
-		await qc.invalidateQueries({ queryKey: ['lobbies', 'lobby', 'byId', packet.lobbyId] });
+		await this.#queryClient.invalidateQueries({
+			queryKey: lobbyKeys.requestsByLobbyId(packet.lobbyId),
+		});
+		await this.#queryClient.invalidateQueries({
+			queryKey: lobbyKeys.playersByLobbyId(packet.lobbyId),
+		});
 		return null;
 	}
 }

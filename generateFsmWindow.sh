@@ -13,7 +13,12 @@ FUNCTIONS_IMPORT="~/shared/lib/fsm/functions"
 
 YANTRIX_CLI_VERSION="${YANTRIX_CLI_VERSION:-0.5.4}"
 
-if command -v yantrix >/dev/null 2>&1; then
+# Prefer the CLI installed in node_modules — `pnpm dlx` resolves its own tree and
+# has been seen to miss transitive deps of the langium parser.
+LOCAL_CLI="node_modules/@yantrix/cli/bin/index.js"
+if [ -f "$LOCAL_CLI" ]; then
+  CODEGEN_CMD="node $LOCAL_CLI codegen"
+elif command -v yantrix >/dev/null 2>&1; then
   CODEGEN_CMD="yantrix codegen"
 elif command -v pnpm >/dev/null 2>&1; then
   CODEGEN_CMD="pnpm dlx @yantrix/cli@${YANTRIX_CLI_VERSION} codegen"

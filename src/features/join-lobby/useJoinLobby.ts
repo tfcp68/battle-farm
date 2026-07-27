@@ -1,14 +1,14 @@
 import { emitDomainEvent } from '~/app/yantrix/data/sources/UIBridgeDataSource';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
+import { normalizeRoomCode } from '~/shared/net/RoomTransport';
 
 export function useJoinLobby() {
 	return {
-		requestJoin(lobbyId: string, playerId: string) {
+		/** The room code is the lobby id — one room, one lobby, one identifier. */
+		joinByCode(code: string, playerId: string) {
 			emitDomainEvent(WindowDomainEvents.join_game_request, {
-				src: 'ui',
-				lobbyId,
+				lobbyId: normalizeRoomCode(code),
 				playerId,
-				gameId: null,
 			});
 		},
 		cancelJoin() {
@@ -16,4 +16,3 @@ export function useJoinLobby() {
 		},
 	};
 }
-

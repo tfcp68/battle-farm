@@ -10,7 +10,7 @@ const REJECTION_MESSAGE: Record<string, string> = {
 
 /** Discriminated packet — one shape per kind of toast. */
 type NotificationPacket =
-	| { kind: 'auth_failed'; error: string | undefined }
+	| { kind: 'connect_failed'; error: string | undefined }
 	| { kind: 'request_rejected'; reason: string | undefined }
 	| { kind: 'request_timeout' };
 
@@ -27,8 +27,8 @@ export class NotificationsDataDestination extends AbstractWindowDataDestination<
 		super({
 			id: opts.id ?? `notifications_${uniqId()}`,
 			triggers: {
-				[WindowDomainEvents.auth_failed]: (event: DomainEvent): NotificationPacket | null => ({
-					kind: 'auth_failed',
+				[WindowDomainEvents.room_connect_failed]: (event: DomainEvent): NotificationPacket | null => ({
+					kind: 'connect_failed',
 					error: parseEventMeta(event.meta).error,
 				}),
 				[WindowDomainEvents.request_rejected]: (event: DomainEvent): NotificationPacket | null => ({
@@ -44,8 +44,8 @@ export class NotificationsDataDestination extends AbstractWindowDataDestination<
 
 	protected resolve(packet: NotificationPacket): null {
 		switch (packet.kind) {
-			case 'auth_failed':
-				toast.error(packet.error ?? 'Authentication failed. Please try again.');
+			case 'connect_failed':
+				toast.error(packet.error ?? 'Could not connect to that room.');
 				break;
 			case 'request_rejected':
 				toast.error(

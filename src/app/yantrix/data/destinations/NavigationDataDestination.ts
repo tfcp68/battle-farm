@@ -2,6 +2,7 @@ import { uniqId } from '@yantrix/core';
 import WindowModeAutomata, { statesDictionary } from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { getStateName } from '~/shared/helpers/fsm';
 import { navigateTo } from '~/app/yantrix/navigationRef';
+import { ROUTE_BY_STATE_ID } from '~/app/routes';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
 import { fsmLogger } from '~/shared/lib/fsm/devLogger';
 import {
@@ -9,34 +10,21 @@ import {
 	type DomainEvent,
 } from '../shared/AbstractWindowDataDestination';
 
-// After the FSM transitions, read its state and map to the canonical route.
-// JOIN_REQUEST stays on /menu — the popup is an overlay, not a separate page.
-const ROUTE_BY_STATE: Record<string, string> = {
-	UNAUTHENTICATED: '/',
-	AUTHENTICATING: '/',
-	AUTH_FAILED: '/',
-	INTRO: '/intro',
-	MAIN_MENU: '/menu',
-	JOIN_REQUEST: '/menu',
-	GAME_LOBBY: '/lobby',
-	GAME_STARTING: '/lobby',
-	IN_GAME: '/game',
-	SCORE_SCREEN: '/score',
-};
-
 // Events that may trigger a route change (superset — false positives re-check the current state).
 const NAV_EVENTS = [
-	WindowDomainEvents.auth_succeeded,
-	WindowDomainEvents.auth_failed,
-	WindowDomainEvents.auth_signed_out,
+	WindowDomainEvents.profile_created,
+	WindowDomainEvents.profile_cleared,
 	WindowDomainEvents.session_restored,
 	WindowDomainEvents.intro_complete,
+	WindowDomainEvents.room_create_requested,
+	WindowDomainEvents.room_connected,
+	WindowDomainEvents.room_connect_failed,
 	WindowDomainEvents.lobby_created,
 	WindowDomainEvents.mode_join_accepted,
 	WindowDomainEvents.menu_join_accepted,
 	WindowDomainEvents.request_rejected,
 	WindowDomainEvents.request_timeout,
-	WindowDomainEvents.re_enter_lobby,
+	WindowDomainEvents.join_game_request,
 	WindowDomainEvents.cancel_game_request,
 	WindowDomainEvents.lobby_closed,
 	WindowDomainEvents.player_exit,
@@ -75,13 +63,15 @@ export class NavigationDataDestination extends AbstractWindowDataDestination<Nav
 	}
 
 	protected resolve(packet: NavigationPacket): null {
-		const stateName = getStateName(statesDictionary, this.#modeFSM.state);
-		if (!stateName) {
-			fsmLogger()?.logNavigationSkipped('modeFSM.state is null (no state name)');
+		const state = this.#modeFSM.state;
+		if (state === null) {
+			fsmLogger()?.logNavigationSkipped('modeFSM.state is null');
 			return null;
 		}
+		// Only for log messages — routing itself is keyed by state id.
+		const stateName = getStateName(statesDictionary, state) ?? String(state);
 
-		const route = ROUTE_BY_STATE[stateName];
+		const route = ROUTE_BY_STATE_ID[state];
 		if (!route) {
 			fsmLogger()?.logNavigationSkipped(`no route mapped for state=${stateName}`);
 		} else if (route === this.#lastRoute) {

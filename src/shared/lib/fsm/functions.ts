@@ -1,8 +1,11 @@
-import { CURRENT_PLAYER_ID_KEY } from '~/entities/auth/queries';
+import { getCurrentPlayerId } from '~/entities/profile/currentProfile';
 
+/**
+ * Injected into the mode FSM, which calls it synchronously while computing a
+ * transition — hence the in-memory mirror rather than a storage read.
+ */
 export function getPlayerId(): string | null {
-	if (typeof window === 'undefined') return null;
-	return window.localStorage.getItem(CURRENT_PLAYER_ID_KEY);
+	return getCurrentPlayerId();
 }
 
 type RipeCrop = { readonly reapTimer: number };

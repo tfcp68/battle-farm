@@ -2,7 +2,8 @@ import { Route, Routes } from 'react-router-dom';
 import MenuSubmodePage from '~/pages/MenuSubmodePage';
 import LobbySubmodePage from '~/pages/LobbySubmodePage';
 import IntroPage from '~/pages/IntroPage';
-import LoginPage from '~/pages/LoginPage';
+import ProfilePage from '~/pages/ProfilePage';
+import { AppRoutes } from '~/app/routes';
 import { Toaster } from '~/shared/ui/components/sonner';
 
 export default function App() {
@@ -15,12 +16,10 @@ export default function App() {
 			/>
 			<main className="content compact">
 				<Routes>
-					<Route path="/" element={<LoginPage />} />
-					<Route path="/intro" element={<IntroPage />} />
-					<Route path="/menu" element={<MenuSubmodePage />} />
-					<Route path="/lobby" element={<LobbySubmodePage />} />
-					{/*<Route path="/register" element={<RegisterPage />} />*/}
-					<Route path="/login" element={<LoginPage />} />
+					<Route path={AppRoutes.profile} element={<ProfilePage />} />
+					<Route path={AppRoutes.intro} element={<IntroPage />} />
+					<Route path={AppRoutes.menu} element={<MenuSubmodePage />} />
+					<Route path={AppRoutes.lobby} element={<LobbySubmodePage />} />
 				</Routes>
 			</main>
 		</div>
