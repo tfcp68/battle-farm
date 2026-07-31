@@ -2,20 +2,16 @@ import type { QueryClient } from '@tanstack/react-query';
 import { uniqId } from '@yantrix/core';
 import type { Services } from '~/shared/services/createServices';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
-import { getPlayerId } from '~/shared/lib/fsm/functions';
 import { parseEventMeta } from '~/app/yantrix/eventSchemas';
+import { lobbyKeys } from '~/entities/lobby/keys';
 import { AbstractWindowDataDestination, type DomainEvent } from '../shared/AbstractWindowDataDestination';
 
 /**
- * The remaining handlers (`lobby_created`, `re_enter_lobby`, `join_game_request`)
- * emit follow-up events and live in {@link createLobbyCommandsAdapter}, which
- * wires a paired Data Source via the IOPromiseAdapter pattern.
+ * Commands that end a player's presence in a room. Membership itself is not
+ * written here — the host owns the roster and admits players on approval — so
+ * what remains is leaving, plus refreshing the cache the UI reads.
  */
-type CommandPacket =
-	| { kind: 'mode_join_accepted'; playerId: string; lobbyId: string }
-	| { kind: 'lobby_closed'; lobbyId: string }
-	| { kind: 'game_started'; lobbyId: string }
-	| { kind: 'player_exit'; playerId: string; lobbyId: string };
+type CommandPacket = { kind: 'leave_room' } | { kind: 'refresh'; lobbyId: string };
 
 export class DomainCommandsDataDestination extends AbstractWindowDataDestination<CommandPacket> {
 	readonly #services: Services;
@@ -25,28 +21,21 @@ export class DomainCommandsDataDestination extends AbstractWindowDataDestination
 		super({
 			id: opts.id ?? `domain_commands_${uniqId(4)}`,
 			triggers: {
+				// Admission already happened on the host; just re-read the roster.
 				[WindowDomainEvents.mode_join_accepted]: (event: DomainEvent): CommandPacket | null => {
-					const meta = parseEventMeta(event.meta);
-					const playerId = meta.playerId ?? getPlayerId();
-					if (!meta.lobbyId || !playerId) return null;
-					return { kind: 'mode_join_accepted', playerId, lobbyId: meta.lobbyId };
-				},
-				[WindowDomainEvents.lobby_closed]: (event: DomainEvent): CommandPacket | null => {
 					const { lobbyId } = parseEventMeta(event.meta);
 					if (!lobbyId) return null;
-					return { kind: 'lobby_closed', lobbyId };
+					return { kind: 'refresh', lobbyId };
 				},
-				[WindowDomainEvents.game_started]: (event: DomainEvent): CommandPacket | null => {
-					const { lobbyId } = parseEventMeta(event.meta);
-					if (!lobbyId) return null;
-					return { kind: 'game_started', lobbyId };
-				},
-				[WindowDomainEvents.player_exit]: (event: DomainEvent): CommandPacket | null => {
-					const meta = parseEventMeta(event.meta);
-					const playerId = meta.playerId ?? getPlayerId();
-					if (!meta.lobbyId || !playerId) return null;
-					return { kind: 'player_exit', playerId, lobbyId: meta.lobbyId };
-				},
+				// Leaving needs no lobby id: there is only ever one room per session,
+				// and `cancel_game_request` carries no meta at all.
+				[WindowDomainEvents.lobby_closed]: (): CommandPacket => ({ kind: 'leave_room' }),
+				[WindowDomainEvents.player_exit]: (): CommandPacket => ({ kind: 'leave_room' }),
+				// Without this the guest stays connected after backing out of a join
+				// request, and its pending request keeps sitting in the host's list.
+				[WindowDomainEvents.cancel_game_request]: (): CommandPacket => ({ kind: 'leave_room' }),
+				[WindowDomainEvents.request_rejected]: (): CommandPacket => ({ kind: 'leave_room' }),
+				[WindowDomainEvents.request_timeout]: (): CommandPacket => ({ kind: 'leave_room' }),
 			},
 		});
 		this.#services = opts.services;
@@ -54,33 +43,16 @@ export class DomainCommandsDataDestination extends AbstractWindowDataDestination
 	}
 
 	protected async resolve(packet: CommandPacket): Promise<null> {
-		const lobbies = this.#services.controllers.lobbies;
 		const qc = this.#queryClient;
 
-		switch (packet.kind) {
-			case 'mode_join_accepted': {
-				const existingPlayers = await lobbies.listPlayersByLobbyId(packet.lobbyId);
-				if (existingPlayers.some((p) => p.playerId === packet.playerId)) return null;
-				await lobbies.addPlayerByLobbyId(packet.lobbyId, packet.playerId, false);
-				await qc.invalidateQueries({
-					queryKey: ['lobbies', 'players', 'byLobby', packet.lobbyId],
-				});
-				await qc.invalidateQueries({
-					queryKey: ['lobbies', 'lobby', 'byId', packet.lobbyId],
-				});
-				return null;
-			}
-			case 'lobby_closed':
-			case 'game_started': {
-				await lobbies.closeByLobbyId(packet.lobbyId);
-				await qc.invalidateQueries({ queryKey: ['lobbies'] });
-				return null;
-			}
-			case 'player_exit': {
-				await lobbies.removePlayerByLobbyId(packet.lobbyId, packet.playerId);
-				await qc.invalidateQueries({ queryKey: ['lobbies'] });
-				return null;
-			}
+		if (packet.kind === 'leave_room') {
+			await this.#services.controllers.lobbies.leave();
+			await qc.invalidateQueries({ queryKey: lobbyKeys.all });
+			return null;
 		}
+
+		await qc.invalidateQueries({ queryKey: lobbyKeys.playersByLobbyId(packet.lobbyId) });
+		await qc.invalidateQueries({ queryKey: lobbyKeys.byLobbyId(packet.lobbyId) });
+		return null;
 	}
 }

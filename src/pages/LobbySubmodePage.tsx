@@ -2,17 +2,17 @@ import React from 'react';
 import RequestTable from '~/widgets/RequestTable';
 import { useMachines } from '~/app/providers/MachinesContext';
 import { useFSM } from '@yantrix/react';
-import { useLobbyById, useLobbyPlayersByLobbyId, useLobbyRequestsRealtime } from '~/entities/lobby/queries';
-import { usePlayersList } from '~/entities/player/queries';
-import { useCurrentPlayer } from '~/entities/auth/queries';
+import { useLobbyById, useLobbyPlayersByLobbyId } from '~/entities/lobby/queries';
+import { useCurrentProfile } from '~/entities/profile/queries';
 import { useLocation } from 'react-router-dom';
 import { TLobbySettings, TWindowModeContext } from '~/shared/types/types';
 import { useManageLobby } from '~/features/manage-lobby/useManageLobby';
 import { Button } from '~/shared/ui/components/button';
+import { buildRoomLink } from '~/shared/net/roomLink';
 import { selectIsHost, selectNicknameById, selectPlayerIds, selectReadyMap } from '~/shared/lib/fsm/selectors';
 
 export default function LobbySubmodePage() {
-	const { closeLobby, leaveLobby, startGame } = useManageLobby();
+	const { closeLobby, leaveLobby } = useManageLobby();
 
 	const { lobby: lobbyFSM, mode: modeFSM } = useMachines();
 	const { getContext: getLobbyContext } = useFSM<TLobbySettings>(lobbyFSM.instance);
@@ -24,19 +24,28 @@ export default function LobbySubmodePage() {
 	const location = useLocation();
 	const lobbyId = modeCtx?.context?.lobbyId ?? location.state?.lobbyId ?? null;
 
-	const { data: currentPlayer } = useCurrentPlayer();
-	const currentPlayerId = currentPlayer?.playerId ?? null;
-
-	useLobbyRequestsRealtime(lobbyId);
+	const { data: profile } = useCurrentProfile();
+	const currentPlayerId = profile?.playerId ?? null;
 
 	const { data: lobby } = useLobbyById(lobbyId);
 	const { data: lobbyPlayers = [] } = useLobbyPlayersByLobbyId(lobbyId);
-	const { data: allPlayers = [] } = usePlayersList();
 
 	const readyMap = selectReadyMap(lobbyCtx);
-	const nicknameById = selectNicknameById(allPlayers);
+	const nicknameById = selectNicknameById(lobbyPlayers);
 	const playerIds = selectPlayerIds(readyMap, lobbyPlayers);
 	const isHost = selectIsHost(lobby?.hostPlayerId, currentPlayerId);
+
+	const [copied, setCopied] = React.useState<'code' | 'link' | null>(null);
+	const copy = async (kind: 'code' | 'link') => {
+		if (!lobbyId) return;
+		try {
+			await navigator.clipboard.writeText(kind === 'link' ? buildRoomLink(lobbyId) : lobbyId);
+			setCopied(kind);
+			setTimeout(() => setCopied(null), 1500);
+		} catch {
+			/* clipboard denied — the code is on screen anyway */
+		}
+	};
 
 	return (
 		<>
@@ -49,13 +58,32 @@ export default function LobbySubmodePage() {
 							</h3>
 						</div>
 
+						<div className="row" style={{ alignItems: 'center', gap: 8 }}>
+							<span className="muted">Room code:</span>
+							<strong data-testid="room-code" style={{ letterSpacing: 2 }}>
+								{lobbyId ?? '—'}
+							</strong>
+							<Button className="primary" onClick={() => copy('link')} disabled={!lobbyId}>
+								{copied === 'link' ? 'Copied' : 'Copy invite link'}
+							</Button>
+							<Button onClick={() => copy('code')} disabled={!lobbyId}>
+								{copied === 'code' ? 'Copied' : 'Copy code'}
+							</Button>
+						</div>
+						<small className="muted">
+							Share the link and the room opens on its own — or read out the code. Either way, it is
+							the only way in.
+						</small>
+
 						<div className="row">
 							{isHost ? (
 								<>
 									<Button className="danger" onClick={() => lobbyId && closeLobby(lobbyId)}>
 										Close Lobby
 									</Button>
-									<Button className="ok" onClick={() => lobbyId && startGame(lobbyId)}>
+									{/* Starting a game is not wired to the network yet — see the
+									    P2P spec: this iteration covers the lobby only. */}
+									<Button className="ok" disabled title="Coming soon — the game is not networked yet">
 										Start Game
 									</Button>
 								</>

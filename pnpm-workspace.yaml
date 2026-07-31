@@ -1,2 +1,13 @@
-onlyBuiltDependencies:
-  - supabase
+allowBuilds:
+  '@parcel/watcher': true
+  core-js-pure: true
+  esbuild: true
+  sharp: true
+
+# @yantrix/react@0.5.4 declares react/react-dom as regular dependencies rather
+# than peers, so pnpm hands it its own React 18 copy. Two Reacts in one tree make
+# every hook inside useFSM throw "Invalid hook call". Pin the whole tree to the
+# app's React until upstream moves them to peerDependencies.
+overrides:
+  react: ^19.1.1
+  react-dom: ^19.1.1

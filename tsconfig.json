@@ -12,12 +12,10 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["src/*"],
-//      "~/assets/*": ["assets/*"],
-//      "~/components/*": ["frontend/components/*"],
-//      "~/frontend/*": ["frontend/*"]
-    },},
+      "~/*": ["src/*"]
+    }
+  },
   "include": ["./frontend/**/*", "./src/**/*", "./tests/**/*"],
-  "exclude": ["node_modules", "dist", "src/**/*.js", "frontend", "tests"],
+  "exclude": ["node_modules", "dist", "src/**/*.js", "frontend", "tests/reducers", "tests/fixtures", "tests/types.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

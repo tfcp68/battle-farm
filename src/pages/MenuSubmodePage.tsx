@@ -1,55 +1,50 @@
 import React from 'react';
 import JoinRequestPopup from '~/shared/ui/JoinRequestPopup';
+import Field from '~/shared/ui/Field';
 import { Button } from '~/shared/ui/components/button';
-import { statesDictionary } from '~/shared/lib/fsm/window/WindowModeAutomata';
 import { useMachines } from '~/app/providers/MachinesContext';
 import { useFSM } from '@yantrix/react';
-import { useCurrentPlayer } from '~/entities/auth/queries';
-import { useLobbiesList } from '~/entities/lobby/queries';
-import { useGameByLobbyId } from '~/entities/game/queries';
-import { emitDomainEvent } from '~/app/yantrix/data/sources/UIBridgeDataSource';
-import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
+import { useCurrentProfile } from '~/entities/profile/queries';
 import { TWindowModeContext } from '~/shared/types/types';
 import { useCreateLobby } from '~/features/create-lobby/useCreateLobby';
 import { useJoinLobby } from '~/features/join-lobby/useJoinLobby';
-import { useAuthActions } from '~/features/auth/useAuthActions';
-import { selectIsJoinRequest, selectJoinLobbyId } from '~/shared/lib/fsm/selectors';
+import { useProfileActions } from '~/features/profile/useProfileActions';
+import { isValidRoomCode, normalizeRoomCode } from '~/shared/net/RoomTransport';
+import {
+	selectConnectError,
+	selectIsConnecting,
+	selectIsJoinRequest,
+	selectJoinLobbyId,
+} from '~/shared/lib/fsm/selectors';
 
 export default function MenuSubmodePage() {
 	const { createLobby } = useCreateLobby();
-	const { requestJoin, cancelJoin } = useJoinLobby();
-	const { signOut } = useAuthActions();
+	const { joinByCode, cancelJoin } = useJoinLobby();
+	const { changeNickname } = useProfileActions();
 
 	const { mode: modeFSM } = useMachines();
 	const { getContext: getModeContext } = useFSM<TWindowModeContext>(modeFSM.instance);
 	const modeCtx = getModeContext();
 
-	const { data: currentPlayer, isLoading: loadingCurrentPlayer } = useCurrentPlayer();
-	const currentPlayerId = currentPlayer?.playerId ?? null;
+	const { data: profile, isLoading: loadingProfile } = useCurrentProfile();
+	const currentPlayerId = profile?.playerId ?? null;
 
-	const { data: lobbies = [], isLoading, refetch } = useLobbiesList({ status: 'open' });
+	const [code, setCode] = React.useState('');
 
 	const isJoinRequest = selectIsJoinRequest(modeCtx?.state);
+	const isConnecting = selectIsConnecting(modeCtx?.state);
 	const joinLobbyId = selectJoinLobbyId(modeCtx);
-	const joinGameId = modeCtx?.context?.gameId ?? null;
+	const connectError = selectConnectError(modeCtx);
 	const didTimeOut = modeCtx?.context?.timedOut === 1;
 
-	const { data: joinGame } = useGameByLobbyId(joinLobbyId);
-	const resolvedJoinGameId = joinGame?.id ?? joinGameId;
+	const canJoin = !!currentPlayerId && !isConnecting && isValidRoomCode(code);
 
-	const lobby = joinLobbyId ? lobbies.find((l) => l.lobbyId === joinLobbyId) ?? null : null;
-
-	const isCreatingLobby =
-		modeCtx?.state === statesDictionary.MAIN_MENU
-			? false
-			: modeCtx?.state !== statesDictionary.MAIN_MENU && !isJoinRequest;
-
-	if (loadingCurrentPlayer) {
+	if (loadingProfile) {
 		return (
 			<div className="with-dev">
 				<div className="menu-page">
 					<div className="menu-card">
-						<small className="muted">Loading player…</small>
+						<small className="muted">Loading profile…</small>
 					</div>
 				</div>
 			</div>
@@ -64,85 +59,51 @@ export default function MenuSubmodePage() {
 						<h3 className="section-title" style={{ margin: 0 }}>
 							Main Menu
 						</h3>
-						<small className="muted">Player: {currentPlayer?.nickname ?? 'Unknown'}</small>
+						<small className="muted">Player: {profile?.nickname ?? 'Unknown'}</small>
 
 						<div className="actions" style={{ width: '100%' }}>
 							<Button
 								className="primary"
-								onClick={() => {
-									if (!currentPlayerId) return;
-									createLobby(currentPlayerId);
-								}}
-								disabled={!currentPlayerId || isCreatingLobby}>
-								{isCreatingLobby ? 'Creating…' : 'Create Lobby'}
+								onClick={() => createLobby()}
+								disabled={!currentPlayerId || isConnecting}>
+								{isConnecting ? 'Connecting…' : 'Create Room'}
 							</Button>
 						</div>
 
 						<hr style={{ width: '100%' }} />
 
 						<div style={{ width: '100%' }}>
-							<div className="row" style={{ justifyContent: 'space-between' }}>
-								<h4 className="section-title" style={{ marginTop: 0 }}>
-									Available Lobbies
-								</h4>
-								<Button onClick={() => refetch()} disabled={isLoading}>
-									{isLoading ? 'Loading…' : 'Refresh'}
+							<h4 className="section-title" style={{ marginTop: 0 }}>
+								Join by code
+							</h4>
+							<Field
+								label="Room code"
+								value={code}
+								onChange={(value: string) => setCode(normalizeRoomCode(value))}
+								placeholder="6 characters, e.g. K7QM2X"
+							/>
+							<div className="actions">
+								<Button
+									onClick={() => currentPlayerId && joinByCode(code, currentPlayerId)}
+									disabled={!canJoin}>
+									{isConnecting ? 'Connecting…' : 'Join'}
 								</Button>
 							</div>
-
-							{isLoading ? (
-								<small className="muted">Loading…</small>
-							) : lobbies.length === 0 ? (
-								<small className="muted">No open lobbies. Create one!</small>
-							) : (
-								<div className="table-scroll">
-									<table className="table" style={{ width: '100%' }}>
-										<thead>
-											<tr>
-												<th>Lobby</th>
-												<th>Host</th>
-												<th>Max</th>
-												<th>Action</th>
-											</tr>
-										</thead>
-										<tbody>
-											{lobbies.map((l) => (
-												<tr key={l.lobbyId}>
-													<td>{l.lobbyId}</td>
-													<td>{l.hostNickname}</td>
-													<td>{l.maxPlayers}</td>
-													<td>
-														<div className="row">
-															<Button
-																onClick={() => {
-																	if (!currentPlayerId) return;
-																	if (l.hostPlayerId === currentPlayerId) {
-																		emitDomainEvent(
-																			WindowDomainEvents.re_enter_lobby,
-																			{
-																				lobbyId: l.lobbyId,
-																				playerId: currentPlayerId,
-																				isHost: 1,
-																			}
-																		);
-																		return;
-																	}
-																	requestJoin(l.lobbyId, currentPlayerId);
-																}}
-																disabled={!currentPlayerId}>
-																{l.hostPlayerId === currentPlayerId ? 'Enter' : 'Join'}
-															</Button>
-														</div>
-													</td>
-												</tr>
-											))}
-										</tbody>
-									</table>
-								</div>
-							)}
+							<small className="muted">
+								Ask the host for their room code — rooms are not listed publicly.
+							</small>
 						</div>
 
 						<hr style={{ width: '100%' }} />
+
+						{connectError && !isConnecting && (
+							<div
+								role="alert"
+								data-testid="room-connect-error"
+								style={{ width: '100%', padding: 8, textAlign: 'center', color: '#a40' }}>
+								{connectError}
+							</div>
+						)}
 
 						{didTimeOut && !isJoinRequest && (
 							<div
@@ -154,8 +115,8 @@ export default function MenuSubmodePage() {
 						)}
 
 						<div style={{ width: '100%', marginTop: 12, display: 'flex', justifyContent: 'center' }}>
-							<Button className="danger" style={{ width: '50%' }} onClick={() => signOut()}>
-								Logout
+							<Button className="danger" style={{ width: '50%' }} onClick={() => changeNickname()}>
+								Change nickname
 							</Button>
 						</div>
 					</div>
@@ -163,11 +124,7 @@ export default function MenuSubmodePage() {
 			</div>
 
 			{isJoinRequest && (
-				<JoinRequestPopup
-					gameId={resolvedJoinGameId}
-					hostPlayerId={lobby?.hostPlayerId ?? null}
-					onCancel={() => cancelJoin()}
-				/>
+				<JoinRequestPopup gameId={joinLobbyId} hostPlayerId={null} onCancel={() => cancelJoin()} />
 			)}
 		</>
 	);

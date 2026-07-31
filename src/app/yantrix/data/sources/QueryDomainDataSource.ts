@@ -1,6 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { uniqId } from '@yantrix/core';
 import { WindowDomainEvents } from '~/app/yantrix/windowDomainEvents';
+import { lobbyKeys, NO_LOBBY } from '~/entities/lobby/keys';
 import { isRecord } from '~/shared/helpers/typeGuards';
 import { AbstractWindowDataSource, type FollowUp } from '../shared/AbstractWindowDataSource';
 
@@ -59,7 +60,7 @@ export class QueryDomainDataSource extends AbstractWindowDataSource<PlayerStateC
 		this.#onSnapshot();
 		this.#unsub = this.#queryClient.getQueryCache().subscribe((cacheEvent) => {
 			const queryKey = cacheEvent.query?.queryKey;
-			if (!Array.isArray(queryKey) || queryKey[0] !== 'lobbies') return;
+			if (!Array.isArray(queryKey) || queryKey[0] !== lobbyKeys.all[0]) return;
 			this.#onSnapshot();
 		});
 		return this;
@@ -87,11 +88,12 @@ export class QueryDomainDataSource extends AbstractWindowDataSource<PlayerStateC
 		try {
 			const playerQueries = this.#queryClient
 				.getQueryCache()
-				.findAll({ queryKey: ['lobbies', 'players', 'byLobby'] });
+				.findAll({ queryKey: lobbyKeys.playersPrefix() });
 			for (const q of playerQueries) {
 				const key = q.queryKey;
 				const lobbyId = Array.isArray(key) ? key[key.length - 1] : null;
-				if (!lobbyId || typeof lobbyId !== 'string') continue;
+				// The placeholder key belongs to a disabled query — it holds no roster.
+				if (!lobbyId || typeof lobbyId !== 'string' || lobbyId === NO_LOBBY) continue;
 
 				const rawData: unknown = q.state.data;
 				const players = Array.isArray(rawData) ? rawData.filter(isPlayerRow) : undefined;

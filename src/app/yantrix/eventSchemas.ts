@@ -9,9 +9,7 @@ export const EventMetaSchema = z.object({
 	gameId: z.string().nullable().optional(),
 	requestId: z.string().optional(),
 	isHost: z.union([z.literal(0), z.literal(1)]).optional(),
-	mode: z.enum(['signIn', 'signUp']).optional(),
 	nickname: z.string().optional(),
-	password: z.string().optional(),
 	error: z.string().optional(),
 	reason: z.string().optional(),
 });

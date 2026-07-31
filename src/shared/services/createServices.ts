@@ -1,25 +1,38 @@
-import AuthModel from '~/entities/auth/model';
-import AuthController from '~/entities/auth/controller';
-import PlayersModel from '~/entities/player/model';
-import PlayersController from '~/entities/player/controller';
+import ProfileModel from '~/entities/profile/model';
+import ProfileController from '~/entities/profile/controller';
 import LobbiesModel from '~/entities/lobby/model';
 import LobbiesController from '~/entities/lobby/controller';
-import GameModel from '~/entities/game/model';
-import GameController from '~/entities/game/controller';
+import { RoomService } from '~/entities/room/RoomService';
+import { createStorage } from '~/shared/storage/createStorage';
+import { createRoomTransport } from '~/shared/net/createRoomTransport';
+import type { StoragePort } from '~/shared/storage/StoragePort';
+import type { RoomTransport } from '~/shared/net/RoomTransport';
 
-export function createServices() {
-	const authModel = new AuthModel();
-	const playersModel = new PlayersModel();
-	const lobbiesModel = new LobbiesModel();
-	const gameModel = new GameModel();
+export interface CreateServicesOpts {
+	/** Injected by tests; production picks the driver from `VITE_STORAGE_DRIVER`. */
+	storage?: StoragePort;
+	/** Injected by tests; production builds a Trystero transport per room. */
+	createTransport?: () => RoomTransport;
+}
 
-	const auth = new AuthController({ model: authModel });
-	const players = new PlayersController({ playersModel, authModel });
-	const lobbies = new LobbiesController({ model: lobbiesModel });
-	const games = new GameController({ model: gameModel });
+/**
+ * Composition root — the only place that picks a storage driver and a transport.
+ * Everything downstream takes them as dependencies.
+ */
+export function createServices(opts: CreateServicesOpts = {}) {
+	const storage = opts.storage ?? createStorage();
+	const rooms = new RoomService({ createTransport: opts.createTransport ?? createRoomTransport });
+
+	const profileModel = new ProfileModel({ storage });
+	const lobbiesModel = new LobbiesModel(rooms);
+
+	const profile = new ProfileController({ model: profileModel });
+	const lobbies = new LobbiesController({ model: lobbiesModel, rooms });
 
 	return {
-		controllers: { auth, players, lobbies, games },
+		rooms,
+		storage,
+		controllers: { profile, lobbies },
 	};
 }
 

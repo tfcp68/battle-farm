@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useMemo } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createServices, Services } from '~/shared/services/createServices';
+import { setCurrentProfile } from '~/entities/profile/currentProfile';
 
 type AppServicesContextValue = Services & { queryClient: QueryClient };
 
@@ -15,17 +16,45 @@ const queryClient = new QueryClient({
 	},
 });
 
-export function AppServicesProvider({ children }: { children: React.ReactNode }) {
-	const services = useMemo(() => createServices(), []);
+/**
+ * Module-level for the same reason as `queryClient`: `CoreLoop` is a singleton
+ * that captures whatever services it is first started with. Built per-component,
+ * a remount would hand the React tree a second `RoomService` while the loop kept
+ * hosting the room in the first — and the tree would render an empty lobby.
+ */
+const services = createServices();
 
-	const value = useMemo<AppServicesContextValue>(
-		() => ({ ...services, queryClient }),
-		[services]
-	);
+export function AppServicesProvider({ children }: { children: React.ReactNode }) {
+	const [isProfileLoaded, setProfileLoaded] = useState(false);
+
+	// The mode FSM reads the player id synchronously at boot, so the profile has
+	// to be in the mirror before anything downstream (MachinesProvider) mounts.
+	useEffect(() => {
+		let cancelled = false;
+		services.controllers.profile
+			.current()
+			.then((profile) => {
+				if (cancelled) return;
+				setCurrentProfile(profile);
+			})
+			.catch(() => {
+				if (!cancelled) setCurrentProfile(null);
+			})
+			.finally(() => {
+				if (!cancelled) setProfileLoaded(true);
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, []);
+
+	const value = useMemo<AppServicesContextValue>(() => ({ ...services, queryClient }), []);
 
 	return (
 		<AppServicesContext.Provider value={value}>
-			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+			<QueryClientProvider client={queryClient}>
+				{isProfileLoaded ? children : null}
+			</QueryClientProvider>
 		</AppServicesContext.Provider>
 	);
 }

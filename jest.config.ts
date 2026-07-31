@@ -9,6 +9,8 @@ const config: Config = {
 	testEnvironment: 'node',
 	preset: 'ts-jest',
 	testRegex: '.*\\.test?\\.ts',
+	// Pre-Yantrix suite importing `~/src/...` paths that no longer exist.
+	testPathIgnorePatterns: ['/node_modules/', '/tests/reducers/'],
 	moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
 		prefix: '<rootDir>/',
 	}),

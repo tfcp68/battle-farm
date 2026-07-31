@@ -1,9 +1,8 @@
 import React from 'react';
-import { usePlayersList } from '~/entities/player/queries';
 import { useLobbyRequestsByLobbyId } from '~/entities/lobby/queries';
 import { useLobbyRequests } from '~/features/lobby-requests/useLobbyRequests';
 import { Button } from '~/shared/ui/components/button';
-import { selectIsHost, selectNicknameById, selectPendingRequests } from '~/shared/lib/fsm/selectors';
+import { selectIsHost, selectPendingRequests } from '~/shared/lib/fsm/selectors';
 
 type RequestTableProps = {
 	lobbyId: string | null | undefined;
@@ -15,10 +14,9 @@ export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }:
 	const isHost = selectIsHost(hostPlayerId, currentPlayerId);
 	const { approve, reject } = useLobbyRequests();
 
+	// The requester announces its own nickname over the data channel, so the
+	// request already carries everything this table shows.
 	const { data: requests = [], isFetching } = useLobbyRequestsByLobbyId(lobbyId || null);
-	const { data: allPlayers = [] } = usePlayersList();
-
-	const nicknameById   = selectNicknameById(allPlayers);
 	const pendingRequests = selectPendingRequests(requests);
 
 	const [loadingId, setLoadingId] = React.useState<string | null>(null);
@@ -54,7 +52,7 @@ export default function RequestTable({ lobbyId, hostPlayerId, currentPlayerId }:
 						) : (
 							pendingRequests.map((r) => (
 								<tr key={r.id}>
-									<td>{nicknameById[r.playerId] ?? r.playerId}</td>
+									<td>{r.nickname ?? r.playerId}</td>
 									<td>
 										<div className="row">
 											<Button

@@ -14,18 +14,20 @@ import WindowLobbyAutomata, {
 import { FsmDevLogger, setFsmDevLogger } from '~/shared/lib/fsm/devLogger';
 import { UIBridgeDataSource } from '~/app/yantrix/data/sources/UIBridgeDataSource';
 import { QueryDomainDataSource } from '~/app/yantrix/data/sources/QueryDomainDataSource';
-import { JoinRequestStatusDataSource } from '~/app/yantrix/data/sources/JoinRequestStatusDataSource';
+import { RoomRequestResultDataSource } from '~/app/yantrix/data/sources/RoomRequestResultDataSource';
+import { RoomClosedDataSource } from '~/app/yantrix/data/sources/RoomClosedDataSource';
+import { InviteLinkDataSource } from '~/app/yantrix/data/sources/InviteLinkDataSource';
 import { JoinRequestTimeoutDataSource } from '~/app/yantrix/data/sources/JoinRequestTimeoutDataSource';
-import { AuthStatusDataSource } from '~/app/yantrix/data/sources/AuthStatusDataSource';
-import { AuthSignedOutDataDestination } from '~/app/yantrix/data/destinations/AuthSignedOutDataDestination';
+import { ProfileStatusDataSource } from '~/app/yantrix/data/sources/ProfileStatusDataSource';
+import { ProfileClearedDataDestination } from '~/app/yantrix/data/destinations/ProfileClearedDataDestination';
 import { NavigationDataDestination } from '~/app/yantrix/data/destinations/NavigationDataDestination';
 import { NotificationsDataDestination } from '~/app/yantrix/data/destinations/NotificationsDataDestination';
 import { LobbyRequestsDataDestination } from '~/app/yantrix/data/destinations/LobbyRequestsDataDestination';
 import { DomainCommandsDataDestination } from '~/app/yantrix/data/destinations/DomainCommandsDataDestination';
+import { connectRoomToQueryCache } from '~/entities/room/RoomQueryBridge';
 
 // Promise adapters — Data Source + Data Destination pairs
-import { createAuthAdapter } from '~/app/yantrix/data/adapters/auth/createAuthAdapter';
-import { createLobbyCommandsAdapter } from '~/app/yantrix/data/adapters/lobby-commands/createLobbyCommandsAdapter';
+import { createRoomCommandsAdapter } from '~/app/yantrix/data/adapters/room-commands/createRoomCommandsAdapter';
 
 import type { Services } from '~/shared/services/createServices';
 import type { QueryClient } from '@tanstack/react-query';
@@ -39,10 +41,13 @@ export type Machines = Record<string, {
 
 let loop: TimedCoreLoop<EventId, Record<number, unknown>> | null = null;
 let machines: Machines | null = null;
+let disconnectRoomBridge: (() => void) | null = null;
 
 if (import.meta.hot) {
 	import.meta.hot.dispose(() => {
 		try { loop?.stop?.(); } catch { /* ignore */ }
+		disconnectRoomBridge?.();
+		disconnectRoomBridge = null;
 		loop = null;
 		machines = null;
 	});
@@ -78,43 +83,38 @@ export function startYantrixCore(deps: { services: Services; queryClient: QueryC
 
 	loop.start();
 
+	// Room snapshots land in the query cache, which QueryDomainDataSource diffs
+	// into domain events — the P2P transport's only touchpoint with the FSM layer.
+	disconnectRoomBridge = connectRoomToQueryCache(deps.services.rooms, deps.queryClient);
+
 	// ── Sources ───────────────────────────────────────────────────────────────
 	// Each source only enqueues events; CoreLoop drains every source's `eventEmitter()`
 	// generator on its tick and publishes to the bus.
 
 	loop.registerSource(new UIBridgeDataSource());
 	loop.registerSource(new QueryDomainDataSource({ queryClient: deps.queryClient }));
-	loop.registerSource(new JoinRequestStatusDataSource({
-		queryClient: deps.queryClient,
-		modeFSM,
-		services: deps.services,
-	}));
+	loop.registerSource(new RoomRequestResultDataSource({ services: deps.services }));
+	loop.registerSource(new RoomClosedDataSource({ services: deps.services }));
+	loop.registerSource(new InviteLinkDataSource({ modeFSM }));
 	loop.registerSource(new JoinRequestTimeoutDataSource({ modeFSM }));
-	loop.registerSource(new AuthStatusDataSource());
+	loop.registerSource(new ProfileStatusDataSource());
 
 	// ── Promise adapters ──────────────────────────────────────────────────────
 	// Each adapter pairs a Data Source with a Data Destination via the
 	// IOPromiseAdapter pattern (resolver -> onResolved -> source.push -> responseMapper -> bus).
 
-	const authAdapter = createAuthAdapter({
+	const roomCommandsAdapter = createRoomCommandsAdapter({
 		services: deps.services,
 		queryClient: deps.queryClient,
 	});
-	loop.registerSource(authAdapter.source);
-	loop.registerDestination(authAdapter.destination);
-
-	const lobbyCommandsAdapter = createLobbyCommandsAdapter({
-		services: deps.services,
-		queryClient: deps.queryClient,
-	});
-	loop.registerSource(lobbyCommandsAdapter.source);
-	loop.registerDestination(lobbyCommandsAdapter.destination);
+	loop.registerSource(roomCommandsAdapter.source);
+	loop.registerDestination(roomCommandsAdapter.destination);
 
 	// ── Fire-and-forget destinations ──────────────────────────────────────────
 	// No paired source — these just run a side effect, no follow-up event.
 
 	loop.registerDestination(
-		new AuthSignedOutDataDestination({ services: deps.services, queryClient: deps.queryClient }),
+		new ProfileClearedDataDestination({ services: deps.services, queryClient: deps.queryClient }),
 	);
 	loop.registerDestination(
 		new DomainCommandsDataDestination({ services: deps.services, queryClient: deps.queryClient }),
