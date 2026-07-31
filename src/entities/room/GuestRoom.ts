@@ -1,10 +1,5 @@
 import type { RoomMessage, RoomTransport } from '~/shared/net/RoomTransport';
-import {
-	type RequestResultPayload,
-	RoomMessageType,
-	type RoomState,
-	type SnapshotPayload,
-} from './types';
+import { type RequestResultPayload, RoomMessageType, type RoomState, type SnapshotPayload } from './types';
 
 export interface GuestRoomOpts {
 	transport: RoomTransport;
@@ -57,10 +52,11 @@ export class GuestRoom {
 
 		this.#unsubscribes.push(
 			this.#transport.onMessage((message, peerId) => this.#onMessage(message, peerId)),
+
 			// The host may already be in the room, or may arrive after us — say hello
 			// on every peer that appears and let the host ignore duplicates.
 			this.#transport.onPeerJoin(() => this.#sendHello()),
-			this.#transport.onPeerLeave((peerId) => this.#onPeerLeave(peerId)),
+			this.#transport.onPeerLeave((peerId) => this.#onPeerLeave(peerId))
 		);
 	}
 

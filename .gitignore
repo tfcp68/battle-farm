@@ -18,3 +18,5 @@ vite.config.d.ts
 
 src/shared/lib/fsm/window/
 src/shared/lib/fsm/game/
+
+token-optimizer/

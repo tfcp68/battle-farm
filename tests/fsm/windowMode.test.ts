@@ -126,4 +126,39 @@ describe('window mode FSM — room entry', () => {
 		expect(fsm.state).toBe(modeStates.GAME_LOBBY);
 		expect(fsm.getContext()?.context).toMatchObject({ lobbyId: CODE, gameId: CODE });
 	});
+
+	/**
+	 * The join request goes out before `room_connected` moves the machine on, so a
+	 * host that approves without waiting for a click — anyone already on its roster
+	 * — can answer while the guest is still CONNECTING. Dropped, the verdict never
+	 * comes again and the guest sits out the 30s timeout.
+	 */
+	it('admits a guest approved before it left CONNECTING', () => {
+		const fsm = bootedAutomata();
+		dispatch(fsm, modeEvents.session_restored, { playerId: 'player-2' });
+
+		dispatch(fsm, modeEvents.join_game_request, { lobbyId: CODE, playerId: 'player-2' });
+		expect(fsm.state).toBe(modeStates.CONNECTING);
+
+		dispatch(fsm, modeEvents.mode_join_accepted, {
+			playerId: 'player-2',
+			lobbyId: CODE,
+			gameId: CODE,
+		});
+
+		expect(fsm.state).toBe(modeStates.GAME_LOBBY);
+		expect(fsm.getContext()?.context).toMatchObject({ lobbyId: CODE, gameId: CODE });
+	});
+
+	/** A host that vanishes while the guest waits must not cost it the full timeout. */
+	it('returns to the menu when the room dies during a join request', () => {
+		const fsm = bootedAutomata();
+		dispatch(fsm, modeEvents.session_restored, { playerId: 'player-2' });
+		dispatch(fsm, modeEvents.join_game_request, { lobbyId: CODE, playerId: 'player-2' });
+		dispatch(fsm, modeEvents.room_connected, { lobbyId: CODE, gameId: CODE });
+		expect(fsm.state).toBe(modeStates.JOIN_REQUEST);
+
+		dispatch(fsm, modeEvents.lobby_closed, { lobbyId: CODE });
+		expect(fsm.state).toBe(modeStates.MAIN_MENU);
+	});
 });
