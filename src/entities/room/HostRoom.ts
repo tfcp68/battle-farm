@@ -73,6 +73,15 @@ export class HostRoom {
 		return this.#state;
 	}
 
+	/**
+	 * Which player a peer introduced itself as, or `null` for a peer that never
+	 * said hello. The match channel gates intents on this, the same way the
+	 * handlers below gate readiness and leaving.
+	 */
+	playerOfPeer(peerId: string): string | null {
+		return this.#peerToPlayer.get(peerId) ?? null;
+	}
+
 	subscribe(listener: StateListener): () => void {
 		this.#listeners.add(listener);
 		return () => this.#listeners.delete(listener);
