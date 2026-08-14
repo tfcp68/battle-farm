@@ -164,6 +164,105 @@ small.muted { color: var(--muted); font-size: 12px }
 }
 
 
+/* ── Match board ────────────────────────────────────────────────────────── */
+
+.turn-bar { position: sticky; top: 0; z-index: 5 }
+
+.timer { height: 4px; background: #0f141b; border-radius: 999px; overflow: hidden }
+.timer-fill { height: 100%; background: var(--accent); transition: width .25s linear }
+
+.card-face {
+    display: grid; gap: 2px; text-align: left;
+    min-width: 132px; padding: 6px 8px; font-size: 12px;
+    border: 1px solid var(--border); border-radius: 8px; background: #0f141b;
+}
+.card-face:disabled { opacity: 0.65; cursor: default }
+.card-face:disabled:hover { box-shadow: none }
+.card-face.selected { border-color: var(--accent); background: rgba(79,209,197,0.12) }
+.card-face-head { display: flex; justify-content: space-between; gap: 6px; font-weight: 700 }
+.card-face-value { color: var(--accent-2) }
+.card-face-meta, .card-face-foot { color: var(--muted); font-size: 11px }
+.card-face.crop-red    { border-left: 3px solid var(--danger) }
+.card-face.crop-green  { border-left: 3px solid var(--ok) }
+.card-face.crop-yellow { border-left: 3px solid var(--warn) }
+.card-face.action      { border-left: 3px solid var(--accent-2) }
+
+/*
+ * The art sits behind the text rather than replacing it: the picture carries no
+ * rules text, so name, value and tooltip have to stay legible over it. The
+ * scrim is what makes that true on a light illustration.
+ */
+.card-face.has-art {
+    position: relative; min-height: 128px; align-content: end;
+    background-size: cover; background-position: center top; background-repeat: no-repeat;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+}
+.card-face.has-art::before {
+    content: ''; position: absolute; inset: 0; border-radius: 7px; pointer-events: none;
+    background: linear-gradient(to bottom, rgba(6,8,12,0.15) 0%, rgba(6,8,12,0.55) 55%, rgba(6,8,12,0.88) 100%);
+}
+.card-face.has-art > * { position: relative; z-index: 1 }
+.card-face.has-art .card-face-meta,
+.card-face.has-art .card-face-foot { color: rgba(255,255,255,0.82) }
+
+/* The two piles the endgame hangs on, which the board never showed. */
+.deck-zone { display: flex; gap: var(--space-2); align-items: flex-start }
+.pile { display: grid; gap: 4px; justify-items: center; min-width: 88px }
+.pile-card {
+    width: 84px; height: 126px; border-radius: 8px;
+    border: 1px solid var(--border); background: #0f141b center/cover no-repeat;
+}
+.pile-card.empty { display: grid; place-items: center; border-style: dashed; color: var(--muted); font-size: 11px }
+.pile-label { color: var(--muted); font-size: 11px }
+
+.hand, .market { display: flex; gap: var(--space-1); flex-wrap: wrap }
+.market-slot { display: grid; gap: 4px }
+.market-slot.empty {
+    display: grid; place-items: center; min-width: 132px; min-height: 56px;
+    border: 1px dashed var(--border); border-radius: 8px;
+}
+
+.beds { display: flex; gap: var(--space-1); flex-wrap: wrap }
+.bed {
+    display: grid; gap: 4px; min-width: 148px; padding: 6px;
+    border: 1px solid var(--border); border-radius: 8px; background: #12151c;
+}
+.bed.selectable { border-color: var(--accent); cursor: pointer }
+.bed-head { display: flex; justify-content: space-between; gap: 6px; font-size: 11px; color: var(--muted) }
+.bed-empty { display: grid; place-items: center; min-height: 56px; color: var(--muted); font-size: 11px }
+
+/* ── Drag and drop ──────────────────────────────────────────────────────── */
+
+/*
+ * A drop target only lights up while a card it accepts is over it, so the
+ * highlight answers "will this land?" before the player lets go. `accept` is
+ * matched against the draggable's type, which is why a Market card never lights
+ * a bed and a hand card never lights the hand it came from.
+ */
+.drop-active { outline: 2px dashed var(--accent); outline-offset: 2px; background: rgba(79,209,197,0.08) }
+.bed.drop-active { border-color: var(--accent) }
+.pile.drop-active, .trade-drop.drop-active { border-radius: 8px }
+
+/* The card left behind while its copy follows the pointer. */
+.card-face.dragging { opacity: 0.4 }
+
+/*
+ * Touch dragging needs the browser to stop claiming the gesture as a scroll,
+ * and a long-press selection halfway through a drag reads as a bug. This is
+ * what makes the pointer sensor behave the same on a phone as on a mouse.
+ */
+.card-face { touch-action: manipulation; -webkit-user-select: none; user-select: none }
+
+.overlay {
+    position: fixed; inset: 0; z-index: 100;
+    display: grid; place-items: center; background: rgba(6,8,12,0.72);
+}
+.overlay-card {
+    width: 520px; max-width: 92vw; max-height: 80vh; overflow: auto;
+    padding: var(--space-3); display: grid; gap: var(--space-2);
+    background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
+}
+
 /* Intro splash overlay */
 .intro-splash {
     position: fixed;

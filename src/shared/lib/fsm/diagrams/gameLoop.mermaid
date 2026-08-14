@@ -1,23 +1,52 @@
 stateDiagram-v2
-    [*] --> PLANNED: RESET
-    note right of [*]
-        inject/isLimitReached
-        #{coins = 0, winLimit = 0}
-    end note
-    PLANNED --> FINISHED: END
-    PLANNED --> ROLLING_CHARACTERS: ROLL_CHARACTERS
-    ROLLING_CHARACTERS --> ROLLING_TURN_ORDER: ROLL_TURN_ORDER
-    ROLLING_TURN_ORDER --> SETUP: PREPARE
+    [*] --> PLANNED
+    PLANNED --> ROLLING_CHARACTERS: PREPARE (matchId, winLimit, playerCount)
+    PLANNED --> FINISHED: END (scoreBoard)
+    ROLLING_CHARACTERS --> ROLLING_TURN_ORDER: [-]
+    ROLLING_TURN_ORDER --> SETUP: [-]
     SETUP --> IN_PROGRESS: START
-    IN_PROGRESS --> IN_PROGRESS: TURN_START
-    IN_PROGRESS --> IN_PROGRESS: TURN_PHASE_START
-    IN_PROGRESS --> IN_PROGRESS: TURN_PHASE_END
-    state isLimitReached <<choice>>
-    IN_PROGRESS --> isLimitReached: TURN_END
-    IN_PROGRESS --> FINISHED: END
-    isLimitReached --> LAST_TURN: isLimitReached(#coins, #winLimit)
-    isLimitReached --> IN_PROGRESS
-    LAST_TURN --> LAST_TURN: TURN_START
-    LAST_TURN --> LAST_TURN: TURN_PHASE_START
-    LAST_TURN --> LAST_TURN: TURN_PHASE_END
-    LAST_TURN --> FINISHED: TURN_END
+    IN_PROGRESS --> IN_PROGRESS: TURN_START (activePlayerId, turnNumber)
+    state isEndgame <<choice>>
+    IN_PROGRESS --> isEndgame: TURN_END (coins, winLimit, deckEmpty)
+    isEndgame --> LAST_TURN: isEndgameTriggered($coins, $winLimit, $deckEmpty)
+    isEndgame --> IN_PROGRESS
+    LAST_TURN --> LAST_TURN: TURN_START (activePlayerId, turnNumber)
+    LAST_TURN --> LAST_TURN: TURN_END
+    IN_PROGRESS --> FINISHED: END (scoreBoard)
+    LAST_TURN --> FINISHED: END (scoreBoard)
+
+note right of PLANNED
++Init
+end note
+
+note right of [*]
+inject/isLimitReached
+define/isEndgameTriggered (c,w,d) => or(isLimitReached(c,w), d)
+#{matchId = 0, winLimit = 0, playerCount = 0, activePlayerId = 0, turnNumber = 0, scoreBoard = 0}
+subscribe/match_created PREPARE ($matchId, $winLimit, $playerCount)
+subscribe/match_started START
+subscribe/turn_started TURN_START ($activePlayerId, $turnNumber)
+subscribe/turn_ended TURN_END ($coins, $winLimit, $deckEmpty)
+subscribe/match_ended END ($scoreBoard)
+end note
+
+note left of ROLLING_CHARACTERS
++ByPass
+#{matchId, winLimit, playerCount} <= $matchId, $winLimit, $playerCount
+end note
+
+note right of ROLLING_TURN_ORDER
++ByPass
+end note
+
+note left of IN_PROGRESS
+#{activePlayerId, turnNumber} <= coalesce($activePlayerId, #activePlayerId), coalesce($turnNumber, #turnNumber)
+end note
+
+note right of LAST_TURN
+#{activePlayerId, turnNumber} <= coalesce($activePlayerId, #activePlayerId), coalesce($turnNumber, #turnNumber)
+end note
+
+note left of FINISHED
+#{scoreBoard} <= coalesce($scoreBoard, 0)
+end note

@@ -4,13 +4,13 @@ stateDiagram-v2
     state gameReady <<choice>>
     [*] --> LOBBY_INIT: CREATE_GAME (gameId, playerId, isHost)
     LOBBY --> hasSpace: PLAYER_JOINING (gameId, playerId)
-    hasSpace --> JOIN_REQUEST: and(isEqual(#gameId,$gameId),has_player_slots(#playerReadyMap,#maxPlayers))
+    hasSpace --> JOIN_REQUEST: can_join(#gameId,$gameId,#playerReadyMap,#maxPlayers)
     LOBBY_INIT --> LOBBY: [-]
     LOBBY --> EXTERNAL_UPDATE: UPDATE (playerReadyMap)
     LOBBY-->canKick: KICK (playerId)
-    canKick-->KICK_PLAYER: and(has(#playerReadyMap,$playerId),isEqual(#isHost,1))
+    canKick-->KICK_PLAYER: can_kick(#playerReadyMap,$playerId,#hostPlayerId,#playerId)
     KICK_PLAYER-->gameReady: [-]
-    LOBBY --> READY_STATE_CHANGE: READY
+    LOBBY --> READY_STATE_CHANGE: READY (playerId, isReady)
     READY_STATE_CHANGE --> gameReady: [-]
     EXTERNAL_UPDATE --> gameReady: [-]
     JOIN_REQUEST --> gameReady: [-]
@@ -18,48 +18,72 @@ stateDiagram-v2
     gameReady --> LOBBY
     hasSpace -->LOBBY
     canKick --> LOBBY
+    GAME_STARTING --> READY_STATE_CHANGE: READY
+    GAME_STARTING --> EXTERNAL_UPDATE: UPDATE
+    GAME_STARTING --> hasSpace: PLAYER_JOINING
+    GAME_STARTING --> canKick: KICK
     GAME_STARTING-->IN_GAME: LAUNCH
 
 note left of [*]
-define/emptyMap () => zip([],[])
-define/resetMap (players) => zip(players,repeat(0, len(players)))
-define/has_player_slots (map, maxPlayers) => isGreater(maxPlayers,len(keys(map)))
-define/game_ready (map) => isEqual(len(keys(map)),sum(values(map)))
+%% `omit(x,[])` is the only way to spell an object literal here — it returns
+%% `{...x}`, so this yields a real `{}` (and normalises the array `zip` hands back).
+define/emptyMap () => omit(zip([],[]),[])
+%% Guards on a transition arrow must be ONE call: @yantrix/cli 0.5.4 compiles a
+%% nested expression there down to its innermost arguments, so
+%% `and(isEqual(a,b),f(c))` silently became `and(a,b)` — the second half of the
+%% condition vanished. Inside a define/ body the nesting compiles correctly, so
+%% every composite predicate lives here.
+define/can_join (gameId, joinGameId, map, maxPlayers) => and(isEqual(gameId,joinGameId),isGreater(maxPlayers,len(keys(map))))
+define/can_kick (map, playerId, hostPlayerId, selfId) => and(has(map,playerId),isEqual(hostPlayerId,selfId))
+define/game_ready (map) => and(isEqual(len(keys(map)),sum(values(map))),isGreater(len(keys(map)),1))
 end note
 
 note right of [*]
-#{playerId, gameId, playerReadyMap = emptyMap(), hostPlayerId, maxPlayers = 7, readyState = 0}
+#{playerId, gameId, playerReadyMap = emptyMap(), hostPlayerId, maxPlayers = 6, readyState = 0}
 subscribe/lobby_created CREATE_GAME ($gameId, $playerId, $isHost = 1)
+%% A guest never sees `lobby_created` — that fires only for whoever opened the
+%% room. Without this line the joiner's lobby machine never leaves ~~~START~~~,
+%% so it ignores every roster update and shows an empty table.
+subscribe/mode_join_accepted CREATE_GAME ($gameId, $playerId, $isHost = 0)
 subscribe/join_game_request PLAYER_JOINING ($gameId, $playerId)
 subscribe/player_state_change UPDATE ($playerReadyMap)
+subscribe/player_ready_changed READY ($playerId, $isReady)
 subscribe/game_start LAUNCH
 end note
 
+%% A state's reducer REPLACES the context — whatever it does not name comes back
+%% as the declared default, i.e. null. So every note below re-states the
+%% identity attributes it wants to survive the transition.
 note right of LOBBY_INIT
 +ByPass
-#{gameId, hostPlayerId = 0} <= $gameId, if(isEqual($isHost,1), $playerId, #hostPlayerId)
-#{playerReadyMap} <= setAttr(#playerReadyMap,$playerId,0)
+#{gameId, hostPlayerId = 0, playerId} <= $gameId, if(isEqual($isHost,1), $playerId, #hostPlayerId), $playerId
+#{playerReadyMap} <= setAttr(omit(#playerReadyMap,[]),$playerId,0)
 end note
 
 note right of JOIN_REQUEST
 +ByPass
-#{playerReadyMap} <= setAttr(resetMap(keys(#playerReadyMap)),$playerId,0)
+#{gameId, hostPlayerId, playerId, readyState} <= #gameId, #hostPlayerId, #playerId, #readyState
+%% Seating the newcomer at 0 is enough to un-ready the table: `game_ready` wants
+%% every key set, and this one is not. No need to clear anyone else's answer.
+#{playerReadyMap} <= setAttr(omit(#playerReadyMap,[]),$playerId,0)
 emit/menu_join_accepted (#gameId)
 end note
 
 note right of KICK_PLAYER
 +ByPass
-#{playerReadyMap} <= resetMap(omit(keys(#playerReadyMap),$playerId))
+#{gameId, hostPlayerId, playerId, readyState} <= #gameId, #hostPlayerId, #playerId, #readyState
+#{playerReadyMap} <= omit(#playerReadyMap,$playerId)
 end note
 
 note right of READY_STATE_CHANGE
 +ByPass
-#{playerReadyMap, readyState} <= setAttr(#playerReadyMap, #playerId, 1), 1
-emit/player_state_change ($game_id, $playerReadyMap)
+#{gameId, hostPlayerId, playerId} <= #gameId, #hostPlayerId, #playerId
+#{playerReadyMap, readyState} <= setAttr(omit(#playerReadyMap,[]), $playerId, $isReady), $isReady
 end note
 
 note right of EXTERNAL_UPDATE
 +ByPass
+#{gameId, hostPlayerId, playerId, readyState} <= #gameId, #hostPlayerId, #playerId, #readyState
 #{playerReadyMap} <= $playerReadyMap
 end note
 

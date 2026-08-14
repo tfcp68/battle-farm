@@ -29,6 +29,12 @@ const NAV_EVENTS = [
 	WindowDomainEvents.lobby_closed,
 	WindowDomainEvents.player_exit,
 	WindowDomainEvents.player_cancel,
+	// Without these three the mode FSM walks GAME_LOBBY → GAME_STARTING → IN_GAME
+	// → SCORE_SCREEN while the router stays on /lobby: `/game` and `/score` were
+	// reachable only by typing the URL.
+	WindowDomainEvents.game_start,
+	WindowDomainEvents.game_started,
+	WindowDomainEvents.game_end,
 ];
 
 interface NavigationPacket {

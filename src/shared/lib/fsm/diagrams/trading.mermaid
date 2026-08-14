@@ -1,44 +1,64 @@
 stateDiagram-v2
-    [*] --> IDLE: RESET
-    note right of [*]
-        inject/hasCardsInHand
-        inject/hasTradeOffers
-        #{hand = []}
-    end note
-    note left of IDLE
-        emit/startTradeCollection
-        subscribe/startTradeCollection START_COLLECT
-    end note
-    state hasCardsInHand <<choice>>
-    IDLE --> hasCardsInHand: START_COLLECT
-    hasCardsInHand --> COLLECT: hasCardsInHand(#hand)
-    note left of COLLECT
-        emit/enableTargetMode (#CARD_OWN)
-    end note
-    COLLECT --> COLLECT: HOVER (index)
-    COLLECT --> COLLECT: ADD_CARD_TO_TRADE (index)
-    COLLECT --> COLLECT: REMOVE_CARD_FROM_TRADE (index)
-    hasCardsInHand --> FINISHED
-    COLLECT --> FINISHED: SKIP
-    COLLECT --> OFFERS_WAITING: SEND_TRADE
-    note left of OFFERS_WAITING
-        emit/startTrade
-        emit/disableTargetMode
-        subscribe/tradeOffersGathered GATHER_OFFERS
-        subscribe/forceEndPhase SKIP
-    end note
-    state hasOffers <<choice>>
-    OFFERS_WAITING --> hasOffers: GATHER_OFFERS (offers)
-    hasOffers --> OFFERS_CHOOSING: hasTradeOffers($offers)
-    hasOffers --> FINISHED
-    note left of OFFERS_CHOOSING
-        subscribe/forceEndPhase SKIP
-    end note
-    OFFERS_CHOOSING --> FINISHED: SKIP
-    OFFERS_CHOOSING --> OFFER_ACCEPTED: ACCEPT_OFFER (player)
-    note left of OFFER_ACCEPTED
-        emit/completeTrade
-        subscribe/completeTrade ACCEPT_OFFER
-    end note
-    OFFER_ACCEPTED --> FINISHED: ACCEPT_OFFER
-    FINISHED --> [*]
+    [*] --> IDLE
+    state hasCards <<choice>>
+    IDLE --> hasCards: START_TRADE (viewerId, hand)
+    hasCards --> COLLECT: hasCardsInHand($hand)
+    hasCards --> IDLE
+    COLLECT --> CARD_ADDED: ADD_CARD (cardId)
+    CARD_ADDED --> COLLECT: [-]
+    COLLECT --> CARD_REMOVED: REMOVE_CARD (cardId)
+    CARD_REMOVED --> COLLECT: [-]
+    COLLECT --> OFFERED: SEND_OFFER
+    OFFERED --> CHOOSING: BIDS_ARRIVED
+    CHOOSING --> ACCEPTED: ACCEPT_BID (bidderId)
+    COLLECT --> IDLE: END_TRADE
+    OFFERED --> IDLE: END_TRADE
+    CHOOSING --> IDLE: END_TRADE
+    ACCEPTED --> IDLE: END_TRADE
+
+note right of IDLE
++Init
+#{offered} <= emptyMap()
+end note
+
+note right of [*]
+define/hasCardsInHand (h) => isPositive(len(coalesce(h,[])))
+define/emptyMap () => omit(zip([],[]),[])
+#{viewerId = 0, offered = emptyMap(), bidderId = 0, seq = 0}
+subscribe/trade_phase_started START_TRADE ($viewerId, $hand)
+subscribe/trade_card_added ADD_CARD ($cardId)
+subscribe/trade_card_removed REMOVE_CARD ($cardId)
+subscribe/trade_offer_sent SEND_OFFER
+subscribe/trade_bids_gathered BIDS_ARRIVED
+subscribe/trade_bid_accepted ACCEPT_BID ($bidderId)
+subscribe/turn_phase_ended END_TRADE
+subscribe/turn_ended END_TRADE
+end note
+
+note left of COLLECT
+#{viewerId, offered, bidderId, seq} <= coalesce($viewerId, #viewerId), #offered, #bidderId, #seq
+end note
+
+note right of CARD_ADDED
++ByPass
+#{viewerId, offered, bidderId, seq} <= #viewerId, setAttr(omit(#offered,[]), $cardId, 1), #bidderId, #seq
+end note
+
+note right of CARD_REMOVED
++ByPass
+#{viewerId, offered, bidderId, seq} <= #viewerId, omit(#offered, $cardId), #bidderId, #seq
+end note
+
+note left of OFFERED
+#{viewerId, offered, bidderId, seq} <= #viewerId, #offered, #bidderId, inc(#seq)
+emit/trade_offer_committed (#viewerId, #offered, #seq)
+end note
+
+note left of CHOOSING
+#{viewerId, offered, bidderId, seq} <= #viewerId, #offered, #bidderId, #seq
+end note
+
+note right of ACCEPTED
+#{viewerId, offered, bidderId, seq} <= #viewerId, #offered, $bidderId, inc(#seq)
+emit/trade_accept_committed (#viewerId, #bidderId, #seq)
+end note

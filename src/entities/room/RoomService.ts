@@ -1,7 +1,14 @@
+import type { GameModel } from '~/entities/game';
 import type { RoomTransport } from '~/shared/net/RoomTransport';
 import { generateRoomCode, normalizeRoomCode } from '~/shared/net/RoomTransport';
 import { HostRoom } from './HostRoom';
 import { GuestRoom } from './GuestRoom';
+import {
+	type ApplyMatchEvent,
+	GuestMatchChannel,
+	HostMatchChannel,
+	type OpenMatchChannel,
+} from './MatchChannel';
 import { DEFAULT_MAX_PLAYERS, type RoomState } from './types';
 
 export class RoomConnectTimeoutError extends Error {
@@ -148,6 +155,47 @@ export class RoomService {
 			void this.leave();
 			throw error;
 		}
+	}
+
+	/**
+	 * Opens the match layer over the current room, or `null` when we are not in
+	 * one. The caller gets whichever half applies — a host that sequences, or a
+	 * guest that follows — behind one interface.
+	 *
+	 * A factory rather than a transport getter: the transport's lifecycle stays
+	 * owned here, so a channel cannot outlive (or close) the room it rides on.
+	 */
+	createMatchChannel(opts: {
+		apply: ApplyMatchEvent;
+		adopt: (model: GameModel) => void;
+		getModel: () => GameModel | null;
+	}): OpenMatchChannel | null {
+		const transport = this.#transport;
+		if (!transport) return null;
+
+		const host = this.#host;
+		if (host) {
+			const channel = new HostMatchChannel({
+				transport,
+				playerId: host.getState().hostPlayerId,
+				apply: opts.apply,
+				playerOfPeer: (peerId) => host.playerOfPeer(peerId),
+				getModel: opts.getModel,
+			});
+			return { role: 'host', channel };
+		}
+
+		const guest = this.#guest;
+		if (!guest) return null;
+
+		const channel = new GuestMatchChannel({
+			transport,
+			playerId: guest.playerId,
+			apply: opts.apply,
+			adopt: opts.adopt,
+		});
+		channel.start();
+		return { role: 'guest', channel };
 	}
 
 	/** Guest-side: ask the host to let us in. Result arrives via {@link onRequestResult}. */

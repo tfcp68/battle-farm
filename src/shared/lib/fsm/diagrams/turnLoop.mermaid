@@ -1,16 +1,59 @@
 stateDiagram-v2
     [*] --> WAITING
-    note right of [*]
-        inject/isLastTurn
-        #{lastTurn = 0}
-    end note
-    WAITING --> HARVEST
-    HARVEST --> SHOPPING
-    SHOPPING --> TRADE
-    TRADE --> PLAYING
-    PLAYING --> FERTILIZE
-    FERTILIZE --> CALCULATION
+    state isMyTurn <<choice>>
+    WAITING --> isMyTurn: BEGIN_TURN (activePlayerId, turnNumber)
+    isMyTurn --> HARVEST: isMyTurn($activePlayerId)
+    isMyTurn --> WAITING
+    HARVEST --> SHOPPING: NEXT_PHASE
+    SHOPPING --> TRADE: NEXT_PHASE
+    TRADE --> PLAYING: NEXT_PHASE
+    PLAYING --> FERTILIZE: NEXT_PHASE
+    FERTILIZE --> CALCULATION: NEXT_PHASE
     state isLastTurn <<choice>>
-    CALCULATION --> isLastTurn
-    isLastTurn --> [*]: isLastTurn(#lastTurn)
+    CALCULATION --> isLastTurn: END_TURN (lastTurn)
+    isLastTurn --> FINISHED: isEqual($lastTurn,1)
     isLastTurn --> WAITING
+    WAITING --> FINISHED: FINISH_MATCH
+
+note right of WAITING
++Init
+end note
+
+note right of [*]
+inject/getPlayerId
+define/isMyTurn (p) => and(not(isNull(getPlayerId())), isEqual(p, getPlayerId()))
+#{activePlayerId = 0, turnNumber = 0}
+subscribe/turn_started BEGIN_TURN ($activePlayerId, $turnNumber)
+subscribe/turn_phase_ended NEXT_PHASE
+subscribe/turn_ended END_TURN ($lastTurn)
+subscribe/match_ended FINISH_MATCH
+end note
+
+note left of HARVEST
+#{activePlayerId, turnNumber} <= $activePlayerId, $turnNumber
+emit/harvest_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of SHOPPING
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/shopping_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of TRADE
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/trade_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of PLAYING
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/play_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of FERTILIZE
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/fertilize_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of CALCULATION
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+end note

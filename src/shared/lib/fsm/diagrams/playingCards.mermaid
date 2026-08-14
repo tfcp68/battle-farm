@@ -1,54 +1,66 @@
 stateDiagram-v2
     direction LR
-    [*] --> IDLE: RESET
-    note right of [*]
-        inject/hasAvailableMoves
-        inject/isCropCard
-        inject/hasPlantingEffect
-        #{hand = []}
-    end note
-    state gotMoreCards <<choice>>
-    IDLE --> gotMoreCards: START_PLAY
-    gotMoreCards --> PLAYING: hasAvailableMoves(#hand)
-    state isCropCard <<choice>>
-    PLAYING --> isCropCard: CHOOSE_CARD (card)
-    PLAYING --> PLAYING: HOVER_CARD (index)
-    PLAYING --> FINISHED: SKIP
-    isCropCard --> PLANTING: isCropCard($card)
-    isCropCard --> TARGETING
-    PLANTING --> FINISHED: SKIP
-    state hasAfterPlanting <<choice>>
-    PLANTING --> CROP_PLANTED: PLANT_CROP (crop)
-    CROP_PLANTED --> hasAfterPlanting: PLANT_CROP (crop)
-    PLANTING --> PLAYING: CANCEL_SELECTION
-    hasAfterPlanting --> TARGETING: hasPlantingEffect($crop)
-    hasAfterPlanting --> gotMoreCards
-    TARGETING --> PLAYING: CANCEL_SELECTION
-    TARGETING --> EXECUTION: EXECUTE_ACTION
-    TARGETING --> FINISHED: SKIP
-    EXECUTION --> gotMoreCards: EXECUTE_ACTION
-    gotMoreCards --> FINISHED
-    FINISHED --> [*]
-    note right of IDLE
-        emit/startPlay
-        subscribe/startPlay START_PLAY
-    end note
-    note left of PLANTING
-        emit/enableTargetMode (#BED_EMPTY)
-    end note
-    note right of EXECUTION
-        emit/disableTargetMode
-        emit/applyEffect
-        subscribe/applyEffect EXECUTE_ACTION
-    end note
-    note left of TARGETING
-        emit/enableTargetMode
-    end note
-    note left of PLAYING
-        emit/enableTargetMode (#CARD_OWN)
-        subscribe/forceEndPhase SKIP
-    end note
-    note left of CROP_PLANTED
-        emit/cropPlanted
-        subscribe/cropPlanted PLANT_CROP
-    end note
+    [*] --> IDLE
+    state hasMoves <<choice>>
+    IDLE --> hasMoves: START_PLAY (viewerId, hand)
+    hasMoves --> PLAYING: hasCardsInHand($hand)
+    hasMoves --> IDLE
+    state pickedCard <<choice>>
+    PLAYING --> pickedCard: CHOOSE_CARD (cardId, cardKind, targetKind)
+    pickedCard --> PLANTING: isCropCard($cardKind)
+    pickedCard --> TARGETING: needsTarget($targetKind)
+    pickedCard --> CARD_ONLY: noTarget($targetKind)
+    CARD_ONLY --> PLAYED: [-]
+    state plantedCrop <<choice>>
+    PLANTING --> plantedCrop: CHOOSE_BED (bedIndex, targetKind)
+    plantedCrop --> TARGETING: needsTarget($targetKind)
+    plantedCrop --> PLAYED: noTarget($targetKind)
+    TARGETING --> PLAYED: PICK_TARGET (target)
+    PLAYED --> pickedCard: CHOOSE_CARD (cardId, cardKind, targetKind)
+    PLANTING --> PLAYING: CANCEL
+    TARGETING --> PLAYING: CANCEL
+    PLAYING --> IDLE: END_PLAY
+    PLANTING --> IDLE: END_PLAY
+    TARGETING --> IDLE: END_PLAY
+    PLAYED --> IDLE: END_PLAY
+
+note right of IDLE
++Init
+end note
+
+note right of [*]
+define/hasCardsInHand (h) => isPositive(len(coalesce(h,[])))
+define/isCropCard (k) => isEqual(coalesce(k,'none'),'crop')
+define/needsTarget (k) => not(isEqual(coalesce(k,'none'),'none'))
+define/noTarget (k) => isEqual(coalesce(k,'none'),'none')
+#{viewerId = 0, cardId = 0, cardKind = 'none', targetKind = 'none', bedIndex = -1, target = 0, seq = 0}
+subscribe/play_phase_started START_PLAY ($viewerId, $hand)
+subscribe/play_card_picked CHOOSE_CARD ($cardId, $cardKind, $targetKind)
+subscribe/play_bed_picked CHOOSE_BED ($bedIndex, $targetKind)
+subscribe/play_target_picked PICK_TARGET ($target)
+subscribe/selection_cancelled CANCEL
+subscribe/turn_phase_ended END_PLAY
+subscribe/turn_ended END_PLAY
+end note
+
+note left of PLAYING
+#{viewerId, cardId, cardKind, targetKind, bedIndex, target, seq} <= coalesce($viewerId, #viewerId), coalesce($cardId, #cardId), coalesce($cardKind, #cardKind), 'none', -1, 0, #seq
+end note
+
+note left of PLANTING
+#{viewerId, cardId, cardKind, targetKind, bedIndex, target, seq} <= #viewerId, $cardId, $cardKind, $targetKind, -1, 0, #seq
+end note
+
+note left of TARGETING
+#{viewerId, cardId, cardKind, targetKind, bedIndex, target, seq} <= #viewerId, coalesce($cardId, #cardId), coalesce($cardKind, #cardKind), $targetKind, coalesce($bedIndex, -1), 0, #seq
+end note
+
+note right of CARD_ONLY
++ByPass
+#{viewerId, cardId, cardKind, targetKind, bedIndex, target, seq} <= #viewerId, $cardId, $cardKind, 'none', -1, 0, #seq
+end note
+
+note right of PLAYED
+#{viewerId, cardId, cardKind, targetKind, bedIndex, target, seq} <= #viewerId, coalesce($cardId, #cardId), coalesce($cardKind, #cardKind), 'none', coalesce($bedIndex, #bedIndex), coalesce($target, 0), inc(#seq)
+emit/play_committed (#viewerId, #cardId, #bedIndex, #target, #seq)
+end note
