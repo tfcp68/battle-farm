@@ -135,10 +135,7 @@ export default function GamePage() {
 					match={match}
 					viewerId={viewerId}
 					canBuy={(shopping.state === 'BROWSING' || shopping.state === 'PURCHASED') && allowance > 0}
-					pendingSlot={shopping.pendingSlot}
 					onBuy={shopping.pickSlot}
-					onConfirm={shopping.confirmBuy}
-					onCancel={shopping.cancel}
 				/>
 
 				{phase === 'TRADE' ? (
@@ -152,18 +149,6 @@ export default function GamePage() {
 						onBid={trade.placeBid}
 						onAccept={trade.acceptBid}
 					/>
-				) : null}
-
-				{fertilizing.state === 'CROP_CONFIRM' && fertilizing.pendingBed !== null ? (
-					<div className="panel row">
-						<small className="muted">Spend a fertilizer on bed {fertilizing.pendingBed + 1}?</small>
-						<button type="button" className="primary" onClick={fertilizing.confirmFertilize}>
-							Fertilize
-						</button>
-						<button type="button" onClick={fertilizing.cancel}>
-							Cancel
-						</button>
-					</div>
 				) : null}
 
 				{viewerId ? (

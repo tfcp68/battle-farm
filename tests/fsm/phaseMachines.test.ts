@@ -67,28 +67,16 @@ describe('shopping', () => {
 		expect(open(1).state).toBe(shoppingStates.IDLE);
 	});
 
-	it('buys in two steps, and only the second one spends', () => {
+	it('spends on the slot pick', () => {
 		const shopping = open(5);
 		expect(shopping.state).toBe(shoppingStates.BROWSING);
 
 		dispatch(shopping, shoppingEvents.market_slot_picked, { slotIndex: 3 });
-		expect(shopping.state).toBe(shoppingStates.CONFIRM);
-		expect(shopping.getContext()?.context).toMatchObject({ slotIndex: 3 });
-
-		dispatch(shopping, shoppingEvents.market_purchase_confirmed, { slotIndex: 3 });
 		expect(shopping.state).toBe(shoppingStates.PURCHASED);
+		expect(shopping.getContext()?.context).toMatchObject({ slotIndex: 3 });
 	});
 
-	it('forgets the slot on cancel', () => {
-		const shopping = open(5);
-		dispatch(shopping, shoppingEvents.market_slot_picked, { slotIndex: 1 });
-		dispatch(shopping, shoppingEvents.selection_cancelled, null);
-
-		expect(shopping.state).toBe(shoppingStates.BROWSING);
-		expect(shopping.getContext()?.context).toMatchObject({ slotIndex: -1 });
-	});
-
-	it('closes with the phase, mid-decision or not', () => {
+	it('closes with the phase, mid-pick or not', () => {
 		const shopping = open(5);
 		dispatch(shopping, shoppingEvents.market_slot_picked, { slotIndex: 1 });
 		dispatch(shopping, shoppingEvents.turn_phase_ended, null);
@@ -109,24 +97,12 @@ describe('fertilizing', () => {
 		expect(open(2, []).state).toBe(fertilizingStates.IDLE);
 	});
 
-	it('spends on the confirmation, not on the pick', () => {
+	it('spends on the crop pick', () => {
 		const fertilizing = open(2, [{ bedIndex: 1, reapTimer: 3 }]);
 		expect(fertilizing.state).toBe(fertilizingStates.CROP_SELECTION);
 
 		dispatch(fertilizing, fertilizingEvents.fertilize_crop_picked, { bedIndex: 1 });
-		expect(fertilizing.state).toBe(fertilizingStates.CROP_CONFIRM);
-
-		dispatch(fertilizing, fertilizingEvents.fertilize_confirmed, { bedIndex: 1 });
 		expect(fertilizing.state).toBe(fertilizingStates.FERTILIZED);
-	});
-
-	it('drops the crop on cancel', () => {
-		const fertilizing = open(2, [{ bedIndex: 1, reapTimer: 3 }]);
-		dispatch(fertilizing, fertilizingEvents.fertilize_crop_picked, { bedIndex: 1 });
-		dispatch(fertilizing, fertilizingEvents.selection_cancelled, null);
-
-		expect(fertilizing.state).toBe(fertilizingStates.CROP_SELECTION);
-		expect(fertilizing.getContext()?.context).toMatchObject({ bedIndex: -1 });
 	});
 });
 

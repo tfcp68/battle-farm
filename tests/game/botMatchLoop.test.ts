@@ -247,8 +247,7 @@ async function botShops(peer: Peer): Promise<void> {
 
 		const before = match.version;
 		await peer.send(MatchUiEvents.market_slot_picked, { slotIndex: slots[0] });
-		expect(peer.shopping.state).toBe(shoppingStates.CONFIRM);
-		await peer.send(MatchUiEvents.market_purchase_confirmed, null);
+		expect(peer.shopping.state).toBe(shoppingStates.PURCHASED);
 		if (peer.store.get().match!.version === before) return;
 	}
 }
@@ -369,8 +368,7 @@ async function botFertilizes(peer: Peer): Promise<void> {
 
 		const before = match.version;
 		await peer.send(MatchUiEvents.fertilize_crop_picked, { bedIndex });
-		expect(peer.fertilizing.state).toBe(fertilizingStates.CROP_CONFIRM);
-		await peer.send(MatchUiEvents.fertilize_confirmed, null);
+		expect(peer.fertilizing.state).toBe(fertilizingStates.FERTILIZED);
 		if (peer.store.get().match!.version === before) return;
 	}
 }
@@ -485,18 +483,17 @@ describe('a full bot match through the real CoreLoop', () => {
 		expect(slots.length).toBeGreaterThan(0);
 
 		await peer.send(MatchUiEvents.market_slot_picked, { slotIndex: slots[0] });
-		await peer.send(MatchUiEvents.market_purchase_confirmed, null);
 		expect(peer.shopping.state).toBe(shoppingStates.PURCHASED);
 		expect(peer.submitted.filter((entry) => entry.kind === 'card_bought')).toHaveLength(1);
 
 		/**
-		 * Trap 7 in the flesh: PURCHASED has no edge for `market_purchase_confirmed`,
+		 * Trap 7 in the flesh: PURCHASED has no edge for `shopping_phase_started`,
 		 * so these dispatches change nothing — but the emitter still fires from the
 		 * state the machine is resting in. The reducer does not run on a dead
 		 * dispatch, so `seq` stays put and the journal drops the re-issues.
 		 */
-		await peer.send(MatchUiEvents.market_purchase_confirmed, null);
-		await peer.send(MatchUiEvents.market_purchase_confirmed, null);
+		await peer.send(MatchUiEvents.shopping_phase_started, null);
+		await peer.send(MatchUiEvents.shopping_phase_started, null);
 
 		expect(peer.shopping.state).toBe(shoppingStates.PURCHASED);
 		expect(peer.submitted.filter((entry) => entry.kind === 'card_bought')).toHaveLength(1);

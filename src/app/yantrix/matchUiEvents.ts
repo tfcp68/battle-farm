@@ -47,10 +47,9 @@ export const MatchUiEvents = {
 	// HARVEST — nothing to click; the machine only says whether anything ripened.
 	harvest_phase_started: harvestEvents.harvest_phase_started,
 
-	// SHOPPING — pick a slot, then confirm before the coins go.
+	// SHOPPING — one step: picking a slot spends the coins.
 	shopping_phase_started: shoppingEvents.shopping_phase_started,
 	market_slot_picked: shoppingEvents.market_slot_picked,
-	market_purchase_confirmed: shoppingEvents.market_purchase_confirmed,
 
 	// TRADE, seller's half — collect a set, offer it, take a bid.
 	trade_phase_started: tradingEvents.trade_phase_started,
@@ -71,10 +70,9 @@ export const MatchUiEvents = {
 	play_bed_picked: playEvents.play_bed_picked,
 	play_target_picked: playEvents.play_target_picked,
 
-	// FERTILIZE — pick a crop, then confirm.
+	// FERTILIZE — one step: picking a crop spends the fertilizer.
 	fertilize_phase_started: fertilizingEvents.fertilize_phase_started,
 	fertilize_crop_picked: fertilizingEvents.fertilize_crop_picked,
-	fertilize_confirmed: fertilizingEvents.fertilize_confirmed,
 
 	/** Shared: back out of whatever is half-picked, in whichever phase is open. */
 	selection_cancelled: playEvents.selection_cancelled,
@@ -114,7 +112,6 @@ export interface MatchUiEventMeta {
 	/** `marketPrices` is what `hasCoinsForTrade` weighs the purse against. */
 	shopping_phase_started: { viewerId: PlayerId; coins: number; marketPrices: number[] };
 	market_slot_picked: { slotIndex: number };
-	market_purchase_confirmed: { slotIndex: number };
 
 	trade_phase_started: { viewerId: PlayerId; hand: CardInstanceId[] };
 	trade_card_added: { cardId: CardInstanceId };
@@ -136,7 +133,6 @@ export interface MatchUiEventMeta {
 
 	fertilize_phase_started: { viewerId: PlayerId; fertilizers: number; crops: RipeCropFact[] };
 	fertilize_crop_picked: { bedIndex: number };
-	fertilize_confirmed: { bedIndex: number };
 
 	selection_cancelled: null;
 }

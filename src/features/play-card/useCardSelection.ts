@@ -1,18 +1,22 @@
 import {
 	type CardInstanceId,
+	cropsOf,
 	type EffectTarget,
-	definitionOf,
+	growingCrops,
 	isCropDefinition,
+	opponentsOf,
 	plantTargetOf,
 	type SelectionKind,
 	selectionKindOf,
+	type TargetKind,
 } from '~/entities/game';
 import { useFSM } from '@yantrix/react';
 import { useMachines } from '~/app/providers/MachinesContext';
 import { emitDomainEvent } from '~/app/yantrix/data/sources/UIBridgeDataSource';
 import { MatchUiEvents } from '~/app/yantrix/matchUiEvents';
-import { useMatch } from '~/app/yantrix/useGameModel';
+import { useMatch, useViewerId } from '~/app/yantrix/useGameModel';
 import { statesDictionary as playStates } from '~/shared/lib/fsm/game/PlayingCardsAutomata';
+import { definitionOf, CROP_COLORS } from '~/entities/game';
 
 /** What the page renders: which step of the play flow the local player is on. */
 export type PlayStep = 'idle' | 'choosing' | 'planting' | 'targeting';
@@ -44,6 +48,59 @@ const STEP_BY_STATE: Record<number, PlayStep> = {
 };
 
 /**
+ * First legal target for a `TargetKind`, used so click + drag both commit in
+ * one gesture. Mirrors `optionsFor` in `TargetOverlay.tsx` so the auto-pick
+ * rule and the (now-defunct) overlay's option list never disagreed; the
+ * overlay is gone in this iteration, but the rule is the same.
+ */
+function firstValidTarget(
+	match: ReturnType<typeof useMatch>,
+	viewerId: string,
+	kind: TargetKind,
+): EffectTarget | null {
+	if (!match) return null;
+	switch (kind) {
+		case 'opponent': {
+			const opp = opponentsOf(match, viewerId as never)[0];
+			return opp ? { playerId: opp } : null;
+		}
+		case 'any_player': {
+			const p = match.order[0];
+			return p ? { playerId: p } : null;
+		}
+		case 'any_crop': {
+			const c = growingCrops(match)[0];
+			return c ? { playerId: c.playerId, bedIndex: c.bedIndex } : null;
+		}
+		case 'own_crop': {
+			const c = cropsOf(match, viewerId as never)[0];
+			return c ? { playerId: c.playerId, bedIndex: c.bedIndex } : null;
+		}
+		case 'any_bed': {
+			for (const pid of match.order) {
+				if (pid === viewerId) continue;
+				if ((match.players[pid]?.beds ?? []).length > 0) {
+					return { playerId: pid, bedIndex: 0 };
+				}
+			}
+			return null;
+		}
+		case 'card_in_hand': {
+			const c = match.players[viewerId as never]?.hand[0];
+			return c ? { cardId: c } : null;
+		}
+		case 'card_in_discard': {
+			const top = match.discard[match.discard.length - 1];
+			return top ? { cardId: top } : null;
+		}
+		case 'crop_color':
+			return { color: CROP_COLORS[0] };
+		case 'none':
+			return null;
+	}
+}
+
+/**
  * The PLAYING phase's selection, read from the two automata and driven by four
  * events.
  *
@@ -55,6 +112,13 @@ const STEP_BY_STATE: Record<number, PlayStep> = {
  * The card's *kind* travels in the event because the machine branches on it
  * (`isCropCard`) — the alternative, sending a precomputed verdict, would leave
  * the diagram describing a decision it no longer makes.
+ *
+ * **`pickBed` commits in one click.** A Crop whose `on_plant` ability asks for
+ * a target used to land on the TargetOverlay after the bed click; now
+ * `pickBed` follows `play_bed_picked` with an auto-picked `play_target_picked`
+ * when the ability needs one. Both events are queued in the same tick — the
+ * bus drains them together, React sees the final `PLAYED` state, and the
+ * overlay never paints.
  */
 export function useCardSelection(): PlaySelection & {
 	pickCard: (cardId: CardInstanceId) => void;
@@ -72,6 +136,7 @@ export function useCardSelection(): PlaySelection & {
 	cancel: () => void;
 } {
 	const match = useMatch();
+	const viewerId = useViewerId();
 	const { play, target } = useMachines();
 	const { state: playState, getContext } = useFSM<PlayContext>(play.instance);
 	const { getContext: getTargetContext } = useFSM<{ targetKind?: string }>(target.instance);
@@ -115,8 +180,23 @@ export function useCardSelection(): PlaySelection & {
 		},
 
 		pickBed(pickedBed: number) {
-			if (!match || !cardId) return;
-			emitDomainEvent(MatchUiEvents.play_bed_picked, bedMeta(definitionOf(match, cardId), cardId, pickedBed));
+			if (!match || !cardId || !viewerId) return;
+			const card = definitionOf(match, cardId);
+			// pickBed is reachable only from PLANTING, which is crop-only — but
+			// TypeScript can't see that, so guard explicitly.
+			if (!isCropDefinition(card)) return;
+			const targetKind = plantTargetOf(card);
+			emitDomainEvent(MatchUiEvents.play_bed_picked, bedMeta(card, cardId, pickedBed));
+			if (targetKind !== 'none') {
+				const target = firstValidTarget(match, viewerId, targetKind);
+				if (target) {
+					emitDomainEvent(MatchUiEvents.play_target_picked, {
+						cardId,
+						bedIndex: pickedBed,
+						target,
+					});
+				}
+			}
 		},
 
 		plantCard(pickedId: CardInstanceId, pickedBed: number) {

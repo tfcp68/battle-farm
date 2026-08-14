@@ -9,43 +9,28 @@ interface ShoppingContext {
 }
 
 /**
- * SHOPPING: take a Market slot, in two steps.
+ * SHOPPING: one Market slot is one purchase. The previous two-step confirm
+ * (pick a slot, then re-click a confirm bar before the coins move) was removed
+ * in `feat(yantrix): drop the buy/fertilize confirm layers` — `shopping.mermaid`
+ * now goes `BROWSING -> PURCHASED` on `CHOOSE_SLOT`, so the page renders no
+ * bar and the player has one fewer click to lose a turn on.
  *
- * The confirm is the diagram's, not an invention: `shopping.mermaid` has always
- * had CONFIRM_TRADE between browsing and buying, and a phase that spends coins
- * on a single click is one misclick away from a lost turn. The roll still caps
- * how many times the second step may land — that check is the model's.
+ * The shopping allowance (the 1d4/1d6/1d20 roll) is still enforced by the
+ * model, not here.
  */
 export function useBuyCard(): {
 	/** The machine's own state name; `null` before it has started. */
 	state: ShoppingStateName | null;
-	/** The slot awaiting confirmation, or `null` while browsing. */
-	pendingSlot: number | null;
 	pickSlot: (slotIndex: number) => void;
-	confirmBuy: () => void;
-	cancel: () => void;
 } {
 	const { shopping } = useMachines();
-	const { state: fsmState, getContext } = useFSM<ShoppingContext>(shopping.instance);
-
-	const raw = getContext()?.context?.slotIndex;
-	const pendingSlot = typeof raw === 'number' && raw >= 0 ? raw : null;
+	const { state: fsmState } = useFSM<ShoppingContext>(shopping.instance);
 
 	return {
 		state: shoppingStateName(fsmState),
-		pendingSlot,
 
 		pickSlot(slotIndex: number) {
 			emitDomainEvent(MatchUiEvents.market_slot_picked, { slotIndex });
-		},
-
-		confirmBuy() {
-			if (pendingSlot === null) return;
-			emitDomainEvent(MatchUiEvents.market_purchase_confirmed, { slotIndex: pendingSlot });
-		},
-
-		cancel() {
-			emitDomainEvent(MatchUiEvents.selection_cancelled, null);
 		},
 	};
 }

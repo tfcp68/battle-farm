@@ -14,27 +14,20 @@ import { DraggableCard } from './DraggableCard';
  * The Market row, plus the two piles whose sizes the endgame hangs on — an empty
  * Deck is one of the two triggers, so the counter is not decoration.
  *
- * Buying takes two clicks. `ShoppingAutomata` holds the slot between them, so
- * `pendingSlot` is read off the machine rather than kept here: a phase that ends
- * mid-decision takes the pending slot with it, without this widget knowing.
- *
- * Dragging a card to the hand replaces the *first* of those two clicks, not
- * both: the confirm bar still appears, because coins must not leave on a single
- * gesture.
+ * Buying is one click. `ShoppingAutomata` no longer holds a slot between two
+ * steps; `BROWSING -> PURCHASED` fires on the same `CHOOSE_SLOT` event,
+ * regardless of whether the gesture was a click or a drag, and the coins leave
+ * the purse on that single event. The allowance (1d4/1d6/1d20) is still
+ * enforced by the model — `canBuy` is what the page uses to gate the slot.
  */
 export function Market(props: {
 	match: GameModel;
 	viewerId: PlayerId | null;
 	canBuy: boolean;
-	/** The slot waiting for a confirmation, or `null` while browsing. */
-	pendingSlot?: number | null;
 	onBuy: (slotIndex: number) => void;
-	onConfirm?: () => void;
-	onCancel?: () => void;
 }) {
-	const { match, viewerId, canBuy, pendingSlot = null, onBuy, onConfirm, onCancel } = props;
+	const { match, viewerId, canBuy, onBuy } = props;
 	const coins = viewerId ? (match.players[viewerId]?.coins ?? 0) : 0;
-	const pendingCardId = pendingSlot === null ? null : (match.market[pendingSlot] ?? null);
 
 	return (
 		<div className="panel">
@@ -45,21 +38,6 @@ export function Market(props: {
 					<small className="muted">Discard {match.discard.length}</small>
 				</div>
 			</div>
-
-			{pendingCardId ? (
-				<div className="row">
-					<small className="muted">
-						Buy {definitionOf(match, pendingCardId).name} for{' '}
-						{marketPriceOf(definitionOf(match, pendingCardId)) ?? '—'} coin(s)?
-					</small>
-					<button type="button" className="primary" data-testid="confirm-buy" onClick={onConfirm}>
-						Buy
-					</button>
-					<button type="button" onClick={onCancel}>
-						Cancel
-					</button>
-				</div>
-			) : null}
 
 			<div className="market">
 				{Array.from({ length: MARKET_SIZE }, (_, slotIndex) => {
@@ -81,7 +59,7 @@ export function Market(props: {
 						definition,
 						value: valueOf(match, cardId),
 						footer: price === null ? '—' : `${price} coin(s)`,
-						selected: slotIndex === pendingSlot,
+						selected: false,
 						disabled: !takeable,
 						onClick: takeable ? () => onBuy(slotIndex) : undefined,
 					};

@@ -2,10 +2,6 @@ import { describe, expect, it } from '@jest/globals';
 import { asCardInstanceId, asPlayerId, CARD_DEFINITIONS, plantTargetOf, selectionKindOf } from '~/entities/game';
 import type { CardDefinition, CropDefinition } from '~/entities/game';
 import { isCropDefinition } from '~/entities/game';
-import FertilizingAutomata, {
-	eventDictionary as fertilizingEvents,
-	statesDictionary as fertilizingStates,
-} from '~/shared/lib/fsm/game/FertilizingAutomata';
 import PlayingCardsAutomata, {
 	eventDictionary as playEvents,
 	statesDictionary as playStates,
@@ -14,6 +10,10 @@ import ShoppingAutomata, {
 	eventDictionary as shoppingEvents,
 	statesDictionary as shoppingStates,
 } from '~/shared/lib/fsm/game/ShoppingAutomata';
+import FertilizingAutomata, {
+	eventDictionary as fertilizingEvents,
+	statesDictionary as fertilizingStates,
+} from '~/shared/lib/fsm/game/FertilizingAutomata';
 import TradingAutomata, {
 	eventDictionary as tradingEvents,
 	statesDictionary as tradingStates,
@@ -26,10 +26,10 @@ import WaitingAutomata, {
 /**
  * When a move is final, and how a destination knows.
  *
- * It used to be a state comparison in TypeScript — "is the machine back in
- * BROWSING? then the buy went through" — which restated the diagram badly
- * enough to let two real bugs through (both reproduced below). Now the machine
- * enters a state that means *committed* and emits from it.
+ * The shopping and fertilizing machines no longer carry a CONFIRM state —
+ * picking the slot (resp. the bed) commits the move directly. The two tests
+ * below pin that one-step flow: one `CHOOSE_SLOT`/`CHOOSE_CROP` event, one
+ * emission, one `seq++`.
  *
  * The emitter is not enough on its own: it re-fires on every accepted dispatch
  * while the machine rests in that state, including actions with no edge out of
@@ -64,7 +64,7 @@ function drive(machine: Machine, event: number, meta: Record<string, unknown> | 
 
 const seqOf = (machine: Machine) => (machine.getContext()?.context as { seq?: number } | null)?.seq;
 
-describe('shopping commits on the confirmation', () => {
+describe('shopping commits on the slot pick', () => {
 	const open = () => {
 		const shopping = new ShoppingAutomata();
 		drive(shopping, shoppingEvents.shopping_phase_started, {
@@ -77,39 +77,18 @@ describe('shopping commits on the confirmation', () => {
 
 	it('emits once, with the slot and the buyer', () => {
 		const shopping = open();
-		expect(drive(shopping, shoppingEvents.market_slot_picked, { slotIndex: 3 })).toEqual([]);
-		expect(shopping.state).toBe(shoppingStates.CONFIRM);
+		const emitted = drive(shopping, shoppingEvents.market_slot_picked, { slotIndex: 3 });
 
-		const emitted = drive(shopping, shoppingEvents.market_purchase_confirmed, null);
 		expect(shopping.state).toBe(shoppingStates.PURCHASED);
 		expect(emitted).toHaveLength(1);
 		expect(emitted[0]?.meta).toMatchObject({ viewerId: ME, slotIndex: 3, seq: 1 });
 	});
 
-	/**
-	 * Live bug this closes. The old gate was `shoppingState === BROWSING`, and a
-	 * confirm arriving from BROWSING with nothing picked leaves the machine in
-	 * BROWSING — so the gate passed and a phantom buy went to the table. Only
-	 * `useBuyCard`'s `if (pendingSlot === null) return` stopped it, which put the
-	 * rule in the UI instead of in the machine.
-	 */
-	it('does not buy from BROWSING with no slot picked', () => {
-		const shopping = open();
-		expect(shopping.state).toBe(shoppingStates.BROWSING);
-
-		const emitted = drive(shopping, shoppingEvents.market_purchase_confirmed, { slotIndex: 3 });
-
-		expect(shopping.state).toBe(shoppingStates.BROWSING);
-		expect(emitted).toEqual([]);
-	});
-
-	it('keeps buying, one commit per confirmation', () => {
+	it('keeps buying, one commit per slot pick', () => {
 		const shopping = open();
 		drive(shopping, shoppingEvents.market_slot_picked, { slotIndex: 3 });
-		drive(shopping, shoppingEvents.market_purchase_confirmed, null);
 
-		drive(shopping, shoppingEvents.market_slot_picked, { slotIndex: 1 });
-		const second = drive(shopping, shoppingEvents.market_purchase_confirmed, null);
+		const second = drive(shopping, shoppingEvents.market_slot_picked, { slotIndex: 1 });
 		expect(second[0]?.meta).toMatchObject({ slotIndex: 1, seq: 2 });
 	});
 
@@ -117,16 +96,17 @@ describe('shopping commits on the confirmation', () => {
 	it('re-issues the same seq on a dispatch it has no edge for', () => {
 		const shopping = open();
 		drive(shopping, shoppingEvents.market_slot_picked, { slotIndex: 3 });
-		drive(shopping, shoppingEvents.market_purchase_confirmed, null);
 		expect(seqOf(shopping)).toBe(1);
 
-		drive(shopping, shoppingEvents.market_purchase_confirmed, null);
-		drive(shopping, shoppingEvents.selection_cancelled, null);
+		// Anything we fire past PURCHASED with no edge just bounces off the
+		// machine — the emitter still fires (trap 7), but the seq stays put.
+		const idle = drive(shopping, shoppingEvents.shopping_phase_started, null);
 		expect(seqOf(shopping)).toBe(1);
+		expect(idle.every((e) => e.meta.seq === 1)).toBe(true);
 	});
 });
 
-describe('fertilizing commits on the confirmation', () => {
+describe('fertilizing commits on the crop pick', () => {
 	const open = () => {
 		const fertilizing = new FertilizingAutomata();
 		drive(fertilizing, fertilizingEvents.fertilize_phase_started, {
@@ -139,18 +119,18 @@ describe('fertilizing commits on the confirmation', () => {
 
 	it('emits once, with the bed and the player', () => {
 		const fertilizing = open();
-		drive(fertilizing, fertilizingEvents.fertilize_crop_picked, { bedIndex: 1 });
-		expect(fertilizing.state).toBe(fertilizingStates.CROP_CONFIRM);
+		const emitted = drive(fertilizing, fertilizingEvents.fertilize_crop_picked, { bedIndex: 1 });
 
-		const emitted = drive(fertilizing, fertilizingEvents.fertilize_confirmed, null);
 		expect(fertilizing.state).toBe(fertilizingStates.FERTILIZED);
 		expect(emitted[0]?.meta).toMatchObject({ viewerId: ME, bedIndex: 1, seq: 1 });
 	});
 
-	it('does not fertilize from CROP_SELECTION with no bed picked', () => {
+	it('keeps fertilizing, one commit per crop pick', () => {
 		const fertilizing = open();
-		expect(drive(fertilizing, fertilizingEvents.fertilize_confirmed, { bedIndex: 1 })).toEqual([]);
-		expect(fertilizing.state).toBe(fertilizingStates.CROP_SELECTION);
+		drive(fertilizing, fertilizingEvents.fertilize_crop_picked, { bedIndex: 1 });
+
+		const second = drive(fertilizing, fertilizingEvents.fertilize_crop_picked, { bedIndex: 2 });
+		expect(second[0]?.meta).toMatchObject({ bedIndex: 2, seq: 2 });
 	});
 });
 

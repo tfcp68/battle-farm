@@ -9,43 +9,29 @@ interface FertilizingContext {
 }
 
 /**
- * FERTILIZE: one fertilizer takes one turn off one of your crops' Reap Timers.
+ * FERTILIZE: one crop is one fertilizer. The two-step confirm (pick a crop,
+ * then re-click a confirm bar before the resource moves) is gone —
+ * `fertilizing.mermaid` now goes `CROP_SELECTION -> FERTILIZED` on
+ * `CHOOSE_CROP`, so a click on a growing crop immediately spends one
+ * fertilizer and shaves a turn off its reap timer.
  *
- * Two steps, like shopping: a fertilizer spent on the wrong bed cannot be taken
- * back, and `fertilizing.mermaid` draws the confirm as CROP_CONFIRM. The machine
- * refuses to open at all when there is no fertilizer or no crop (`canFertilize`),
- * so the page has no such rule of its own.
+ * The `canFertilize` guard in the FSM still refuses to open at all when
+ * there is no fertilizer or no growing crop, so the page has no such rule of
+ * its own.
  */
 export function useFertilizeCrop(): {
 	/** The machine's own state name; `null` before it has started. */
 	state: FertilizeStateName | null;
-	/** The bed awaiting confirmation, or `null` while choosing. */
-	pendingBed: number | null;
 	pickCrop: (bedIndex: number) => void;
-	confirmFertilize: () => void;
-	cancel: () => void;
 } {
 	const { fertilizing } = useMachines();
-	const { state: fsmState, getContext } = useFSM<FertilizingContext>(fertilizing.instance);
-
-	const raw = getContext()?.context?.bedIndex;
-	const pendingBed = typeof raw === 'number' && raw >= 0 ? raw : null;
+	const { state: fsmState } = useFSM<FertilizingContext>(fertilizing.instance);
 
 	return {
 		state: fertilizeStateName(fsmState),
-		pendingBed,
 
 		pickCrop(bedIndex: number) {
 			emitDomainEvent(MatchUiEvents.fertilize_crop_picked, { bedIndex });
-		},
-
-		confirmFertilize() {
-			if (pendingBed === null) return;
-			emitDomainEvent(MatchUiEvents.fertilize_confirmed, { bedIndex: pendingBed });
-		},
-
-		cancel() {
-			emitDomainEvent(MatchUiEvents.selection_cancelled, null);
 		},
 	};
 }
