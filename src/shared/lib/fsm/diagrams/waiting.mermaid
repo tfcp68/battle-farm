@@ -2,7 +2,7 @@ stateDiagram-v2
     direction LR
     [*] --> IDLE
     state hasMoney <<choice>>
-    IDLE --> hasMoney: OFFER_APPEARED (coins)
+    IDLE --> hasMoney: OFFER_APPEARED (viewerId, coins)
     hasMoney --> HAS_TRADE: isPositive($coins)
     hasMoney --> IDLE
     HAS_TRADE --> BID_SENT: MAKE_BID (coins)
@@ -14,12 +14,18 @@ note right of IDLE
 end note
 
 note right of [*]
-#{bid = 0}
-subscribe/trade_offer_appeared OFFER_APPEARED ($coins)
+#{viewerId = 0, bid = 0, seq = 0}
+subscribe/trade_offer_appeared OFFER_APPEARED ($viewerId, $coins)
 subscribe/waiting_bid_placed MAKE_BID ($coins)
 subscribe/trade_offer_closed OFFER_CLOSED
+subscribe/turn_ended OFFER_CLOSED
+end note
+
+note left of HAS_TRADE
+#{viewerId, bid, seq} <= $viewerId, 0, #seq
 end note
 
 note left of BID_SENT
-#{bid} <= $coins
+#{viewerId, bid, seq} <= #viewerId, $coins, inc(#seq)
+emit/waiting_bid_committed (#viewerId, #bid, #seq)
 end note

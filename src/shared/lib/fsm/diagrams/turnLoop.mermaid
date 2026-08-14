@@ -31,4 +31,29 @@ end note
 
 note left of HARVEST
 #{activePlayerId, turnNumber} <= $activePlayerId, $turnNumber
+emit/harvest_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of SHOPPING
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/shopping_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of TRADE
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/trade_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of PLAYING
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/play_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of FERTILIZE
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
+emit/fertilize_phase_opened (#activePlayerId, #turnNumber)
+end note
+
+note left of CALCULATION
+#{activePlayerId, turnNumber} <= #activePlayerId, #turnNumber
 end note

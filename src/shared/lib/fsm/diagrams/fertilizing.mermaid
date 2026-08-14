@@ -1,14 +1,16 @@
 stateDiagram-v2
     [*] --> IDLE
     state canApply <<choice>>
-    IDLE --> canApply: START_FERTILIZE (fertilizers, crops)
+    IDLE --> canApply: START_FERTILIZE (viewerId, fertilizers, crops)
     canApply --> CROP_SELECTION: canFertilize($fertilizers, $crops)
     canApply --> IDLE
     CROP_SELECTION --> CROP_CONFIRM: CHOOSE_CROP (bedIndex)
-    CROP_CONFIRM --> CROP_SELECTION: CONFIRM_FERTILIZE
+    CROP_CONFIRM --> FERTILIZED: CONFIRM_FERTILIZE
     CROP_CONFIRM --> CROP_SELECTION: CANCEL
+    FERTILIZED --> CROP_CONFIRM: CHOOSE_CROP (bedIndex)
     CROP_SELECTION --> IDLE: END_FERTILIZE
     CROP_CONFIRM --> IDLE: END_FERTILIZE
+    FERTILIZED --> IDLE: END_FERTILIZE
 
 note right of IDLE
 +Init
@@ -16,18 +18,24 @@ end note
 
 note right of [*]
 define/canFertilize (f,c) => and(isPositive(coalesce(f,0)), isPositive(len(coalesce(c,[]))))
-#{bedIndex = -1}
-subscribe/fertilize_phase_started START_FERTILIZE ($fertilizers, $crops)
+#{viewerId = 0, bedIndex = -1, seq = 0}
+subscribe/fertilize_phase_started START_FERTILIZE ($viewerId, $fertilizers, $crops)
 subscribe/fertilize_crop_picked CHOOSE_CROP ($bedIndex)
 subscribe/fertilize_confirmed CONFIRM_FERTILIZE
 subscribe/selection_cancelled CANCEL
-subscribe/fertilize_phase_ended END_FERTILIZE
+subscribe/turn_phase_ended END_FERTILIZE
+subscribe/turn_ended END_FERTILIZE
 end note
 
 note left of CROP_SELECTION
-#{bedIndex} <= -1
+#{viewerId, bedIndex, seq} <= coalesce($viewerId, #viewerId), -1, #seq
 end note
 
 note left of CROP_CONFIRM
-#{bedIndex} <= $bedIndex
+#{viewerId, bedIndex, seq} <= #viewerId, $bedIndex, #seq
+end note
+
+note right of FERTILIZED
+#{viewerId, bedIndex, seq} <= #viewerId, #bedIndex, inc(#seq)
+emit/fertilize_committed (#viewerId, #bedIndex, #seq)
 end note

@@ -13,5 +13,6 @@ end note
 note right of [*]
 define/hasRipeCrops (c) => isPositive(len(filterBy(coalesce(c,[]),'reapTimer',0)))
 subscribe/harvest_phase_started START_HARVEST ($crops)
-subscribe/harvest_phase_ended END_HARVEST
+subscribe/turn_phase_ended END_HARVEST
+subscribe/turn_ended END_HARVEST
 end note

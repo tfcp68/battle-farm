@@ -1,14 +1,16 @@
 stateDiagram-v2
     [*] --> IDLE
     state canAfford <<choice>>
-    IDLE --> canAfford: START_SHOPPING (coins, marketPrices)
+    IDLE --> canAfford: START_SHOPPING (viewerId, coins, marketPrices)
     canAfford --> BROWSING: hasCoinsForTrade($coins, $marketPrices)
     canAfford --> IDLE
     BROWSING --> CONFIRM: CHOOSE_SLOT (slotIndex)
-    CONFIRM --> BROWSING: CONFIRM_BUY
+    CONFIRM --> PURCHASED: CONFIRM_BUY
     CONFIRM --> BROWSING: CANCEL
+    PURCHASED --> CONFIRM: CHOOSE_SLOT (slotIndex)
     BROWSING --> IDLE: END_SHOPPING
     CONFIRM --> IDLE: END_SHOPPING
+    PURCHASED --> IDLE: END_SHOPPING
 
 note right of IDLE
 +Init
@@ -16,18 +18,24 @@ end note
 
 note right of [*]
 define/hasCoinsForTrade (c,p) => and(isPositive(len(p)), isGreaterOrEqual(coalesce(c,0), coalesce(min(p),0)))
-#{slotIndex = -1}
-subscribe/shopping_phase_started START_SHOPPING ($coins, $marketPrices)
+#{viewerId = 0, slotIndex = -1, seq = 0}
+subscribe/shopping_phase_started START_SHOPPING ($viewerId, $coins, $marketPrices)
 subscribe/market_slot_picked CHOOSE_SLOT ($slotIndex)
 subscribe/market_purchase_confirmed CONFIRM_BUY
 subscribe/selection_cancelled CANCEL
-subscribe/shopping_phase_ended END_SHOPPING
+subscribe/turn_phase_ended END_SHOPPING
+subscribe/turn_ended END_SHOPPING
 end note
 
 note left of BROWSING
-#{slotIndex} <= -1
+#{viewerId, slotIndex, seq} <= coalesce($viewerId, #viewerId), -1, #seq
 end note
 
 note left of CONFIRM
-#{slotIndex} <= $slotIndex
+#{viewerId, slotIndex, seq} <= #viewerId, $slotIndex, #seq
+end note
+
+note right of PURCHASED
+#{viewerId, slotIndex, seq} <= #viewerId, #slotIndex, inc(#seq)
+emit/shopping_committed (#viewerId, #slotIndex, #seq)
 end note

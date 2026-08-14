@@ -1,7 +1,7 @@
 stateDiagram-v2
     [*] --> IDLE
     state hasCards <<choice>>
-    IDLE --> hasCards: START_TRADE (hand)
+    IDLE --> hasCards: START_TRADE (viewerId, hand)
     hasCards --> COLLECT: hasCardsInHand($hand)
     hasCards --> IDLE
     COLLECT --> CARD_ADDED: ADD_CARD (cardId)
@@ -10,10 +10,11 @@ stateDiagram-v2
     CARD_REMOVED --> COLLECT: [-]
     COLLECT --> OFFERED: SEND_OFFER
     OFFERED --> CHOOSING: BIDS_ARRIVED
-    CHOOSING --> IDLE: ACCEPT_BID
+    CHOOSING --> ACCEPTED: ACCEPT_BID (bidderId)
     COLLECT --> IDLE: END_TRADE
     OFFERED --> IDLE: END_TRADE
     CHOOSING --> IDLE: END_TRADE
+    ACCEPTED --> IDLE: END_TRADE
 
 note right of IDLE
 +Init
@@ -23,34 +24,41 @@ end note
 note right of [*]
 define/hasCardsInHand (h) => isPositive(len(coalesce(h,[])))
 define/emptyMap () => omit(zip([],[]),[])
-#{offered = emptyMap()}
-subscribe/trade_phase_started START_TRADE ($hand)
+#{viewerId = 0, offered = emptyMap(), bidderId = 0, seq = 0}
+subscribe/trade_phase_started START_TRADE ($viewerId, $hand)
 subscribe/trade_card_added ADD_CARD ($cardId)
 subscribe/trade_card_removed REMOVE_CARD ($cardId)
 subscribe/trade_offer_sent SEND_OFFER
 subscribe/trade_bids_gathered BIDS_ARRIVED
-subscribe/trade_bid_accepted ACCEPT_BID
-subscribe/trade_phase_ended END_TRADE
+subscribe/trade_bid_accepted ACCEPT_BID ($bidderId)
+subscribe/turn_phase_ended END_TRADE
+subscribe/turn_ended END_TRADE
 end note
 
 note left of COLLECT
-#{offered} <= #offered
+#{viewerId, offered, bidderId, seq} <= coalesce($viewerId, #viewerId), #offered, #bidderId, #seq
 end note
 
 note right of CARD_ADDED
 +ByPass
-#{offered} <= setAttr(omit(#offered,[]), $cardId, 1)
+#{viewerId, offered, bidderId, seq} <= #viewerId, setAttr(omit(#offered,[]), $cardId, 1), #bidderId, #seq
 end note
 
 note right of CARD_REMOVED
 +ByPass
-#{offered} <= omit(#offered, $cardId)
+#{viewerId, offered, bidderId, seq} <= #viewerId, omit(#offered, $cardId), #bidderId, #seq
 end note
 
 note left of OFFERED
-#{offered} <= #offered
+#{viewerId, offered, bidderId, seq} <= #viewerId, #offered, #bidderId, inc(#seq)
+emit/trade_offer_committed (#viewerId, #offered, #seq)
 end note
 
 note left of CHOOSING
-#{offered} <= #offered
+#{viewerId, offered, bidderId, seq} <= #viewerId, #offered, #bidderId, #seq
+end note
+
+note right of ACCEPTED
+#{viewerId, offered, bidderId, seq} <= #viewerId, #offered, $bidderId, inc(#seq)
+emit/trade_accept_committed (#viewerId, #bidderId, #seq)
 end note
