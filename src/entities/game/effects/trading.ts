@@ -13,14 +13,30 @@ import {
  * partial deals — the set moves or nothing does.
  */
 
-/** The active player puts cards up. Replaces any previous offer this turn. */
+/**
+ * The active player puts cards up. Replaces any previous offer this turn.
+ *
+ * There is no separate "send" any more: the seller's every pick arrives here, so
+ * this runs once per card rather than once per turn, and the last call wins. Two
+ * consequences worth stating, because both are deliberate:
+ *
+ * - **An empty set retracts the offer.** Taking the last card back off the table
+ *   is how a seller changes their mind, and leaving a stale set up would be the
+ *   one way to trade a card you no longer meant to.
+ * - **Bids start over on every change.** They were made against a different set,
+ *   so keeping them would let a seller add a card to a price somebody already
+ *   agreed to. The seller only gets this window until the first bid lands —
+ *   after that `TradingAutomata` is in CHOOSING and sends nothing more.
+ */
 export function offerTrade(model: GameModel, intent: { playerId: PlayerId; cardIds: CardInstanceId[] }): GameModel {
 	const { playerId, cardIds } = intent;
 	if (model.turn.phase !== 'TRADE' || model.turn.activePlayerId !== playerId) return model;
 
 	const hand = model.players[playerId]?.hand ?? [];
 	const offered = cardIds.filter((cardId) => hand.includes(cardId));
-	if (offered.length === 0) return model;
+	if (offered.length === 0) {
+		return model.turn.trade === null ? model : { ...model, turn: { ...model.turn, trade: null } };
+	}
 
 	return { ...model, turn: { ...model.turn, trade: { sellerId: playerId, cardIds: offered, bids: {} } } };
 }

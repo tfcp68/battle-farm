@@ -34,7 +34,7 @@ import { TurnBar } from '~/widgets/match/TurnBar';
 const HINTS: Partial<Record<GameModel['turn']['phase'], string>> = {
 	HARVEST: 'Ripe crops were collected automatically.',
 	SHOPPING: 'Buy up to your roll, if you can pay.',
-	TRADE: 'Offer a set of cards; opponents bid for all of it.',
+	TRADE: 'Whatever you put on the table is on offer; opponents bid for all of it.',
 	PLAYING: 'Play any number of cards: crops into beds, actions for fertilizers.',
 	FERTILIZE: 'Each fertilizer takes a turn off one of your crops.',
 };
@@ -72,12 +72,21 @@ export default function GamePage() {
 	const phase = match.turn.phase;
 	const allowance = match.turn.allowance ?? 0;
 
+	/**
+	 * The seller may still change the set. `OFFERED` counts: an offer is live
+	 * from the first card dropped and stays editable until a bid seals it, which
+	 * is why this is not just `COLLECT`.
+	 */
+	function isTrading(): boolean {
+		return trade.sellerState === 'COLLECT' || trade.sellerState === 'OFFERED';
+	}
+
 	function pickHandCard(cardId: CardInstanceId): void {
 		if (!match || !viewerId) return;
 
 		// Which machine hears the click is the only thing the page decides; what
 		// each of them makes of it is the diagram's business.
-		if (trade.sellerState === 'COLLECT') {
+		if (isTrading()) {
 			trade.toggleCard(cardId);
 			return;
 		}
@@ -109,7 +118,7 @@ export default function GamePage() {
 	}
 
 	function isHandCardSelectable(): boolean {
-		if (trade.sellerState === 'COLLECT') return true;
+		if (isTrading()) return true;
 		return selection.step === 'choosing' || selection.step === 'planting';
 	}
 
@@ -145,7 +154,7 @@ export default function GamePage() {
 						selected={trade.offered}
 						sellerState={trade.sellerState}
 						bidderState={trade.bidderState}
-						onOffer={trade.sendOffer}
+						onTakeBack={trade.toggleCard}
 						onBid={trade.placeBid}
 						onAccept={trade.acceptBid}
 					/>
@@ -164,21 +173,17 @@ export default function GamePage() {
 						<Hand
 							match={match}
 							playerId={viewerId}
-							// Whichever machine is open owns the highlight. Keyed on the
-							// machine rather than on the phase: the play machine keeps its
-							// last card in context long after the phase that picked it.
-							selected={
-								trade.sellerState === 'COLLECT'
-									? trade.offered
-									: selection.cardId
-										? [selection.cardId]
-										: []
-							}
+							// The play machine keeps its last card in context long after the
+							// phase that picked it, so the highlight is keyed on the machine
+							// rather than on the phase. Trade needs none: an offered card is
+							// drawn on the table instead of highlighted in the hand.
+							selected={selection.cardId ? [selection.cardId] : []}
+							withheld={isTrading() ? trade.offered : []}
 							selectable={isHandCardSelectable}
 							onSelect={pickHandCard}
 							hint={selection.step === 'planting' ? 'Now pick a bed.' : HINTS[phase]}
-							// Dropping a Market card here picks its slot; the confirm
-							// bar still has to be pressed before any coins move.
+							// Dropping a Market card here buys it outright — the slot
+							// pick is the purchase, there is no confirm left to press.
 							droppable={shopping.state === 'BROWSING' || shopping.state === 'PURCHASED'}
 						/>
 					</>

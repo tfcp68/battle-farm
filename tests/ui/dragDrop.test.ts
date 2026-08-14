@@ -1,5 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
-import { asCardInstanceId } from '~/entities/game';
+import { asCardInstanceId, asPlayerId } from '~/entities/game';
 import {
 	DRAG_TYPES,
 	type DropZone,
@@ -18,12 +18,14 @@ import {
  */
 
 const CARD = asCardInstanceId('card-1');
+const ME = asPlayerId('player-me');
+const THEM = asPlayerId('player-them');
 
 describe('drop zone ids', () => {
 	it('round-trips every zone', () => {
 		const zones: DropZone[] = [
-			{ kind: 'bed', bedIndex: 0 },
-			{ kind: 'bed', bedIndex: 3 },
+			{ kind: 'bed', playerId: ME, bedIndex: 0 },
+			{ kind: 'bed', playerId: ME, bedIndex: 3 },
 			{ kind: 'discard' },
 			{ kind: 'trade' },
 			{ kind: 'hand' },
@@ -34,11 +36,29 @@ describe('drop zone ids', () => {
 		}
 	});
 
+	/**
+	 * The bug this file exists to keep out.
+	 *
+	 * dnd-kit keys its droppable registry by id and the last registration for a
+	 * key evicts the previous one. The match screen renders the viewer's beds and
+	 * then every opponent's, so a bed id that carried only its index made the
+	 * opponent's bed N — which never accepts a drop — replace the viewer's bed N.
+	 * Every plant-by-drag then landed on `target === null` and did nothing.
+	 */
+	it('gives each player their own bed zones', () => {
+		expect(dropZoneId({ kind: 'bed', playerId: ME, bedIndex: 0 })).not.toBe(
+			dropZoneId({ kind: 'bed', playerId: THEM, bedIndex: 0 }),
+		);
+	});
+
 	it('refuses ids that are not ours', () => {
 		expect(parseDropZone('bed:0')).toBeNull();
 		expect(parseDropZone('zone:nowhere')).toBeNull();
-		expect(parseDropZone('zone:bed:-1')).toBeNull();
-		expect(parseDropZone('zone:bed:x')).toBeNull();
+		expect(parseDropZone(`zone:bed:${ME}:-1`)).toBeNull();
+		expect(parseDropZone(`zone:bed:${ME}:x`)).toBeNull();
+		// An index with nobody to own it is not a bed on this board.
+		expect(parseDropZone('zone:bed:0')).toBeNull();
+		expect(parseDropZone(`zone:bed::0`)).toBeNull();
 		expect(parseDropZone(42)).toBeNull();
 		expect(parseDropZone(undefined)).toBeNull();
 	});
@@ -49,7 +69,7 @@ describe('what a drop means', () => {
 	const market = { type: DRAG_TYPES.marketCard, slotIndex: 2 } as const;
 
 	it('plants a hand card dropped on a bed', () => {
-		expect(resolveDrop(hand, { kind: 'bed', bedIndex: 1 })).toEqual({
+		expect(resolveDrop(hand, { kind: 'bed', playerId: ME, bedIndex: 1 })).toEqual({
 			kind: 'plant',
 			cardId: CARD,
 			bedIndex: 1,
@@ -65,17 +85,18 @@ describe('what a drop means', () => {
 	});
 
 	/**
-	 * The one asymmetry worth stating out loud: dragging out of the Market picks
-	 * a slot and stops. Coins leave on the confirm, because `shopping.mermaid`
-	 * puts CONFIRM between BROWSING and PURCHASED on purpose.
+	 * Dragging out of the Market names a slot, and naming it is the purchase —
+	 * `shopping.mermaid` goes `BROWSING -> PURCHASED` on `CHOOSE_SLOT`. What this
+	 * layer refuses to do is price it: which slot was picked is all a gesture can
+	 * say, and the model decides what it costs.
 	 */
-	it('picks a market slot without buying it', () => {
+	it('names a market slot, and leaves the price to the model', () => {
 		expect(resolveDrop(market, { kind: 'hand' })).toEqual({ kind: 'pickSlot', slotIndex: 2 });
 	});
 
 	it('refuses gestures that mean nothing', () => {
 		expect(resolveDrop(hand, { kind: 'hand' })).toBeNull();
-		expect(resolveDrop(market, { kind: 'bed', bedIndex: 0 })).toBeNull();
+		expect(resolveDrop(market, { kind: 'bed', playerId: ME, bedIndex: 0 })).toBeNull();
 		expect(resolveDrop(market, { kind: 'discard' })).toBeNull();
 		expect(resolveDrop(market, { kind: 'trade' })).toBeNull();
 	});

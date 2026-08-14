@@ -135,8 +135,9 @@ describe('trading — the seller', () => {
 
 		dispatch(trading, tradingEvents.trade_card_removed, { cardId: CARD_A });
 		expect(offered(trading)).toEqual([CARD_B]);
-		// Both toggles pass through a `+ByPass` state and land back in COLLECT.
-		expect(trading.state).toBe(tradingStates.COLLECT);
+		// Both toggles pass through a `+ByPass` state and land in OFFERED, which
+		// is what republishes the set: COLLECT is only ever the empty table.
+		expect(trading.state).toBe(tradingStates.OFFERED);
 	});
 
 	/**
@@ -157,12 +158,24 @@ describe('trading — the seller', () => {
 		expect(offered(trading)).toEqual([CARD_A]);
 	});
 
-	it('offers the set, then waits for a bid before it can accept', () => {
+	/**
+	 * Ticking a card *is* offering it — there is no send step between the two.
+	 * `CARD_ADDED` bypasses into `OFFERED`, which is what puts the set on the
+	 * table, and the set stays editable from there until a bid seals it.
+	 */
+	it('offers on the first card, then waits for a bid before it can accept', () => {
 		const trading = open();
-		dispatch(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
 
-		dispatch(trading, tradingEvents.trade_offer_sent, { cardIds: [CARD_A] });
+		dispatch(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
 		expect(trading.state).toBe(tradingStates.OFFERED);
+		expect(offered(trading)).toEqual([CARD_A]);
+
+		dispatch(trading, tradingEvents.trade_card_added, { cardId: CARD_B });
+		expect(trading.state).toBe(tradingStates.OFFERED);
+		expect(offered(trading).sort()).toEqual([CARD_A, CARD_B].sort());
+
+		dispatch(trading, tradingEvents.trade_card_removed, { cardId: CARD_A });
+		expect(offered(trading)).toEqual([CARD_B]);
 
 		dispatch(trading, tradingEvents.trade_bids_gathered, { bids: { 'p-two': 3 } });
 		expect(trading.state).toBe(tradingStates.CHOOSING);

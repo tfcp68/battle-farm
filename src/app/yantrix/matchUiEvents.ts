@@ -51,11 +51,10 @@ export const MatchUiEvents = {
 	shopping_phase_started: shoppingEvents.shopping_phase_started,
 	market_slot_picked: shoppingEvents.market_slot_picked,
 
-	// TRADE, seller's half — collect a set, offer it, take a bid.
+	// TRADE, seller's half — every card added *is* the offer, then take a bid.
 	trade_phase_started: tradingEvents.trade_phase_started,
 	trade_card_added: tradingEvents.trade_card_added,
 	trade_card_removed: tradingEvents.trade_card_removed,
-	trade_offer_sent: tradingEvents.trade_offer_sent,
 	trade_bids_gathered: tradingEvents.trade_bids_gathered,
 	trade_bid_accepted: tradingEvents.trade_bid_accepted,
 
@@ -116,7 +115,6 @@ export interface MatchUiEventMeta {
 	trade_phase_started: { viewerId: PlayerId; hand: CardInstanceId[] };
 	trade_card_added: { cardId: CardInstanceId };
 	trade_card_removed: { cardId: CardInstanceId };
-	trade_offer_sent: { cardIds: CardInstanceId[] };
 	/** The first bid landed — the seller has something to choose between. */
 	trade_bids_gathered: { bids: Record<PlayerId, number> };
 	trade_bid_accepted: { bidderId: PlayerId };

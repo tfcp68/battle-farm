@@ -5,10 +5,10 @@ stateDiagram-v2
     hasCards --> COLLECT: hasCardsInHand($hand)
     hasCards --> IDLE
     COLLECT --> CARD_ADDED: ADD_CARD (cardId)
-    CARD_ADDED --> COLLECT: [-]
-    COLLECT --> CARD_REMOVED: REMOVE_CARD (cardId)
-    CARD_REMOVED --> COLLECT: [-]
-    COLLECT --> OFFERED: SEND_OFFER
+    CARD_ADDED --> OFFERED: [-]
+    OFFERED --> CARD_ADDED: ADD_CARD (cardId)
+    OFFERED --> CARD_REMOVED: REMOVE_CARD (cardId)
+    CARD_REMOVED --> OFFERED: [-]
     OFFERED --> CHOOSING: BIDS_ARRIVED
     CHOOSING --> ACCEPTED: ACCEPT_BID (bidderId)
     COLLECT --> IDLE: END_TRADE
@@ -28,7 +28,6 @@ define/emptyMap () => omit(zip([],[]),[])
 subscribe/trade_phase_started START_TRADE ($viewerId, $hand)
 subscribe/trade_card_added ADD_CARD ($cardId)
 subscribe/trade_card_removed REMOVE_CARD ($cardId)
-subscribe/trade_offer_sent SEND_OFFER
 subscribe/trade_bids_gathered BIDS_ARRIVED
 subscribe/trade_bid_accepted ACCEPT_BID ($bidderId)
 subscribe/turn_phase_ended END_TRADE

@@ -49,7 +49,7 @@ export function GardenBeds(props: {
 					return (
 						<DropTarget
 							key={bedIndex}
-							zone={{ kind: 'bed', bedIndex }}
+							zone={{ kind: 'bed', playerId, bedIndex }}
 							accept={DRAG_TYPES.handCard}
 							disabled={!canDrop?.(bedIndex)}
 							className={`bed${isSelectable ? ' selectable' : ''}`}

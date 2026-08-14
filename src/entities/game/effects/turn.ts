@@ -53,15 +53,19 @@ export function advancePhase(model: GameModel): GameModel {
 
 /**
  * SHOPPING and FERTILIZE both open with a 1d4 that caps what the player may do;
- * TRADE opens with a clean slate.
+ * every other phase opens with a clean slate.
+ *
+ * The open offer is cleared by *any* phase boundary, not just the one into
+ * TRADE. An offer nobody took would otherwise ride along in the snapshot for the
+ * rest of the turn — every trade effect refuses it, but anything reading the
+ * model still sees a live-looking deal that is over.
  */
 function enterPhase(model: GameModel, phase: TurnPhase): GameModel {
-	if (phase === 'SHOPPING' || phase === 'FERTILIZE') {
-		const [allowance, afterRoll] = roll(model, D4);
-		return { ...afterRoll, turn: { ...afterRoll.turn, allowance } };
-	}
-	if (phase === 'TRADE') return { ...model, turn: { ...model.turn, trade: null, allowance: null } };
-	return { ...model, turn: { ...model.turn, allowance: null } };
+	const opened = { ...model, turn: { ...model.turn, trade: null, allowance: null } };
+	if (phase !== 'SHOPPING' && phase !== 'FERTILIZE') return opened;
+
+	const [allowance, afterRoll] = roll(opened, D4);
+	return { ...afterRoll, turn: { ...afterRoll.turn, allowance } };
 }
 
 /**

@@ -23,6 +23,13 @@ import { DropTarget } from './DropTarget';
  * `WaitingAutomata` for everyone else — so "may I still bid?" is answered by a
  * state instead of by re-deriving the rules here. The typed bid stays local: it
  * is not a decision until Bid is pressed.
+ *
+ * **The seller's half has no button.** Dropping a card here offers it, and
+ * dropping another offers both — `trading.mermaid` runs `CARD_ADDED` straight
+ * into `OFFERED`, so what is on the table is always what has been dropped. That
+ * is why the drop zone stays mounted once an offer exists: it is not a
+ * "compose" step that closes, it is the offer itself, still open to change
+ * until somebody bids.
  */
 export function TradePanel(props: {
 	match: GameModel;
@@ -31,55 +38,68 @@ export function TradePanel(props: {
 	selected: readonly CardInstanceId[];
 	sellerState: TradingStateName | null;
 	bidderState: WaitingStateName | null;
-	onOffer: () => void;
+	/** Take a card back off the table. */
+	onTakeBack: (cardId: CardInstanceId) => void;
 	onBid: (coins: number) => void;
 	onAccept: (bidderId: PlayerId) => void;
 }) {
-	const { match, viewerId, selected, sellerState, bidderState, onOffer, onBid, onAccept } = props;
+	const { match, viewerId, selected, sellerState, bidderState, onTakeBack, onBid, onAccept } = props;
 	const [bid, setBid] = useState('0');
 
 	const trade = match.turn.trade;
 	const isSeller = !!viewerId && match.turn.activePlayerId === viewerId;
 	const coins = viewerId ? (match.players[viewerId]?.coins ?? 0) : 0;
+	// The cards to show: the model's offer once it exists, and the seller's own
+	// picks in the moment before the commit has come back round the loop.
+	const onTable = trade?.cardIds ?? (isSeller ? selected : []);
+	// Sealed the moment a bid lands — that is `CHOOSING`, not `OFFERED`.
+	const canStillChange = sellerState === 'COLLECT' || sellerState === 'OFFERED';
 
 	return (
 		<div className="panel">
 			<h4 className="section-title">Trade</h4>
 
-			{!trade ? (
-				isSeller ? (
-					<DropTarget
-						zone={{ kind: 'trade' }}
-						accept={DRAG_TYPES.handCard}
-						disabled={sellerState !== 'COLLECT'}
-						className="row trade-drop">
-						<small className="muted">
-							Drag cards here — or pick them in your hand — then offer the set. No partial deals.
-						</small>
-						<button
-							type="button"
-							className="primary"
-							data-testid="send-offer"
-							disabled={sellerState !== 'COLLECT' || selected.length === 0}
-							onClick={onOffer}>
-							Offer {selected.length} card(s)
-						</button>
-					</DropTarget>
-				) : (
-					<small className="muted">Waiting for an offer.</small>
-				)
+			{!trade && !isSeller ? (
+				<small className="muted">Waiting for an offer.</small>
 			) : (
 				<>
-					<div className="hand">
-						{trade.cardIds.map((cardId) => (
-							<CardFace
-								key={cardId}
-								cardId={cardId}
-								definition={definitionOf(match, cardId)}
-								value={valueOf(match, cardId)}
-							/>
-						))}
-					</div>
+					{isSeller ? (
+						<DropTarget
+							zone={{ kind: 'trade' }}
+							accept={DRAG_TYPES.handCard}
+							disabled={!canStillChange}
+							className="hand trade-drop">
+							{onTable.map((cardId) => (
+								<CardFace
+									key={cardId}
+									cardId={cardId}
+									definition={definitionOf(match, cardId)}
+									value={valueOf(match, cardId)}
+									// Clicking a card on the table takes it back — the only way
+									// out, since it is no longer drawn in the hand.
+									onClick={canStillChange ? () => onTakeBack(cardId) : undefined}
+									footer={canStillChange ? 'Click to take back' : undefined}
+								/>
+							))}
+							{onTable.length === 0 ? (
+								<small className="muted">
+									Drag cards here — or pick them in your hand. Whatever lands here is on
+									offer; no partial deals.
+								</small>
+							) : null}
+						</DropTarget>
+					) : (
+						<div className="hand">
+							{onTable.map((cardId) => (
+								<CardFace
+									key={cardId}
+									cardId={cardId}
+									definition={definitionOf(match, cardId)}
+									value={valueOf(match, cardId)}
+								/>
+							))}
+						</div>
+					)}
 
 					{isSeller ? (
 						<table className="table">
@@ -91,7 +111,7 @@ export function TradePanel(props: {
 								</tr>
 							</thead>
 							<tbody>
-								{Object.entries(trade.bids).map(([bidderId, offered]) => (
+								{Object.entries(trade?.bids ?? {}).map(([bidderId, offered]) => (
 									<tr key={bidderId}>
 										<td>{match.players[bidderId as PlayerId]?.nickname ?? bidderId}</td>
 										<td>{offered}</td>
@@ -105,10 +125,12 @@ export function TradePanel(props: {
 										</td>
 									</tr>
 								))}
-								{Object.keys(trade.bids).length === 0 ? (
+								{Object.keys(trade?.bids ?? {}).length === 0 ? (
 									<tr>
 										<td colSpan={3}>
-											<small className="muted">No bids yet.</small>
+											<small className="muted">
+												{onTable.length === 0 ? 'Nothing on offer yet.' : 'No bids yet.'}
+											</small>
 										</td>
 									</tr>
 								) : null}

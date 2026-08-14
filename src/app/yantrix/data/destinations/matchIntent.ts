@@ -87,8 +87,13 @@ function compose(kind: CommitKind, playerId: PlayerId, fields: Omit<CommitMeta, 
 		case 'trade_offer': {
 			// The set travels as the map the machine keeps: `keys(#offered)` in the
 			// emit meta throws (trap 6), so the conversion happens here.
+			//
+			// An empty set is a real move, not a missing one — it is how a seller
+			// takes the last card back off the table, and `offerTrade` reads it as
+			// a retraction. `OFFERED` is reachable only through `CARD_ADDED` /
+			// `CARD_REMOVED`, so nothing else can produce one.
 			const cardIds = Object.keys(fields.offered ?? {}) as CardInstanceId[];
-			return cardIds.length === 0 ? null : ({ kind: 'trade_offered', playerId, cardIds } as const);
+			return { kind: 'trade_offered', playerId, cardIds } as const;
 		}
 		case 'trade_accept':
 			return fields.bidderId

@@ -342,6 +342,35 @@ describe('TRADE', () => {
 		expect(next.turn.trade?.cardIds).toEqual([hands.seller[1]]);
 	});
 
+	/**
+	 * There is no "send" step any more: every card the seller picks arrives as
+	 * its own offer, so this runs once per card and the last one wins.
+	 */
+	it('republishes the set as the seller changes it, and starts the bidding over', () => {
+		const { model, hands } = table();
+
+		let next = offerTrade(model, { playerId: pid('seller'), cardIds: [hands.seller[0]!] });
+		next = placeBid(next, { playerId: pid('buyer'), coins: 7 });
+		expect(next.turn.trade?.bids).toEqual({ [pid('buyer')]: 7 });
+
+		// A second card is a different deal — the old price does not carry over.
+		next = offerTrade(next, { playerId: pid('seller'), cardIds: [hands.seller[0]!, hands.seller[1]!] });
+		expect(next.turn.trade?.cardIds).toEqual([hands.seller[0], hands.seller[1]]);
+		expect(next.turn.trade?.bids).toEqual({});
+	});
+
+	/** Taking the last card back off the table is how a seller changes their mind. */
+	it('retracts the offer when the set empties', () => {
+		const { model, hands } = table();
+
+		const open = offerTrade(model, { playerId: pid('seller'), cardIds: [hands.seller[0]!] });
+		expect(open.turn.trade).not.toBeNull();
+
+		expect(offerTrade(open, { playerId: pid('seller'), cardIds: [] }).turn.trade).toBeNull();
+		// Nothing on the table and nothing offered is not a change at all.
+		expect(offerTrade(model, { playerId: pid('seller'), cardIds: [] })).toBe(model);
+	});
+
 	it('refuses a bid beyond the purse, a negative bid, and the seller bidding', () => {
 		const { model, hands } = table();
 		const open = offerTrade(model, { playerId: pid('seller'), cardIds: [hands.seller[0]!] });

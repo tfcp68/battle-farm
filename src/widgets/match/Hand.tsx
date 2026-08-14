@@ -29,15 +29,35 @@ export function Hand(props: {
 	hint?: string;
 	/** The hand is also where a Market card lands when it is dragged out. */
 	droppable?: boolean;
+	/**
+	 * Yours, but not in your hand right now — the cards on the trade table.
+	 *
+	 * The rules leave them in hand until a deal seals, and the model does too;
+	 * this is only where they are *drawn*. A card in two places at once is a card
+	 * the player cannot reason about — they drag it onto the table and it appears
+	 * to still be where they dragged it from.
+	 */
+	withheld?: readonly CardInstanceId[];
 }) {
-	const { match, playerId, selected = [], selectable, onSelect, hint, droppable = false } = props;
+	const {
+		match,
+		playerId,
+		selected = [],
+		selectable,
+		onSelect,
+		hint,
+		droppable = false,
+		withheld = [],
+	} = props;
 	const player = match.players[playerId];
 	if (!player) return null;
+
+	const held = player.hand.filter((cardId) => !withheld.includes(cardId));
 
 	return (
 		<div className="panel">
 			<div className="row" style={{ justifyContent: 'space-between' }}>
-				<h4 className="section-title">Your hand ({player.hand.length})</h4>
+				<h4 className="section-title">Your hand ({held.length})</h4>
 				{hint ? <small className="muted">{hint}</small> : null}
 			</div>
 
@@ -46,7 +66,7 @@ export function Hand(props: {
 				accept={DRAG_TYPES.marketCard}
 				disabled={!droppable}
 				className="hand">
-				{player.hand.map((cardId) => {
+				{held.map((cardId) => {
 					const definition = definitionOf(match, cardId);
 					const isSelectable = !!onSelect && (selectable?.(cardId) ?? false);
 					const face = {
@@ -73,7 +93,9 @@ export function Hand(props: {
 						<CardFace key={cardId} {...face} />
 					);
 				})}
-				{player.hand.length === 0 ? <small className="muted">No cards.</small> : null}
+				{held.length === 0 ? (
+					<small className="muted">{withheld.length > 0 ? 'All on the table.' : 'No cards.'}</small>
+				) : null}
 			</DropTarget>
 		</div>
 	);

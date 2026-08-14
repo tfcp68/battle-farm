@@ -1,4 +1,4 @@
-import type { CardInstanceId } from '~/entities/game';
+import { asPlayerId, type CardInstanceId, type PlayerId } from '~/entities/game';
 
 /**
  * What a drag means, decided without React or the DOM.
@@ -20,9 +20,20 @@ export const DRAG_TYPES = {
 
 export type DragType = (typeof DRAG_TYPES)[keyof typeof DRAG_TYPES];
 
-/** Where a card may be dropped. `bedIndex` is the only zone with a coordinate. */
+/**
+ * Where a card may be dropped.
+ *
+ * A bed is the only zone that exists more than once on the board, so it is the
+ * only one that needs coordinates — and it needs *both* of them. `bedIndex`
+ * alone names a bed on somebody's farm, not a bed on the table: every player has
+ * a bed 0. See {@link dropZoneId} for what that costs when it is left out.
+ *
+ * Whether a given bed accepts the drop is still the page's call (`canDrop` in
+ * `GamePage`), which is what keeps an opponent's bed shut; `playerId` here is
+ * about identity, not permission.
+ */
 export type DropZone =
-	| { kind: 'bed'; bedIndex: number }
+	| { kind: 'bed'; playerId: PlayerId; bedIndex: number }
 	| { kind: 'discard' }
 	| { kind: 'trade' }
 	| { kind: 'hand' };
@@ -44,9 +55,21 @@ export type DragIntent =
 
 const ZONE_PREFIX = 'zone';
 
-/** Droppable ids are strings because a bed carries its index in the id. */
+/**
+ * Droppable ids are strings because a bed carries its coordinates in the id.
+ *
+ * **The id has to be unique across the whole board.** dnd-kit keys its droppable
+ * registry by id and the last registration for a key evicts the one before it —
+ * so while a bed was named by its index alone, the opponents' `<GardenBeds>`
+ * (rendered after the viewer's, and never given a `canDrop`) replaced the
+ * viewer's bed of the same index with a disabled one. Every plant-by-drag then
+ * ended on `target === null` and silently did nothing, leaving click-then-click
+ * as the only way to plant.
+ */
 export function dropZoneId(zone: DropZone): string {
-	return zone.kind === 'bed' ? `${ZONE_PREFIX}:bed:${zone.bedIndex}` : `${ZONE_PREFIX}:${zone.kind}`;
+	return zone.kind === 'bed'
+		? `${ZONE_PREFIX}:bed:${zone.playerId}:${zone.bedIndex}`
+		: `${ZONE_PREFIX}:${zone.kind}`;
 }
 
 export function parseDropZone(id: unknown): DropZone | null {
@@ -56,8 +79,14 @@ export function parseDropZone(id: unknown): DropZone | null {
 
 	switch (parts[1]) {
 		case 'bed': {
-			const bedIndex = Number(parts[2]);
-			return Number.isInteger(bedIndex) && bedIndex >= 0 ? { kind: 'bed', bedIndex } : null;
+			// `owner:index` exactly — a bed with no owner is not a place on this board.
+			if (parts.length !== 4) return null;
+			const owner = parts[2];
+			const bedIndex = Number(parts[3]);
+			if (!owner) return null;
+			return Number.isInteger(bedIndex) && bedIndex >= 0
+				? { kind: 'bed', playerId: asPlayerId(owner), bedIndex }
+				: null;
 		}
 		case 'discard':
 			return { kind: 'discard' };
@@ -99,9 +128,10 @@ export function resolveDrop(source: DragSource, target: DropZone): DragIntent | 
 					return assertNever(target);
 			}
 		case DRAG_TYPES.marketCard:
-			// Buying stays two steps: the drop picks the slot, the confirm spends
-			// the coins. A phase that pays out on one gesture is one slip away
-			// from a lost turn, which is why `shopping.mermaid` has CONFIRM at all.
+			// Naming the slot *is* the purchase: `shopping.mermaid` goes
+			// `BROWSING -> PURCHASED` on `CHOOSE_SLOT`, so the coins leave on this
+			// one gesture. The intent keeps the older name because it is still the
+			// slot the drop names, not the card — the model prices it.
 			return target.kind === 'hand' ? { kind: 'pickSlot', slotIndex: source.slotIndex } : null;
 		default:
 			return assertNever(source);

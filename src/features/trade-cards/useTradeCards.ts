@@ -28,14 +28,20 @@ interface TradingContext {
  * adding and removing are separate events because a state's reducer cannot tell
  * which action brought it there, so a toggle is two `+ByPass` states, exactly as
  * the lobby does for its ready map.
+ *
+ * **Ticking a card *is* the offer.** There is no Offer button: `CARD_ADDED`
+ * bypasses straight into `OFFERED`, which emits `trade_offer_committed`, so the
+ * set on the table is always exactly the set the seller has picked. Each change
+ * republishes it and `offerTrade` starts the bidding over — which is the point,
+ * since a bid was made against a different set. Once a bid is in, the machine
+ * has left `OFFERED` for `CHOOSING` and the set is sealed.
  */
 export function useTradeCards(): {
 	sellerState: TradingStateName | null;
 	bidderState: WaitingStateName | null;
-	/** Hand cards the seller has ticked so far. */
+	/** Hand cards the seller has ticked so far — and therefore has on offer. */
 	offered: CardInstanceId[];
 	toggleCard: (cardId: CardInstanceId) => void;
-	sendOffer: () => void;
 	acceptBid: (bidderId: PlayerId) => void;
 	placeBid: (coins: number) => void;
 } {
@@ -55,11 +61,6 @@ export function useTradeCards(): {
 				? MatchUiEvents.trade_card_removed
 				: MatchUiEvents.trade_card_added;
 			emitDomainEvent(event, { cardId });
-		},
-
-		sendOffer() {
-			if (offered.length === 0) return;
-			emitDomainEvent(MatchUiEvents.trade_offer_sent, { cardIds: offered });
 		},
 
 		acceptBid(bidderId: PlayerId) {

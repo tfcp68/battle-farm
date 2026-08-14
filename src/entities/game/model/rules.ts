@@ -29,18 +29,33 @@ export const MAX_PLAYERS = 6;
  * model is replicated by replaying events, not by trusting a clock — so the wall
  * clock stays outside it, in the host's phase clock and the viewer's countdown.
  *
- * `TRADE` is the rules' three windows (offer 15 s, bid 15 s, accept 10 s) as one
- * number, because the model has one TRADE phase and not three. `CALCULATION` is
- * transient — the driver closes the turn the moment it is entered — and
- * `WAITING` belongs to nobody.
+ * `CALCULATION` is transient — the driver closes the turn the moment it is
+ * entered — and `WAITING` belongs to nobody.
+ *
+ * **The phases nobody acts in are the ones that were cut.** A turn used to run
+ * 110 s, and on a table of two that is 110 s of "Waiting…" before your first
+ * move. The cuts are all in time the rules never asked for or that this
+ * implementation cannot spend:
+ *
+ * - `HARVEST` had 10 s and *no player action at all* — `harvest.mermaid` has no
+ *   event out of `HARVESTING`, and `runHarvest` has already run inside
+ *   `startTurn` before the phase opens. The rulebook's step 1 is instantaneous.
+ *   What is left is a beat long enough to watch the coins land.
+ * - `TRADE` had the rules' three windows (offer 15 s, bid 15 s, accept 10 s)
+ *   added up, but the model has one TRADE phase and not three, so a seller with
+ *   nothing to offer burned all forty seconds of it.
+ * - `FERTILIZE` is a 1d4 of clicks and has no timing in the rulebook at all.
+ *
+ * `SHOPPING` and `PLAYING` keep the rulebook's own numbers: those are the two
+ * phases where something is actually decided.
  */
 export const PHASE_DURATION_MS: Record<TurnPhase, number | null> = {
 	WAITING: null,
-	HARVEST: 10_000,
+	HARVEST: 2_000,
 	SHOPPING: 15_000,
-	TRADE: 40_000,
+	TRADE: 20_000,
 	PLAYING: 30_000,
-	FERTILIZE: 15_000,
+	FERTILIZE: 10_000,
 	CALCULATION: null,
 };
 

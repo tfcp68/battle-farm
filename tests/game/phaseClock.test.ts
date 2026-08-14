@@ -156,10 +156,24 @@ describe('the phase clock', () => {
 	it('gives every turn phase a stated duration', () => {
 		// A phase added without a duration would silently never expire.
 		expect(Object.values(PHASE_DURATION_MS).filter((ms) => ms !== null).length).toBe(5);
+		// The two the rulebook actually times.
 		expect(PHASE_DURATION_MS.SHOPPING).toBe(15_000);
 		expect(PHASE_DURATION_MS.PLAYING).toBe(30_000);
-		expect(PHASE_DURATION_MS.FERTILIZE).toBe(15_000);
 		expect(PHASE_DURATION_MS.CALCULATION).toBeNull();
 		expect(PHASE_DURATION_MS.WAITING).toBeNull();
+	});
+
+	/**
+	 * A turn is the sum of its phases, and on a table of two it is also how long
+	 * the other player stares at "Waiting…". HARVEST in particular has no player
+	 * action at all — `harvest.mermaid` has no event out of HARVESTING — so any
+	 * window it holds is pure waiting.
+	 */
+	it('keeps the unplayable phases short', () => {
+		expect(PHASE_DURATION_MS.HARVEST).toBeLessThan(PHASE_DURATION_MS.SHOPPING!);
+		expect(PHASE_DURATION_MS.FERTILIZE).toBeLessThan(PHASE_DURATION_MS.PLAYING!);
+
+		const turn = Object.values(PHASE_DURATION_MS).reduce<number>((sum, ms) => sum + (ms ?? 0), 0);
+		expect(turn).toBeLessThanOrEqual(80_000);
 	});
 });

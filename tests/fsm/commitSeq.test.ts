@@ -149,20 +149,46 @@ describe('trading commits twice — offering and accepting', () => {
 	it('emits the offered set as a map', () => {
 		const trading = open();
 		drive(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
-		drive(trading, tradingEvents.trade_card_added, { cardId: CARD_B });
 
-		const emitted = drive(trading, tradingEvents.trade_offer_sent, null);
+		// The second card is a second offer, not an addition to a pending one.
+		const emitted = drive(trading, tradingEvents.trade_card_added, { cardId: CARD_B });
 		expect(trading.state).toBe(tradingStates.OFFERED);
-		expect(emitted[0]?.meta).toMatchObject({ viewerId: ME, seq: 1 });
+		expect(emitted[0]?.meta).toMatchObject({ viewerId: ME, seq: 2 });
 		expect(Object.keys((emitted[0]?.meta as { offered: object }).offered).sort()).toEqual(
 			[CARD_A, CARD_B].sort(),
 		);
 	});
 
+	/**
+	 * Every pick republishes, so `seq` counts cards rather than offers — which is
+	 * what lets the destination tell "added a second card" from trap 7's re-issue
+	 * of the same set.
+	 */
+	it('gives each change of the set its own seq', () => {
+		const trading = open();
+		const first = drive(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
+		const second = drive(trading, tradingEvents.trade_card_added, { cardId: CARD_B });
+		const third = drive(trading, tradingEvents.trade_card_removed, { cardId: CARD_A });
+
+		expect(first[0]?.meta).toMatchObject({ seq: 1 });
+		expect(second[0]?.meta).toMatchObject({ seq: 2 });
+		expect(third[0]?.meta).toMatchObject({ seq: 3 });
+		expect(Object.keys((third[0]?.meta as { offered: object }).offered)).toEqual([CARD_B]);
+	});
+
+	/** Taking the last card back is a retraction, and it has to reach the table. */
+	it('emits an empty set when the last card comes off', () => {
+		const trading = open();
+		drive(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
+
+		const emitted = drive(trading, tradingEvents.trade_card_removed, { cardId: CARD_A });
+		expect(trading.state).toBe(tradingStates.OFFERED);
+		expect(Object.keys((emitted[0]?.meta as { offered: object }).offered)).toEqual([]);
+	});
+
 	it('emits the accepted bidder from its own state', () => {
 		const trading = open();
 		drive(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
-		drive(trading, tradingEvents.trade_offer_sent, null);
 		drive(trading, tradingEvents.trade_bids_gathered, { bids: { 'p-two': 3 } });
 		expect(trading.state).toBe(tradingStates.CHOOSING);
 
@@ -174,13 +200,27 @@ describe('trading commits twice — offering and accepting', () => {
 	it('cannot accept a bid before any arrived', () => {
 		const trading = open();
 		drive(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
-		drive(trading, tradingEvents.trade_offer_sent, null);
 
 		const emitted = drive(trading, tradingEvents.trade_bid_accepted, { bidderId: 'p-two' });
 		expect(trading.state).toBe(tradingStates.OFFERED);
 		// The offer's own emission re-issues, but with the seq it already had.
 		expect(emitted.every((e) => e.meta.seq === 1)).toBe(true);
 		expect(emitted.some((e) => 'bidderId' in e.meta)).toBe(false);
+	});
+
+	/**
+	 * The set is sealed by the first bid, not by a button: `ADD_CARD` has no edge
+	 * out of `CHOOSING`, so a seller cannot enlarge a set somebody has already
+	 * put a price on.
+	 */
+	it('refuses to change the set once a bid is in', () => {
+		const trading = open();
+		drive(trading, tradingEvents.trade_card_added, { cardId: CARD_A });
+		drive(trading, tradingEvents.trade_bids_gathered, { bids: { 'p-two': 3 } });
+
+		const emitted = drive(trading, tradingEvents.trade_card_added, { cardId: CARD_B });
+		expect(trading.state).toBe(tradingStates.CHOOSING);
+		expect(emitted.every((e) => e.meta.seq === 1)).toBe(true);
 	});
 });
 
