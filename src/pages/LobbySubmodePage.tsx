@@ -7,12 +7,17 @@ import { useCurrentProfile } from '~/entities/profile/queries';
 import { useLocation } from 'react-router-dom';
 import { TLobbySettings, TWindowModeContext } from '~/shared/types/types';
 import { useManageLobby } from '~/features/manage-lobby/useManageLobby';
+import { useStartGame } from '~/features/start-game/useStartGame';
+import { useToggleReady } from '~/features/toggle-ready/useToggleReady';
+import { MAX_PLAYERS, MIN_PLAYERS } from '~/entities/game';
 import { Button } from '~/shared/ui/components/button';
 import { buildRoomLink } from '~/shared/net/roomLink';
 import { selectIsHost, selectNicknameById, selectPlayerIds, selectReadyMap } from '~/shared/lib/fsm/selectors';
 
 export default function LobbySubmodePage() {
 	const { closeLobby, leaveLobby } = useManageLobby();
+	const { canStart, startGame } = useStartGame();
+	const { setReady } = useToggleReady();
 
 	const { lobby: lobbyFSM, mode: modeFSM } = useMachines();
 	const { getContext: getLobbyContext } = useFSM<TLobbySettings>(lobbyFSM.instance);
@@ -34,6 +39,8 @@ export default function LobbySubmodePage() {
 	const nicknameById = selectNicknameById(lobbyPlayers);
 	const playerIds = selectPlayerIds(readyMap, lobbyPlayers);
 	const isHost = selectIsHost(lobby?.hostPlayerId, currentPlayerId);
+	const isReady = !!currentPlayerId && !!readyMap[currentPlayerId];
+	const isStartable = canStart(playerIds, readyMap);
 
 	const [copied, setCopied] = React.useState<'code' | 'link' | null>(null);
 	const copy = async (kind: 'code' | 'link') => {
@@ -76,14 +83,33 @@ export default function LobbySubmodePage() {
 						</small>
 
 						<div className="row">
+							{/* Everyone declares, the host included — `canStart` and the
+							    FSM's `game_ready` predicate both count the whole roster. */}
+							<Button
+								className={isReady ? 'ok' : 'primary'}
+								data-testid="ready-toggle"
+								disabled={!lobbyId || !currentPlayerId}
+								title={isReady ? 'Take it back' : 'Tell the table you are set'}
+								onClick={() =>
+									lobbyId && currentPlayerId && setReady(lobbyId, currentPlayerId, !isReady)
+								}>
+								{isReady ? 'Ready ✓' : 'Ready up'}
+							</Button>
+
 							{isHost ? (
 								<>
 									<Button className="danger" onClick={() => lobbyId && closeLobby(lobbyId)}>
 										Close Lobby
 									</Button>
-									{/* Starting a game is not wired to the network yet — see the
-									    P2P spec: this iteration covers the lobby only. */}
-									<Button className="ok" disabled title="Coming soon — the game is not networked yet">
+									<Button
+										className="ok"
+										disabled={!lobbyId || !isStartable}
+										title={
+											isStartable
+												? 'Deal the match'
+												: `Needs ${MIN_PLAYERS}–${MAX_PLAYERS} players, everyone ready`
+										}
+										onClick={() => lobbyId && startGame(lobbyId, playerIds)}>
 										Start Game
 									</Button>
 								</>
