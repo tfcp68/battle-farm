@@ -3,6 +3,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { FakeSignalHub } from '~/shared/net/FakeRoomTransport';
 import { RoomService } from '~/entities/room/RoomService';
 import { connectRoomToQueryCache } from '~/entities/room/RoomQueryBridge';
+import { DEFAULT_MAX_PLAYERS } from '~/entities/room/types';
 import LobbiesModel from '~/entities/lobby/model';
 import { lobbyKeys } from '~/entities/lobby/keys';
 
@@ -28,7 +29,7 @@ describe('room → query cache', () => {
 			lobbyId: CODE,
 			hostPlayerId: 'host-1',
 			status: 'open',
-			maxPlayers: 7,
+			maxPlayers: DEFAULT_MAX_PLAYERS,
 		});
 		expect(players).toEqual([
 			{

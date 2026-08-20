@@ -67,7 +67,12 @@ export interface RoomErrorPayload {
 	message: string;
 }
 
-export const DEFAULT_MAX_PLAYERS = 7;
+/**
+ * Six, because the rulebook gives one Class per player and there are six
+ * Classes (`MAX_PLAYERS` in `~/entities/game`). A room that could hold a
+ * seventh would only be able to seat six of them at the table.
+ */
+export const DEFAULT_MAX_PLAYERS = 6;
 
 export function emptyRoomState(code: string, hostPlayerId: string, maxPlayers: number): RoomState {
 	return {

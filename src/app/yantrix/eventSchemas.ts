@@ -9,6 +9,9 @@ export const EventMetaSchema = z.object({
 	gameId: z.string().nullable().optional(),
 	requestId: z.string().optional(),
 	isHost: z.union([z.literal(0), z.literal(1)]).optional(),
+	// 0/1 rather than a boolean: the lobby FSM sums the ready map to decide
+	// `game_ready`, so the value has to be arithmetic.
+	isReady: z.union([z.literal(0), z.literal(1)]).optional(),
 	nickname: z.string().optional(),
 	error: z.string().optional(),
 	reason: z.string().optional(),

@@ -27,4 +27,5 @@ export const WindowDomainEvents = {
 	lobby_request_approved: modeEvents.lobby_request_approved,
 	lobby_request_rejected: modeEvents.lobby_request_rejected,
 	player_state_change: lobbyEvents.player_state_change,
+	player_ready_changed: lobbyEvents.player_ready_changed,
 } as const;

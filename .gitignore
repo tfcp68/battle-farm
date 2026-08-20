@@ -20,3 +20,9 @@ src/shared/lib/fsm/window/
 src/shared/lib/fsm/game/
 
 token-optimizer/
+.omo/
+.codegraph/
+.opencode
+.agent_context/
+.multica/
+AGENTS.md
