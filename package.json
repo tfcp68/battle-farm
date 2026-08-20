@@ -6,11 +6,11 @@
   "type": "module",
   "scripts": {
     "codegen:fsm": "bash ./generateFsmWindow.sh",
-    "dev": "pnpm codegen:fsm && vite --host 0.0.0.0",
-    "build": "pnpm codegen:fsm && tsc -b && vite build",
+    "dev": "pnpm codegen:fsm && pnpm assets:build && vite --host 0.0.0.0",
+    "build": "pnpm codegen:fsm && pnpm assets:build && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "pnpm codegen:fsm && jest",
+    "test": "pnpm codegen:fsm && pnpm assets:build && jest",
     "assets:build": "node scripts/build-card-art.ts",
     "assets:check": "node scripts/build-card-art.ts --check"
   },
